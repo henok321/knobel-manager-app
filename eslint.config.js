@@ -46,7 +46,11 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      // Add any custom rules here
+      'arrow-body-style': ['error', 'as-needed'],
+      'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
+      'no-console': 'error',
+      'no-debugger': 'error',
+      'func-style': ['error', 'expression', { allowArrowFunctions: true }],
     },
     settings: {
       react: {
