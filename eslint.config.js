@@ -22,6 +22,8 @@ export default [
       sourceType: 'module',
       globals: {
         ...globals.browser,
+        ...globals.es2021,
+        ...globals.jest,
       },
     },
     plugins: {
@@ -50,35 +52,6 @@ export default [
       react: {
         version: 'detect',
       },
-    },
-  }, // Configuration for test files
-  {
-    files: [
-      '**/__tests__/**/*.{js,jsx,ts,tsx}',
-      '**/*.{spec,test}.{js,jsx,ts,tsx}',
-    ],
-    languageOptions: {
-      parser: tsParser,
-      ecmaVersion: 2021,
-      sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.node, // Include Node.js globals for tests
-        ...globals.jest, // Include Jest globals
-      },
-    },
-    plugins: {
-      '@typescript-eslint': ts,
-      jest,
-      prettier,
-    },
-    rules: {
-      ...js.configs.recommended.rules,
-      ...ts.configs.recommended.rules,
-      ...jest.configs.recommended.rules, // Include Jest recommended rules
-      ...prettierConfig.rules,
-      'prettier/prettier': 'warn',
-      // Add any custom rules for tests here
     },
   },
 ];
