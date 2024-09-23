@@ -1,10 +1,8 @@
-import { Button } from '@chakra-ui/react';
+import Sidebar from './navigation/Sidebar.tsx';
 
 const App = () => (
   <>
-    <div>
-      <Button colorScheme="blue">Submit</Button>
-    </div>
+    <Sidebar />
   </>
 );
 
