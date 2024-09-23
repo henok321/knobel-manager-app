@@ -51,6 +51,12 @@ export default [
       'no-console': 'error',
       'no-debugger': 'error',
       'func-style': ['error', 'expression', { allowArrowFunctions: true }],
+      'react/sort-comp': [
+        'error',
+        {
+          order: ['everything-else', 'render'],
+        },
+      ],
     },
     settings: {
       react: {

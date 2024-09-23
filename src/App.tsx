@@ -1,8 +1,8 @@
 import { Box, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Sidebar from './navigation/Sidebar.tsx';
-import Home from './sites/Home.tsx';
-import Settings from './sites/Settings.tsx';
+import Home from './pages/Home.tsx';
+import Settings from './pages/Settings.tsx';
 
 const App = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -15,7 +15,6 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
-        <Box ml={{ base: 0, md: 60 }} p="4"></Box>
       </Box>
     </BrowserRouter>
   );
