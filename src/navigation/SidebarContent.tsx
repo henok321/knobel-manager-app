@@ -11,10 +11,12 @@ import { FiHome } from '@react-icons/all-files/fi/FiHome';
 import { FiSettings } from '@react-icons/all-files/fi/FiSettings';
 import NavItem from './NavItem.tsx';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
+  path: string;
 }
 
 interface SidebarProps extends BoxProps {
@@ -22,9 +24,9 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'SIDEBAR_ITEM_HOME', icon: FiHome },
+  { name: 'SIDEBAR_ITEM_HOME', icon: FiHome, path: '/' },
 
-  { name: 'SIDEBAR_ITEM_SETTINGS', icon: FiSettings },
+  { name: 'SIDEBAR_ITEM_SETTINGS', icon: FiSettings, path: '/settings' },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -48,9 +50,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={t(link.name)} icon={link.icon}>
-          {t(link.name)}
-        </NavItem>
+        <Link to={link.path} key={t(link.name)}>
+          <NavItem key={t(link.name)} icon={link.icon}>
+            {t(link.name)}
+          </NavItem>
+        </Link>
       ))}
     </Box>
   );
