@@ -1,25 +1,31 @@
-name: Deploy to Firebase Hosting
+name: CI/CD for Firebase Hosting
 
 on:
   push:
     branches:
       - main
+  pull_request:
+  workflow_dispatch:  # Manual trigger
+
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Set up Node.js 22
-      - name: Set up Node.js
+      - name: Set up Node.js (v22)
         uses: actions/setup-node@v3
         with:
           node-version: '22'
 
-      # Cache node modules
-      - name: Cache node modules
+      - name: Cache Node.js dependencies
         uses: actions/cache@v3
         with:
           path: node_modules
@@ -27,19 +33,28 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      # Install dependencies and build
-      - run: yarn install --frozen-lockfile && yarn build
+      - name: Install dependencies and build project
+        run: yarn install --frozen-lockfile && yarn build
 
-      # Linting step
-      - run: yarn lint
+      - name: Run linting checks
+        run: yarn lint
 
-      # Run tests
-      - run: yarn test
+      - name: Run tests
+        run: yarn test
 
-      # Deploy to Firebase Hosting
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy to Firebase Hosting (Production)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KNOBEL_MANAGER_WEB }}
           channelId: live
+          projectId: knobel-manager-web
+
+      - name: Deploy Preview to Firebase Hosting (Pull Request)
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KNOBEL_MANAGER_WEB }}
           projectId: knobel-manager-web
