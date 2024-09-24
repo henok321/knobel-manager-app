@@ -12,7 +12,9 @@
     "fix": "yarn lint:fix && yarn format && yarn lint",
     "test": "jest",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "clean": "rm -rf node_modules dist"
+
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
