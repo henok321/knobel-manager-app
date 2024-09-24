@@ -14,7 +14,6 @@
     "preview": "vite preview",
     "prepare": "husky",
     "clean": "rm -rf node_modules dist"
-
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
