@@ -4,7 +4,7 @@ import PageWrapper from '../components/PageWrapper.tsx';
 const Home = () => (
   <>
     <PageWrapper>
-      <Heading>Home</Heading>
+      <Heading>Home Pull Request</Heading>
       <p>Hello World</p>
     </PageWrapper>{' '}
   </>
