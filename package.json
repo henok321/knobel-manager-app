@@ -14,8 +14,7 @@
     "preview": "vite preview",
     "prepare": "husky",
     "clean": "rm -rf node_modules dist",
-    "deploy": "yarn build && firebase deploy --only hosting",
-    "ci": "yarn install && yarn lint && yarn test && yarn build && yarn deploy"
+    "deploy": "yarn build && firebase deploy --only hosting"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",

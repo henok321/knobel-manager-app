@@ -11,8 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: yarn global add firebase-tools
-      - run: yarn ci
+      - run: yarn install && yarn build
+      - run: yarn lint
+      - run: yarn test
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
