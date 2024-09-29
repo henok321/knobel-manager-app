@@ -1,25 +1,19 @@
-import { useDisclosure } from '@chakra-ui/react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Sidebar from './navigation/Sidebar.tsx';
 import Home from './pages/Home.tsx';
 import Settings from './pages/Settings.tsx';
 import Login from './auth/Login.tsx';
+import { SidebarProvider } from './sidebar/SidebarContext.tsx';
 
-const App = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  return (
+const App = () => (
+  <SidebarProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />}></Route>
-      </Routes>
-      <Sidebar isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
-      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
     </BrowserRouter>
-  );
-};
+  </SidebarProvider>
+);
 
 export default App;

@@ -1,12 +1,12 @@
 import { Heading } from '@chakra-ui/react';
-import PageWrapper from '../components/PageWrapper.tsx';
+import Layout from '../components/Layout.tsx';
 
 const Home = () => (
   <>
-    <PageWrapper>
+    <Layout>
       <Heading>Home</Heading>
       <p>Hello World</p>
-    </PageWrapper>{' '}
+    </Layout>{' '}
   </>
 );
 
