@@ -14,9 +14,14 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 const Login = () => {
   const { t } = useTranslation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+
   return (
     <Flex
       minH={'100vh'}
@@ -40,11 +45,19 @@ const Login = () => {
           <Stack spacing={4}>
             <FormControl id="email">
               <FormLabel>{t('LOGIN_EMAIL_INPUT_LABEL')}</FormLabel>
-              <Input type="email" />
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </FormControl>
             <FormControl id="password">
               <FormLabel>{t('LOGIN_PASSWORD_INPUT_LABEL')}</FormLabel>
-              <Input type="password" />
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </FormControl>
             <Stack spacing={10}>
               <Stack
@@ -52,12 +65,18 @@ const Login = () => {
                 align={'start'}
                 justify={'space-between'}
               >
-                <Checkbox>{t('LOGIN_REMEMBER_ME_CHECKBOX_LABEL')}</Checkbox>
+                <Checkbox
+                  checked={rememberMe}
+                  onChange={() => setRememberMe(!rememberMe)}
+                >
+                  {t('LOGIN_REMEMBER_ME_CHECKBOX_LABEL')}
+                </Checkbox>
                 <Text color={'blue.400'}>
                   {t('LOGIN_FORGOT_PASSWORD_LINK')}
                 </Text>
               </Stack>
               <Button
+                onClick={(event) => event.preventDefault()}
                 bg={'blue.400'}
                 color={'white'}
                 _hover={{
