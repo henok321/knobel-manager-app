@@ -14,13 +14,33 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
+
+interface FormData {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+}
 
 const Login = () => {
   const { t } = useTranslation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
+    email: '',
+    password: '',
+    rememberMe: false,
+  });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
 
   return (
     <Flex
@@ -43,49 +63,54 @@ const Login = () => {
           p={8}
         >
           <Stack spacing={4}>
-            <FormControl id="email">
-              <FormLabel>{t('LOGIN_EMAIL_INPUT_LABEL')}</FormLabel>
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>{t('LOGIN_PASSWORD_INPUT_LABEL')}</FormLabel>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </FormControl>
-            <Stack spacing={10}>
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                align={'start'}
-                justify={'space-between'}
-              >
-                <Checkbox
-                  checked={rememberMe}
-                  onChange={() => setRememberMe(!rememberMe)}
+            <form onSubmit={handleLogin}>
+              <FormControl id="email">
+                <FormLabel>{t('LOGIN_EMAIL_INPUT_LABEL')}</FormLabel>
+                <Input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl id="password">
+                {' '}
+                <FormLabel>{t('LOGIN_PASSWORD_INPUT_LABEL')}</FormLabel>
+                <Input
+                  type="password"
+                  name="password"
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <Stack spacing={10}>
+                <Stack
+                  direction={{ base: 'column', sm: 'row' }}
+                  align={'start'}
+                  justify={'space-between'}
                 >
-                  {t('LOGIN_REMEMBER_ME_CHECKBOX_LABEL')}
-                </Checkbox>
-                <Text color={'blue.400'}>
-                  {t('LOGIN_FORGOT_PASSWORD_LINK')}
-                </Text>
+                  <Checkbox
+                    checked={formData.rememberMe}
+                    name="rememberMe"
+                    onChange={handleChange}
+                  >
+                    {t('LOGIN_REMEMBER_ME_CHECKBOX_LABEL')}
+                  </Checkbox>
+                  <Text color={'blue.400'}>
+                    {t('LOGIN_FORGOT_PASSWORD_LINK')}
+                  </Text>
+                </Stack>
+                <Button
+                  type="submit"
+                  bg={'blue.400'}
+                  color={'white'}
+                  _hover={{
+                    bg: 'blue.500',
+                  }}
+                >
+                  {t('LOGIN_SIGN_IN_BUTTON')}
+                </Button>
               </Stack>
-              <Button
-                onClick={(event) => event.preventDefault()}
-                bg={'blue.400'}
-                color={'white'}
-                _hover={{
-                  bg: 'blue.500',
-                }}
-              >
-                {t('LOGIN_SIGN_IN_BUTTON')}
-              </Button>
-            </Stack>
+            </form>
           </Stack>
         </Box>
       </Stack>
