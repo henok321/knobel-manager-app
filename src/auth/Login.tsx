@@ -85,6 +85,7 @@ const Login = () => {
                 <Input
                   type="email"
                   name="email"
+                  isRequired
                   value={formData.email}
                   onChange={handleChange}
                 />
@@ -95,6 +96,7 @@ const Login = () => {
                 <Input
                   type="password"
                   name="password"
+                  isRequired
                   onChange={handleChange}
                 />
               </FormControl>
