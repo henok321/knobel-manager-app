@@ -5,7 +5,6 @@ import {
   AlertIcon,
   Box,
   Button,
-  Checkbox,
   Flex,
   FormControl,
   FormLabel,
@@ -24,14 +23,12 @@ import useAuth from './authHooks.ts';
 interface FormData {
   email: string;
   password: string;
-  rememberMe: boolean;
 }
 
 const Login = () => {
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
-    rememberMe: false,
   });
 
   const [loginAttempted, setLoginAttempted] = useState(false);
@@ -107,13 +104,6 @@ const Login = () => {
                   align={'start'}
                   justify={'space-between'}
                 >
-                  <Checkbox
-                    checked={formData.rememberMe}
-                    name="rememberMe"
-                    onChange={handleChange}
-                  >
-                    {t('LOGIN_REMEMBER_ME_CHECKBOX_LABEL')}
-                  </Checkbox>
                   <Text color={'blue.400'}>
                     {t('LOGIN_FORGOT_PASSWORD_LINK')}
                   </Text>
