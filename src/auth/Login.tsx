@@ -1,18 +1,19 @@
 'use client';
 
 import {
-  Flex,
+  Alert,
+  AlertIcon,
   Box,
+  Button,
+  Checkbox,
+  Flex,
   FormControl,
   FormLabel,
-  Input,
-  Checkbox,
-  Stack,
-  Button,
   Heading,
+  Input,
+  Stack,
   Text,
   useColorModeValue,
-  FormErrorMessage,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
@@ -128,7 +129,10 @@ const Login = () => {
                   {t('LOGIN_SIGN_IN_BUTTON')}
                 </Button>
                 {authState.error && (
-                  <FormErrorMessage>{authState.error}</FormErrorMessage>
+                  <Alert status="error">
+                    <AlertIcon />
+                    {authState.error}
+                  </Alert>
                 )}
               </Stack>
             </form>

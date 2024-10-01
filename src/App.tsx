@@ -26,6 +26,14 @@ const App = () => (
             </AuthRedirect>
           }
         />
+        <Route
+          path={'*'}
+          element={
+            <AuthRedirect>
+              <Home />
+            </AuthRedirect>
+          }
+        ></Route>
       </Routes>
     </BrowserRouter>
   </SidebarProvider>
