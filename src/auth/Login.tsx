@@ -33,6 +33,8 @@ const Login = () => {
     rememberMe: false,
   });
 
+  const [loginAttempted, setLoginAttempted] = useState(false);
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { login, authState } = useAuth();
@@ -46,14 +48,16 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (!authState.error) {
+    if (loginAttempted && !authState.error) {
       navigate('/');
     }
-  }, [authState.error, navigate]);
+  }, [authState.error, navigate, loginAttempted]);
 
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoginAttempted(false);
     await login(formData.email, formData.password);
+    setLoginAttempted(true);
   };
 
   return (
