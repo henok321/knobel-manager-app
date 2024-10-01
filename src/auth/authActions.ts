@@ -17,7 +17,16 @@ export const loginAction =
       if (!user || !user.email || !user.uid) {
         dispatch(loginFailure('Invalid user'));
       } else {
-        dispatch(loginSuccess({ email: user.email, uid: user.uid }));
+        const idToken = await user.getIdToken();
+        dispatch(
+          loginSuccess({
+            email: user.email,
+            uid: user.uid,
+            idToken: idToken,
+            refreshToken: user.refreshToken,
+            displayName: user.displayName || '',
+          }),
+        );
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
