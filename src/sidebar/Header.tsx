@@ -17,11 +17,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import { FiMenu } from '@react-icons/all-files/fi/FiMenu';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store/store.ts';
-import { logoutAction } from '../auth/authActions.ts';
 import { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAuth from '../auth/authHooks.ts';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -29,12 +27,12 @@ interface MobileProps extends FlexProps {
 
 const Header = ({ onOpen, ...rest }: MobileProps) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    await dispatch(logoutAction());
+    await logout();
     navigate('/login');
   };
 

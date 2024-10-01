@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase.ts';
 import { AppDispatch } from '../store/store.ts';
 import { loginFailure, loginSuccess, logout } from './authReducer.ts';
@@ -26,6 +26,5 @@ export const loginAction =
   };
 
 export const logoutAction = () => async (dispatch: AppDispatch) => {
-  await signOut(auth);
   dispatch(logout());
 };
