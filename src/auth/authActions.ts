@@ -18,16 +18,15 @@ export const loginAction =
         dispatch(loginFailure('Invalid user'));
       } else {
         const idToken = await user.getIdToken();
-        dispatch(
-          loginSuccess({
-            email: user.email,
-            uid: user.uid,
-            idToken: idToken,
-            refreshToken: user.refreshToken,
-            displayName: user.displayName || '',
-          }),
-        );
-        localStorage.setItem('user', JSON.stringify(user));
+        const reduxUser = {
+          email: user.email,
+          uid: user.uid,
+          idToken: idToken,
+          refreshToken: user.refreshToken,
+          displayName: user.displayName || '',
+        };
+        dispatch(loginSuccess(reduxUser));
+        localStorage.setItem('user', JSON.stringify(reduxUser));
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

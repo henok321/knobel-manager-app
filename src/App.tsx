@@ -1,23 +1,9 @@
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home.tsx';
 import Settings from './pages/Settings.tsx';
 import Login from './auth/Login.tsx';
 import { SidebarProvider } from './sidebar/SidebarContext.tsx';
-import { ReactNode, useEffect } from 'react';
-import useAuth from './auth/authHooks.ts';
-
-const AuthRedirect = ({ children }: { children: ReactNode }) => {
-  const { authState } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!authState.user) {
-      navigate('/login');
-    }
-  }, [authState.user, navigate]);
-
-  return children;
-};
+import { AuthRedirect } from './auth/AuthRedirect.tsx';
 
 const App = () => (
   <SidebarProvider>
