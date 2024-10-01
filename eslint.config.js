@@ -9,6 +9,8 @@ import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
+import { fixupPluginRules } from '@eslint/compat';
+import reactHooksPlugin from '@eslint/js';
 
 export default [
   {
@@ -29,7 +31,7 @@ export default [
     plugins: {
       '@typescript-eslint': ts,
       react,
-      'react-hooks': reactHooks,
+      'react-hooks': fixupPluginRules(reactHooksPlugin),
       'react-refresh': reactRefresh,
       prettier,
     },
@@ -37,7 +39,7 @@ export default [
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
       ...react.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
+      ...reactHooksPlugin.configs.recommended.rules,
       ...prettierConfig.rules,
       'prettier/prettier': 'warn',
       'react/react-in-jsx-scope': 'off',

@@ -17,6 +17,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { FiMenu } from '@react-icons/all-files/fi/FiMenu';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../store/store.ts';
+import { logoutAction } from '../auth/authActions.ts';
+import { MouseEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -24,6 +29,15 @@ interface MobileProps extends FlexProps {
 
 const Header = ({ onOpen, ...rest }: MobileProps) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  const handleLogout = async (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    await dispatch(logoutAction());
+    navigate('/login');
+  };
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -91,7 +105,9 @@ const Header = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>{t('SIDEBAR_HEADER_MENU_ITEM_PROFILE')}</MenuItem>
               <MenuItem>{t('SIDEBAR_HEADER_MENU_ITEM_SETTINGS')}</MenuItem>
               <MenuDivider />
-              <MenuItem>{t('SIDEBAR_HEADER_MENU_ITEM_LOGOUT')}</MenuItem>
+              <MenuItem onClick={handleLogout}>
+                {t('SIDEBAR_HEADER_MENU_ITEM_LOGOUT')}
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>

@@ -12,9 +12,13 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+import useAuth from './authHooks.ts';
 
 interface FormData {
   email: string;
@@ -23,12 +27,15 @@ interface FormData {
 }
 
 const Login = () => {
-  const { t } = useTranslation();
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
     rememberMe: false,
   });
+
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { login, authState } = useAuth();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -38,8 +45,15 @@ const Login = () => {
     }));
   };
 
-  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (!authState.error) {
+      navigate('/');
+    }
+  }, [authState.error, navigate]);
+
+  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await login(formData.email, formData.password);
   };
 
   return (
@@ -109,6 +123,9 @@ const Login = () => {
                 >
                   {t('LOGIN_SIGN_IN_BUTTON')}
                 </Button>
+                {authState.error && (
+                  <FormErrorMessage>{authState.error}</FormErrorMessage>
+                )}
               </Stack>
             </form>
           </Stack>

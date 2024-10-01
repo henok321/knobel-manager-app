@@ -1,19 +1,16 @@
-import { Box, Flex, FlexProps, Icon } from '@chakra-ui/react';
+import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { IconType } from '@react-icons/all-files';
 import { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
   children: ReactNode;
+  path: string;
 }
 
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => (
-  <Box
-    as="a"
-    href="#"
-    style={{ textDecoration: 'none' }}
-    _focus={{ boxShadow: 'none' }}
-  >
+const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => (
+  <Link to={path}>
     <Flex
       align="center"
       p="4"
@@ -39,7 +36,7 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => (
       )}
       {children}
     </Flex>
-  </Box>
+  </Link>
 );
 
 export default NavItem;

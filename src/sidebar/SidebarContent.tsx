@@ -11,7 +11,6 @@ import { FiHome } from '@react-icons/all-files/fi/FiHome';
 import { FiSettings } from '@react-icons/all-files/fi/FiSettings';
 import NavItem from './NavItem.tsx';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 interface LinkItemProps {
   name: string;
@@ -50,11 +49,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <Link to={link.path} key={t(link.name)}>
-          <NavItem key={t(link.name)} icon={link.icon}>
-            {t(link.name)}
-          </NavItem>
-        </Link>
+        <NavItem key={t(link.name)} icon={link.icon} path={link.path}>
+          {t(link.name)}
+        </NavItem>
       ))}
     </Box>
   );
