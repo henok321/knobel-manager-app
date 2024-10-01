@@ -5,6 +5,8 @@ export interface AuthState {
     email: string;
     displayName: string;
     uid: string;
+  } | null;
+  token: {
     idToken: string;
     refreshToken: string;
   } | null;
@@ -13,6 +15,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
   user: null,
+  token: null,
   error: null,
 };
 
@@ -30,15 +33,25 @@ const authSlice = createSlice({
         refreshToken: string;
       }>,
     ) => {
-      state.user = action.payload;
+      state.user = {
+        uid: action.payload.uid,
+        email: action.payload.email,
+        displayName: action.payload.displayName,
+      };
+      state.token = {
+        idToken: action.payload.idToken,
+        refreshToken: action.payload.refreshToken,
+      };
       state.error = null;
     },
     loginFailure: (state, action: PayloadAction<string>) => {
       state.user = null;
+      state.token = null;
       state.error = action.payload;
     },
     logout: (state) => {
       state.user = null;
+      state.token = null;
       state.error = null;
     },
   },
