@@ -27,6 +27,7 @@ export const loginAction =
             displayName: user.displayName || '',
           }),
         );
+        localStorage.setItem('user', JSON.stringify(user));
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -35,5 +36,6 @@ export const loginAction =
   };
 
 export const logoutAction = () => async (dispatch: AppDispatch) => {
+  localStorage.removeItem('user');
   dispatch(logout());
 };
