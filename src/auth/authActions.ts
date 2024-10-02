@@ -1,9 +1,9 @@
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../../firebase.ts';
 import { AppDispatch } from '../store/store.ts';
-import { loginFailure, loginSuccess, logout } from './authReducer.ts';
+import { setUser, setUserFailed } from '../store/user/userSlice.ts';
 
-export const loginAction =
+export const loginWithEmail =
   (email: string, password: string) => async (dispatch: AppDispatch) => {
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -15,32 +15,22 @@ export const loginAction =
       const user = userCredential.user;
 
       if (!user || !user.email || !user.uid) {
-        dispatch(loginFailure('Invalid user'));
+        dispatch(setUserFailed('Invalid user'));
       } else {
-        const idToken = await user.getIdToken();
-
         const userInfo = {
           email: user.email,
           uid: user.uid,
           displayName: user.displayName || '',
         };
-        dispatch(loginSuccess(userInfo));
-        localStorage.setItem(
-          'user',
-          JSON.stringify({
-            ...userInfo,
-            idToken,
-            refreshToken: user.refreshToken,
-          }),
-        );
+        dispatch(setUser(userInfo));
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      dispatch(loginFailure(error.message));
+      dispatch(setUserFailed(error.message));
     }
   };
 
-export const logoutAction = () => async (dispatch: AppDispatch) => {
-  localStorage.removeItem('user');
-  dispatch(logout());
+export const logoutUser = () => async (dispatch: AppDispatch) => {
+  signOut(auth);
+  dispatch(setUser(null));
 };

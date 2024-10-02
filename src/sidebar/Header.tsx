@@ -18,8 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { FiMenu } from '@react-icons/all-files/fi/FiMenu';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { MouseEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import useAuth from '../auth/authHooks.ts';
+import useUser from '../auth/authHook.ts';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -27,13 +26,11 @@ interface MobileProps extends FlexProps {
 
 const Header = ({ onOpen, ...rest }: MobileProps) => {
   const { t } = useTranslation();
-  const { logout } = useAuth();
-  const navigate = useNavigate();
+  const { logout } = useUser();
 
   const handleLogout = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    await logout();
-    navigate('/login');
+    logout();
   };
 
   return (

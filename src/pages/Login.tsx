@@ -17,8 +17,12 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
-import useAuth from './authHooks.ts';
+import useUser from '../auth/authHook.ts';
+import { setUser } from '../store/user/userSlice.ts';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth as firebaseAuth } from '../../firebase.ts';
+import { useDispatch } from 'react-redux';
+import { CenteredSpinner } from '../components/CenteredSpinner.tsx';
 
 interface FormData {
   email: string;
@@ -31,11 +35,10 @@ const Login = () => {
     password: '',
   });
 
-  const [loginAttempted, setLoginAttempted] = useState(false);
-
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { login, authState } = useAuth();
+  const { login, userState } = useUser();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -46,17 +49,31 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (loginAttempted && !authState.error) {
-      navigate('/');
-    }
-  }, [authState.error, navigate, loginAttempted]);
+    const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
+      if (user) {
+        const userInfo = {
+          email: user.email || '',
+          uid: user.uid,
+          displayName: user.displayName || '',
+        };
+        dispatch(setUser(userInfo));
+      } else {
+        dispatch(setUser(null));
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [dispatch]);
 
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoginAttempted(false);
     await login(formData.email, formData.password);
-    setLoginAttempted(true);
   };
+
+  if (loading) {
+    return <CenteredSpinner />;
+  }
 
   return (
     <Flex
@@ -120,10 +137,10 @@ const Login = () => {
                 >
                   {t('LOGIN_SIGN_IN_BUTTON')}
                 </Button>
-                {authState.error && (
+                {userState.error && (
                   <Alert status="error">
                     <AlertIcon />
-                    {authState.error}
+                    {userState.error}
                   </Alert>
                 )}
               </Stack>

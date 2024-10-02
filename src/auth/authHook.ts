@@ -2,26 +2,26 @@
 
 import { AppDispatch } from '../store/store.ts';
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthState } from './authReducer.ts';
-import { loginAction, logoutAction } from './authActions.ts';
+import { UserState } from '../store/user/userSlice.ts';
+import { loginWithEmail, logoutUser } from './authActions.ts';
 
-const useAuth = () => {
+const useUser = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const authState = useSelector((state: { auth: AuthState }) => state.auth);
+  const userState = useSelector((state: { auth: UserState }) => state.auth);
 
   const login = async (email: string, password: string) => {
-    await dispatch(loginAction(email, password));
+    await dispatch(loginWithEmail(email, password));
   };
 
   const logout = async () => {
-    await dispatch(logoutAction());
+    await dispatch(logoutUser());
   };
 
   return {
-    authState,
+    userState,
     login,
     logout,
   };
 };
 
-export default useAuth;
+export default useUser;
