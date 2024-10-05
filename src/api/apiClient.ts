@@ -2,12 +2,13 @@ import axios from 'axios';
 import { auth } from '../../firebase.ts';
 
 const apiClient = axios.create({
-  baseURL: 'https://knobel-manager-service-566295896360.europe-west1.run.app',
+  baseURL: '/api',
 });
 
-axios.interceptors.request.use(
+apiClient.interceptors.request.use(
   async (config) => {
-    config.headers.token = await auth.currentUser?.getIdToken();
+    const idToken = await auth.currentUser?.getIdToken();
+    config.headers.Authorization = `Bearer ${idToken}`;
     return config;
   },
   (error) => Promise.reject(error),
@@ -19,5 +20,3 @@ export const ping = async () => {
   const response = await apiClient.get<PingResponse>('/ping');
   return response.data;
 };
-
-export default apiClient;
