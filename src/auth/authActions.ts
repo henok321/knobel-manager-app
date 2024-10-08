@@ -31,6 +31,6 @@ export const loginWithEmail =
   };
 
 export const logoutUser = () => async (dispatch: AppDispatch) => {
-  signOut(auth);
+  await signOut(auth);
   dispatch(setUser(null));
 };

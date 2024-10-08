@@ -30,7 +30,7 @@ const Header = ({ onOpen, ...rest }: MobileProps) => {
 
   const handleLogout = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    logout();
+    await logout();
   };
 
   return (
