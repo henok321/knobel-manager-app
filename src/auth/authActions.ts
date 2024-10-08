@@ -30,6 +30,12 @@ export const loginWithEmail =
     }
   };
 
+export const updateUser =
+  (user: { email: string; displayName: string; uid: string }) =>
+  async (dispatch: AppDispatch) => {
+    dispatch(setUser(user));
+  };
+
 export const logoutUser = () => async (dispatch: AppDispatch) => {
   await signOut(auth);
   dispatch(setUser(null));
