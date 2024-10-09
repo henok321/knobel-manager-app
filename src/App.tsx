@@ -5,6 +5,7 @@ import { SidebarProvider } from './sidebar/SidebarContext.tsx';
 import useUser from './auth/authHook.ts';
 import Login from './pages/Login.tsx';
 import UserProfile from './pages/UserProfile.tsx';
+import GamesOverview from './pages/GamesOverview.tsx';
 
 const App = () => {
   const { userState } = useUser();
@@ -15,6 +16,7 @@ const App = () => {
         <Routes>
           <Route path="/" index element={<Home />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/games" element={<GamesOverview />} />
           <Route path="/profile" element={<UserProfile />} />
         </Routes>
       </BrowserRouter>
