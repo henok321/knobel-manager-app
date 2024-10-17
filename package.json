@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode prod",
+    "local": "vite --mode local",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -14,7 +15,7 @@
     "preview": "vite preview",
     "prepare": "husky",
     "clean": "rm -rf node_modules dist",
-    "deploy": "yarn build && firebase deploy --only hosting"
+    "deploy": "yarn build --mode prod && firebase deploy --only hosting"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.9.1",
@@ -44,7 +45,7 @@
     "@testing-library/react": "^16.0.1",
     "@types/axios": "^0.14.0",
     "@types/jest": "^29.5.13",
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.7.5",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
     "@types/react-redux": "^7.1.34",
