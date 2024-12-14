@@ -42,7 +42,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
   },
 );
 
-function SliderThumbs(props: { value?: number[] }) {
+const SliderThumbs = (props: { value?: number[] }) => {
   const { value } = props;
   return (
     <For each={value}>
@@ -53,7 +53,7 @@ function SliderThumbs(props: { value?: number[] }) {
       )}
     </For>
   );
-}
+};
 
 interface SliderMarksProps {
   marks?: Array<number | { value: number; label: React.ReactNode }>;
