@@ -1,16 +1,10 @@
-import {
-  Box,
-  BoxProps,
-  CloseButton,
-  Flex,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Box, BoxProps, Flex, Text } from '@chakra-ui/react';
 import { IconType } from '@react-icons/all-files';
 import { FiHome } from '@react-icons/all-files/fi/FiHome';
 import { FiSettings } from '@react-icons/all-files/fi/FiSettings';
 import NavItem from './NavItem.tsx';
 import { useTranslation } from 'react-i18next';
+import { CloseButton } from '../components/ui/close-button.tsx';
 
 interface LinkItemProps {
   name: string;
@@ -34,9 +28,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
-      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"

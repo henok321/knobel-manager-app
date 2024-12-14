@@ -1,20 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Alert,
-  AlertIcon,
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  Stack,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Box, Button, Heading, Input, Stack } from '@chakra-ui/react';
 import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../firebase.ts';
 import Layout from '../components/Layout.tsx';
+import { Alert } from '../components/ui/alert.tsx';
+import { Field } from '../components/ui/field.tsx';
 
 const UserProfile = () => {
   const { t } = useTranslation();
@@ -62,46 +53,38 @@ const UserProfile = () => {
 
   return (
     <Layout>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+      <Stack gap={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}>{t('USER_PROFILE_HEADING')}</Heading>
         </Stack>
-        <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}
-        >
+        <Box rounded={'lg'} boxShadow={'lg'} p={8}>
           <form onSubmit={handleSubmit}>
-            <Stack spacing={4}>
-              <FormControl id="displayName">
-                <FormLabel>{t('USER_PROFILE_DISPLAY_NAME')}</FormLabel>
+            <Stack gap={4}>
+              <Field id="displayName" label={t('USER_PROFILE_DISPLAY_NAME')}>
                 <Input
                   type="text"
                   name="displayName"
                   value={formData.displayName}
                   onChange={handleChange}
                 />
-              </FormControl>
-              <FormControl id="email">
-                <FormLabel>{t('USER_PROFILE_EMAIL')}</FormLabel>
+              </Field>
+              <Field id="email" label={t('USER_PROFILE_EMAIL')}>
                 <Input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                 />
-              </FormControl>
-              <FormControl id="password">
-                <FormLabel>{t('USER_PROFILE_PASSWORD')}</FormLabel>
+              </Field>
+              <Field id="password" label={t('USER_PROFILE_PASSWORD')}>
                 <Input
                   type="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                 />
-              </FormControl>
-              <Stack spacing={10}>
+              </Field>
+              <Stack gap={10}>
                 <Button
                   type="submit"
                   bg={'blue.400'}
@@ -112,18 +95,8 @@ const UserProfile = () => {
                 >
                   {t('UPDATE_PROFILE_SUBMIT')}
                 </Button>
-                {error && (
-                  <Alert status="error">
-                    <AlertIcon />
-                    {error}
-                  </Alert>
-                )}
-                {success && (
-                  <Alert status="success">
-                    <AlertIcon />
-                    {success}
-                  </Alert>
-                )}
+                {error && <Alert status="error">{error}</Alert>}
+                {success && <Alert status="success">{success}</Alert>}
               </Stack>
             </Stack>
           </form>

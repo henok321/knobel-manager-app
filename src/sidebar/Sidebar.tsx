@@ -1,6 +1,6 @@
 import SidebarContent from './SidebarContent.tsx';
-import { Drawer, DrawerContent } from '@chakra-ui/react';
 import Header from './Header.tsx';
+import { DrawerContent, DrawerRoot } from '../components/ui/drawer.tsx';
 
 interface SidebarProps {
   onClose: () => void;
@@ -14,18 +14,16 @@ const Sidebar = ({ onClose, onOpen, isOpen }: SidebarProps) => (
       onClose={() => onClose}
       display={{ base: 'none', md: 'block' }}
     />
-    <Drawer
-      isOpen={isOpen}
-      placement="left"
-      onClose={onClose}
-      returnFocusOnClose={false}
-      onOverlayClick={onClose}
+    <DrawerRoot
+      open={isOpen}
+      placement="start"
+      onOpenChange={onClose}
       size="full"
     >
       <DrawerContent>
         <SidebarContent onClose={onClose} />
       </DrawerContent>
-    </Drawer>
+    </DrawerRoot>
     <Header onOpen={onOpen} />
   </>
 );

@@ -1,14 +1,16 @@
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import {
+  DialogActionTrigger,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+} from '../../components/ui/dialog.tsx';
+import { Button } from '../../components/ui/button.tsx';
 
 interface LogoutModalProps {
   isOpen: boolean;
@@ -20,25 +22,26 @@ const LogoutModal = ({ isOpen, onClose, handleLogout }: LogoutModalProps) => {
   const { t } = useTranslation();
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      isCentered
-      closeOnOverlayClick={false}
-    >
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{t('LOGOUT_MODAL_HEADER')}</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>{t('LOGOUT_MODAL_HINT')}</ModalBody>
-        <ModalFooter>
+    <DialogRoot open={isOpen} onOpenChange={onClose}>
+      <DialogTrigger asChild>
+        {/* Your trigger component, e.g., a button */}
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{t('LOGOUT_MODAL_HEADER')}</DialogTitle>
+          <DialogCloseTrigger />
+        </DialogHeader>
+        <DialogBody>{t('LOGOUT_MODAL_HINT')}</DialogBody>
+        <DialogFooter>
           <Button colorScheme="blue" mr={3} onClick={handleLogout}>
             {t('LOGOUT_MODAL_CONFIRM')}
           </Button>
-          <Button onClick={onClose}>{t('LOGOUT_MODAL_CANCEL')}</Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+          <DialogActionTrigger asChild>
+            <Button onClick={onClose}>{t('LOGOUT_MODAL_CANCEL')}</Button>
+          </DialogActionTrigger>
+        </DialogFooter>
+      </DialogContent>
+    </DialogRoot>
   );
 };
 

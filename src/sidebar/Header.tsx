@@ -1,25 +1,25 @@
-import {
-  Avatar,
-  Box,
-  Flex,
-  FlexProps,
-  HStack,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-  Text,
-  useColorModeValue,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { FiMenu } from '@react-icons/all-files/fi/FiMenu';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import useUser from '../auth/authHook.ts';
 import LogoutModal from './modal/LogoutModal.tsx';
+import {
+  Box,
+  Flex,
+  Text,
+  FlexProps,
+  HStack,
+  IconButton,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react';
+import {
+  MenuContent,
+  MenuItem,
+  MenuRoot,
+  MenuTrigger,
+} from '../components/ui/menu.tsx';
+import { Avatar } from '../components/ui/avatar.tsx';
+import { FiMenu } from 'react-icons/fi';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -42,9 +42,7 @@ const Header = ({ onOpen, ...rest }: MobileProps) => {
         px={{ base: 4, md: 4 }}
         height="20"
         alignItems="center"
-        bg={useColorModeValue('white', 'gray.900')}
         borderBottomWidth="1px"
-        borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
         justifyContent={{ base: 'space-between', md: 'flex-end' }}
         {...rest}
       >
@@ -53,22 +51,16 @@ const Header = ({ onOpen, ...rest }: MobileProps) => {
           onClick={onOpen}
           variant="outline"
           aria-label="open menu"
-          icon={<FiMenu />}
-        />
-
-        <Text
-          display={{ base: 'flex', md: 'none' }}
-          fontSize="2xl"
-          fontFamily="monospace"
-          fontWeight="bold"
         >
-          {t('SIDEBAR_TITLE')}
-        </Text>
+          <FiMenu />
+        </IconButton>
 
-        <HStack spacing={{ base: '0', md: '6' }}>
+        {t('SIDEBAR_TITLE')}
+
+        <HStack gap={{ base: '0', md: '6' }}>
           <Flex alignItems={'center'}>
-            <Menu>
-              <MenuButton
+            <MenuRoot>
+              <MenuTrigger
                 py={2}
                 transition="all 0.3s"
                 _focus={{ boxShadow: 'none' }}
@@ -83,36 +75,34 @@ const Header = ({ onOpen, ...rest }: MobileProps) => {
                   <VStack
                     display={{ base: 'none', md: 'flex' }}
                     alignItems="flex-start"
-                    spacing="1px"
+                    gap="1px"
                     ml="2"
                   >
                     <Text fontSize="sm">Justina Clark</Text>
-                    <Text fontSize="xs" color="gray.600">
-                      Admin
-                    </Text>
+                    <Text fontSize="xs">Admin</Text>
                   </VStack>
                   <Box display={{ base: 'none', md: 'flex' }}>
                     <FiChevronDown />
                   </Box>
                 </HStack>
-              </MenuButton>
-              <MenuList
-                bg={useColorModeValue('white', 'gray.900')}
-                borderColor={useColorModeValue('gray.200', 'gray.700')}
-              >
-                <MenuItem>{t('SIDEBAR_HEADER_MENU_ITEM_PROFILE')}</MenuItem>
-                <MenuItem>{t('SIDEBAR_HEADER_MENU_ITEM_SETTINGS')}</MenuItem>
-                <MenuDivider />
-                <MenuItem onClick={logoutModal.onOpen}>
-                  {t('SIDEBAR_HEADER_MENU_ITEM_LOGOUT')}
-                </MenuItem>
-              </MenuList>
-            </Menu>
+              </MenuTrigger>
+              <MenuContent>
+                <MenuItem
+                  value={t('SIDEBAR_HEADER_MENU_ITEM_PROFILE')}
+                ></MenuItem>
+                <MenuItem
+                  value={t('SIDEBAR_HEADER_MENU_ITEM_SETTINGS')}
+                ></MenuItem>
+                <MenuItem
+                  value={t('SIDEBAR_HEADER_MENU_ITEM_LOGOUT')}
+                ></MenuItem>
+              </MenuContent>
+            </MenuRoot>
           </Flex>
         </HStack>
       </Flex>
       <LogoutModal
-        isOpen={logoutModal.isOpen}
+        isOpen={logoutModal.open}
         onClose={logoutModal.onClose}
         handleLogout={handleLogout}
       />

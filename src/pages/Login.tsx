@@ -1,18 +1,13 @@
 'use client';
 
 import {
-  Alert,
-  AlertIcon,
   Box,
   Button,
   Flex,
-  FormControl,
-  FormLabel,
   Heading,
   Input,
   Stack,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
@@ -23,6 +18,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth as firebaseAuth } from '../../firebase.ts';
 import { useDispatch } from 'react-redux';
 import { CenteredSpinner } from '../components/CenteredSpinner.tsx';
+import { Field } from '../components/ui/field.tsx';
+import { Alert } from '../components/ui/alert.tsx';
 
 interface FormData {
   email: string;
@@ -76,48 +73,35 @@ const Login = () => {
   }
 
   return (
-    <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}
-    >
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+    <Flex minH={'100vh'} align={'center'} justify={'center'}>
+      <Stack gap={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}>{t('LOGIN_HEADING')}</Heading>
           <Text fontSize={'lg'} color={'gray.600'}>
             {t('LOGIN_SUBHEADER')}
           </Text>
         </Stack>
-        <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}
-        >
-          <Stack spacing={4}>
+        <Box rounded={'lg'} boxShadow={'lg'} p={8}>
+          <Stack gap={4}>
             <form onSubmit={handleLogin}>
-              <FormControl id="email">
-                <FormLabel>{t('LOGIN_EMAIL_INPUT_LABEL')}</FormLabel>
+              <Field id="email" label={t('LOGIN_EMAIL_INPUT_LABEL')}>
                 <Input
                   type="email"
                   name="email"
-                  isRequired
+                  required
                   value={formData.email}
                   onChange={handleChange}
                 />
-              </FormControl>
-              <FormControl id="password">
-                {' '}
-                <FormLabel>{t('LOGIN_PASSWORD_INPUT_LABEL')}</FormLabel>
+              </Field>
+              <Field id="password" label={t('LOGIN_PASSWORD_INPUT_LABEL')}>
                 <Input
                   type="password"
+                  required
                   name="password"
-                  isRequired
                   onChange={handleChange}
                 />
-              </FormControl>
-              <Stack spacing={10}>
+              </Field>
+              <Stack gap={10}>
                 <Stack
                   direction={{ base: 'column', sm: 'row' }}
                   align={'start'}
@@ -138,10 +122,7 @@ const Login = () => {
                   {t('LOGIN_SIGN_IN_BUTTON')}
                 </Button>
                 {userState.error && (
-                  <Alert status="error">
-                    <AlertIcon />
-                    {userState.error}
-                  </Alert>
+                  <Alert status="error">{userState.error}</Alert>
                 )}
               </Stack>
             </form>
