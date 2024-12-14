@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "automerge": true,
+  "enabledManagers": ["npm", "github-actions"],
+  "prCreation": "immediate",
+  "labels": ["dependencies"],
+  "schedule": ["at any time"],
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true,
+      "addLabels": ["dev-dependencies"]
+    },
+    {
+      "matchPackagePatterns": ["^@types/"],
+      "groupName": "TypeScript Definitions",
+      "addLabels": ["typescript"]
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ]
+}
