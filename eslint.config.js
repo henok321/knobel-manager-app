@@ -18,6 +18,7 @@ export default [
   },
   {
     files: ['**/*.{ts,tsx}'],
+    ignores: ['src/components/ui/**'],
     languageOptions: {
       parser: tsParser,
       ecmaVersion: 2021,
