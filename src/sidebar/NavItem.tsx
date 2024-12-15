@@ -1,6 +1,6 @@
 import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { IconType } from '@react-icons/all-files';
-import { ReactNode } from 'react';
+import { Children, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
 interface NavItemProps extends FlexProps {
@@ -24,17 +24,7 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => (
       }}
       {...rest}
     >
-      {icon && (
-        <Icon
-          mr="4"
-          fontSize="16"
-          _groupHover={{
-            color: 'white',
-          }}
-          as={icon}
-        />
-      )}
-      {children}
+      <div>{children}</div>
     </Flex>
   </Link>
 );

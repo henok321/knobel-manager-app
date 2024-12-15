@@ -9,7 +9,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ onClose, onOpen, isOpen }: SidebarProps) => (
-  <>
+  <div>
     <SidebarContent
       onClose={() => onClose}
       display={{ base: 'none', md: 'block' }}
@@ -25,7 +25,7 @@ const Sidebar = ({ onClose, onOpen, isOpen }: SidebarProps) => (
       </DrawerContent>
     </DrawerRoot>
     <Header onOpen={onOpen} />
-  </>
+  </div>
 );
 
 export default Sidebar;

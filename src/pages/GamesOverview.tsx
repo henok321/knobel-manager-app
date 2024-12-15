@@ -12,27 +12,25 @@ const GamesOverview = () => {
 
   return (
     <Layout>
-      <div>
-        <Heading marginBottom={'1rem'}>{t('GAMES_OVERVIEW_HEADING')}</Heading>
-        <List.Root gap={3}>
-          {games.map((game) => (
-            <List.Item
-              background={'white'}
-              key={game.id}
-              p={3}
-              borderWidth="1px"
-              borderRadius="lg"
-              cursor="pointer"
-              onClick={() => {}}
-            >
-              <Text fontWeight="bold">{game.name}</Text>
-              <Badge colorScheme={game.year === 'Admin' ? 'red' : 'blue'}>
-                {game.year}
-              </Badge>
-            </List.Item>
-          ))}
-        </List.Root>
-      </div>
+      <Heading marginBottom={'1rem'}>{t('GAMES_OVERVIEW_HEADING')}</Heading>
+      <List.Root gap={3}>
+        {games.map((game) => (
+          <List.Item
+            background={'white'}
+            key={game.id}
+            p={3}
+            borderWidth="1px"
+            borderRadius="lg"
+            cursor="pointer"
+            onClick={() => {}}
+          >
+            <Text fontWeight="bold">{game.name}</Text>
+            <Badge colorScheme={game.year === 'Admin' ? 'red' : 'blue'}>
+              {game.year}
+            </Badge>
+          </List.Item>
+        ))}
+      </List.Root>
     </Layout>
   );
 };

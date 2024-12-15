@@ -23,9 +23,6 @@ const LogoutModal = ({ isOpen, onClose, handleLogout }: LogoutModalProps) => {
 
   return (
     <DialogRoot open={isOpen} onOpenChange={onClose}>
-      <DialogTrigger asChild>
-        {/* Your trigger component, e.g., a button */}
-      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t('LOGOUT_MODAL_HEADER')}</DialogTitle>

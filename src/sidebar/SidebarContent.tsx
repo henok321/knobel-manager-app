@@ -1,9 +1,7 @@
-import { Box, BoxProps, Flex, Text } from '@chakra-ui/react';
-import { IconType } from '@react-icons/all-files';
-import { FiHome } from '@react-icons/all-files/fi/FiHome';
-import { FiSettings } from '@react-icons/all-files/fi/FiSettings';
-import NavItem from './NavItem.tsx';
+import { Box, Flex, Text, BoxProps } from '@chakra-ui/react';
+import { FiHome, FiSettings } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
+import NavItem from './NavItem';
 import { CloseButton } from '../components/ui/close-button.tsx';
 
 interface LinkItemProps {
@@ -18,7 +16,6 @@ interface SidebarProps extends BoxProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: 'SIDEBAR_ITEM_HOME', icon: FiHome, path: '/' },
-
   { name: 'SIDEBAR_ITEM_SETTINGS', icon: FiSettings, path: '/settings' },
 ];
 
@@ -41,7 +38,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={t(link.name)} icon={link.icon} path={link.path}>
+        <NavItem key={link.name} icon={link.icon} path={link.path}>
           {t(link.name)}
         </NavItem>
       ))}
