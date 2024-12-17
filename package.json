@@ -18,7 +18,7 @@
     "deploy": "yarn build --mode prod && firebase deploy --only hosting"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.9.1",
+    "@chakra-ui/react": "^3.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@react-icons/all-files": "^4.1.0",
