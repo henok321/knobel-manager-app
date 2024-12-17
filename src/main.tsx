@@ -11,14 +11,18 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-import { CssBaseline } from '@mui/material';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+
+export const appTheme = createTheme();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <I18nextProvider i18n={i18n}>
-        <CssBaseline />
-        <App />
+        <CssBaseline enableColorScheme />
+        <ThemeProvider theme={appTheme}>
+          <App />{' '}
+        </ThemeProvider>
       </I18nextProvider>
     </Provider>
   </StrictMode>,
