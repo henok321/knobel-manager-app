@@ -1,7 +1,8 @@
+import { Button } from '@mui/material';
+
 const Login = () => (
   <div>
-    <h1>Login</h1>
-    <p>Hello World</p>
+    <Button variant="contained">Login</Button>
   </div>
 );
 
