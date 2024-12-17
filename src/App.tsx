@@ -1,29 +1,22 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home.tsx';
-import Settings from './pages/Settings.tsx';
-import { SidebarProvider } from './sidebar/SidebarContext.tsx';
-import useUser from './auth/authHook.ts';
 import Login from './pages/Login.tsx';
-import UserProfile from './pages/UserProfile.tsx';
-import GamesOverview from './pages/GamesOverview.tsx';
+import ProtectedRoute from './auth/ProtectedRoute.tsx';
+import { AuthProvider } from './auth/AuthContext.tsx';
+import Games from './pages/Games.tsx';
 
-const App = () => {
-  const { userState } = useUser();
-
-  return userState.user ? (
-    <SidebarProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" index element={<Home />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/games" element={<GamesOverview />} />
-          <Route path="/profile" element={<UserProfile />} />
-        </Routes>
-      </BrowserRouter>
-    </SidebarProvider>
-  ) : (
-    <Login />
-  );
-};
+const App = () => (
+  <AuthProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/games" element={<Games />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </AuthProvider>
+);
 
 export default App;

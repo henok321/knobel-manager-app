@@ -3,8 +3,8 @@ import Layout from './Layout.tsx';
 const Home = () => (
   <Layout>
     <div>
-      <h1>Home</h1>
-      <p>Hello World</p>
+      <h1>Games</h1>
+      <p>Hello Games</p>
     </div>
   </Layout>
 );
