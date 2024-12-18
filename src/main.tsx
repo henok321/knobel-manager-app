@@ -5,6 +5,7 @@ import i18n from './i18n/i18n.ts';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import store from './store/store.ts';
+import './index.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

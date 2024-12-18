@@ -1,31 +1,35 @@
+import React, { createContext, useEffect, useState } from 'react';
 import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import 'firebase/compat/auth';
-import { auth as firebaseAuth } from '../../firebase.ts';
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  User,
+} from 'firebase/auth';
+import { auth as firebaseAuth } from './firebaseConfig.ts';
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-interface AuthContextValue {
+export interface AuthContextValue {
   user: User | null;
   loading: boolean;
+  // eslint-disable-next-line no-unused-vars
+  loginAction: (loginData: LoginData) => Promise<void>;
+  logOut: () => void;
 }
+
+type LoginData = {
+  email: string;
+  password: string;
+};
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
-  loading: true,
+  loading: false,
+  loginAction: async () => {},
+  logOut: () => {},
 });
 
-export const useAuth = (): AuthContextValue => useContext(AuthContext);
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -38,9 +42,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     [],
   );
 
+  const loginAction = async ({ email, password }: LoginData) => {
+    await signInWithEmailAndPassword(firebaseAuth, email, password);
+  };
+
+  const logOut = () => {
+    signOut(firebaseAuth);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        loginAction,
+        logOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
+
+export { AuthContext };
