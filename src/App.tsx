@@ -9,14 +9,13 @@ import { Navigation } from '@toolpad/core';
 
 const NAVIGATION: Navigation = [
   {
-    kind: 'header',
-    title: 'Main items',
-  },
-  {
     title: 'Home',
+    pattern: '/home',
   },
+
   {
     title: 'Settings',
+    pattern: '/settings',
   },
 ];
 const App = () => (

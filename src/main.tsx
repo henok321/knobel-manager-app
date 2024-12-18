@@ -9,9 +9,10 @@ import '@fontsource/roboto/700.css';
 
 import { createTheme } from '@mui/material';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Layout from './Layout.tsx';
+import Layout from './pages/Layout.tsx';
 import HomePage from './pages/HomePage.tsx';
 import SettingsPage from './pages/SettingsPage.tsx';
+import Login from './pages/Login.tsx';
 
 export const appTheme = createTheme();
 
@@ -20,11 +21,15 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       {
+        path: '/login',
+        Component: Login,
+      },
+      {
         path: '/',
-        Component: Layout,
+        element: <Layout />,
         children: [
-          { path: '', Component: HomePage },
-          { path: 'settings', Component: SettingsPage },
+          { path: '/home', element: <HomePage /> },
+          { path: '/settings', element: <SettingsPage /> },
         ],
       },
     ],
