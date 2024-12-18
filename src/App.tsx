@@ -1,20 +1,20 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import useUser from './auth/authHook.ts';
 import Home from './pages/Home.tsx';
 import Login from './pages/Login.tsx';
+import ProtectedRoute from './auth/ProtectedRoute.tsx';
+import { AuthProvider } from './auth/AuthContext.tsx';
 
-const App = () => {
-  const { userState } = useUser();
-
-  return userState.user ? (
+const App = () => (
+  <AuthProvider>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+        </Route>
       </Routes>
     </BrowserRouter>
-  ) : (
-    <Login />
-  );
-};
+  </AuthProvider>
+);
 
 export default App;
