@@ -1,29 +1,38 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
-import i18n from './i18n/i18n.ts';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
-import store from './store/store.ts';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { createTheme } from '@mui/material';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Layout from './Layout.tsx';
+import HomePage from './pages/HomePage.tsx';
+import SettingsPage from './pages/SettingsPage.tsx';
 
 export const appTheme = createTheme();
 
+const router = createBrowserRouter([
+  {
+    Component: App,
+    children: [
+      {
+        path: '/',
+        Component: Layout,
+        children: [
+          { path: '', Component: HomePage },
+          { path: 'settings', Component: SettingsPage },
+        ],
+      },
+    ],
+  },
+]);
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider store={store}>
-      <I18nextProvider i18n={i18n}>
-        <CssBaseline enableColorScheme />
-        <ThemeProvider theme={appTheme}>
-          <App />{' '}
-        </ThemeProvider>
-      </I18nextProvider>
-    </Provider>
+    <RouterProvider router={router} />
   </StrictMode>,
 );

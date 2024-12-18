@@ -1,34 +1,33 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { AppProvider } from '@toolpad/core/react-router-dom';
-import { DashboardLayout, Navigation } from '@toolpad/core';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import useUser from './auth/authHook';
-import Settings from './pages/Settings.tsx';
+import { Provider as ReduxProvider } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
+import { CssBaseline } from '@mui/material';
+import store from './store/store.ts';
+import i18n from 'i18next';
+import { Navigation } from '@toolpad/core';
 
 const NAVIGATION: Navigation = [
-  { pattern: '/', title: 'Home' },
-  { pattern: '/settings', title: 'Settings' },
+  {
+    kind: 'header',
+    title: 'Main items',
+  },
+  {
+    title: 'Home',
+  },
+  {
+    title: 'Settings',
+  },
 ];
-
-const App = () => {
-  const { userState } = useUser();
-  return (
-    <BrowserRouter>
+const App = () => (
+  <ReduxProvider store={store}>
+    <I18nextProvider i18n={i18n}>
+      <CssBaseline enableColorScheme />
       <AppProvider navigation={NAVIGATION}>
-        {userState.user ? (
-          <DashboardLayout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/settings" element={<Settings />} />
-            </Routes>
-          </DashboardLayout>
-        ) : (
-          <Login />
-        )}
+        <Outlet />
       </AppProvider>
-    </BrowserRouter>
-  );
-};
+    </I18nextProvider>
+  </ReduxProvider>
+);
 
 export default App;
