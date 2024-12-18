@@ -1,6 +1,4 @@
-import { AppProvider } from '@toolpad/core/AppProvider';
 import { AuthProvider, AuthResponse, SignInPage } from '@toolpad/core';
-import { appTheme } from '../main.tsx';
 import useUser from '../auth/authHook.ts';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -55,12 +53,10 @@ const Login = () => {
   }
 
   return (
-    <AppProvider theme={appTheme}>
-      <SignInPage
-        providers={[{ id: 'credentials', name: 'Firebase' }]}
-        signIn={signIn}
-      />
-    </AppProvider>
+    <SignInPage
+      providers={[{ id: 'credentials', name: 'Firebase' }]}
+      signIn={signIn}
+    />
   );
 };
 
