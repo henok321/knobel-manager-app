@@ -3,6 +3,7 @@ import Home from './pages/Home.tsx';
 import Login from './pages/Login.tsx';
 import ProtectedRoute from './auth/ProtectedRoute.tsx';
 import { AuthProvider } from './auth/AuthContext.tsx';
+import Games from './pages/Games.tsx';
 
 const App = () => (
   <AuthProvider>
@@ -11,6 +12,7 @@ const App = () => (
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />
+          <Route path="/games" element={<Games />} />
         </Route>
       </Routes>
     </BrowserRouter>
