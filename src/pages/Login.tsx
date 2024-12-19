@@ -27,45 +27,52 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-md w-full max-w-sm"
-      >
-        <h1 className="text-2xl font-bold mb-4">{t('LOGIN_HEADING')}</h1>
-        <div className="mb-4">
-          <label className="block mb-1">{t('LOGIN_EMAIL_INPUT_LABEL')}</label>
-          <input
-            type="email"
-            className="border w-full p-2"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">
-            {t('LOGIN_PASSWORD_INPUT_LABEL')}
-          </label>
-          <input
-            type="password"
-            className="border w-full p-2"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700"
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+      <header className="bg-blue-500 text-white p-4 w-full flex justify-between items-center fixed top-0">
+        <h1 className="text-2xl">Header</h1>
+      </header>
+      <div className="mt-16 min-w-full min-h-screen">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded shadow-md w-full max-w-lg mx-4 sm:mx-0"
         >
-          {t('LOGIN_SIGN_IN_BUTTON')}
-        </button>
-      </form>
+          <h1 className="text-2xl font-bold mb-6 text-center">
+            {t('LOGIN_HEADING')}
+          </h1>
+          <div className="mb-4">
+            <label className="block mb-1">{t('LOGIN_EMAIL_INPUT_LABEL')}</label>
+            <input
+              type="email"
+              className="border w-full p-2"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block mb-1">
+              {t('LOGIN_PASSWORD_INPUT_LABEL')}
+            </label>
+            <input
+              type="password"
+              className="border w-full p-2"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="bg-blue-600 text-white w-full py-3 rounded hover:bg-blue-700"
+          >
+            {t('LOGIN_SIGN_IN_BUTTON')}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
