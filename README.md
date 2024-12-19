@@ -1,50 +1,41 @@
-# React + TypeScript + Vite
+# Knobel Manager App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Synopsis
 
-Currently, two official plugins are available:
+The main goal of this project is to build a React application from scratch with a modern but also stable tech stack.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This app is a small tournament manager for the dice game "Knobeln" or "Schocken".
 
-## Expanding the ESLint configuration
+## Backend
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This web app usess an API provided by [Knobel Mangager Service](https://github.com/henok321/knobel-manager-service)
 
-- Configure the top-level `parserOptions` property like this:
+## Authentication
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+The service uses JWT for authentication that is provided by Firebase Authentication.
+
+## Build and run
+
+### Install dependencies
+
+Installs all dependencies and initializes the husky hooks.
+
+```shell
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Linting
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react';
+Run `eslint` and `prettier` and auto fix issues. Will also be executed before each commit by husky.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-});
+```shell
+npm run fix
+```
+
+### Development
+
+Run the development server.
+
+```shell
+npm run dev
 ```
