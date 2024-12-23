@@ -36,10 +36,7 @@ Update all dependencies:
 
 ```shell
 ncu -i
-
 ```
-
-```shell
 
 ### Linting
 

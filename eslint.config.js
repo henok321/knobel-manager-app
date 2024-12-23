@@ -1,16 +1,16 @@
 // eslint.config.js
 
 import js from '@eslint/js';
+import reactHooksPlugin from '@eslint/js';
 import globals from 'globals';
 import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
+import markdown from 'eslint-plugin-markdown';
 import { fixupPluginRules } from '@eslint/compat';
-import reactHooksPlugin from '@eslint/js';
 
 export default [
   {
@@ -65,5 +65,9 @@ export default [
         version: 'detect',
       },
     },
+  },
+  {
+    files: ['**/.md'],
+    ...markdown.configs.recommended,
   },
 ];
