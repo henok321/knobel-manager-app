@@ -24,6 +24,23 @@ Installs all dependencies and initializes the husky hooks.
 npm install
 ```
 
+### Update dependencies
+
+Install `npm-check-updates`:
+
+```shell
+npx npm-check-updates
+```
+
+Update all dependencies:
+
+```shell
+ncu -i
+
+```
+
+```shell
+
 ### Linting
 
 Run `eslint` and `prettier` and auto fix issues. Will also be executed before each commit by husky.
