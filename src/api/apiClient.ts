@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { auth as firebaseAuth } from '../auth/firebaseConfig.ts';
+import { Game } from '../slices/games/types.ts';
 
 const apiClient = axios.create({
   baseURL: '/api',
@@ -14,9 +15,12 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-type PingResponse = { message: string };
+export type GamesResponse = {
+  games: Game[];
+  activeGameID: string;
+};
 
-export const ping = async () => {
-  const response = await apiClient.get<PingResponse>('/ping');
+export const getGames = async (): Promise<GamesResponse> => {
+  const response = await apiClient.get<GamesResponse>('/games');
   return response.data;
 };
