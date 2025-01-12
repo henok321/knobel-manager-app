@@ -50,6 +50,14 @@ npm run fix
 
 Run the development server.
 
+#### Local API
+
+```shell
+npm run local
+```
+
+#### Production API
+
 ```shell
 npm run dev
 ```
