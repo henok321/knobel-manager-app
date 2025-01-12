@@ -26,6 +26,7 @@ export default [
         ...globals.browser,
         ...globals.es2021,
         ...globals.jest,
+        ...globals.node,
       },
     },
     plugins: {
@@ -52,6 +53,7 @@ export default [
       'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
       'no-console': 'error',
       'no-debugger': 'error',
+      'no-process-env': 'error',
       'func-style': ['error', 'expression', { allowArrowFunctions: true }],
       'react/sort-comp': [
         'error',
