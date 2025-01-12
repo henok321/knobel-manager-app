@@ -64,7 +64,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    requires: ['lint','test']
+    needs: [ lint, test ]
 
     steps:
       - name: Checkout repository
