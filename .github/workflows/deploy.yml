@@ -33,7 +33,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
-      - name: Install dependencies and build project
+      - name: Install dependencies
         run: npm ci
 
       - name: Run linting checks
@@ -59,7 +59,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
-      - name: Install dependencies and build project
+      - name: Install dependencies
         run: npm ci
 
       - name: Run tests
@@ -73,10 +73,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies and build project
-        run: npm ci && npm run build
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Deploy to Firebase Hosting (Production)
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to Firebase (Production)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -85,7 +88,7 @@ jobs:
           channelId: live
           projectId: knobel-manager-webapp
 
-      - name: Deploy Preview to Firebase Hosting (Pull Request)
+      - name: Deploy Preview to Firebase (Pull Request)
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
