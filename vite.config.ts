@@ -9,6 +9,8 @@ export default defineConfig({
       '/api': {
         target: 'https://knobel-manager-service.fly.dev/',
         changeOrigin: true,
+        secure: true,
+        ws: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
