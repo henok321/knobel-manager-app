@@ -13,9 +13,9 @@
       "addLabels": ["dev-dependencies"]
     },
     {
-      "matchPackagePatterns": ["^@types/"],
       "groupName": "TypeScript Definitions",
-      "addLabels": ["typescript"]
+      "addLabels": ["typescript"],
+      "matchPackageNames": ["/^@types//"]
     },
     {
       "matchUpdateTypes": ["minor", "patch"],
