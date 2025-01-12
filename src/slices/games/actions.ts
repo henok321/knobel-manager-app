@@ -3,8 +3,5 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchGamesAction = createAsyncThunk<GamesResponse>(
   'games/fetchGames',
-  async () => {
-    const response = await getGames();
-    return response;
-  },
+  async () => await getGames(),
 );
