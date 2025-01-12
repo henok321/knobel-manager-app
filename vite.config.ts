@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://knobel-manager-service.fly.dev/',
+        target: 'https://knobel-manager-service.fly.dev:443/',
         changeOrigin: true,
         secure: true,
         ws: true,
