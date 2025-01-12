@@ -34,7 +34,7 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: Install dependencies and build project
-        run: npm ci && npm run build
+        run: npm ci
 
       - name: Run linting checks
         run: npm run lint
@@ -58,6 +58,9 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
+
+      - name: Install dependencies and build project
+        run: npm ci
 
       - name: Run tests
         run: npm test
