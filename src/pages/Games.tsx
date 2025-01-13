@@ -50,13 +50,18 @@ const Home = () => {
                     <strong>Status:</strong> {game.status}
                   </p>
                   <p>
-                    <strong>Team Size:</strong> {game.teamSize}
+                    <strong>${t('GAMES_PAGE_DETAILS_VIEW_TEAM_SIZE')}</strong>{' '}
+                    {game.teamSize}
                   </p>
                   <p>
-                    <strong>Table Size:</strong> {game.tableSize}
+                    <strong>${t('GAMES_PAGE_DETAILS_VIEW_TABLE_SIZE')}</strong>{' '}
+                    {game.tableSize}
                   </p>
                   <p>
-                    <strong>Number of Rounds:</strong> {game.numberOfRounds}
+                    <strong>
+                      N${t('GAMES_PAGE_DETAILS_VIEW_NUMBER_OF_ROUNDS')}
+                    </strong>{' '}
+                    {game.numberOfRounds}
                   </p>
                 </div>
               )}
