@@ -16,7 +16,7 @@ const Login: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen text-xl">
+      <div className="flex h-screen items-center justify-center text-xl">
         {t('LOADING')}
       </div>
     );
@@ -27,40 +27,40 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
-      <header className="bg-blue-500 text-white p-4 w-full flex justify-between items-center fixed top-0">
+    <div className="flex min-h-screen flex-col bg-gray-100">
+      <header className="fixed top-0 flex w-full items-center justify-between bg-blue-500 p-4 text-white">
         <h1 className="text-2xl font-bold">{t('HEADER_TITLE')}</h1>
       </header>
 
-      <main className="flex-grow flex items-center justify-center pt-20 px-4">
+      <main className="flex grow items-center justify-center px-4 pt-20">
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-6 rounded shadow-md w-full max-w-md"
+          className="w-full max-w-md rounded bg-white p-6 shadow-md"
         >
-          <h1 className="text-2xl font-bold mb-6 text-center">
+          <h1 className="mb-6 text-center text-2xl font-bold">
             {t('LOGIN_HEADING')}
           </h1>
           <div className="mb-4">
-            <label htmlFor="email" className="block mb-1 font-medium">
+            <label htmlFor="email" className="mb-1 block font-medium">
               {t('LOGIN_EMAIL_INPUT_LABEL')}
             </label>
             <input
               id="email"
               type="email"
-              className="border w-full p-2 rounded"
+              className="w-full rounded border p-2"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
           <div className="mb-6">
-            <label htmlFor="password" className="block mb-1 font-medium">
+            <label htmlFor="password" className="mb-1 block font-medium">
               {t('LOGIN_PASSWORD_INPUT_LABEL')}
             </label>
             <input
               id="password"
               type="password"
-              className="border w-full p-2 rounded"
+              className="w-full rounded border p-2"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -68,7 +68,7 @@ const Login: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="bg-blue-600 text-white w-full py-3 rounded hover:bg-blue-700 transition-colors"
+            className="w-full rounded bg-blue-600 py-3 text-white transition-colors hover:bg-blue-700"
           >
             {t('LOGIN_BUTTON')}
           </button>

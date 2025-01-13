@@ -16,7 +16,7 @@ const Home = () => {
 
   if (gamesState.fetching) {
     return (
-      <div className="flex items-center justify-center h-screen text-xl">
+      <div className="flex h-screen items-center justify-center text-xl">
         Loading...
       </div>
     );
@@ -29,11 +29,11 @@ const Home = () => {
   return (
     <Layout>
       <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">${t('GAMES_PAGE_HEADLINE')}</h1>
+        <h1 className="mb-4 text-2xl font-bold">${t('GAMES_PAGE_HEADLINE')}</h1>
         <ul className="list-disc pl-5">
           {gamesState.games.map((game) => (
             <li key={game.id} className="mb-2">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <span>{game.name}</span>
                 <button
                   className="text-blue-500"
@@ -45,7 +45,7 @@ const Home = () => {
                 </button>
               </div>
               {selectedGame === game.id && (
-                <div className="mt-2 ml-4">
+                <div className="ml-4 mt-2">
                   <p>
                     <strong>Status:</strong> {game.status}
                   </p>

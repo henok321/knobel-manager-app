@@ -11,8 +11,10 @@ import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 import markdown from 'eslint-plugin-markdown';
 import { fixupPluginRules } from '@eslint/compat';
+import tailwind from 'eslint-plugin-tailwindcss';
 
 export default [
+  ...tailwind.configs['flat/recommended'],
   {
     ignores: ['dist', 'node_modules'],
   },
