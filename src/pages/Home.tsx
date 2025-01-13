@@ -1,12 +1,16 @@
 import Layout from './Layout.tsx';
+import { useTranslation } from 'react-i18next';
 
-const Home = () => (
-  <Layout>
-    <div>
-      <h1>Home</h1>
-      <p>Hello World</p>
-    </div>
-  </Layout>
-);
+const Home = () => {
+  const { t } = useTranslation();
+
+  return (
+    <Layout>
+      <div>
+        <h1 className="text-2xl font-bold mb-4">${t('HOME_PAGE_HEADLINE')}</h1>
+      </div>
+    </Layout>
+  );
+};
 
 export default Home;
