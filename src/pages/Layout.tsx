@@ -12,7 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className=" flex min-h-screen flex-col bg-gray-100">
+    <div className="flex min-h-screen flex-col bg-gray-100">
       {/* Header */}
       <header className="fixed top-0 z-10 flex w-full items-center justify-between bg-blue-500 p-4 text-white shadow-md">
         <h1 className="text-2xl font-bold">{t('HEADER_TITLE')}</h1>
