@@ -25,7 +25,7 @@ i18n
           GAMES_PAGE_DETAILS_VIEW_TEAM_SIZE: 'Team size:',
           GAMES_PAGE_DETAILS_VIEW_TABLE_SIZE: 'Table size:',
           GAMES_PAGE_DETAILS_VIEW_NUMBER_OF_ROUNDS: 'Number of Rounds',
-          HOME_PAGE_HEADLINE: 'Home‚',
+          HOME_PAGE_HEADLINE: 'Home',
         },
       },
       de: {
@@ -44,7 +44,7 @@ i18n
           GAMES_PAGE_DETAILS_VIEW_TEAM_SIZE: 'Anzahl Teams:',
           GAMES_PAGE_DETAILS_VIEW_TABLE_SIZE: 'Anzahl Tische:',
           GAMES_PAGE_DETAILS_VIEW_NUMBER_OF_ROUNDS: 'Runden:',
-          HOME_PAGE_HEADLINE: 'Startseite‚',
+          HOME_PAGE_HEADLINE: 'Startseite',
         },
       },
     },

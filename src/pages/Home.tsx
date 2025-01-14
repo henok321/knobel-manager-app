@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 text-2xl font-bold">${t('HOME_PAGE_HEADLINE')}</h1>
+        <h1 className="mb-4 text-2xl font-bold">{t('HOME_PAGE_HEADLINE')}</h1>
       </div>
     </Layout>
   );

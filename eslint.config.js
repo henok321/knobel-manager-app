@@ -12,6 +12,7 @@ import prettierConfig from 'eslint-config-prettier';
 import markdown from 'eslint-plugin-markdown';
 import { fixupPluginRules } from '@eslint/compat';
 import tailwind from 'eslint-plugin-tailwindcss';
+import jest from 'eslint-plugin-jest';
 
 export default [
   ...tailwind.configs['flat/recommended'],
@@ -68,6 +69,25 @@ export default [
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    files: ['**/*.test.{js,jsx,ts,tsx}'],
+    plugins: {
+      jest,
+    },
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+    rules: {
+      ...jest.configs.recommended.rules,
+      'jest/no-disabled-tests': 'warn',
+      'jest/no-focused-tests': 'error',
+      'jest/no-identical-title': 'error',
+      'jest/prefer-to-have-length': 'warn',
+      'jest/valid-expect': 'error',
     },
   },
   {
