@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "dbaeumer.vscode-eslint",
+    "github.vscode-github-actions",
+    "xabikos.javascriptsnippets",
+    "orta.vscode-jest",
+    "jawandarajbir.react-vscode-extension-pack",
+    "xabikos.reactsnippets",
+    "jjpatel361.reactstrap-snippets",
+    "burkeholland.simple-react-snippets",
+    "infeng.vscode-react-typescript",
+    "esbenp.prettier-vscode"
+  ]
+}
