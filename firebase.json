@@ -5,7 +5,7 @@
     "rewrites": [
       {
         "source": "/api/**",
-        "destination": "https://your-production-api-url/**"
+        "destination": "https://knobel-manager-service.fly.dev/**"
       },
       {
         "source": "**",
