@@ -80,5 +80,8 @@
     "typescript-eslint": "^8.20.0",
     "vite": "^6.0.7"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@1.22.22",
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.30.1"
+  }
 }
