@@ -4,10 +4,6 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
-        "source": "/api/**",
-        "destination": "https://knobel-manager-service.fly.dev/**"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
