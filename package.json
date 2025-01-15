@@ -15,7 +15,7 @@
     "preview": "vite preview",
     "prepare": "husky",
     "clean": "rm -rf node_modules dist",
-    "deploy": "npm run build --mode production && firebase deploy --only hosting"
+    "deploy": "npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
