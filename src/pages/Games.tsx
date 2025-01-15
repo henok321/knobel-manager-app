@@ -29,7 +29,7 @@ const Games = () => {
     setSelectedGame(selectedGame === gameId ? null : gameId);
   };
 
-  const handleAddGame = (formData: GameFormData) => {
+  const handleCreateGame = (formData: GameFormData) => {
     // eslint-disable-next-line no-console
     console.log(formData);
   };
@@ -43,7 +43,7 @@ const Games = () => {
           onClick={() => setGameModalActive(true)}
           className="rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
         >
-          Add game
+          {t('GAMES_PAGE_CREATE_GAME_BUTTON')}
         </button>
 
         <ul className="list-disc pl-5">
@@ -91,7 +91,7 @@ const Games = () => {
         onClose={() => {
           setGameModalActive(false);
         }}
-        addGame={handleAddGame}
+        createGame={handleCreateGame}
       />
     </Layout>
   );

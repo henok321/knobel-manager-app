@@ -1,5 +1,3 @@
-// eslint.config.js
-
 import js from '@eslint/js';
 import reactHooksPlugin from '@eslint/js';
 import globals from 'globals';
@@ -15,7 +13,6 @@ import tailwindcss from 'eslint-plugin-tailwindcss';
 import jest from 'eslint-plugin-jest';
 
 export default [
-  // ...tailwind.configs['flat/recommended'],
   {
     ignores: ['dist', 'node_modules'],
   },

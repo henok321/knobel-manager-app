@@ -1,5 +1,6 @@
 import { FormEvent } from 'react';
 import Modal from '../components/Modal.tsx';
+import { useTranslation } from 'react-i18next';
 
 export interface GameFormData {
   name: string;
@@ -11,10 +12,12 @@ export interface GameFormData {
 export interface GameFormProps {
   isOpen: boolean;
   onClose: () => void;
-  addGame: (game: GameFormData) => void;
+  createGame: (game: GameFormData) => void;
 }
 
-const GameForm = ({ isOpen, onClose, addGame }: GameFormProps) => {
+const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
+  const { t } = useTranslation();
+
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget as HTMLFormElement;
@@ -25,18 +28,18 @@ const GameForm = ({ isOpen, onClose, addGame }: GameFormProps) => {
       tableSize: Number(formData.get('tableSize')),
       numberOfRounds: Number(formData.get('numberOfRounds')),
     } as GameFormData;
-    addGame(game);
+    createGame(game);
     onClose();
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div>
-        <h2 className="mb-4 text-xl font-bold">Add Game</h2>
+        <h2 className="mb-4 text-xl font-bold">{t('GAMES_FORM_HEADLINE')}</h2>
         <form onSubmit={submit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Game Name
+              {t('GAMES_FORM_LABEL_NAME')}
             </label>
             <input
               type="text"
@@ -47,7 +50,7 @@ const GameForm = ({ isOpen, onClose, addGame }: GameFormProps) => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Team Size
+              {t('GAMES_FORM_LABEL_TEAM_SIZE')}
             </label>
             <input
               type="number"
@@ -58,7 +61,7 @@ const GameForm = ({ isOpen, onClose, addGame }: GameFormProps) => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Table Size
+              {t('GAMES_FORM_LABEL_TABLE_SIZE')}
             </label>
             <input
               type="number"
@@ -69,7 +72,7 @@ const GameForm = ({ isOpen, onClose, addGame }: GameFormProps) => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Number of Rounds
+              {t('GAMES_FORM_LABEL_ROUNDS')}
             </label>
             <input
               type="number"
@@ -83,7 +86,7 @@ const GameForm = ({ isOpen, onClose, addGame }: GameFormProps) => {
               type="submit"
               className="rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
             >
-              Create Game
+              {t('GAMES_FORM_SUBMIT_BUTTON')}
             </button>
           </div>
         </form>
