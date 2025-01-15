@@ -3,7 +3,7 @@ import { auth as firebaseAuth } from '../auth/firebaseConfig.ts';
 import { Game } from '../slices/games/types.ts';
 
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 apiClient.interceptors.request.use(
