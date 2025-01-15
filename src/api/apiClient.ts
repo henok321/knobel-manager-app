@@ -20,7 +20,25 @@ export type GamesResponse = {
   activeGameID: string;
 };
 
+export type GameRequest = {
+  name: string;
+  teamSize: number;
+  tableSize: number;
+  numberOfRounds: number;
+};
+
+export type GameResponse = {
+  game: Game;
+};
+
 export const getGames = async (): Promise<GamesResponse> => {
   const response = await apiClient.get<GamesResponse>('/games');
+  return response.data;
+};
+
+export const createGame = async (
+  gameRequest: GameRequest,
+): Promise<GameResponse> => {
+  const response = await apiClient.post('/games', gameRequest);
   return response.data;
 };

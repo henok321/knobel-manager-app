@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import GameForm, { GameFormData } from './GameForm.tsx';
 
 const Games = () => {
-  const { gamesState, fetchGames } = useGames();
+  const { gamesState, fetchGames, createGame } = useGames();
   const [selectedGame, setSelectedGame] = useState<number | null>(null);
   const [gameModalActive, setGameModalActive] = useState<boolean>(false);
 
@@ -30,8 +30,7 @@ const Games = () => {
   };
 
   const handleCreateGame = (formData: GameFormData) => {
-    // eslint-disable-next-line no-console
-    console.log(formData);
+    createGame(formData);
   };
 
   return (
