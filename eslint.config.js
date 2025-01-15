@@ -66,6 +66,10 @@ export default [
           order: ['everything-else', 'render'],
         },
       ],
+      'react/jsx-curly-brace-presence': [
+        'error',
+        { props: 'never', children: 'never' },
+      ],
     },
     settings: {
       react: {
