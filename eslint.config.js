@@ -59,6 +59,8 @@ export default [
       'no-console': 'error',
       'no-debugger': 'error',
       'no-process-env': 'error',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['error'],
       'func-style': ['error', 'expression', { allowArrowFunctions: true }],
       'react/sort-comp': [
         'error',

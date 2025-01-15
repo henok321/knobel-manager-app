@@ -12,7 +12,7 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-11/12 max-w-md rounded-lg bg-white shadow-lg">
         <div className="flex justify-end p-2">
           <button

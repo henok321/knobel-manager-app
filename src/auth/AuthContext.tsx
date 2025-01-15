@@ -10,7 +10,7 @@ import { auth as firebaseAuth } from './firebaseConfig.ts';
 export interface AuthContextValue {
   user: User | null;
   loading: boolean;
-  // eslint-disable-next-line no-unused-vars
+
   loginAction: (loginData: LoginData) => Promise<void>;
   logOut: () => void;
 }
