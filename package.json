@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --mode prod",
-    "local": "vite --mode dev",
-    "build": "tsc -b && vite build",
+    "dev": "vite --mode production",
+    "local": "vite --mode development",
+    "build": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
@@ -15,7 +15,7 @@
     "preview": "vite preview",
     "prepare": "husky",
     "clean": "rm -rf node_modules dist",
-    "deploy": "npm run build --mode prod && firebase deploy --only hosting"
+    "deploy": "npm run build --mode production && firebase deploy --only hosting"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
