@@ -59,5 +59,5 @@ npm run local
 #### Production API
 
 ```shell
-npm run dev
+npm run prod
 ```
