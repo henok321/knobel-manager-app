@@ -1,7 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GamesResponse } from '../../api/apiClient.ts';
 import { Game } from './types.ts';
-import { createGameAction, fetchGamesAction } from './actions.ts';
+import {
+  createGameAction,
+  deleteGameAction,
+  fetchGamesAction,
+} from './actions.ts';
 
 export type GamesState = {
   games: Game[];
@@ -52,6 +56,19 @@ const reducer = createSlice({
       })
       .addCase(createGameAction.fulfilled, (state, action) => {
         state.games.push(action.payload.game);
+        state.fetched = true;
+        state.fetching = false;
+      })
+      .addCase(deleteGameAction.pending, (state) => {
+        state.fetching = true;
+        state.fetched = false;
+      })
+      .addCase(deleteGameAction.rejected, (state) => {
+        state.fetching = false;
+        state.fetched = false;
+      })
+      .addCase(deleteGameAction.fulfilled, (state, action) => {
+        state.games = state.games.filter((game) => game.id !== action.meta.arg);
         state.fetched = true;
         state.fetching = false;
       });

@@ -42,3 +42,7 @@ export const createGame = async (
   const response = await apiClient.post('/games', gameRequest);
   return response.data;
 };
+
+export const deleteGame = async (gameID: number) => {
+  await apiClient.delete(`/games/${gameID}`);
+};

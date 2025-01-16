@@ -6,7 +6,7 @@ import GameForm, { GameFormData } from './GameForm.tsx';
 import GameCard from './GameCard';
 
 const Games = () => {
-  const { gamesState, fetchGames, createGame } = useGames();
+  const { gamesState, fetchGames, createGame, deleteGame } = useGames();
   const [gameModalActive, setGameModalActive] = useState(false);
   const { t } = useTranslation();
 
@@ -28,14 +28,13 @@ const Games = () => {
     createGame(formData);
   };
 
-  const handleActivateGame = (gameId: number) => {
+  const handleActivateGame = (gameID: number) => {
     // eslint-disable-next-line no-console
-    console.log(`Activating game with ID: ${gameId}`);
+    console.log(`Activating game with ID: ${gameID}`);
   };
 
-  const handleDeleteGame = (gameId: number) => {
-    // eslint-disable-next-line no-console
-    console.log(`Deleting game with ID: ${gameId}`);
+  const handleDeleteGame = (gameID: number) => {
+    deleteGame(gameID);
   };
 
   return (
