@@ -3,7 +3,7 @@ import Home from './pages/Home.tsx';
 import Login from './pages/Login.tsx';
 import ProtectedRoute from './auth/ProtectedRoute.tsx';
 import { AuthProvider } from './auth/AuthContext.tsx';
-import Games from './pages/Games.tsx';
+import Games from './pages/games/Games.tsx';
 
 const App = () => (
   <AuthProvider>

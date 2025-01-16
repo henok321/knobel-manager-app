@@ -1,5 +1,5 @@
 import { FormEvent } from 'react';
-import Modal from '../components/Modal.tsx';
+import Modal from '../../components/Modal.tsx';
 import { useTranslation } from 'react-i18next';
 
 export interface GameFormData {
