@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { GamesState } from './reducer.ts';
+import { GamesState } from './slice.ts';
 import { AppDispatch } from '../../store/store.ts';
 import {
   activateGameAction,

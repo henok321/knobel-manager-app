@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Game } from '../../slices/games/types';
+import { Game } from '../../slices/games/types.ts';
 import { useTranslation } from 'react-i18next';
 
 export type GameCardProps = {

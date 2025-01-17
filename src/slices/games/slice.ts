@@ -22,7 +22,7 @@ const initialState: GamesState = {
   fetching: false,
 };
 
-const reducer = createSlice({
+const gamesSlice = createSlice({
   name: 'games',
   initialState,
   reducers: {
@@ -77,7 +77,6 @@ const reducer = createSlice({
         state.fetching = true;
         state.fetched = false;
       })
-
       .addCase(activateGameAction.rejected, (state) => {
         state.fetching = false;
         state.fetched = false;
@@ -90,6 +89,6 @@ const reducer = createSlice({
   },
 });
 
-export const { setGames } = reducer.actions;
+export const { setGames } = gamesSlice.actions;
 
-export default reducer.reducer;
+export default gamesSlice.reducer;
