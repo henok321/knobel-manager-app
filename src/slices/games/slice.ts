@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GamesResponse } from '../../api/apiClient.ts';
+import { createSlice } from '@reduxjs/toolkit';
 import { Game } from './types.ts';
 import {
   activateGameAction,
@@ -25,13 +24,9 @@ const initialState: GamesState = {
 const gamesSlice = createSlice({
   name: 'games',
   initialState,
-  reducers: {
-    setGames: (state, action: PayloadAction<GamesResponse>) => {
-      state.games = action.payload.games;
-      state.activeGameID = action.payload.activeGameID;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
+    // fetch games
     builder
       .addCase(fetchGamesAction.pending, (state) => {
         state.fetching = true;
@@ -46,7 +41,10 @@ const gamesSlice = createSlice({
       .addCase(fetchGamesAction.rejected, (state) => {
         state.fetching = false;
         state.fetched = false;
-      })
+      });
+
+    // create game
+    builder
       .addCase(createGameAction.pending, (state) => {
         state.fetching = true;
         state.fetched = false;
@@ -59,7 +57,10 @@ const gamesSlice = createSlice({
         state.games.push(action.payload.game);
         state.fetched = true;
         state.fetching = false;
-      })
+      });
+
+    // delete game
+    builder
       .addCase(deleteGameAction.pending, (state) => {
         state.fetching = true;
         state.fetched = false;
@@ -88,7 +89,5 @@ const gamesSlice = createSlice({
       });
   },
 });
-
-export const { setGames } = gamesSlice.actions;
 
 export default gamesSlice.reducer;
