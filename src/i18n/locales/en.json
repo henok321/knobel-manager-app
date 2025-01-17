@@ -1,0 +1,51 @@
+{
+  "global": {
+    "loading": "Loading..."
+  },
+  "header": {
+    "heading": "Knobel Manager",
+    "logout": "Logout",
+    "nav": {
+      "home": "Home",
+      "games": "Games"
+    }
+  },
+
+  "pages": {
+    "login": {
+      "heading": "Login to your account",
+      "label": {
+        "email": "Email",
+        "password": "Password"
+      },
+      "submit": "Login"
+    },
+    "home": {
+      "heading": "Home"
+    },
+    "games": {
+      "heading": "Games",
+      "createGameButton": "Create game",
+      "card": {
+        "details": {
+          "teamSize": "Team size:",
+          "tableSize": "Table size:",
+          "numberOfRounds": "Number of Rounds:",
+          "status": "Status:"
+        },
+        "activateButton": "Activate",
+        "deleteButton": "Delete"
+      },
+      "form": {
+        "heading": "Create game",
+        "label": {
+          "name": "Name",
+          "teamSize": "Team size",
+          "tableSize": "Table size",
+          "rounds": "Number of rounds"
+        },
+        "submit": "Create"
+      }
+    }
+  }
+}
