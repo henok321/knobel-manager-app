@@ -73,7 +73,10 @@ const gamesSlice = createSlice({
         state.games = state.games.filter((game) => game.id !== action.meta.arg);
         state.fetched = true;
         state.fetching = false;
-      })
+      });
+
+    // update active game
+    builder
       .addCase(activateGameAction.pending, (state) => {
         state.fetching = true;
         state.fetched = false;
