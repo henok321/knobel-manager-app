@@ -7,70 +7,68 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',
-    debug: true,
-    resources: {
-      en: {
-        translation: {
-          LOGIN_HEADING: 'Login to your account',
-          LOGIN_EMAIL_INPUT_LABEL: 'Email address',
-          LOGIN_PASSWORD_INPUT_LABEL: 'Password',
-          LOGIN_BUTTON: 'Login',
-          LOGOUT_BUTTON: 'Logout',
-          HEADER_TITLE: 'Knobel Manager',
-          NAV_HOME: 'Home',
-          NAV_GAMES: 'Games',
-          GAMES_PAGE_HEADLINE: 'Games',
-          GAMES_PAGE_CREATE_GAME_BUTTON: 'Create game',
-          GAMES_PAGE_SHOW_DETAILS_BUTTON: 'Show details',
-          GAMES_PAGE_HIDE_DETAILS_BUTTON: 'Hide details',
-          GAMES_PAGE_DETAILS_VIEW_TEAM_SIZE: 'Team size:',
-          GAMES_PAGE_DETAILS_VIEW_TABLE_SIZE: 'Table size:',
-          GAMES_PAGE_DETAILS_VIEW_NUMBER_OF_ROUNDS: 'Number of Rounds:',
-          GAMES_PAGE_DETAILS_VIEW_STATUS: 'Status:',
-          GAMES_FORM_HEADLINE: 'Create game',
-          GAMES_FORM_LABEL_NAME: 'Name',
-          GAMES_FORM_LABEL_TEAM_SIZE: 'Team size',
-          GAMES_FORM_LABEL_TABLE_SIZE: 'Table size',
-          GAMES_FORM_LABEL_ROUNDS: 'Number of rounds',
-          GAMES_FORM_SUBMIT_BUTTON: 'Create',
-
-          HOME_PAGE_HEADLINE: 'Home',
-        },
-      },
-      de: {
-        translation: {
-          LOGIN_HEADING: 'Log dich ein',
-          LOGIN_EMAIL_INPUT_LABEL: 'E-Mail',
-          LOGIN_PASSWORD_INPUT_LABEL: 'Passwort',
-          LOGIN_BUTTON: 'Anmelden',
-          LOGOUT_BUTTON: 'Abmelden',
-          HEADER_TITLE: 'Knobel Manager',
-          NAV_HOME: 'Startseite',
-          NAV_GAMES: 'Spiele',
-          GAMES_PAGE_HEADLINE: 'Spiele',
-          GAMES_PAGE_CREATE_GAME_BUTTON: 'Spiel erstellen',
-          GAMES_PAGE_SHOW_DETAILS_BUTTON: 'Details anzeigen',
-          GAMES_PAGE_HIDE_DETAILS_BUTTON: 'Details ausblenden',
-          GAMES_PAGE_DETAILS_VIEW_TEAM_SIZE: 'Anzahl Teams:',
-          GAMES_PAGE_DETAILS_VIEW_TABLE_SIZE: 'Anzahl Tische:',
-          GAMES_PAGE_DETAILS_VIEW_NUMBER_OF_ROUNDS: 'Runden:',
-          GAMES_PAGE_DETAILS_VIEW_STATUS: 'Status:',
-          GAMES_FORM_HEADLINE: 'Spiel erstellen',
-          GAMES_FORM_LABEL_NAME: 'Name',
-          GAMES_FORM_LABEL_TEAM_SIZE: 'Anzahl Teams',
-          GAMES_FORM_LABEL_TABLE_SIZE: 'Anzahl Tische',
-          GAMES_FORM_LABEL_ROUNDS: 'Anzahl Runden',
-          GAMES_FORM_SUBMIT_BUTTON: 'Erstellen',
-          HOME_PAGE_HEADLINE: 'Startseite',
-        },
-      },
-    },
+    debug: false,
     detection: {
       order: ['querystring', 'localStorage', 'cookie', 'navigator'],
       caches: ['localStorage', 'cookie'],
     },
     interpolation: {
       escapeValue: false,
+    },
+    resources: {
+      en: {
+        translation: {
+          global: {
+            loading: 'Loading...',
+          },
+          header: {
+            heading: 'Knobel Manager',
+            logout: 'Logout',
+            nav: {
+              home: 'Home',
+              games: 'Games',
+            },
+          },
+
+          pages: {
+            login: {
+              heading: 'Login to your account',
+              label: {
+                email: 'Email',
+                password: 'Password',
+              },
+              submit: 'Login',
+            },
+            home: {
+              heading: 'Home',
+            },
+            games: {
+              heading: 'Games',
+              createGameButton: 'Create game',
+              card: {
+                details: {
+                  teamSize: 'Team size:',
+                  tableSize: 'Table size:',
+                  numberOfRounds: 'Number of Rounds:',
+                  status: 'Status:',
+                },
+                activateButton: 'Activate',
+                deleteButton: 'Delete',
+              },
+              form: {
+                heading: 'Create game',
+                label: {
+                  name: 'Name',
+                  teamSize: 'Team size',
+                  tableSize: 'Table size',
+                  rounds: 'Number of rounds',
+                },
+                submit: 'Create',
+              },
+            },
+          },
+        },
+      },
     },
   });
 

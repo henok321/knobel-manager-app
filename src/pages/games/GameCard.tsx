@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Game } from '../../slices/games/types';
+import { useTranslation } from 'react-i18next';
 
 export type GameCardProps = {
   game: Game;
@@ -9,6 +10,7 @@ export type GameCardProps = {
 
 const GameCard = ({ game, onActivate, onDelete }: GameCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { t } = useTranslation();
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -34,13 +36,16 @@ const GameCard = ({ game, onActivate, onDelete }: GameCardProps) => {
       {isExpanded && (
         <div className="mt-4">
           <p>
-            <strong>Team Size:</strong> {game.teamSize}
+            <strong>{t('pages.games.card.details.teamSize')}</strong>{' '}
+            {game.teamSize}
           </p>
           <p>
-            <strong>Table Size:</strong> {game.tableSize}
+            <strong>{t('pages.games.card.details.tableSize')}</strong>{' '}
+            {game.tableSize}
           </p>
           <p>
-            <strong>Number of Rounds:</strong> {game.numberOfRounds}
+            <strong>{t('pages.games.card.details.numberOfRounds')}</strong>{' '}
+            {game.numberOfRounds}
           </p>
           <div className="mt-4 flex space-x-2">
             <button
@@ -50,7 +55,7 @@ const GameCard = ({ game, onActivate, onDelete }: GameCardProps) => {
               }}
               className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
             >
-              Activate
+              {t('pages.games.card.activateButton')}
             </button>
             <button
               onClick={(e) => {
@@ -59,7 +64,7 @@ const GameCard = ({ game, onActivate, onDelete }: GameCardProps) => {
               }}
               className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
             >
-              Delete
+              {t('pages.games.card.deleteButton')}
             </button>
           </div>
         </div>
