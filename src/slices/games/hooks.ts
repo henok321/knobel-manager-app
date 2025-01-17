@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GamesState } from './reducer.ts';
 import { AppDispatch } from '../../store/store.ts';
 import {
+  activateGameAction,
   createGameAction,
   deleteGameAction,
   fetchGamesAction,
@@ -24,7 +25,11 @@ const useGames = () => {
     dispatch(deleteGameAction(gameID));
   };
 
-  return { gamesState, fetchGames, createGame, deleteGame };
+  const activateGame = (gameID: number) => {
+    dispatch(activateGameAction(gameID));
+  };
+
+  return { gamesState, fetchGames, createGame, deleteGame, activateGame };
 };
 
 export default useGames;

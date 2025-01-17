@@ -34,7 +34,8 @@
           "status": "Status:"
         },
         "activateButton": "Activate",
-        "deleteButton": "Delete"
+        "deleteButton": "Delete",
+        "isActive": "Active"
       },
       "form": {
         "heading": "Create game",
@@ -42,7 +43,7 @@
           "name": "Name",
           "teamSize": "Team size",
           "tableSize": "Table size",
-          "rounds": "Number of rounds"
+          "numberOfRounds": "Number of rounds"
         },
         "submit": "Create"
       }

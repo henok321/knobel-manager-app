@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GamesResponse } from '../../api/apiClient.ts';
 import { Game } from './types.ts';
 import {
+  activateGameAction,
   createGameAction,
   deleteGameAction,
   fetchGamesAction,
@@ -9,7 +10,7 @@ import {
 
 export type GamesState = {
   games: Game[];
-  activeGameID: string | null;
+  activeGameID: number | null;
   fetching: boolean;
   fetched: boolean;
 };
@@ -71,6 +72,20 @@ const reducer = createSlice({
         state.games = state.games.filter((game) => game.id !== action.meta.arg);
         state.fetched = true;
         state.fetching = false;
+      })
+      .addCase(activateGameAction.pending, (state) => {
+        state.fetching = true;
+        state.fetched = false;
+      })
+
+      .addCase(activateGameAction.rejected, (state) => {
+        state.fetching = false;
+        state.fetched = false;
+      })
+      .addCase(activateGameAction.fulfilled, (state, action) => {
+        state.activeGameID = action.meta.arg;
+        state.fetching = false;
+        state.fetched = true;
       });
   },
 });

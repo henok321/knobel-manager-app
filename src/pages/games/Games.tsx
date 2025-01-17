@@ -6,7 +6,8 @@ import GameCard from './GameCard';
 import Layout from '../../components/Layout.tsx';
 
 const Games = () => {
-  const { gamesState, fetchGames, createGame, deleteGame } = useGames();
+  const { gamesState, fetchGames, createGame, deleteGame, activateGame } =
+    useGames();
   const [gameModalActive, setGameModalActive] = useState(false);
   const { t } = useTranslation();
 
@@ -29,8 +30,7 @@ const Games = () => {
   };
 
   const handleActivateGame = (gameID: number) => {
-    // eslint-disable-next-line no-console
-    console.log(`Activating game with ID: ${gameID}`);
+    activateGame(gameID);
   };
 
   const handleDeleteGame = (gameID: number) => {
@@ -51,6 +51,7 @@ const Games = () => {
           {gamesState.games.map((game) => (
             <GameCard
               key={game.id}
+              isActiveGame={game.id === gamesState.activeGameID}
               game={game}
               onActivate={handleActivateGame}
               onDelete={handleDeleteGame}

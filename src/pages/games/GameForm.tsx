@@ -35,7 +35,7 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <h2 className="mb-6 text-2xl font-semibold text-gray-800">
-        {t('GAMES_FORM_HEADLINE')}
+        {t('pages.games.form.heading')}
       </h2>
       <form onSubmit={submit} className="space-y-6">
         <div>
@@ -43,7 +43,7 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
             htmlFor="name"
             className="block text-sm font-medium text-gray-700"
           >
-            {t('GAMES_FORM_LABEL_NAME')}
+            {t('pages.games.form.label.name')}
           </label>
           <input
             type="text"
@@ -58,7 +58,7 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
             htmlFor="teamSize"
             className="block text-sm font-medium text-gray-700"
           >
-            {t('GAMES_FORM_LABEL_TEAM_SIZE')}
+            {t('pages.games.form.label.teamSize')}
           </label>
           <input
             type="number"
@@ -73,7 +73,7 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
             htmlFor="tableSize"
             className="block text-sm font-medium text-gray-700"
           >
-            {t('GAMES_FORM_LABEL_TABLE_SIZE')}
+            {t('pages.games.form.label.tableSize')}
           </label>
           <input
             type="number"
@@ -88,7 +88,7 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
             htmlFor="numberOfRounds"
             className="block text-sm font-medium text-gray-700"
           >
-            {t('GAMES_FORM_LABEL_ROUNDS')}
+            {t('pages.games.form.label.numberOfRounds')}
           </label>
           <input
             type="number"
@@ -103,7 +103,7 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
             type="submit"
             className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
-            {t('GAMES_FORM_SUBMIT_BUTTON')}
+            {t('pages.games.form.submit')}
           </button>
         </div>
       </form>

@@ -1,4 +1,5 @@
 import {
+  activateGame,
   createGame,
   deleteGame,
   GameRequest,
@@ -21,4 +22,9 @@ export const createGameAction = createAsyncThunk<GameResponse, GameRequest>(
 export const deleteGameAction = createAsyncThunk<void, number>(
   'games/deleteGame',
   async (gameID) => await deleteGame(gameID),
+);
+
+export const activateGameAction = createAsyncThunk<void, number>(
+  'games/activateGame',
+  async (gameID) => await activateGame(gameID),
 );

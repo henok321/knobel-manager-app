@@ -17,7 +17,7 @@ apiClient.interceptors.request.use(
 
 export type GamesResponse = {
   games: Game[];
-  activeGameID: string;
+  activeGameID: number;
 };
 
 export type GameRequest = {
@@ -45,4 +45,8 @@ export const createGame = async (
 
 export const deleteGame = async (gameID: number) => {
   await apiClient.delete(`/games/${gameID}`);
+};
+
+export const activateGame = async (gameID: number) => {
+  await apiClient.post(`games/${gameID}/activate`);
 };
