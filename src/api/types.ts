@@ -22,8 +22,8 @@ export type ApiGame = {
   numberOfRounds: number;
   status: string;
   owners: ApiOwner[];
-  teams: ApiTeam[];
-  rounds: ApiRound[];
+  teams?: ApiTeam[];
+  rounds?: ApiRound[];
 };
 
 export type ApiOwner = {
@@ -35,7 +35,7 @@ export type ApiTeam = {
   id: number;
   name: string;
   gameID: number;
-  players: ApiPlayer[];
+  players?: ApiPlayer[];
 };
 
 export type ApiPlayer = {
@@ -49,7 +49,7 @@ export type ApiRound = {
   roundNumber: number;
   gameID: number;
   status: string;
-  tables: ApiTable[];
+  tables?: ApiTable[];
 };
 
 export type ApiTable = {

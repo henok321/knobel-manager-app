@@ -56,24 +56,24 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
       owners: apiGame.owners,
     };
 
-    apiGame.teams.forEach((apiTeam) => {
+    apiGame.teams?.forEach((apiTeam) => {
       const teamId = apiTeam.id;
       normalizedData.teams[teamId] = {
         ...apiTeam,
       };
 
-      apiTeam.players.forEach((player) => {
+      apiTeam.players?.forEach((player) => {
         normalizedData.players[player.id] = { ...player };
       });
     });
 
-    apiGame.rounds.forEach((round) => {
+    apiGame.rounds?.forEach((round) => {
       const roundId = round.id;
       normalizedData.rounds[roundId] = {
         ...round,
       };
 
-      round.tables.forEach((table) => {
+      round.tables?.forEach((table) => {
         const tableId = table.id;
         normalizedData.tables[tableId] = {
           ...table,
