@@ -7,7 +7,7 @@ import {
   deleteGameAction,
   fetchGamesAction,
 } from './actions.ts';
-import { GameRequest } from '../../api/apiClient.ts';
+import { GameRequest } from '../../api/types.ts';
 
 const useGames = () => {
   const dispatch = useDispatch<AppDispatch>();

@@ -48,7 +48,7 @@ const Games = () => {
           {t('pages.games.createGameButton')}
         </button>
         <div>
-          {gamesState.games.map((game) => (
+          {Object.values(gamesState.games).map((game) => (
             <GameCard
               key={game.id}
               isActiveGame={game.id === gamesState.activeGameID}

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Game } from './types.ts';
+import { Game } from '../types.ts';
 import {
   activateGameAction,
   createGameAction,
@@ -8,15 +8,15 @@ import {
 } from './actions.ts';
 
 export type GamesState = {
-  games: Game[];
-  activeGameID: number | null;
+  activeGameID?: number;
+  games: Record<number, Game>;
   fetching: boolean;
   fetched: boolean;
 };
 
 const initialState: GamesState = {
-  games: [],
-  activeGameID: null,
+  games: {},
+  activeGameID: undefined,
   fetched: false,
   fetching: false,
 };
@@ -54,7 +54,7 @@ const gamesSlice = createSlice({
         state.fetched = false;
       })
       .addCase(createGameAction.fulfilled, (state, action) => {
-        state.games.push(action.payload.game);
+        state.games[action.payload.game.id] = action.payload.game;
         state.fetched = true;
         state.fetching = false;
       });
@@ -70,7 +70,10 @@ const gamesSlice = createSlice({
         state.fetched = false;
       })
       .addCase(deleteGameAction.fulfilled, (state, action) => {
-        state.games = state.games.filter((game) => game.id !== action.meta.arg);
+        const gameID = action.meta.arg;
+        if (gameID) {
+          delete state.games[gameID];
+        }
         state.fetched = true;
         state.fetching = false;
       });

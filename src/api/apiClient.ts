@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { auth as firebaseAuth } from '../auth/firebaseConfig.ts';
-import { Game } from '../slices/games/types.ts';
+import { GameRequest, GameResponse, GamesResponse } from './types.ts';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -14,22 +14,6 @@ apiClient.interceptors.request.use(
   },
   (error) => Promise.reject(error),
 );
-
-export type GamesResponse = {
-  games: Game[];
-  activeGameID: number;
-};
-
-export type GameRequest = {
-  name: string;
-  teamSize: number;
-  tableSize: number;
-  numberOfRounds: number;
-};
-
-export type GameResponse = {
-  game: Game;
-};
 
 export const getGames = async (): Promise<GamesResponse> => {
   const response = await apiClient.get<GamesResponse>('/games');
