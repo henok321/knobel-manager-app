@@ -20,14 +20,14 @@ export type GameState = EntityState<Game, number> & AdditionalGamesState;
 
 const gamesAdapter = createEntityAdapter<Game>();
 
-const initialState = gamesAdapter.getInitialState<AdditionalGamesState>({
+const state = gamesAdapter.getInitialState<AdditionalGamesState>({
   status: 'idle',
   activeGameID: undefined,
 });
 
 const gamesSlice = createSlice({
   name: 'games',
-  initialState,
+  initialState: state,
   reducers: {},
   extraReducers: (builder) => {
     // fetch games
@@ -36,7 +36,7 @@ const gamesSlice = createSlice({
         state.status = 'pending';
       })
       .addCase(fetchGamesAction.fulfilled, (state, action) => {
-        gamesAdapter.setAll(initialState, action.payload.games);
+        gamesAdapter.setAll(state, action.payload.games);
         state.activeGameID = action.payload.activeGameID;
         state.status = 'succeeded';
       })
@@ -53,7 +53,7 @@ const gamesSlice = createSlice({
         state.status = 'failed';
       })
       .addCase(createGameAction.fulfilled, (state, action) => {
-        gamesAdapter.setOne(initialState, action.payload.game);
+        gamesAdapter.setOne(state, action.payload.game);
         state.status = 'succeeded';
       });
 
@@ -68,7 +68,7 @@ const gamesSlice = createSlice({
       .addCase(deleteGameAction.fulfilled, (state, action) => {
         const gameID = action.meta.arg;
         if (gameID) {
-          gamesAdapter.removeOne(initialState, gameID);
+          gamesAdapter.removeOne(state, gameID);
         }
         state.status = 'succeeded';
       });
