@@ -6,8 +6,6 @@ export type Game = {
   numberOfRounds: number;
   status: string;
   owners: Owner[];
-  teams: Team[];
-  rounds: Round[];
 };
 
 export type Owner = {
@@ -19,7 +17,6 @@ export type Team = {
   id: number;
   name: string;
   gameID: number;
-  players: Player[];
 };
 
 export type Player = {
@@ -33,15 +30,12 @@ export type Round = {
   roundNumber: number;
   gameID: number;
   status: string;
-  tables: Table[];
 };
 
 export type Table = {
   id: number;
   tableNumber: number;
   roundID: number;
-  players: Player[];
-  scores?: Score[];
 };
 
 export type Score = {
@@ -50,3 +44,13 @@ export type Score = {
   tableID: number;
   score: number;
 };
+
+export interface NormalizedData {
+  activeGameID?: number;
+  games: Record<number, Game>;
+  teams: Record<number, Team>;
+  players: Record<number, Player>;
+  rounds: Record<number, Round>;
+  tables: Record<number, Table>;
+  scores: Record<number, Score>;
+}
