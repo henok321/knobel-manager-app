@@ -12,12 +12,12 @@ const Games = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!gamesState.fetched) {
+    if (gamesState.status === 'idle') {
       fetchGames();
     }
-  }, [gamesState.fetched, fetchGames]);
+  }, [gamesState.status, fetchGames]);
 
-  if (gamesState.fetching) {
+  if (gamesState.status === 'idle' || gamesState.status === 'pending') {
     return (
       <div className="flex h-screen items-center justify-center text-xl">
         {t('global.loading')}
@@ -48,15 +48,16 @@ const Games = () => {
           {t('pages.games.createGameButton')}
         </button>
         <div>
-          {Object.values(gamesState.games).map((game) => (
-            <GameCard
-              key={game.id}
-              isActiveGame={game.id === gamesState.activeGameID}
-              game={game}
-              onActivate={handleActivateGame}
-              onDelete={handleDeleteGame}
-            />
-          ))}
+          {gamesState.entities &&
+            Object.values(gamesState.entities).map((game) => (
+              <GameCard
+                key={game.id}
+                isActiveGame={game.id === gamesState.activeGameID}
+                game={game}
+                onActivate={handleActivateGame}
+                onDelete={handleDeleteGame}
+              />
+            ))}
         </div>
       </div>
       <GameForm

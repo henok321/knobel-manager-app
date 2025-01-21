@@ -1,4 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {
+  createEntityAdapter,
+  createSlice,
+  EntityState,
+} from '@reduxjs/toolkit';
 import { Game } from '../types.ts';
 import {
   activateGameAction,
@@ -7,19 +11,19 @@ import {
   fetchGamesAction,
 } from './actions.ts';
 
-export type GamesState = {
+type AdditionalGamesState = {
+  status: 'idle' | 'pending' | 'succeeded' | 'failed';
   activeGameID?: number;
-  games: Record<number, Game>;
-  fetching: boolean;
-  fetched: boolean;
 };
 
-const initialState: GamesState = {
-  games: {},
+export type GameState = EntityState<Game, number> & AdditionalGamesState;
+
+const gamesAdapter = createEntityAdapter<Game>();
+
+const initialState = gamesAdapter.getInitialState<AdditionalGamesState>({
+  status: 'idle',
   activeGameID: undefined,
-  fetched: false,
-  fetching: false,
-};
+});
 
 const gamesSlice = createSlice({
   name: 'games',
@@ -29,69 +33,57 @@ const gamesSlice = createSlice({
     // fetch games
     builder
       .addCase(fetchGamesAction.pending, (state) => {
-        state.fetching = true;
-        state.fetched = false;
+        state.status = 'pending';
       })
       .addCase(fetchGamesAction.fulfilled, (state, action) => {
-        state.games = action.payload.games;
+        gamesAdapter.setAll(initialState, action.payload.games);
         state.activeGameID = action.payload.activeGameID;
-        state.fetching = false;
-        state.fetched = true;
+        state.status = 'succeeded';
       })
       .addCase(fetchGamesAction.rejected, (state) => {
-        state.fetching = false;
-        state.fetched = false;
+        state.status = 'failed';
       });
 
     // create game
     builder
       .addCase(createGameAction.pending, (state) => {
-        state.fetching = true;
-        state.fetched = false;
+        state.status = 'pending';
       })
       .addCase(createGameAction.rejected, (state) => {
-        state.fetching = false;
-        state.fetched = false;
+        state.status = 'failed';
       })
       .addCase(createGameAction.fulfilled, (state, action) => {
-        state.games[action.payload.game.id] = action.payload.game;
-        state.fetched = true;
-        state.fetching = false;
+        gamesAdapter.setOne(initialState, action.payload.game);
+        state.status = 'succeeded';
       });
 
     // delete game
     builder
       .addCase(deleteGameAction.pending, (state) => {
-        state.fetching = true;
-        state.fetched = false;
+        state.status = 'pending';
       })
       .addCase(deleteGameAction.rejected, (state) => {
-        state.fetching = false;
-        state.fetched = false;
+        state.status = 'failed';
       })
       .addCase(deleteGameAction.fulfilled, (state, action) => {
         const gameID = action.meta.arg;
         if (gameID) {
-          delete state.games[gameID];
+          gamesAdapter.removeOne(initialState, gameID);
         }
-        state.fetched = true;
-        state.fetching = false;
+        state.status = 'succeeded';
       });
 
     // update active game
     builder
       .addCase(activateGameAction.pending, (state) => {
-        state.fetching = true;
-        state.fetched = false;
+        state.status = 'pending';
       })
       .addCase(activateGameAction.rejected, (state) => {
-        state.fetching = false;
-        state.fetched = false;
+        state.status = 'failed';
       })
       .addCase(activateGameAction.fulfilled, (state, action) => {
         state.activeGameID = action.meta.arg;
-        state.fetching = false;
-        state.fetched = true;
+        state.status = 'succeeded';
       });
   },
 });
