@@ -1,7 +1,7 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth.ts';
 import { useTranslation } from 'react-i18next';
+import { NavBar } from './NavBar.tsx';
 
 interface HeaderProps {
   navBar?: boolean;
@@ -26,32 +26,7 @@ const Header: React.FC<HeaderProps> = ({ navBar, logoutButton }) => {
         )}
       </hgroup>
 
-      {navBar && (
-        <nav className="border-b border-gray-300 bg-gray-200 p-4">
-          <ul className="flex space-x-4">
-            <li>
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  `cursor-pointer transition-colors hover:text-blue-500 ${isActive ? 'font-bold text-blue-700 underline' : ''}`
-                }
-              >
-                {t('header.nav.home')}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/games"
-                className={({ isActive }) =>
-                  `cursor-pointer transition-colors hover:text-blue-500 ${isActive ? 'font-bold text-blue-700 underline' : ''}`
-                }
-              >
-                {t('header.nav.games')}
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      )}
+      {navBar && <NavBar />}
     </header>
   );
 };
