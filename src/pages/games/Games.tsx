@@ -14,19 +14,35 @@ const Games = () => {
     deleteGame,
     activateGame,
   } = useGames();
+
   const [gameModalActive, setGameModalActive] = useState(false);
   const { t } = useTranslation();
 
+  // Fetch games if status is idle
   useEffect(() => {
     if (gamesState.status === 'idle') {
       fetchGames();
     }
   }, [gamesState.status, fetchGames]);
 
-  if (gamesState.status === 'idle' || gamesState.status === 'pending') {
+  // === DERIVED BOOLEANS ===
+  const isLoading =
+    gamesState.status === 'idle' || gamesState.status === 'pending';
+  const hasError = gamesState.status === 'failed' && gamesState.error;
+
+  if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center text-xl">
         {t('global.loading')}
+      </div>
+    );
+  }
+
+  if (hasError) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center text-xl text-red-500">
+        <p>{t('global.errorOccurred')}</p>
+        <p>{gamesState.error?.message}</p>
       </div>
     );
   }
@@ -53,19 +69,20 @@ const Games = () => {
         >
           {t('pages.games.createGameButton')}
         </button>
+
         <div>
-          {gamesState.entities &&
-            allGames.map((game) => (
-              <GameCard
-                key={game.id}
-                isActiveGame={game.id === gamesState.activeGameID}
-                game={game}
-                onActivate={handleActivateGame}
-                onDelete={handleDeleteGame}
-              />
-            ))}
+          {allGames.map((game) => (
+            <GameCard
+              key={game.id}
+              isActiveGame={game.id === gamesState.activeGameID}
+              game={game}
+              onActivate={handleActivateGame}
+              onDelete={handleDeleteGame}
+            />
+          ))}
         </div>
       </div>
+
       <GameForm
         isOpen={gameModalActive}
         onClose={() => setGameModalActive(false)}
