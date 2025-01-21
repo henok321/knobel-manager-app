@@ -7,9 +7,11 @@ import {
   fetchGamesAction,
 } from './actions.ts';
 import { GameRequest } from '../../api/types.ts';
-import { GameState } from './slice.ts';
+import { GameState, selectAllGames } from './slice.ts';
 
 const useGames = () => {
+  const allGames = useSelector(selectAllGames);
+
   const dispatch = useDispatch<AppDispatch>();
   const gamesState = useSelector((state: { games: GameState }) => state.games);
 
@@ -29,7 +31,14 @@ const useGames = () => {
     dispatch(activateGameAction(gameID));
   };
 
-  return { gamesState, fetchGames, createGame, deleteGame, activateGame };
+  return {
+    gamesState,
+    allGames,
+    fetchGames,
+    createGame,
+    deleteGame,
+    activateGame,
+  };
 };
 
 export default useGames;

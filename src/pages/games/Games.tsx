@@ -6,8 +6,14 @@ import GameCard from './GameCard';
 import Layout from '../../components/Layout.tsx';
 
 const Games = () => {
-  const { gamesState, fetchGames, createGame, deleteGame, activateGame } =
-    useGames();
+  const {
+    gamesState,
+    allGames,
+    fetchGames,
+    createGame,
+    deleteGame,
+    activateGame,
+  } = useGames();
   const [gameModalActive, setGameModalActive] = useState(false);
   const { t } = useTranslation();
 
@@ -49,7 +55,7 @@ const Games = () => {
         </button>
         <div>
           {gamesState.entities &&
-            Object.values(gamesState.entities).map((game) => (
+            allGames.map((game) => (
               <GameCard
                 key={game.id}
                 isActiveGame={game.id === gamesState.activeGameID}
