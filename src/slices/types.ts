@@ -5,6 +5,7 @@ export type Game = {
   tableSize: number;
   numberOfRounds: number;
   status: string;
+  rounds: number[];
   owners: Owner[];
 };
 
@@ -17,6 +18,7 @@ export type Team = {
   id: number;
   name: string;
   gameID: number;
+  players: number[];
 };
 
 export type Player = {
@@ -30,12 +32,14 @@ export type Round = {
   roundNumber: number;
   gameID: number;
   status: string;
+  tables: number[];
 };
 
 export type Table = {
   id: number;
   tableNumber: number;
   roundID: number;
+  players: number[];
 };
 
 export type Score = {

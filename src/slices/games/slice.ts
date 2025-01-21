@@ -8,9 +8,9 @@ import {
   activateGameAction,
   createGameAction,
   deleteGameAction,
-  fetchGamesAction,
 } from './actions.ts';
 import { RootState } from '../../store/store.ts';
+import { fetchAll } from '../actions.ts';
 
 type AdditionalGamesState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -35,15 +35,15 @@ const gamesSlice = createSlice({
   extraReducers: (builder) => {
     // fetch games
     builder
-      .addCase(fetchGamesAction.pending, (state) => {
+      .addCase(fetchAll.pending, (state) => {
         state.status = 'pending';
       })
-      .addCase(fetchGamesAction.fulfilled, (state, action) => {
+      .addCase(fetchAll.fulfilled, (state, action) => {
         gamesAdapter.setAll(state, action.payload.games);
         state.activeGameID = action.payload.activeGameID;
         state.status = 'succeeded';
       })
-      .addCase(fetchGamesAction.rejected, (state, action) => {
+      .addCase(fetchAll.rejected, (state, action) => {
         state.status = 'failed';
         state.error = new Error(action.error.message);
       });
