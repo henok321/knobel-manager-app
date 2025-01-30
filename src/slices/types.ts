@@ -6,12 +6,7 @@ export type Game = {
   numberOfRounds: number;
   status: string;
   rounds: number[];
-  owners: Owner[];
-};
-
-export type Owner = {
-  gameID: number;
-  ownerSub: string;
+  owners: string[];
 };
 
 export type Team = {

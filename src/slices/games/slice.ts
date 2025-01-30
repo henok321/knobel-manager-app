@@ -58,7 +58,18 @@ const gamesSlice = createSlice({
         state.error = new Error(action.error.message);
       })
       .addCase(createGameAction.fulfilled, (state, action) => {
-        gamesAdapter.setOne(state, action.payload.game);
+        const game: Game = {
+          id: action.payload.game.id,
+          name: action.payload.game.name,
+          teamSize: action.payload.game.teamSize,
+          tableSize: action.payload.game.tableSize,
+          numberOfRounds: action.payload.game.numberOfRounds,
+          status: action.payload.game.status,
+          rounds: action.payload.game.rounds?.map((round) => round.id) || [],
+          owners: action.payload.game.owners.map((owner) => owner.ownerSub),
+        };
+
+        gamesAdapter.setOne(state, game);
         state.status = 'succeeded';
       });
 
