@@ -16,7 +16,7 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
       <div className="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-lg">
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 text-gray-500 hover:text-gray-800 focus:outline-none"
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 focus:outline-none"
         >
           &times;
         </button>

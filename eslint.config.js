@@ -9,7 +9,6 @@ import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 import markdown from 'eslint-plugin-markdown';
 import { fixupPluginRules } from '@eslint/compat';
-import tailwindcss from 'eslint-plugin-tailwindcss';
 import jest from 'eslint-plugin-jest';
 
 export default [
@@ -35,7 +34,6 @@ export default [
       'react-hooks': fixupPluginRules(reactHooksPlugin),
       'react-refresh': reactRefresh,
       prettier,
-      tailwindcss,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -43,7 +41,6 @@ export default [
       ...react.configs.recommended.rules,
       ...reactHooksPlugin.configs.recommended.rules,
       ...prettierConfig.rules,
-      ...tailwindcss.configs.recommended.rules,
       'prettier/prettier': 'warn',
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
