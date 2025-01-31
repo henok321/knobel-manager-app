@@ -20,14 +20,12 @@ const Games = () => {
   const [gameModalActive, setGameModalActive] = useState(false);
   const { t } = useTranslation();
 
-  // Fetch games if status is idle
   useEffect(() => {
     if (status === 'idle') {
       fetchGames();
     }
   }, [status, fetchGames]);
 
-  // === DERIVED BOOLEANS ===
   const isLoading = status === 'idle' || status === 'pending';
   const hasError = status === 'failed' && error;
 

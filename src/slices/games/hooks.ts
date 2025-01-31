@@ -13,6 +13,7 @@ import {
   selectGamesStatus,
 } from './slice';
 import { fetchAll } from '../actions';
+import { useCallback } from 'react';
 
 const useGames = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,21 +23,30 @@ const useGames = () => {
   const status = useSelector(selectGamesStatus);
   const error = useSelector(selectGamesError);
 
-  const fetchGames = () => {
+  const fetchGames = useCallback(() => {
     dispatch(fetchAll());
-  };
+  }, [dispatch]);
 
-  const createGame = (gameRequest: GameRequest) => {
-    dispatch(createGameAction(gameRequest));
-  };
+  const createGame = useCallback(
+    (gameRequest: GameRequest) => {
+      dispatch(createGameAction(gameRequest));
+    },
+    [dispatch],
+  );
 
-  const deleteGame = (gameID: number) => {
-    dispatch(deleteGameAction(gameID));
-  };
+  const deleteGame = useCallback(
+    (gameID: number) => {
+      dispatch(deleteGameAction(gameID));
+    },
+    [dispatch],
+  );
 
-  const activateGame = (gameID: number) => {
-    dispatch(activateGameAction(gameID));
-  };
+  const activateGame = useCallback(
+    (gameID: number) => {
+      dispatch(activateGameAction(gameID));
+    },
+    [dispatch],
+  );
 
   return {
     allGames,
