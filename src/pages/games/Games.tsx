@@ -7,12 +7,14 @@ import Layout from '../../components/Layout.tsx';
 
 const Games = () => {
   const {
-    gamesState,
+    status,
+    error,
     allGames,
+    activeGame,
     fetchGames,
     createGame,
-    deleteGame,
     activateGame,
+    deleteGame,
   } = useGames();
 
   const [gameModalActive, setGameModalActive] = useState(false);
@@ -20,15 +22,14 @@ const Games = () => {
 
   // Fetch games if status is idle
   useEffect(() => {
-    if (gamesState.status === 'idle') {
+    if (status === 'idle') {
       fetchGames();
     }
-  }, [gamesState.status, fetchGames]);
+  }, [status, fetchGames]);
 
   // === DERIVED BOOLEANS ===
-  const isLoading =
-    gamesState.status === 'idle' || gamesState.status === 'pending';
-  const hasError = gamesState.status === 'failed' && gamesState.error;
+  const isLoading = status === 'idle' || status === 'pending';
+  const hasError = status === 'failed' && error;
 
   if (isLoading) {
     return (
@@ -42,7 +43,7 @@ const Games = () => {
     return (
       <div className="flex h-screen flex-col items-center justify-center text-xl text-red-500">
         <p>{t('global.errorOccurred')}</p>
-        <p>{gamesState.error?.message}</p>
+        <p>{error?.message}</p>
       </div>
     );
   }
@@ -74,7 +75,7 @@ const Games = () => {
           {allGames.map((game) => (
             <GameCard
               key={game.id}
-              isActiveGame={game.id === gamesState.activeGameID}
+              isActiveGame={game.id === activeGame?.id}
               game={game}
               onActivate={handleActivateGame}
               onDelete={handleDeleteGame}

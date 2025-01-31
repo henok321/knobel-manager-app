@@ -1,5 +1,6 @@
 import {
   createEntityAdapter,
+  createSelector,
   createSlice,
   EntityState,
 } from '@reduxjs/toolkit';
@@ -106,7 +107,27 @@ const gamesSlice = createSlice({
   },
 });
 
-export default gamesSlice.reducer;
-
-export const { selectAll: selectAllGames } =
+const { selectAll: selectAllGames, selectEntities: selectGameEntities } =
   gamesAdapter.getSelectors<RootState>((state) => state.games);
+
+const selectActiveGameID = (state: RootState) => state.games.activeGameID;
+
+const selectGamesStatus = (state: RootState) => state.games.status;
+const selectGamesError = (state: RootState) => state.games.error;
+
+const selectActiveGame = createSelector(
+  [selectActiveGameID, selectGameEntities],
+  (activeGameID, entities) => {
+    if (!activeGameID) return undefined;
+    return entities[activeGameID];
+  },
+);
+
+export {
+  selectAllGames,
+  selectActiveGame,
+  selectGamesStatus,
+  selectGamesError,
+};
+
+export default gamesSlice.reducer;

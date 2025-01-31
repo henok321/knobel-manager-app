@@ -1,19 +1,26 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../store/store.ts';
+import { AppDispatch } from '../../store/store';
 import {
   activateGameAction,
   createGameAction,
   deleteGameAction,
-} from './actions.ts';
-import { GameRequest } from '../../api/types.ts';
-import { GamesState, selectAllGames } from './slice.ts';
-import { fetchAll } from '../actions.ts';
+} from './actions';
+import { GameRequest } from '../../api/types';
+import {
+  selectActiveGame,
+  selectAllGames,
+  selectGamesError,
+  selectGamesStatus,
+} from './slice';
+import { fetchAll } from '../actions';
 
 const useGames = () => {
-  const allGames = useSelector(selectAllGames);
-
   const dispatch = useDispatch<AppDispatch>();
-  const gamesState = useSelector((state: { games: GamesState }) => state.games);
+
+  const allGames = useSelector(selectAllGames);
+  const activeGame = useSelector(selectActiveGame);
+  const status = useSelector(selectGamesStatus);
+  const error = useSelector(selectGamesError);
 
   const fetchGames = () => {
     dispatch(fetchAll());
@@ -32,8 +39,11 @@ const useGames = () => {
   };
 
   return {
-    gamesState,
     allGames,
+    activeGame,
+    status,
+    error,
+
     fetchGames,
     createGame,
     deleteGame,
