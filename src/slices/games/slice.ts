@@ -18,7 +18,7 @@ type AdditionalGamesState = {
   activeGameID?: number;
 };
 
-export type GameState = EntityState<Game, number> & AdditionalGamesState;
+export type GamesState = EntityState<Game, number> & AdditionalGamesState;
 
 const gamesAdapter = createEntityAdapter<Game>();
 

@@ -3,25 +3,25 @@ import {
   createSlice,
   EntityState,
 } from '@reduxjs/toolkit';
-import { Team } from '../types.ts';
+import { Player } from '../types.ts';
 import { fetchAll } from '../actions.ts';
 
-type AdditionalTeamState = {
+type AdditionalPlayerState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
   error?: Error | null;
 };
 
-export type TeamsState = EntityState<Team, number> & AdditionalTeamState;
+export type PlayersState = EntityState<Player, number> & AdditionalPlayerState;
 
-const teamsAdapter = createEntityAdapter<Team>();
+const playersAdapter = createEntityAdapter<Player>();
 
-const state = teamsAdapter.getInitialState<AdditionalTeamState>({
+const state = playersAdapter.getInitialState<AdditionalPlayerState>({
   status: 'idle',
   error: null,
 });
 
-const teamsSlice = createSlice({
-  name: 'teams',
+const playersSlice = createSlice({
+  name: 'players',
   initialState: state,
   reducers: {},
   extraReducers: (builder) => {
@@ -31,7 +31,7 @@ const teamsSlice = createSlice({
         state.status = 'pending';
       })
       .addCase(fetchAll.fulfilled, (state, action) => {
-        teamsAdapter.setAll(state, action.payload.teams);
+        playersAdapter.setAll(state, action.payload.players);
         state.status = 'succeeded';
       })
       .addCase(fetchAll.rejected, (state, action) => {
@@ -41,4 +41,4 @@ const teamsSlice = createSlice({
   },
 });
 
-export default teamsSlice.reducer;
+export default playersSlice.reducer;

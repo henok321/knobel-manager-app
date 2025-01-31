@@ -6,14 +6,14 @@ import {
   deleteGameAction,
 } from './actions.ts';
 import { GameRequest } from '../../api/types.ts';
-import { GameState, selectAllGames } from './slice.ts';
+import { GamesState, selectAllGames } from './slice.ts';
 import { fetchAll } from '../actions.ts';
 
 const useGames = () => {
   const allGames = useSelector(selectAllGames);
 
   const dispatch = useDispatch<AppDispatch>();
-  const gamesState = useSelector((state: { games: GameState }) => state.games);
+  const gamesState = useSelector((state: { games: GamesState }) => state.games);
 
   const fetchGames = () => {
     dispatch(fetchAll());
