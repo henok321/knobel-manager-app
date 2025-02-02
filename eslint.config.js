@@ -10,6 +10,7 @@ import prettierConfig from 'eslint-config-prettier';
 import markdown from 'eslint-plugin-markdown';
 import { fixupPluginRules } from '@eslint/compat';
 import jest from 'eslint-plugin-jest';
+import importPlugin from 'eslint-plugin-import';
 
 export default [
   {
@@ -34,6 +35,7 @@ export default [
       'react-hooks': fixupPluginRules(reactHooksPlugin),
       'react-refresh': reactRefresh,
       prettier,
+      import: importPlugin,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -75,6 +77,22 @@ export default [
           reservedFirst: true,
           ignoreCase: true,
           locale: 'auto',
+        },
+      ],
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            ['parent', 'sibling', 'index'],
+          ],
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
         },
       ],
     },

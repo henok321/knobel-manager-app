@@ -3,8 +3,9 @@ import {
   createSlice,
   EntityState,
 } from '@reduxjs/toolkit';
-import { Team } from '../types.ts';
+
 import { fetchAll } from '../actions.ts';
+import { Team } from '../types.ts';
 
 type AdditionalTeamState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';

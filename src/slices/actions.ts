@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { NormalizedData } from './types.ts';
 import { getGames } from '../api/apiClient.ts';
 import { GamesResponse } from '../api/types.ts';

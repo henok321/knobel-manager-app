@@ -1,6 +1,7 @@
 import { FormEvent } from 'react';
-import Modal from '../../components/Modal';
 import { useTranslation } from 'react-i18next';
+
+import Modal from '../../components/Modal';
 
 export interface GameFormData {
   name: string;

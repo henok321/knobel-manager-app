@@ -3,8 +3,9 @@ import {
   createSlice,
   EntityState,
 } from '@reduxjs/toolkit';
-import { Player } from '../types.ts';
+
 import { fetchAll } from '../actions.ts';
+import { Player } from '../types.ts';
 
 type AdditionalPlayerState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';

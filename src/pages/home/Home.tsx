@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import TeamForm, { TeamFormData } from './TeamForm.tsx';
 import Layout from '../../components/Layout.tsx';
 import useGames from '../../slices/games/hooks.ts';
 import { Game } from '../../slices/types.ts';
-import { useEffect, useState } from 'react';
-import TeamForm, { TeamFormData } from './TeamForm.tsx';
 
 const Home = () => {
   const { t } = useTranslation();

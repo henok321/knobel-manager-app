@@ -1,5 +1,6 @@
-import { activateGame, createGame, deleteGame } from '../../api/apiClient.ts';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { activateGame, createGame, deleteGame } from '../../api/apiClient.ts';
 import { GameRequest, GameResponse } from '../../api/types.ts';
 
 export const createGameAction = createAsyncThunk<GameResponse, GameRequest>(

@@ -1,10 +1,11 @@
-import React, { createContext, useEffect, useState } from 'react';
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
   User,
 } from 'firebase/auth';
+import React, { createContext, useEffect, useState } from 'react';
+
 import { auth as firebaseAuth } from './firebaseConfig.ts';
 
 export interface AuthContextValue {

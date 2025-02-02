@@ -1,7 +1,8 @@
 import React from 'react';
-import { useAuth } from '../auth/useAuth.ts';
 import { useTranslation } from 'react-i18next';
+
 import NavBar from './NavBar.tsx';
+import { useAuth } from '../auth/useAuth.ts';
 
 interface HeaderProps {
   navBar?: boolean;

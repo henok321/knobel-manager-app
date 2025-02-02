@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { auth as firebaseAuth } from '../auth/firebaseConfig.ts';
+
 import { GameRequest, GameResponse, GamesResponse } from './types.ts';
+import { auth as firebaseAuth } from '../auth/firebaseConfig.ts';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,

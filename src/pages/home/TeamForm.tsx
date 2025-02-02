@@ -1,7 +1,8 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
-import Modal from '../../components/Modal';
-import { useTranslation } from 'react-i18next';
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import Modal from '../../components/Modal';
 
 export interface TeamFormData {
   name: string;

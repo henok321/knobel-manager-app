@@ -1,19 +1,20 @@
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../store/store';
+
 import {
   activateGameAction,
   createGameAction,
   deleteGameAction,
 } from './actions';
-import { GameRequest } from '../../api/types';
 import {
   selectActiveGame,
   selectAllGames,
   selectGamesError,
   selectGamesStatus,
 } from './slice';
+import { GameRequest } from '../../api/types';
+import { AppDispatch } from '../../store/store';
 import { fetchAll } from '../actions';
-import { useCallback } from 'react';
 
 const useGames = () => {
   const dispatch = useDispatch<AppDispatch>();

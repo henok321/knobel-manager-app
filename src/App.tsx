@@ -1,9 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import { AuthProvider } from './auth/AuthContext.tsx';
+import ProtectedRoute from './auth/ProtectedRoute.tsx';
+import Games from './pages/games/Games.tsx';
 import Home from './pages/home/Home.tsx';
 import Login from './pages/Login.tsx';
-import ProtectedRoute from './auth/ProtectedRoute.tsx';
-import { AuthProvider } from './auth/AuthContext.tsx';
-import Games from './pages/games/Games.tsx';
 
 const App = () => (
   <AuthProvider>

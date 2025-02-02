@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Game } from '../../slices/types.ts';
 import { useTranslation } from 'react-i18next';
+
+import { Game } from '../../slices/types.ts';
 
 export type GameCardProps = {
   game: Game;

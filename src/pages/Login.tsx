@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../auth/useAuth.ts';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
+
+import { useAuth } from '../auth/useAuth.ts';
 import Layout from '../components/Layout.tsx';
 
 const Login: React.FC = () => {
