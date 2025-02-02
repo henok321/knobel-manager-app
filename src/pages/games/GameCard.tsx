@@ -62,21 +62,21 @@ const GameCard = ({
           </p>
           <div className="mt-4 flex space-x-2">
             <button
+              className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-blue-300"
               disabled={isActiveGame}
               onClick={(e) => {
                 e.stopPropagation();
                 onActivate(game.id);
               }}
-              className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-blue-300"
             >
               {t('pages.games.card.activateButton')}
             </button>
             <button
+              className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete(game.id);
               }}
-              className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
             >
               {t('pages.games.card.deleteButton')}
             </button>

@@ -9,20 +9,20 @@ const NavBar = () => {
       <ul className="flex space-x-4">
         <li>
           <NavLink
-            to="/"
             className={({ isActive }) =>
               `cursor-pointer transition-colors hover:text-blue-500 ${isActive ? 'font-bold text-blue-700 underline' : ''}`
             }
+            to="/"
           >
             {t('header.nav.home')}
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/games"
             className={({ isActive }) =>
               `cursor-pointer transition-colors hover:text-blue-500 ${isActive ? 'font-bold text-blue-700 underline' : ''}`
             }
+            to="/games"
           >
             {t('header.nav.games')}
           </NavLink>

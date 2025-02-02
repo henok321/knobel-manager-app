@@ -59,12 +59,12 @@ const Games = () => {
   };
 
   return (
-    <Layout navBar logoutButton>
+    <Layout logoutButton navBar>
       <div>
         <h1 className="mb-4 text-2xl font-bold">{t('pages.games.heading')}</h1>
         <button
-          onClick={() => setGameModalActive(true)}
           className="mb-4 rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
+          onClick={() => setGameModalActive(true)}
         >
           {t('pages.games.createGameButton')}
         </button>
@@ -73,8 +73,8 @@ const Games = () => {
           {allGames.map((game) => (
             <GameCard
               key={game.id}
-              isActiveGame={game.id === activeGame?.id}
               game={game}
+              isActiveGame={game.id === activeGame?.id}
               onActivate={handleActivateGame}
               onDelete={handleDeleteGame}
             />
@@ -83,9 +83,9 @@ const Games = () => {
       </div>
 
       <GameForm
+        createGame={handleCreateGame}
         isOpen={gameModalActive}
         onClose={() => setGameModalActive(false)}
-        createGame={handleCreateGame}
       />
     </Layout>
   );

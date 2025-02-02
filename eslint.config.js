@@ -66,6 +66,17 @@ export default [
         'error',
         { props: 'never', children: 'never' },
       ],
+      'react/jsx-sort-props': [
+        'error',
+        {
+          callbacksLast: true,
+          shorthandFirst: true,
+          noSortAlphabetically: false,
+          reservedFirst: true,
+          ignoreCase: true,
+          locale: 'auto',
+        },
+      ],
     },
     settings: {
       react: {

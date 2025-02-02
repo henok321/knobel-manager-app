@@ -18,8 +18,8 @@ const Header: React.FC<HeaderProps> = ({ navBar, logoutButton }) => {
         <h1 className="text-2xl font-bold">{t('header.heading')}</h1>
         {logoutButton && (
           <button
-            onClick={logOut}
             className="rounded bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600"
+            onClick={logOut}
           >
             {t('header.logout')}
           </button>

@@ -36,7 +36,7 @@ const Home = () => {
   }
 
   return (
-    <Layout navBar logoutButton>
+    <Layout logoutButton navBar>
       <h1 className="mb-4 text-2xl font-bold">{t('pages.home.heading')}</h1>
 
       {activeGame ? (
@@ -46,17 +46,17 @@ const Home = () => {
           </h2>
 
           <button
-            onClick={() => setGameModalActive(true)}
             className="mb-4 rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
+            onClick={() => setGameModalActive(true)}
           >
             {t('pages.home.createTeamButton')}
           </button>
 
           <TeamForm
-            teamSize={activeGame.teamSize}
-            isOpen={gameModalActive}
-            onClose={() => setGameModalActive(false)}
             createTeam={handleCreateTeam}
+            isOpen={gameModalActive}
+            teamSize={activeGame.teamSize}
+            onClose={() => setGameModalActive(false)}
           />
         </div>
       ) : (

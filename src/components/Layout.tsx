@@ -15,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({
   children,
 }) => (
   <div className="flex min-h-screen flex-col bg-gray-100">
-    <Header navBar={navBar} logoutButton={logoutButton} />
+    <Header logoutButton={logoutButton} navBar={navBar} />
     <main
       className={`grow p-4 pt-36 ${
         center ? 'flex items-center justify-center' : ''

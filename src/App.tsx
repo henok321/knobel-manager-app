@@ -9,10 +9,10 @@ const App = () => (
   <AuthProvider>
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route element={<Login />} path="/login" />
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/games" element={<Games />} />
+          <Route element={<Home />} path="/" />
+          <Route element={<Games />} path="/games" />
         </Route>
       </Routes>
     </BrowserRouter>

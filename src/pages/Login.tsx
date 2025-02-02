@@ -26,48 +26,48 @@ const Login: React.FC = () => {
 
   // If already authenticated, redirect
   if (user) {
-    return <Navigate to="/" replace />;
+    return <Navigate replace to="/" />;
   }
 
   // Centered form thanks to LayoutCenter
   return (
     <Layout center>
       <form
-        onSubmit={handleSubmit}
         className="w-full max-w-md rounded bg-white p-6 shadow-md"
+        onSubmit={handleSubmit}
       >
         <h1 className="mb-6 text-center text-2xl font-bold">
           {t('pages.login.heading')}
         </h1>
         <div className="mb-4">
-          <label htmlFor="email" className="mb-1 block font-medium">
+          <label className="mb-1 block font-medium" htmlFor="email">
             {t('pages.login.label.email')}
           </label>
           <input
+            required
+            className="w-full rounded border p-2"
             id="email"
             type="email"
-            className="w-full rounded border p-2"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
         </div>
         <div className="mb-6">
-          <label htmlFor="password" className="mb-1 block font-medium">
+          <label className="mb-1 block font-medium" htmlFor="password">
             {t('pages.login.label.password')}
           </label>
           <input
+            required
+            className="w-full rounded border p-2"
             id="password"
             type="password"
-            className="w-full rounded border p-2"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
         </div>
         <button
-          type="submit"
           className="w-full rounded bg-blue-600 py-3 text-white transition-colors hover:bg-blue-700"
+          type="submit"
         >
           {t('pages.login.submit')}
         </button>
