@@ -3,6 +3,8 @@
   "trailingComma": "all",
   "singleQuote": true,
   "printWidth": 80,
+  "jsxBracketSameLine": false,
+  "arrowParens": "always",
   "tabWidth": 2,
   "endOfLine": "auto",
   "plugins": ["prettier-plugin-tailwindcss"]

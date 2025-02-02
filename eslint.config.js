@@ -1,5 +1,5 @@
 import js from '@eslint/js';
-import reactHooksPlugin from '@eslint/js';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import react from 'eslint-plugin-react';
 import reactRefresh from 'eslint-plugin-react-refresh';
