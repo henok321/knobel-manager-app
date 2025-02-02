@@ -22,7 +22,21 @@
       "submit": "Login"
     },
     "home": {
-      "heading": "Home"
+      "heading": "Home",
+      "noActiveGame": "No active game",
+      "createTeamButton": "Create Team",
+      "team": {
+        "form": {
+          "heading": "Create team",
+          "label": {
+            "name": "Team name",
+            "players": "Team members"
+          },
+          "addPlayer": "Add member",
+          "removePlayer": "Remove member",
+          "submit": "Create"
+        }
+      }
     },
     "games": {
       "heading": "Games",

@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home.tsx';
+import Home from './pages/home/Home.tsx';
 import Login from './pages/Login.tsx';
 import ProtectedRoute from './auth/ProtectedRoute.tsx';
 import { AuthProvider } from './auth/AuthContext.tsx';
