@@ -14,6 +14,22 @@ export type GameResponse = {
   game: ApiGame;
 };
 
+export type TeamRequest = {
+  name: string;
+};
+
+export type TeamResponse = {
+  team: ApiTeam;
+};
+
+export type PlayerRequest = {
+  name: string;
+};
+
+export type PlayerResponse = {
+  player: ApiPlayer;
+};
+
 export type ApiGame = {
   id: number;
   name: string;

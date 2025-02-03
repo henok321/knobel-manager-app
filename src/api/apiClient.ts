@@ -1,6 +1,14 @@
 import axios from 'axios';
 
-import { GameRequest, GameResponse, GamesResponse } from './types.ts';
+import {
+  GameRequest,
+  GameResponse,
+  GamesResponse,
+  PlayerRequest,
+  PlayerResponse,
+  TeamRequest,
+  TeamResponse,
+} from './types.ts';
 import { auth as firebaseAuth } from '../auth/firebaseConfig.ts';
 
 const apiClient = axios.create({
@@ -34,4 +42,24 @@ export const deleteGame = async (gameID: number) => {
 
 export const activateGame = async (gameID: number) => {
   await apiClient.post(`games/${gameID}/activate`);
+};
+
+export const createTeam = async (
+  gameID: number,
+  teamRequest: TeamRequest,
+): Promise<TeamResponse> => {
+  const response = await apiClient.post(`games/${gameID}/team`, teamRequest);
+  return response.data;
+};
+
+export const createPlayer = async (
+  gameID: number,
+  teamID: number,
+  playerRequest: PlayerRequest,
+): Promise<PlayerResponse> => {
+  const response = await apiClient.post(
+    `games/${gameID}/team/${teamID}`,
+    playerRequest,
+  );
+  return response.data;
 };
