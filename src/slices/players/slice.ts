@@ -5,6 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { fetchAll } from '../actions.ts';
+import { createTeamAction } from '../teams/actions.ts';
 import { Player } from '../types.ts';
 
 type AdditionalPlayerState = {
@@ -38,6 +39,27 @@ const playersSlice = createSlice({
       .addCase(fetchAll.rejected, (state, action) => {
         state.status = 'failed';
         state.error = new Error(action.error.message);
+      });
+
+    // team with players created
+    builder
+      .addCase(createTeamAction.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(createTeamAction.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = new Error(action.error.message);
+      })
+
+      .addCase(createTeamAction.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        const players: Player[] =
+          action.payload.team.players?.map((p) => ({
+            id: p.id,
+            name: p.name,
+            teamID: p.teamID,
+          })) || [];
+        playersAdapter.addMany(state, players);
       });
   },
 });

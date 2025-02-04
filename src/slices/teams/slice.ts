@@ -60,7 +60,7 @@ const teamsSlice = createSlice({
           players:
             action.payload.team.players?.map((player) => player.id) || [],
         };
-        teamsAdapter.setOne(state, team);
+        teamsAdapter.addOne(state, team);
         state.status = 'succeeded';
       });
   },

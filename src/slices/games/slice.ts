@@ -72,7 +72,7 @@ const gamesSlice = createSlice({
           owners: action.payload.game.owners.map((owner) => owner.ownerSub),
         };
 
-        gamesAdapter.setOne(state, game);
+        gamesAdapter.addOne(state, game);
         state.status = 'succeeded';
       });
 
