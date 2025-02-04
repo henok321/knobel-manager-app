@@ -32,6 +32,7 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
       teamSize: apiGame.teamSize,
       tableSize: apiGame.tableSize,
       numberOfRounds: apiGame.numberOfRounds,
+      teams: apiGame.teams?.map((team) => team.id) || [],
       status: apiGame.status,
       owners: apiGame.owners?.map((owner) => owner.ownerSub),
       rounds: apiGame.rounds?.map((round) => round.id) || [],

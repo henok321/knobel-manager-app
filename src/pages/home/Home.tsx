@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 import TeamForm, { TeamFormData } from './TeamForm.tsx';
 import Layout from '../../components/Layout.tsx';
 import useGames from '../../slices/games/hooks.ts';
+import useTeams from '../../slices/teams/hooks.ts';
 import { Game } from '../../slices/types.ts';
 
 const Home = () => {
   const { t } = useTranslation();
   const { activeGame, fetchGames, status } = useGames();
   const [gameModalActive, setGameModalActive] = useState(false);
+  const { createTeam } = useTeams();
 
   const renderActiveGame = (game: Game) => (
     <p>
@@ -24,8 +26,12 @@ const Home = () => {
   }, [status, fetchGames]);
 
   const handleCreateTeam = (team: TeamFormData) => {
-    // eslint-disable-next-line no-console
-    console.log(team);
+    if (activeGame) {
+      createTeam(activeGame.id, {
+        name: team.name,
+        players: team.members.map((p) => ({ name: p })),
+      });
+    }
   };
 
   if (status === 'pending') {

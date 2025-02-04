@@ -16,6 +16,9 @@ export type GameResponse = {
 
 export type TeamRequest = {
   name: string;
+  players: {
+    name: string;
+  }[];
 };
 
 export type TeamResponse = {

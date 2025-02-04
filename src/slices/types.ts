@@ -5,6 +5,7 @@ export type Game = {
   tableSize: number;
   numberOfRounds: number;
   status: string;
+  teams: number[];
   rounds: number[];
   owners: string[];
 };

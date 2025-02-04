@@ -64,6 +64,7 @@ const gamesSlice = createSlice({
           id: action.payload.game.id,
           name: action.payload.game.name,
           teamSize: action.payload.game.teamSize,
+          teams: action.payload.game.teams?.map((team) => team.id) || [],
           tableSize: action.payload.game.tableSize,
           numberOfRounds: action.payload.game.numberOfRounds,
           status: action.payload.game.status,

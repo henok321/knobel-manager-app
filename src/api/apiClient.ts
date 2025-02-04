@@ -48,7 +48,7 @@ export const createTeam = async (
   gameID: number,
   teamRequest: TeamRequest,
 ): Promise<TeamResponse> => {
-  const response = await apiClient.post(`games/${gameID}/team`, teamRequest);
+  const response = await apiClient.post(`games/${gameID}/teams`, teamRequest);
   return response.data;
 };
 
