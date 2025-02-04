@@ -1,9 +1,11 @@
 import {
+  createDraftSafeSelector,
   createEntityAdapter,
   createSlice,
   EntityState,
 } from '@reduxjs/toolkit';
 
+import { RootState } from '../../store/store.ts';
 import { fetchAll } from '../actions.ts';
 import { createTeamAction } from '../teams/actions.ts';
 import { Player } from '../types.ts';
@@ -50,7 +52,6 @@ const playersSlice = createSlice({
         state.status = 'failed';
         state.error = new Error(action.error.message);
       })
-
       .addCase(createTeamAction.fulfilled, (state, action) => {
         state.status = 'succeeded';
         const players: Player[] =
@@ -63,5 +64,18 @@ const playersSlice = createSlice({
       });
   },
 });
+
+const { selectAll: selectAllPlayers } = playersAdapter.getSelectors<RootState>(
+  (state) => state.players,
+);
+
+const selectPlayersByTeamID = createDraftSafeSelector(
+  [selectAllPlayers, (_: RootState, teamID: number) => teamID],
+  (players, teamID) => {
+    players.filter((p) => p.teamID === teamID);
+  },
+);
+
+export { selectAllPlayers, selectPlayersByTeamID };
 
 export default playersSlice.reducer;

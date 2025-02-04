@@ -70,9 +70,11 @@ const { selectAll: selectAllTeams } = teamsAdapter.getSelectors<RootState>(
   (state) => state.teams,
 );
 
-export const selectTeamsByGameId = createDraftSafeSelector(
+const selectTeamsByGameId = createDraftSafeSelector(
   [selectAllTeams, (_: RootState, gameID: number) => gameID],
   (teams, gameID) => teams.filter((team) => team.gameID === gameID),
 );
+
+export { selectTeamsByGameId, selectAllTeams };
 
 export default teamsSlice.reducer;

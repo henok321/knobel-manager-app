@@ -1,21 +1,19 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import { createTeamAction } from './actions.ts';
-import { selectTeamsByGameId } from './slice.ts';
+import { selectAllTeams } from './slice.ts';
 import { TeamRequest } from '../../api/types.ts';
-import { AppDispatch, RootState } from '../../store/store.ts';
+import { AppDispatch } from '../../store/store.ts';
 
 const useTeams = () => {
   const dispatch = useDispatch<AppDispatch>();
 
+  const allTeams = useSelector(selectAllTeams);
   const createTeam = (gameID: number, teamRequest: TeamRequest) => {
     dispatch(createTeamAction({ gameID, teamRequest }));
   };
 
-  return { createTeam };
+  return { allTeams, createTeam };
 };
-
-export const useTeamsByGameId = (gameID: number) =>
-  useSelector((state: RootState) => selectTeamsByGameId(state, gameID));
 
 export default useTeams;
