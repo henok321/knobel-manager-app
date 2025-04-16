@@ -20,5 +20,8 @@
   "editor.quickSuggestions": {
     "strings": true
   },
-  "css.validate": true
+  "css.validate": true,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
