@@ -21,7 +21,7 @@
     "@heroicons/react": "^2.2.0",
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.9.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.0.0",
     "firebase": "^11.8.1",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.1.0",
