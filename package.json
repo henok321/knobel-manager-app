@@ -9,13 +9,19 @@
     "build": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "format": "prettier --write --ignore-unknown .",
     "fix": "npm run lint:fix && npm run format && npm run lint",
     "test": "jest",
     "preview": "vite preview",
     "prepare": "husky",
     "clean": "rm -rf node_modules dist",
     "deploy": "npm run build && firebase deploy --only hosting"
+  },
+  "lint-staged": {
+    "**/*": [
+      "eslint --fix",
+      "prettier --write --ignore-unknown"
+    ]
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
