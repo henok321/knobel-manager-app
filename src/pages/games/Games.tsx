@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { Button, Center, Container, Stack, Text, Title } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import GameCard from './GameCard';
 import GameForm, { GameFormData } from './GameForm.tsx';
+import CenterLoader from '../../components/CenterLoader.tsx';
 import Layout from '../../components/Layout.tsx';
 import useGames from '../../slices/games/hooks.ts';
 
@@ -31,19 +33,19 @@ const Games = () => {
   const hasError = status === 'failed' && error;
 
   if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center text-xl">
-        {t('global.loading')}
-      </div>
-    );
+    return <CenterLoader />;
   }
 
   if (hasError) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center text-xl text-red-500">
-        <p>{t('global.errorOccurred')}</p>
-        <p>{error?.message}</p>
-      </div>
+      <Center h="100vh">
+        <Stack align="center" gap="xs">
+          <Text c="red" size="xl">
+            {t('global.errorOccurred')}
+          </Text>
+          <Text c="red">{error?.message}</Text>
+        </Stack>
+      </Center>
     );
   }
 
@@ -60,17 +62,15 @@ const Games = () => {
   };
 
   return (
-    <Layout logoutButton navBar>
-      <div>
-        <h1 className="mb-4 text-2xl font-bold">{t('pages.games.heading')}</h1>
-        <button
-          className="mb-4 rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
-          onClick={() => setGameModalActive(true)}
-        >
+    <Layout navbarActive>
+      <Container py="md" size="sm">
+        <Title mb="md" order={1}>
+          {t('pages.games.heading')}
+        </Title>
+        <Button mb="md" onClick={() => setGameModalActive(true)}>
           {t('pages.games.createGameButton')}
-        </button>
-
-        <div>
+        </Button>
+        <Stack gap="md">
           {allGames.map((game) => (
             <GameCard
               key={game.id}
@@ -80,9 +80,8 @@ const Games = () => {
               onDelete={handleDeleteGame}
             />
           ))}
-        </div>
-      </div>
-
+        </Stack>
+      </Container>
       <GameForm
         createGame={handleCreateGame}
         isOpen={gameModalActive}

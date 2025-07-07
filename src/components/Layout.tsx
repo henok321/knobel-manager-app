@@ -1,30 +1,30 @@
+import { AppShell, Flex } from '@mantine/core';
 import React, { ReactNode } from 'react';
 
 import Header from './Header';
 
 interface LayoutProps {
-  navBar?: boolean;
-  logoutButton?: boolean;
-  center?: boolean; // <-- our toggle for content centering
+  navbarActive?: boolean;
+  center?: boolean;
   children: ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({
-  navBar,
-  logoutButton,
-  center,
-  children,
-}) => (
-  <div className="flex min-h-screen flex-col bg-gray-100">
-    <Header logoutButton={logoutButton} navBar={navBar} />
-    <main
-      className={`grow p-4 pt-36 ${
-        center ? 'flex items-center justify-center' : ''
-      }`}
-    >
-      {children}
-    </main>
-  </div>
+const Layout: React.FC<LayoutProps> = ({ navbarActive, center, children }) => (
+  <AppShell>
+    <AppShell.Header>
+      <Header navbarActive={navbarActive} />
+    </AppShell.Header>
+
+    <AppShell.Main>
+      {center ? (
+        <Flex align="center" justify="center" style={{ height: 'calc(100vh' }}>
+          {children}
+        </Flex>
+      ) : (
+        children
+      )}
+    </AppShell.Main>
+  </AppShell>
 );
 
 export default Layout;

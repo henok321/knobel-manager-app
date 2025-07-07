@@ -1,34 +1,75 @@
-import React from 'react';
+import { Burger, Button, Container, Group, Title } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { NavLink, useLocation } from 'react-router-dom';
 
-import NavBar from './NavBar.tsx';
-import { useAuth } from '../auth/useAuth.ts';
+import classes from './Header.module.css';
+import { useAuth } from '../auth/useAuth';
 
-interface HeaderProps {
-  navBar?: boolean;
-  logoutButton?: boolean;
+interface NavItem {
+  path: string;
+  label: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ navBar, logoutButton }) => {
-  const { logOut } = useAuth();
+interface HeaderProps {
+  navbarActive?: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
+  const [opened, { toggle }] = useDisclosure(false);
   const { t } = useTranslation();
+  const location = useLocation();
+  const { logOut } = useAuth();
+
+  const navItem: NavItem[] = [
+    { path: '/', label: t('header.nav.home') },
+    { path: '/games', label: t('header.nav.games') },
+  ];
+
+  const [active, setActive] = useState(location.pathname);
+
+  const items = navItem.map(({ path, label }) => (
+    <NavLink
+      key={path}
+      className={classes.link}
+      data-active={active === path || undefined}
+      to={path}
+      onClick={() => {
+        setActive(path);
+      }}
+    >
+      {label}
+    </NavLink>
+  ));
 
   return (
-    <header className="fixed top-0 z-10 w-full bg-blue-500 shadow-md">
-      <hgroup className="flex items-center justify-between p-4 text-white">
-        <h1 className="text-2xl font-bold">{t('header.heading')}</h1>
-        {logoutButton && (
-          <button
-            className="rounded bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600"
-            onClick={logOut}
-          >
-            {t('header.logout')}
-          </button>
-        )}
-      </hgroup>
+    <Container className={classes.inner} size="md">
+      <Title className={classes.appTitle} order={3}>
+        {t('header.heading', 'Knobel Manager')}
+      </Title>
 
-      {navBar && <NavBar />}
-    </header>
+      {navbarActive && (
+        <Group className={classes.navGroup} visibleFrom="xs">
+          <Group className={classes.linkGroup}>{items}</Group>
+        </Group>
+      )}
+
+      {navbarActive && (
+        <Button
+          className={classes.logoutButton}
+          color="red"
+          radius="md"
+          size="sm"
+          variant="outline"
+          onClick={logOut}
+        >
+          {t('header.logout')}{' '}
+        </Button>
+      )}
+
+      <Burger hiddenFrom="xs" opened={opened} size="sm" onClick={toggle} />
+    </Container>
   );
 };
 

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
 import { useAuth } from '../auth/useAuth.ts';
+import CenterLoader from '../components/CenterLoader.tsx';
 import Layout from '../components/Layout.tsx';
 
 const Login: React.FC = () => {
@@ -16,21 +17,15 @@ const Login: React.FC = () => {
     await loginAction({ email, password });
   };
 
-  // Loading spinner, or text
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center text-xl">
-        {t('pages.login.loading')}
-      </div>
-    );
+    return <CenterLoader />;
   }
 
-  // If already authenticated, redirect
   if (user) {
     return <Navigate replace to="/" />;
   }
 
-  // Centered form thanks to LayoutCenter
+  // TODO: migrate from Tailwind to Mantine
   return (
     <Layout center>
       <form

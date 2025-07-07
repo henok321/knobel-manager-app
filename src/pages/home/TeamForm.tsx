@@ -1,8 +1,7 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { Modal, Text, TextInput, Button, Group, Stack } from '@mantine/core';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import Modal from '../../components/Modal';
 
 export interface TeamFormData {
   name: string;
@@ -53,84 +52,78 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <h2 className="mb-6 text-2xl font-semibold text-gray-800">
-        {t('pages.home.team.form.heading')}
-      </h2>
-      <form className="space-y-6" onSubmit={submit}>
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="team-name"
-          >
-            {t('pages.home.team.form.label.name')}
-          </label>
-          <input
+    <Modal
+      centered
+      opened={isOpen}
+      title={
+        <Text fw={600} size="xl">
+          {t('pages.home.team.form.heading')}
+        </Text>
+      }
+      onClose={onClose}
+    >
+      <form onSubmit={submit}>
+        <Stack gap="md">
+          <TextInput
+            autoFocus
             required
-            className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             id="team-name"
+            label={t('pages.home.team.form.label.name')}
             name="team-name"
-            type="text"
             value={teamName}
             onChange={handleChangeTeamName}
           />
-        </div>
 
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="players"
-          >
-            {t('pages.home.team.form.label.players')}
-          </label>
-          <div className="mt-1 space-y-4">
-            {players.map((player, index) => (
-              <div key={index} className="flex items-center">
-                <input
-                  required
-                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  id={`player-${index}`}
-                  name={`player-${index}`}
-                  type="text"
-                  value={player}
-                  onChange={(e) => handleChangePlayer(index, e)}
-                />
-                <button
-                  aria-label={t('pages.home.team.form.removePlayer')}
-                  className="ml-2 p-2 text-red-500 hover:text-red-600 disabled:opacity-50"
-                  disabled={players.length === 1}
-                  type="button"
-                  onClick={() => removePlayer(index)}
-                >
-                  <TrashIcon className="h-5 w-5" />
-                </button>
-              </div>
-            ))}
-
-            <button
-              aria-label={t('pages.home.team.form.addPlayer')}
-              className="flex items-center p-2 text-green-500 hover:text-green-600 disabled:opacity-50"
-              disabled={players.length >= teamSize}
-              type="button"
-              onClick={addPlayer}
-            >
-              <PlusIcon className="h-5 w-5" />
-              <span className="ml-2 text-sm">
-                {t('pages.home.team.form.addPlayer')}
-              </span>
-            </button>
+          <div>
+            <Text fw={500} mb="xs" size="sm">
+              {t('pages.home.team.form.label.players')}
+            </Text>
+            <Stack gap="xs">
+              {players.map((player, index) => (
+                <Group key={index} gap="xs">
+                  <TextInput
+                    required
+                    id={`player-${index}`}
+                    name={`player-${index}`}
+                    style={{ flex: 1 }}
+                    value={player}
+                    onChange={(e) => handleChangePlayer(index, e)}
+                  />
+                  <Button
+                    aria-label={t('pages.home.team.form.removePlayer')}
+                    color="red"
+                    disabled={players.length === 1}
+                    px={6}
+                    type="button"
+                    variant="subtle"
+                    onClick={() => removePlayer(index)}
+                  >
+                    <TrashIcon style={{ width: 20, height: 20 }} />
+                  </Button>
+                </Group>
+              ))}
+              <Button
+                aria-label={t('pages.home.team.form.addPlayer')}
+                color="green"
+                disabled={players.length >= teamSize}
+                leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
+                mt="xs"
+                size="xs"
+                type="button"
+                variant="subtle"
+                onClick={addPlayer}
+              >
+                <Text size="sm">{t('pages.home.team.form.addPlayer')}</Text>
+              </Button>
+            </Stack>
           </div>
-        </div>
 
-        <div className="flex justify-end">
-          <button
-            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-300"
-            disabled={players.length !== teamSize}
-            type="submit"
-          >
-            {t('pages.home.team.form.submit')}
-          </button>
-        </div>
+          <Group justify="flex-end" mt="md">
+            <Button disabled={players.length !== teamSize} type="submit">
+              {t('pages.home.team.form.submit')}
+            </Button>
+          </Group>
+        </Stack>
       </form>
     </Modal>
   );
