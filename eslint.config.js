@@ -7,7 +7,7 @@ import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
-import markdown from 'eslint-plugin-markdown';
+import markdown from '@eslint/markdown';
 import { fixupPluginRules } from '@eslint/compat';
 import jest from 'eslint-plugin-jest';
 import importPlugin from 'eslint-plugin-import';
@@ -121,8 +121,5 @@ export default [
       'jest/valid-expect': 'error',
     },
   },
-  {
-    files: ['**/.md'],
-    ...markdown.configs.recommended,
-  },
+  ...markdown.configs.recommended,
 ];
