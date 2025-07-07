@@ -26,16 +26,8 @@ npm install
 
 ### Update dependencies
 
-Install `npm-check-updates`:
-
 ```shell
-npx npm-check-updates
-```
-
-Update all dependencies:
-
-```shell
-ncu -i
+npx npm-check-updates -i
 ```
 
 ### Linting
