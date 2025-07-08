@@ -1,3 +1,4 @@
+import { Container, Title, Button, Stack, Center, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -21,9 +22,9 @@ const Home = () => {
   );
 
   const renderActiveGame = (game: Game) => (
-    <p>
+    <Text>
       {game.id} - {game.name}
-    </p>
+    </Text>
   );
 
   useEffect(() => {
@@ -43,54 +44,55 @@ const Home = () => {
 
   if (status === 'pending') {
     return (
-      <div className="flex h-screen items-center justify-center text-xl">
-        {t('global.loading')}
-      </div>
+      <Center h="100vh">
+        <Text size="xl">{t('global.loading')}</Text>
+      </Center>
     );
   }
 
   return (
     <Layout logoutButton navBar>
-      <h1 className="mb-4 text-2xl font-bold">{t('pages.home.heading')}</h1>
+      <Container py="md" size="sm">
+        <Title mb="md" order={1}>
+          {t('pages.home.heading')}
+        </Title>
 
-      {activeGame ? (
-        <div>
-          <h2 className="mb-4 text-xl font-semibold">
-            {renderActiveGame(activeGame)}
-          </h2>
+        {activeGame ? (
+          <Stack gap="md">
+            <Title order={2} size="h3">
+              {renderActiveGame(activeGame)}
+            </Title>
 
-          <button
-            className="mb-4 rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
-            onClick={() => setGameModalActive(true)}
-          >
-            {t('pages.home.createTeamButton')}
-          </button>
+            <Button mb="md" onClick={() => setGameModalActive(true)}>
+              {t('pages.home.createTeamButton')}
+            </Button>
 
-          <TeamForm
-            createTeam={handleCreateTeam}
-            isOpen={gameModalActive}
-            teamSize={activeGame.teamSize}
-            onClose={() => setGameModalActive(false)}
-          />
-        </div>
-      ) : (
-        <div>
-          <p>{t('pages.home.noActiveGame')}</p>
-        </div>
-      )}
+            <TeamForm
+              createTeam={handleCreateTeam}
+              isOpen={gameModalActive}
+              teamSize={activeGame.teamSize}
+              onClose={() => setGameModalActive(false)}
+            />
+          </Stack>
+        ) : (
+          <Text>{t('pages.home.noActiveGame')}</Text>
+        )}
 
-      <div>
-        {teams.map((team) => (
-          <div key={team.id}>
-            <h3>{team.name}</h3>
-            <ul>
-              {team.players.map((player) => (
-                <li key={player}>{player}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+        <Stack gap="md" mt="xl">
+          {teams.map((team) => (
+            <Stack key={team.id} gap="xs">
+              <Title order={3} size="h4">
+                {team.name}
+              </Title>
+              <ul style={{ margin: 0 }}>
+                {team.players.map((player) => (
+                  <li key={player}>{player}</li>
+                ))}
+              </ul>
+            </Stack>
+          ))}
+        </Stack>
+      </Container>
     </Layout>
   );
 };

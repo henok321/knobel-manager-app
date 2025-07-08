@@ -1,7 +1,14 @@
+import {
+  Modal,
+  Text,
+  TextInput,
+  NumberInput,
+  Button,
+  Stack,
+  Group,
+} from '@mantine/core';
 import { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import Modal from '../../components/Modal';
 
 export interface GameFormData {
   name: string;
@@ -34,79 +41,50 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <h2 className="mb-6 text-2xl font-semibold text-gray-800">
-        {t('pages.games.form.heading')}
-      </h2>
-      <form className="space-y-6" onSubmit={submit}>
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="name"
-          >
-            {t('pages.games.form.label.name')}
-          </label>
-          <input
+    <Modal
+      centered
+      opened={isOpen}
+      title={
+        <Text fw={600} size="xl">
+          {t('pages.games.form.heading')}
+        </Text>
+      }
+      onClose={onClose}
+    >
+      <form onSubmit={submit}>
+        <Stack gap="md">
+          <TextInput
+            autoFocus
             required
-            className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             id="name"
+            label={t('pages.games.form.label.name')}
             name="name"
-            type="text"
           />
-        </div>
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="teamSize"
-          >
-            {t('pages.games.form.label.teamSize')}
-          </label>
-          <input
+          <NumberInput
             required
-            className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             id="teamSize"
+            label={t('pages.games.form.label.teamSize')}
+            min={1}
             name="teamSize"
-            type="number"
           />
-        </div>
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="tableSize"
-          >
-            {t('pages.games.form.label.tableSize')}
-          </label>
-          <input
+          <NumberInput
             required
-            className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             id="tableSize"
+            label={t('pages.games.form.label.tableSize')}
+            min={1}
             name="tableSize"
-            type="number"
           />
-        </div>
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="numberOfRounds"
-          >
-            {t('pages.games.form.label.numberOfRounds')}
-          </label>
-          <input
+          <NumberInput
             required
-            className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             id="numberOfRounds"
+            label={t('pages.games.form.label.numberOfRounds')}
+            min={1}
             name="numberOfRounds"
-            type="number"
           />
-        </div>
-        <div className="flex justify-end">
-          <button
-            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-            type="submit"
-          >
-            {t('pages.games.form.submit')}
-          </button>
-        </div>
+          <Group justify="flex-end" mt="md">
+            <Button type="submit">{t('pages.games.form.submit')}</Button>
+          </Group>
+        </Stack>
       </form>
     </Modal>
   );
