@@ -16,6 +16,7 @@ export default [
   {
     ignores: ['dist', 'node_modules'],
   },
+  ...markdown.configs.recommended,
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -121,5 +122,4 @@ export default [
       'jest/valid-expect': 'error',
     },
   },
-  ...markdown.configs.recommended,
 ];

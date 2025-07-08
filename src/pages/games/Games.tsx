@@ -1,3 +1,4 @@
+import { Container, Title, Button, Stack, Center, Text } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -32,18 +33,22 @@ const Games = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center text-xl">
-        {t('global.loading')}
-      </div>
+      <Center h="100vh">
+        <Text size="xl">{t('global.loading')}</Text>
+      </Center>
     );
   }
 
   if (hasError) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center text-xl text-red-500">
-        <p>{t('global.errorOccurred')}</p>
-        <p>{error?.message}</p>
-      </div>
+      <Center h="100vh">
+        <Stack align="center" gap="xs">
+          <Text c="red" size="xl">
+            {t('global.errorOccurred')}
+          </Text>
+          <Text c="red">{error?.message}</Text>
+        </Stack>
+      </Center>
     );
   }
 
@@ -61,16 +66,14 @@ const Games = () => {
 
   return (
     <Layout logoutButton navBar>
-      <div>
-        <h1 className="mb-4 text-2xl font-bold">{t('pages.games.heading')}</h1>
-        <button
-          className="mb-4 rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
-          onClick={() => setGameModalActive(true)}
-        >
+      <Container py="md" size="sm">
+        <Title mb="md" order={1}>
+          {t('pages.games.heading')}
+        </Title>
+        <Button mb="md" onClick={() => setGameModalActive(true)}>
           {t('pages.games.createGameButton')}
-        </button>
-
-        <div>
+        </Button>
+        <Stack gap="md">
           {allGames.map((game) => (
             <GameCard
               key={game.id}
@@ -80,9 +83,8 @@ const Games = () => {
               onDelete={handleDeleteGame}
             />
           ))}
-        </div>
-      </div>
-
+        </Stack>
+      </Container>
       <GameForm
         createGame={handleCreateGame}
         isOpen={gameModalActive}
