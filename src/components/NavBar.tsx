@@ -1,34 +1,37 @@
+import { Box, Stack } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-
 const NavBar = () => {
   const { t } = useTranslation();
-
+  const linkData = [
+    { to: '/', label: t('header.nav.home') },
+    { to: '/games', label: t('header.nav.games') },
+  ];
   return (
-    <nav className="border-b border-gray-300 bg-gray-200 p-4">
-      <ul className="flex space-x-4">
-        <li>
+    <Box
+      component="nav"
+      style={{
+        padding: '1rem',
+      }}
+    >
+      <Stack gap="xs">
+        {linkData.map(({ to, label }) => (
           <NavLink
-            className={({ isActive }) =>
-              `cursor-pointer transition-colors hover:text-blue-500 ${isActive ? 'font-bold text-blue-700 underline' : ''}`
-            }
-            to="/"
+            key={to}
+            style={({ isActive }) => ({
+              fontWeight: isActive ? 700 : 400,
+              color: isActive ? '#1D4ED8' : 'inherit',
+              textDecoration: isActive ? 'underline' : 'none',
+              padding: '0.5rem 0',
+              display: 'block',
+            })}
+            to={to}
           >
-            {t('header.nav.home')}
+            {label}
           </NavLink>
-        </li>
-        <li>
-          <NavLink
-            className={({ isActive }) =>
-              `cursor-pointer transition-colors hover:text-blue-500 ${isActive ? 'font-bold text-blue-700 underline' : ''}`
-            }
-            to="/games"
-          >
-            {t('header.nav.games')}
-          </NavLink>
-        </li>
-      </ul>
-    </nav>
+        ))}
+      </Stack>
+    </Box>
   );
 };
 
