@@ -65,7 +65,7 @@ const Games = () => {
   };
 
   return (
-    <Layout displayNavBar logoutButton>
+    <Layout displayNavBar>
       <Container py="md" size="sm">
         <Title mb="md" order={1}>
           {t('pages.games.heading')}

@@ -1,4 +1,4 @@
-import { Container, Title, Button, Stack, Center, Text } from '@mantine/core';
+import { Button, Center, Container, Stack, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -51,7 +51,7 @@ const Home = () => {
   }
 
   return (
-    <Layout displayNavBar logoutButton>
+    <Layout displayNavBar>
       <Container py="md" size="sm">
         <Title mb="md" order={1}>
           {t('pages.home.heading')}

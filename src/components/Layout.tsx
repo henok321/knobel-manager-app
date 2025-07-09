@@ -7,7 +7,6 @@ import NavBar from './NavBar';
 interface LayoutProps {
   displayNavBar?: boolean;
   navBarOpened?: boolean;
-  logoutButton?: boolean;
   center?: boolean;
   children: ReactNode;
 }
