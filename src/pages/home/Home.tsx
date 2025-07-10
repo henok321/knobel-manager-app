@@ -51,7 +51,7 @@ const Home = () => {
   }
 
   return (
-    <Layout displayNavBar>
+    <Layout navbarActive>
       <Container py="md" size="sm">
         <Title mb="md" order={1}>
           {t('pages.home.heading')}

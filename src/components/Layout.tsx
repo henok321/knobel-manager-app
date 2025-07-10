@@ -2,32 +2,18 @@ import { AppShell } from '@mantine/core';
 import React, { ReactNode } from 'react';
 
 import Header from './Header';
-import NavBar from './NavBar';
 
 interface LayoutProps {
-  displayNavBar?: boolean;
-  navBarOpened?: boolean;
+  navbarActive?: boolean;
   center?: boolean;
   children: ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ navBarOpened, center, children }) => (
-  <AppShell
-    header={{ height: 60 }}
-    navbar={{
-      width: 300,
-      breakpoint: 'sm',
-      collapsed: { mobile: !navBarOpened },
-    }}
-    padding="md"
-  >
+const Layout: React.FC<LayoutProps> = ({ navbarActive, center, children }) => (
+  <AppShell header={{ height: 60 }} padding="md">
     <AppShell.Header>
-      <Header />
+      <Header navbarActive={navbarActive} />
     </AppShell.Header>
-
-    <AppShell.Navbar p="md">
-      <NavBar />
-    </AppShell.Navbar>
 
     <AppShell.Main
       style={{
