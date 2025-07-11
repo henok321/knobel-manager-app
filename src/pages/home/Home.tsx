@@ -1,9 +1,10 @@
-import { Button, Center, Container, Stack, Text, Title } from '@mantine/core';
+import { Button, Container, Stack, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import TeamForm, { TeamFormData } from './TeamForm.tsx';
+import CenterLoader from '../../components/CenterLoader.tsx';
 import Layout from '../../components/Layout.tsx';
 import useGames from '../../slices/games/hooks.ts';
 import useTeams from '../../slices/teams/hooks.ts';
@@ -43,11 +44,7 @@ const Home = () => {
   };
 
   if (status === 'pending') {
-    return (
-      <Center h="100vh">
-        <Text size="xl">{t('global.loading')}</Text>
-      </Center>
-    );
+    return <CenterLoader />;
   }
 
   return (

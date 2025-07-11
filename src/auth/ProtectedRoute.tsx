@@ -1,16 +1,13 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
 import { useAuth } from './useAuth.ts';
+import CenterLoader from '../components/CenterLoader.tsx';
 
 const ProtectedRoute = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center text-xl">
-        Loading...
-      </div>
-    );
+    <CenterLoader />;
   }
 
   return user ? <Outlet /> : <Navigate replace to="/login" />;

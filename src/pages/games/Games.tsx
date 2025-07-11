@@ -1,9 +1,10 @@
-import { Container, Title, Button, Stack, Center, Text } from '@mantine/core';
-import { useState, useEffect } from 'react';
+import { Button, Center, Container, Stack, Text, Title } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import GameCard from './GameCard';
 import GameForm, { GameFormData } from './GameForm.tsx';
+import CenterLoader from '../../components/CenterLoader.tsx';
 import Layout from '../../components/Layout.tsx';
 import useGames from '../../slices/games/hooks.ts';
 
@@ -32,11 +33,7 @@ const Games = () => {
   const hasError = status === 'failed' && error;
 
   if (isLoading) {
-    return (
-      <Center h="100vh">
-        <Text size="xl">{t('global.loading')}</Text>
-      </Center>
-    );
+    return <CenterLoader />;
   }
 
   if (hasError) {
