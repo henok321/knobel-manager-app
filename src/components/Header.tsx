@@ -44,34 +44,32 @@ const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
   ));
 
   return (
-    <header className={classes.header}>
-      <Container className={classes.inner} size="md">
-        <Title className={classes.appTitle} order={3}>
-          {t('header.heading', 'Knobel Manager')}
-        </Title>
+    <Container className={classes.inner} size="md">
+      <Title className={classes.appTitle} order={3}>
+        {t('header.heading', 'Knobel Manager')}
+      </Title>
 
-        {navbarActive && (
-          <Group className={classes.navGroup} visibleFrom="xs">
-            <Group className={classes.linkGroup}>{items}</Group>
-          </Group>
-        )}
+      {navbarActive && (
+        <Group className={classes.navGroup} visibleFrom="xs">
+          <Group className={classes.linkGroup}>{items}</Group>
+        </Group>
+      )}
 
-        {navbarActive && (
-          <Button
-            className={classes.logoutButton}
-            color="red"
-            radius="md"
-            size="sm"
-            variant="outline"
-            onClick={logOut}
-          >
-            {t('header.logout')}{' '}
-          </Button>
-        )}
+      {navbarActive && (
+        <Button
+          className={classes.logoutButton}
+          color="red"
+          radius="md"
+          size="sm"
+          variant="outline"
+          onClick={logOut}
+        >
+          {t('header.logout')}{' '}
+        </Button>
+      )}
 
-        <Burger hiddenFrom="xs" opened={opened} size="sm" onClick={toggle} />
-      </Container>
-    </header>
+      <Burger hiddenFrom="xs" opened={opened} size="sm" onClick={toggle} />
+    </Container>
   );
 };
 
