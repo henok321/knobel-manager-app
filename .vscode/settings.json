@@ -3,8 +3,6 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": "always",
-    "source.fixAll.eslint": "always",
-    "source.fixAll.ts": "always",
     "source.organizeImports": "always"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -16,6 +14,11 @@
   ],
   "eslint.format.enable": true,
   "prettier.requireConfig": true,
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+  "stylelint.enable": true,
+  "stylelint.validate": ["css", "scss", "less", "postcss"],
   "tailwindCSS.includeLanguages": {
     "typescriptreact": "html",
     "javascriptreact": "html"
@@ -23,7 +26,6 @@
   "editor.quickSuggestions": {
     "strings": true
   },
-  "css.validate": true,
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
