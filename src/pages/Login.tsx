@@ -21,12 +21,11 @@ const Login: React.FC = () => {
     return <CenterLoader />;
   }
 
-  // If already authenticated, redirect
   if (user) {
     return <Navigate replace to="/" />;
   }
 
-  // Centered form thanks to LayoutCenter
+  // TODO: migrate from Tailwind to Mantine
   return (
     <Layout center>
       <form
