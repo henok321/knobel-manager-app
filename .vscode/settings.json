@@ -19,10 +19,6 @@
   "less.validate": false,
   "stylelint.enable": true,
   "stylelint.validate": ["css", "scss", "less", "postcss"],
-  "tailwindCSS.includeLanguages": {
-    "typescriptreact": "html",
-    "javascriptreact": "html"
-  },
   "editor.quickSuggestions": {
     "strings": true
   },
