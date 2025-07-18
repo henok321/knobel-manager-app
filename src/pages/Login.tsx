@@ -1,20 +1,48 @@
-import React, { useState } from 'react';
+import {
+  Button,
+  Group,
+  Paper,
+  PaperProps,
+  PasswordInput,
+  Stack,
+  Text,
+  TextInput,
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { upperFirst } from '@mantine/hooks';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { useAuth } from '../auth/useAuth.ts';
-import CenterLoader from '../components/CenterLoader.tsx';
-import Layout from '../components/Layout.tsx';
+import { LoginData } from '../auth/AuthContext';
+import { useAuth } from '../auth/useAuth';
+import CenterLoader from '../components/CenterLoader';
+import Layout from '../components/Layout';
 
-const Login: React.FC = () => {
+const Login = (props: PaperProps) => {
   const { user, loading, loginAction } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
   const { t } = useTranslation();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await loginAction({ email, password });
+  const form = useForm<LoginData>({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+
+    validate: {
+      email: (val) =>
+        /^\S+@\S+$/.test(val)
+          ? null
+          : t('pages.login.fields.email.validationMessage'),
+      password: (val) =>
+        val.length <= 6
+          ? t('pages.login.fields.password.validationMessage')
+          : null,
+    },
+  });
+
+  const handleSubmit = async (formData: LoginData) => {
+    await loginAction(formData);
   };
 
   if (loading) {
@@ -25,49 +53,54 @@ const Login: React.FC = () => {
     return <Navigate replace to="/" />;
   }
 
-  // TODO: migrate from Tailwind to Mantine
   return (
     <Layout center>
-      <form
-        className="w-full max-w-md rounded bg-white p-6 shadow-md"
-        onSubmit={handleSubmit}
-      >
-        <h1 className="mb-6 text-center text-2xl font-bold">
+      <Paper withBorder p="lg" radius="md" {...props}>
+        <Text fw={500} size="lg">
           {t('pages.login.heading')}
-        </h1>
-        <div className="mb-4">
-          <label className="mb-1 block font-medium" htmlFor="email">
-            {t('pages.login.label.email')}
-          </label>
-          <input
-            required
-            className="w-full rounded border p-2"
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="mb-6">
-          <label className="mb-1 block font-medium" htmlFor="password">
-            {t('pages.login.label.password')}
-          </label>
-          <input
-            required
-            className="w-full rounded border p-2"
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button
-          className="w-full rounded bg-blue-600 py-3 text-white transition-colors hover:bg-blue-700"
-          type="submit"
+        </Text>
+
+        <form
+          onSubmit={form.onSubmit((formData) => {
+            handleSubmit(formData);
+          })}
         >
-          {t('pages.login.submit')}
-        </button>
-      </form>
+          <Stack>
+            <TextInput
+              required
+              error={form.errors.email && 'Invalid email'}
+              label="Email"
+              placeholder={t('pages.login.fields.email.placeholder')}
+              radius="md"
+              value={form.values.email}
+              onChange={(event) =>
+                form.setFieldValue('email', event.currentTarget.value)
+              }
+            />
+
+            <PasswordInput
+              required
+              error={
+                form.errors.password &&
+                t('pages.login.fields.password.validationMessage')
+              }
+              label={t('pages.login.fields.password.label')}
+              placeholder={t('pages.login.fields.password.placeholder')}
+              radius="md"
+              value={form.values.password}
+              onChange={(event) =>
+                form.setFieldValue('password', event.currentTarget.value)
+              }
+            />
+          </Stack>
+
+          <Group justify="space-between" mt="xl">
+            <Button radius="xl" type="submit">
+              {upperFirst(t('pages.login.submit'))}
+            </Button>
+          </Group>
+        </form>
+      </Paper>
     </Layout>
   );
 };

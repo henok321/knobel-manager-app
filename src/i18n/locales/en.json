@@ -15,9 +15,17 @@
   "pages": {
     "login": {
       "heading": "Login to your account",
-      "label": {
-        "email": "Email",
-        "password": "Password"
+      "fields": {
+        "email": {
+          "label": "Email",
+          "placeholder": "mail@example.com",
+          "validationMessage": "Invalid email address"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Your password",
+          "validationMessage": "Password must be at least 6 characters long"
+        }
       },
       "submit": "Login"
     },
