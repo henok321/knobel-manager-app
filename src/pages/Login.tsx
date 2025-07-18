@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { upperFirst } from '@mantine/hooks';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ import Layout from '../components/Layout';
 
 const Login = (props: PaperProps) => {
   const { user, loading, loginAction } = useAuth();
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const { t } = useTranslation();
 
@@ -42,7 +44,17 @@ const Login = (props: PaperProps) => {
   });
 
   const handleSubmit = async (formData: LoginData) => {
-    await loginAction(formData);
+    const loginResult = await loginAction(formData);
+
+    if (loginResult) {
+      if (loginResult.code === 'INVALID_CREDENDIAL') {
+        setLoginError(t('pages.login.error.invalidCredentials'));
+      } else {
+        setLoginError(t('pages.login.error.unknown'));
+      }
+    } else {
+      setLoginError(null);
+    }
   };
 
   if (loading) {
@@ -99,6 +111,12 @@ const Login = (props: PaperProps) => {
               }
             />
           </Stack>
+
+          {loginError && (
+            <Text c="red" mt="md">
+              {loginError}
+            </Text>
+          )}
 
           <Group justify="space-between" mt="xl">
             <Button radius="xl" type="submit">

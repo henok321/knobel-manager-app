@@ -27,6 +27,10 @@
           "validationMessage": "Password must be at least 6 characters long"
         }
       },
+      "error": {
+        "invalidCredentials": "Invalid login credentials",
+        "unknown": "An unknown error occurred"
+      },
       "submit": "Login"
     },
     "home": {

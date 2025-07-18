@@ -1,3 +1,4 @@
+import { FirebaseError } from 'firebase/app';
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -8,23 +9,27 @@ import React, { createContext, useEffect, useState } from 'react';
 
 import { auth as firebaseAuth } from './firebaseConfig.ts';
 
-export interface AuthContextValue {
-  user: User | null;
-  loading: boolean;
-
-  loginAction: (loginData: LoginData) => Promise<void>;
-  logOut: () => void;
-}
-
 type LoginData = {
   email: string;
   password: string;
 };
 
+type AuthError = {
+  code: 'UNKNWON_ERROR' | 'INVALID_CREDENDIAL';
+};
+
+export interface AuthContextValue {
+  user: User | null;
+  loading: boolean;
+
+  loginAction: (loginData: LoginData) => Promise<AuthError | null>;
+  logOut: () => void;
+}
+
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   loading: false,
-  loginAction: async () => {},
+  loginAction: async () => null,
   logOut: () => {},
 });
 
@@ -43,8 +48,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     [],
   );
 
-  const loginAction = async ({ email, password }: LoginData) => {
-    await signInWithEmailAndPassword(firebaseAuth, email, password);
+  const loginAction = async ({
+    email,
+    password,
+  }: LoginData): Promise<AuthError | null> => {
+    try {
+      await signInWithEmailAndPassword(firebaseAuth, email, password);
+    } catch (error) {
+      const firebaseError = error as FirebaseError;
+      if (firebaseError.code == 'auth/invalid-credential') {
+        return { code: 'INVALID_CREDENDIAL' };
+      }
+      return { code: 'UNKNWON_ERROR' };
+    }
+    return null;
   };
 
   const logOut = () => {
@@ -65,4 +82,5 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export { AuthContext, LoginData };
+export { AuthContext };
+export type { AuthError, LoginData };
