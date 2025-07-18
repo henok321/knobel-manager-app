@@ -54,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }: LoginData): Promise<AuthError | null> => {
     try {
       await signInWithEmailAndPassword(firebaseAuth, email, password);
-    } catch (error) {
+    } catch (error: unknown) {
       const firebaseError = error as FirebaseError;
       if (firebaseError.code == 'auth/invalid-credential') {
         return { code: 'INVALID_CREDENDIAL' };
