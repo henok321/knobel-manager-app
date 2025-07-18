@@ -68,7 +68,9 @@ const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
         </Button>
       )}
 
-      <Burger hiddenFrom="xs" opened={opened} size="sm" onClick={toggle} />
+      {navbarActive && (
+        <Burger hiddenFrom="xs" opened={opened} size="sm" onClick={toggle} />
+      )}
     </Container>
   );
 };

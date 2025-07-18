@@ -54,9 +54,15 @@ const Login = (props: PaperProps) => {
   }
 
   return (
-    <Layout center>
-      <Paper withBorder p="lg" radius="md" {...props}>
-        <Text fw={500} size="lg">
+    <Layout center navbarActive={false}>
+      <Paper
+        withBorder
+        p="lg"
+        radius="md"
+        w={{ base: 320, sm: 400, md: 480, lg: 540, xl: 600 }}
+        {...props}
+      >
+        <Text fw={500} pb="md" size="lg">
           {t('pages.login.heading')}
         </Text>
 
