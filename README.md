@@ -16,6 +16,15 @@ The service uses JWT for authentication that is provided by Firebase Authenticat
 
 ## Build and run
 
+### Prerequisites
+
+Install NodeJS version from `.nvmrc` file.
+
+```shell
+nvm install
+nvm use
+```
+
 ### Install dependencies
 
 Installs all dependencies and initializes the husky hooks.
