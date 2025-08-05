@@ -13,7 +13,7 @@
   },
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["before 6am every wednesday"],
+    "schedule": ["before 6am on wednesday"],
     "automerge": true
   },
   "packageRules": [
