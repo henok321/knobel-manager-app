@@ -6,6 +6,16 @@
   "prCreation": "immediate",
   "labels": ["dependencies"],
   "schedule": ["at any time"],
+  "npm": {
+    "minimumReleaseAge": "3d",
+    "enabled": true,
+    "ignoreUnstable": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am every wednesday"],
+    "automerge": true
+  },
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
@@ -18,7 +28,7 @@
       "matchPackageNames": ["/^@types//"]
     },
     {
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": ["minor", "patch", "digest", "pin"],
       "automerge": true
     },
     {
