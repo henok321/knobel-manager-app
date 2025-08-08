@@ -1,39 +1,47 @@
 import js from '@eslint/js';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import globals from 'globals';
-import react from 'eslint-plugin-react';
-import reactRefresh from 'eslint-plugin-react-refresh';
+import markdown from '@eslint/markdown';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
-import markdown from '@eslint/markdown';
-import { fixupPluginRules } from '@eslint/compat';
-import jest from 'eslint-plugin-jest';
 import importPlugin from 'eslint-plugin-import';
+import jest from 'eslint-plugin-jest';
+import prettier from 'eslint-plugin-prettier';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import globals from 'globals';
 
 export default [
   {
-    ignores: ['dist', 'node_modules'],
+    ignores: [
+      'dist',
+      'node_modules',
+      'coverage',
+      '**/*.d.ts',
+      '*.min.*',
+      'jest.setup.js',
+    ],
   },
+
   ...markdown.configs.recommended,
+
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
       parser: tsParser,
-      ecmaVersion: 2021,
+      ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
         ...globals.browser,
         ...globals.es2021,
-        ...globals.jest,
         ...globals.node,
+        ...globals.jest,
       },
     },
     plugins: {
       '@typescript-eslint': ts,
       react,
-      'react-hooks': fixupPluginRules(reactHooksPlugin),
+      'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       prettier,
       import: importPlugin,
@@ -42,29 +50,30 @@ export default [
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
       ...react.configs.recommended.rules,
-      ...reactHooksPlugin.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
       ...prettierConfig.rules,
       'prettier/prettier': 'warn',
+
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
+
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
       ],
+
       'arrow-body-style': ['error', 'as-needed'],
       'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
       'no-console': 'error',
       'no-debugger': 'error',
       'no-process-env': 'error',
+
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': ['error'],
+
       'func-style': ['error', 'expression', { allowArrowFunctions: true }],
-      'react/sort-comp': [
-        'error',
-        {
-          order: ['everything-else', 'render'],
-        },
-      ],
+
+      'react/sort-comp': ['error', { order: ['everything-else', 'render'] }],
       'react/jsx-curly-brace-presence': [
         'error',
         { props: 'never', children: 'never' },
@@ -90,28 +99,18 @@ export default [
             ['parent', 'sibling', 'index'],
           ],
           'newlines-between': 'always',
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
+          alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
+    settings: { react: { version: 'detect' } },
   },
+
   {
     files: ['**/*.test.{js,jsx,ts,tsx}'],
-    plugins: {
-      jest,
-    },
+    plugins: { jest },
     languageOptions: {
-      globals: {
-        ...globals.jest,
-      },
+      globals: { ...globals.jest },
     },
     rules: {
       ...jest.configs.recommended.rules,
