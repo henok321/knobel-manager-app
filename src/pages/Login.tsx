@@ -25,7 +25,7 @@ import Layout from '../components/Layout';
 const Login = (props: PaperProps) => {
   const { user, loading, loginAction } = useAuth();
   const [loginError, setLoginError] = useState<string | null>(null);
-
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const { t } = useTranslation();
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
@@ -49,10 +49,11 @@ const Login = (props: PaperProps) => {
   });
 
   const handleSubmit = async (formData: LoginData) => {
+    setSubmitting(true);
     const loginResult = await loginAction(formData);
 
     if (loginResult) {
-      if (loginResult.code === 'INVALID_CREDENDIAL') {
+      if (loginResult.code === 'INVALID_CREDENTIALS') {
         setLoginError(t('pages.login.error.invalidCredentials'));
       } else {
         setLoginError(t('pages.login.error.unknown'));
@@ -60,6 +61,7 @@ const Login = (props: PaperProps) => {
     } else {
       setLoginError(null);
     }
+    setSubmitting(false);
   };
 
   if (loading) {
@@ -77,13 +79,14 @@ const Login = (props: PaperProps) => {
       </Text>
 
       <form
-        onSubmit={form.onSubmit((formData) => {
-          handleSubmit(formData);
+        onSubmit={form.onSubmit(async (formData) => {
+          await handleSubmit(formData);
         })}
       >
         <Stack>
           <TextInput
             required
+            disabled={submitting}
             error={form.errors.email && 'Invalid email'}
             label="Email"
             placeholder={t('pages.login.fields.email.placeholder')}
@@ -96,6 +99,7 @@ const Login = (props: PaperProps) => {
 
           <PasswordInput
             required
+            disabled={submitting}
             error={
               form.errors.password &&
               t('pages.login.fields.password.validationMessage')
@@ -117,7 +121,12 @@ const Login = (props: PaperProps) => {
         )}
 
         <Group justify="space-between" mt="xl">
-          <Button radius="xl" type="submit">
+          <Button
+            disabled={submitting}
+            loading={submitting}
+            radius="xl"
+            type="submit"
+          >
             {upperFirst(t('pages.login.submit'))}
           </Button>
         </Group>

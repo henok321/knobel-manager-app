@@ -21,7 +21,7 @@ type LoginData = {
 };
 
 type AuthError = {
-  code: 'UNKNWON_ERROR' | 'INVALID_CREDENDIAL';
+  code: 'UNKNOWN_ERROR' | 'INVALID_CREDENTIALS';
 };
 
 export interface AuthContextValue {
@@ -60,9 +60,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       } catch (error: unknown) {
         const firebaseError = error as FirebaseError;
         if (firebaseError.code == 'auth/invalid-credential') {
-          return { code: 'INVALID_CREDENDIAL' };
+          return { code: 'INVALID_CREDENTIALS' };
         }
-        return { code: 'UNKNWON_ERROR' };
+        return { code: 'UNKNOWN_ERROR' };
       }
       return null;
     },
