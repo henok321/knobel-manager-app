@@ -1,5 +1,6 @@
 import {
   Button,
+  Flex,
   Group,
   Paper,
   PaperProps,
@@ -66,65 +67,67 @@ const Login = (props: PaperProps) => {
   }
 
   return (
-    <Layout center navbarActive={false}>
-      <Paper
-        withBorder
-        p="lg"
-        radius="md"
-        w={{ base: 320, sm: 400, md: 480, lg: 540, xl: 600 }}
-        {...props}
-      >
-        <Text fw={500} pb="md" size="lg">
-          {t('pages.login.heading')}
-        </Text>
-
-        <form
-          onSubmit={form.onSubmit((formData) => {
-            handleSubmit(formData);
-          })}
+    <Layout navbarActive={false}>
+      <Flex align="center" h="80vh" justify="center">
+        <Paper
+          withBorder
+          p="lg"
+          radius="md"
+          w={{ base: 320, sm: 400, md: 480, lg: 540, xl: 600 }}
+          {...props}
         >
-          <Stack>
-            <TextInput
-              required
-              error={form.errors.email && 'Invalid email'}
-              label="Email"
-              placeholder={t('pages.login.fields.email.placeholder')}
-              radius="md"
-              value={form.values.email}
-              onChange={(event) =>
-                form.setFieldValue('email', event.currentTarget.value)
-              }
-            />
+          <Text fw={500} pb="md" size="lg">
+            {t('pages.login.heading')}
+          </Text>
 
-            <PasswordInput
-              required
-              error={
-                form.errors.password &&
-                t('pages.login.fields.password.validationMessage')
-              }
-              label={t('pages.login.fields.password.label')}
-              placeholder={t('pages.login.fields.password.placeholder')}
-              radius="md"
-              value={form.values.password}
-              onChange={(event) =>
-                form.setFieldValue('password', event.currentTarget.value)
-              }
-            />
-          </Stack>
+          <form
+            onSubmit={form.onSubmit((formData) => {
+              handleSubmit(formData);
+            })}
+          >
+            <Stack>
+              <TextInput
+                required
+                error={form.errors.email && 'Invalid email'}
+                label="Email"
+                placeholder={t('pages.login.fields.email.placeholder')}
+                radius="md"
+                value={form.values.email}
+                onChange={(event) =>
+                  form.setFieldValue('email', event.currentTarget.value)
+                }
+              />
 
-          {loginError && (
-            <Text c="red" mt="md">
-              {loginError}
-            </Text>
-          )}
+              <PasswordInput
+                required
+                error={
+                  form.errors.password &&
+                  t('pages.login.fields.password.validationMessage')
+                }
+                label={t('pages.login.fields.password.label')}
+                placeholder={t('pages.login.fields.password.placeholder')}
+                radius="md"
+                value={form.values.password}
+                onChange={(event) =>
+                  form.setFieldValue('password', event.currentTarget.value)
+                }
+              />
+            </Stack>
 
-          <Group justify="space-between" mt="xl">
-            <Button radius="xl" type="submit">
-              {upperFirst(t('pages.login.submit'))}
-            </Button>
-          </Group>
-        </form>
-      </Paper>
+            {loginError && (
+              <Text c="red" mt="md">
+                {loginError}
+              </Text>
+            )}
+
+            <Group justify="space-between" mt="xl">
+              <Button radius="xl" type="submit">
+                {upperFirst(t('pages.login.submit'))}
+              </Button>
+            </Group>
+          </form>
+        </Paper>
+      </Flex>
     </Layout>
   );
 };

@@ -1,29 +1,19 @@
-import { AppShell, Flex } from '@mantine/core';
+import { AppShell } from '@mantine/core';
 import React, { ReactNode } from 'react';
 
 import Header from './Header';
 
 interface LayoutProps {
   navbarActive?: boolean;
-  center?: boolean;
   children: ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ navbarActive, center, children }) => (
-  <AppShell>
+const Layout: React.FC<LayoutProps> = ({ navbarActive, children }) => (
+  <AppShell header={{ height: '4rem' }} padding="md">
     <AppShell.Header>
       <Header navbarActive={navbarActive} />
     </AppShell.Header>
-
-    <AppShell.Main>
-      {center ? (
-        <Flex align="center" justify="center" style={{ height: 'calc(100vh' }}>
-          {children}
-        </Flex>
-      ) : (
-        children
-      )}
-    </AppShell.Main>
+    <AppShell.Main>{children}</AppShell.Main>
   </AppShell>
 );
 
