@@ -7,7 +7,7 @@ const ProtectedRoute = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    <CenterLoader />;
+    return <CenterLoader />;
   }
 
   return user ? <Outlet /> : <Navigate replace to="/login" />;

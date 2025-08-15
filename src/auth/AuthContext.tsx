@@ -5,7 +5,13 @@ import {
   signOut,
   User,
 } from 'firebase/auth';
-import React, { createContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { auth as firebaseAuth } from './firebaseConfig.ts';
 
@@ -21,7 +27,6 @@ type AuthError = {
 export interface AuthContextValue {
   user: User | null;
   loading: boolean;
-
   loginAction: (loginData: LoginData) => Promise<AuthError | null>;
   logOut: () => void;
 }
@@ -48,37 +53,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     [],
   );
 
-  const loginAction = async ({
-    email,
-    password,
-  }: LoginData): Promise<AuthError | null> => {
-    try {
-      await signInWithEmailAndPassword(firebaseAuth, email, password);
-    } catch (error: unknown) {
-      const firebaseError = error as FirebaseError;
-      if (firebaseError.code == 'auth/invalid-credential') {
-        return { code: 'INVALID_CREDENDIAL' };
+  const loginAction = useCallback(
+    async ({ email, password }: LoginData): Promise<AuthError | null> => {
+      try {
+        await signInWithEmailAndPassword(firebaseAuth, email, password);
+      } catch (error: unknown) {
+        const firebaseError = error as FirebaseError;
+        if (firebaseError.code == 'auth/invalid-credential') {
+          return { code: 'INVALID_CREDENDIAL' };
+        }
+        return { code: 'UNKNWON_ERROR' };
       }
-      return { code: 'UNKNWON_ERROR' };
-    }
-    return null;
-  };
+      return null;
+    },
+    [],
+  );
 
-  const logOut = () => {
-    signOut(firebaseAuth);
-  };
+  const logOut = useCallback(() => void signOut(firebaseAuth), []);
+
+  const contextValue = useMemo<AuthContextValue>(
+    () => ({
+      user,
+      loading,
+      loginAction,
+      logOut,
+    }),
+    [user, loading, loginAction, logOut],
+  );
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        loginAction,
-        logOut,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 

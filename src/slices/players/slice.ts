@@ -71,9 +71,7 @@ const { selectAll: selectAllPlayers } = playersAdapter.getSelectors<RootState>(
 
 const selectPlayersByTeamID = createDraftSafeSelector(
   [selectAllPlayers, (_: RootState, teamID: number) => teamID],
-  (players, teamID) => {
-    players.filter((p) => p.teamID === teamID);
-  },
+  (players, teamID) => players.filter((p) => p.teamID === teamID),
 );
 
 export { selectAllPlayers, selectPlayersByTeamID };

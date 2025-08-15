@@ -69,7 +69,7 @@ export default [
       'no-process-env': 'error',
 
       'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': ['error'],
+      '@typescript-eslint/no-unused-vars': 'off',
 
       'func-style': ['error', 'expression', { allowArrowFunctions: true }],
 
@@ -104,6 +104,42 @@ export default [
       ],
     },
     settings: { react: { version: 'detect' } },
+  },
+
+  // JS/JSX: enable base rule, disable TS rule
+  {
+    files: ['**/*.{js,jsx}'],
+    rules: {
+      'no-unused-vars': [
+        'error',
+        {
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+      '@typescript-eslint/no-unused-vars': 'off',
+    },
+  },
+
+  // TS/TSX: disable base rule, enable TS-aware rule
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+    },
   },
 
   {

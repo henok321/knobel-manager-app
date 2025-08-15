@@ -80,7 +80,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
             </Text>
             <Stack gap="xs">
               {players.map((player, index) => (
-                <Group key={index} gap="xs">
+                <Group key={player} gap="xs">
                   <TextInput
                     required
                     id={`player-${index}`}
