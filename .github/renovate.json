@@ -6,6 +6,7 @@
   "prCreation": "immediate",
   "labels": ["dependencies"],
   "schedule": ["at any time"],
+  "dependencyDashboard": true,
   "npm": {
     "minimumReleaseAge": "3d",
     "enabled": true,
