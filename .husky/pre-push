@@ -1,1 +1,3 @@
-npm run lint && npm run test
+npm audit --production --audit-level=high
+npm run lint
+npm run test
