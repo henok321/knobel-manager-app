@@ -20,6 +20,8 @@ export default [
       '**/*.d.ts',
       '*.min.*',
       'jest.setup.js',
+      'CLAUDE.md',
+      '.claude',
     ],
   },
 
