@@ -7,6 +7,7 @@ import {
 
 import { RootState } from '../../store/store.ts';
 import { fetchAll } from '../actions.ts';
+import { updatePlayerAction, deletePlayerAction } from './actions.ts';
 import { createTeamAction } from '../teams/actions.ts';
 import { Player } from '../types.ts';
 
@@ -61,6 +62,15 @@ const playersSlice = createSlice({
             teamID: p.teamID,
           })) || [];
         playersAdapter.addMany(state, players);
+      })
+      .addCase(updatePlayerAction.fulfilled, (state, action) => {
+        playersAdapter.updateOne(state, {
+          id: action.payload.id,
+          changes: { name: action.payload.name },
+        });
+      })
+      .addCase(deletePlayerAction.fulfilled, (state, action) => {
+        playersAdapter.removeOne(state, action.payload);
       });
   },
 });

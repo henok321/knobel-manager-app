@@ -1,7 +1,9 @@
 {
   "global": {
     "loading": "Loading...",
-    "errorOccurred": "An error occurred"
+    "errorOccurred": "An error occurred",
+    "error": "Error",
+    "cancel": "Cancel"
   },
   "header": {
     "heading": "Knobel Manager",
@@ -37,6 +39,27 @@
       "heading": "Home",
       "noActiveGame": "No active game",
       "createTeamButton": "Create Team",
+      "dashboard": {
+        "title": "Dashboard",
+        "subtitle": "Welcome to Knobel Manager",
+        "stats": {
+          "totalGames": "Total Games",
+          "totalTeams": "Total Teams",
+          "activeGame": "Active Game"
+        },
+        "viewAll": "View All",
+        "activeGame": {
+          "description": "Your current active tournament",
+          "manage": "Manage Game",
+          "teams": "Teams",
+          "addTeam": "Add Team"
+        },
+        "noActiveGame": "No active game. Create or activate a game to get started!",
+        "createGame": "Create New Game",
+        "recentGames": "Recent Games",
+        "teams": "teams",
+        "rounds": "rounds"
+      },
       "team": {
         "form": {
           "heading": "Create team",
@@ -52,16 +75,29 @@
     },
     "games": {
       "heading": "Games",
+      "subtitle": "Manage all your tournaments",
       "createGameButton": "Create game",
+      "search": "Search games...",
+      "filters": {
+        "all": "All",
+        "active": "Active",
+        "setup": "Setup"
+      },
+      "noGames": "No games yet. Create your first tournament!",
+      "noResults": "No games found matching your search.",
+      "createFirstGame": "Create Your First Game",
+      "confirmDelete": "Are you sure you want to delete this game?",
       "card": {
         "details": {
-          "teamSize": "Team size:",
-          "tableSize": "Table size:",
-          "numberOfRounds": "Number of Rounds:",
-          "status": "Status:"
+          "teamSize": "Team size",
+          "tableSize": "Table size",
+          "numberOfRounds": "Rounds",
+          "teams": "Teams",
+          "status": "Status"
         },
         "activateButton": "Activate",
         "deleteButton": "Delete",
+        "viewDetails": "View Details",
         "isActive": "Active"
       },
       "form": {
@@ -73,6 +109,55 @@
           "numberOfRounds": "Number of rounds"
         },
         "submit": "Create"
+      }
+    },
+    "gameDetail": {
+      "notFound": "Game not found",
+      "teamSize": "Team Size",
+      "tableSize": "Table Size",
+      "rounds": "Rounds",
+      "tabs": {
+        "teams": "Teams",
+        "rounds": "Rounds",
+        "rankings": "Rankings"
+      },
+      "teams": {
+        "addTeam": "Add Team",
+        "noTeams": "No teams yet. Add your first team to get started!",
+        "players": "Players",
+        "confirmDeleteTeam": "Are you sure you want to delete this team? This action cannot be undone.",
+        "confirmDeletePlayer": "Are you sure you want to delete this player? This action cannot be undone."
+      },
+      "rounds": {
+        "selectRound": "Select Round",
+        "round": "Round",
+        "startRound": "Start Round",
+        "table": "Table",
+        "player": "Player",
+        "team": "Team",
+        "score": "Score",
+        "noTables": "No tables available for this round.",
+        "scoresEntered": "Scores Entered",
+        "enterScores": "Enter Scores",
+        "editScores": "Edit Scores",
+        "saveScores": "Save Scores",
+        "setupMatchmaking": "Setup Matchmaking",
+        "setupRequired": "Matchmaking Setup Required",
+        "setupDescription": "Click the button below to generate tables and player assignments for all rounds. This will use the backend matchmaking algorithm to distribute players fairly.",
+        "generatingTables": "Generating tables and matchmaking...",
+        "setupError": "Failed to setup matchmaking. Please try again.",
+        "matchmakingInfo": "Backend will handle matchmaking and create tables automatically"
+      },
+      "rankings": {
+        "teamRankings": "Team Rankings",
+        "playerRankings": "Player Rankings",
+        "rank": "Rank",
+        "team": "Team",
+        "player": "Player",
+        "totalScore": "Total Score",
+        "noData": "No scores entered yet",
+        "filterByRound": "Filter by Round",
+        "totalRanking": "Total (All Rounds)"
       }
     }
   }

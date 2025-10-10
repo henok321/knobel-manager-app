@@ -1,8 +1,14 @@
 import axios from 'axios';
 
 import { auth as firebaseAuth } from '../auth/firebaseConfig';
-import { GamesApi, PlayersApi, TeamsApi } from '../generated/api';
-import { Configuration } from '../generated/configuration';
+import {
+  GamesApi,
+  PlayersApi,
+  ScoresApi,
+  TablesApi,
+  TeamsApi,
+  Configuration,
+} from '../generated';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -37,6 +43,16 @@ export const teamsApi = new TeamsApi(
   axiosInstance,
 );
 export const playersApi = new PlayersApi(
+  apiConfiguration,
+  undefined,
+  axiosInstance,
+);
+export const tablesApi = new TablesApi(
+  apiConfiguration,
+  undefined,
+  axiosInstance,
+);
+export const scoresApi = new ScoresApi(
   apiConfiguration,
   undefined,
   axiosInstance,

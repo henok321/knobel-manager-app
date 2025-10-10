@@ -13,6 +13,7 @@ import {
 } from './actions.ts';
 import { RootState } from '../../store/store.ts';
 import { fetchAll } from '../actions.ts';
+import { createTeamAction, deleteTeamAction } from '../teams/actions.ts';
 
 type AdditionalGamesState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -106,6 +107,39 @@ const gamesSlice = createSlice({
         state.activeGameID = action.meta.arg;
         state.status = 'succeeded';
       });
+
+    // create team - update game's teams array
+    builder.addCase(createTeamAction.fulfilled, (state, action) => {
+      const gameID = action.meta.arg.gameID;
+      const teamID = action.payload.team.id;
+      const game = state.entities[gameID];
+      if (game && teamID) {
+        gamesAdapter.updateOne(state, {
+          id: gameID,
+          changes: {
+            teams: [...game.teams, teamID],
+          },
+        });
+      }
+    });
+
+    // delete team - update game's teams array
+    builder.addCase(deleteTeamAction.fulfilled, (state, action) => {
+      const teamID = action.payload;
+      // Find the game that contains this team
+      const games = Object.values(state.entities);
+      for (const game of games) {
+        if (game && game.teams.includes(teamID)) {
+          gamesAdapter.updateOne(state, {
+            id: game.id,
+            changes: {
+              teams: game.teams.filter((id) => id !== teamID),
+            },
+          });
+          break;
+        }
+      }
+    });
   },
 });
 
