@@ -4,13 +4,22 @@ import { gamesApi } from '../../api/apiClient.ts';
 import {
   GameCreateRequest,
   CreateGame201Response,
-} from '../../generated/models';
+  GameUpdateRequest,
+} from '../../generated';
 
 export const createGameAction = createAsyncThunk<
   CreateGame201Response,
   GameCreateRequest
 >('games/createGame', async (gameRequest) => {
   const response = await gamesApi.createGame(gameRequest);
+  return response.data;
+});
+
+export const updateGameAction = createAsyncThunk<
+  CreateGame201Response,
+  { gameID: number; gameRequest: GameUpdateRequest }
+>('games/updateGame', async ({ gameID, gameRequest }) => {
+  const response = await gamesApi.updateGame(gameID, gameRequest);
   return response.data;
 });
 

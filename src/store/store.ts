@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import gamesReducer from '../slices/games/slice.ts';
 import playersReducer from '../slices/players/slice.ts';
+import tablesReducer from '../slices/tables/slice.ts';
 import teamsReducer from '../slices/teams/slice.ts';
 
 const store = configureStore({
@@ -9,6 +10,7 @@ const store = configureStore({
     games: gamesReducer,
     teams: teamsReducer,
     players: playersReducer,
+    tables: tablesReducer,
   },
 });
 

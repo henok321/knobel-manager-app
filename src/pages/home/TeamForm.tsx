@@ -20,10 +20,17 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState(['']);
 
+  const handleClose = () => {
+    // Reset form when closing
+    setTeamName('');
+    setPlayers(['']);
+    onClose();
+  };
+
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createTeam({ name: teamName, members: players });
-    onClose();
+    handleClose();
   };
 
   const handleChangeTeamName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +67,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
           {t('pages.home.team.form.heading')}
         </Text>
       }
-      onClose={onClose}
+      onClose={handleClose}
     >
       <form onSubmit={submit}>
         <Stack gap="md">
@@ -80,7 +87,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
             </Text>
             <Stack gap="xs">
               {players.map((player, index) => (
-                <Group key={player} gap="xs">
+                <Group key={index} gap="xs">
                   <TextInput
                     required
                     id={`player-${index}`}

@@ -7,7 +7,11 @@ import {
 
 import { fetchAll } from '../actions.ts';
 import { Team } from '../types.ts';
-import { createTeamAction } from './actions.ts';
+import {
+  createTeamAction,
+  updateTeamAction,
+  deleteTeamAction,
+} from './actions.ts';
 import { RootState } from '../../store/store.ts';
 
 type AdditionalTeamState = {
@@ -62,6 +66,15 @@ const teamsSlice = createSlice({
         };
         teamsAdapter.addOne(state, team);
         state.status = 'succeeded';
+      })
+      .addCase(updateTeamAction.fulfilled, (state, action) => {
+        teamsAdapter.updateOne(state, {
+          id: action.payload.id,
+          changes: { name: action.payload.name },
+        });
+      })
+      .addCase(deleteTeamAction.fulfilled, (state, action) => {
+        teamsAdapter.removeOne(state, action.payload);
       });
   },
 });

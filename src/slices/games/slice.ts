@@ -10,9 +10,11 @@ import {
   activateGameAction,
   createGameAction,
   deleteGameAction,
+  updateGameAction,
 } from './actions.ts';
 import { RootState } from '../../store/store.ts';
 import { fetchAll } from '../actions.ts';
+import { createTeamAction, deleteTeamAction } from '../teams/actions.ts';
 
 type AdditionalGamesState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -106,6 +108,68 @@ const gamesSlice = createSlice({
         state.activeGameID = action.meta.arg;
         state.status = 'succeeded';
       });
+
+    // update game
+    builder
+      .addCase(updateGameAction.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(updateGameAction.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = new Error(action.error.message);
+      })
+      .addCase(updateGameAction.fulfilled, (state, action) => {
+        const game: Game = {
+          id: action.payload.game.id,
+          name: action.payload.game.name,
+          teamSize: action.payload.game.teamSize,
+          teams: action.payload.game.teams?.map((team) => team.id) || [],
+          tableSize: action.payload.game.tableSize,
+          numberOfRounds: action.payload.game.numberOfRounds,
+          status: action.payload.game.status,
+          rounds: action.payload.game.rounds?.map((round) => round.id) || [],
+          owners: action.payload.game.owners.map((owner) => owner.ownerSub),
+        };
+
+        gamesAdapter.updateOne(state, {
+          id: game.id,
+          changes: game,
+        });
+        state.status = 'succeeded';
+      });
+
+    // create team - update game's teams array
+    builder.addCase(createTeamAction.fulfilled, (state, action) => {
+      const gameID = action.meta.arg.gameID;
+      const teamID = action.payload.team.id;
+      const game = state.entities[gameID];
+      if (game && teamID) {
+        gamesAdapter.updateOne(state, {
+          id: gameID,
+          changes: {
+            teams: [...game.teams, teamID],
+          },
+        });
+      }
+    });
+
+    // delete team - update game's teams array
+    builder.addCase(deleteTeamAction.fulfilled, (state, action) => {
+      const teamID = action.payload;
+      // Find the game that contains this team
+      const games = Object.values(state.entities);
+      for (const game of games) {
+        if (game && game.teams.includes(teamID)) {
+          gamesAdapter.updateOne(state, {
+            id: game.id,
+            changes: {
+              teams: game.teams.filter((id) => id !== teamID),
+            },
+          });
+          break;
+        }
+      }
+    });
   },
 });
 
