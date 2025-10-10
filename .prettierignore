@@ -3,3 +3,4 @@ dist/
 build/
 CLAUDE.md
 .claude
+src/generated

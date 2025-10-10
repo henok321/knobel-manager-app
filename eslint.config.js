@@ -22,6 +22,7 @@ export default [
       'jest.setup.js',
       'CLAUDE.md',
       '.claude',
+      'src/generated',
     ],
   },
 
