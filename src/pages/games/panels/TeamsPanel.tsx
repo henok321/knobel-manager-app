@@ -9,7 +9,7 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -34,13 +34,17 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const [editedPlayerName, setEditedPlayerName] = useState<string>('');
 
   // Get teams and players for this game from Redux
-  const teams = useSelector((state: RootState) =>
-    game.teams
-      .map((teamId) => state.teams.entities[teamId])
-      .filter((team) => team !== undefined),
-  );
-
+  const teamsEntities = useSelector((state: RootState) => state.teams.entities);
   const allPlayers = useSelector((state: RootState) => state.players.entities);
+
+  // Memoize teams array to prevent unnecessary rerenders
+  const teams = useMemo(
+    () =>
+      game.teams
+        .map((teamId) => teamsEntities[teamId])
+        .filter((team) => team !== undefined),
+    [game.teams, teamsEntities],
+  );
 
   // Helper to get players for a team
   const getPlayersForTeam = (teamId: number) => {

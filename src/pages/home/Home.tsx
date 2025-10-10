@@ -174,7 +174,7 @@ const Home = () => {
                   <Grid.Col span={{ base: 6, sm: 3 }}>
                     <Stack gap={4}>
                       <Text c="dimmed" size="sm">
-                        {t('pages.gameDetail.rounds')}
+                        {t('pages.gameDetail.rounds.round')}
                       </Text>
                       <Text fw={600} size="lg">
                         {activeGame.numberOfRounds}

@@ -8,14 +8,15 @@ import {
   Stack,
   Table as MantineTable,
   Text,
+  TextInput,
   Title,
 } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { gamesApi } from '../../../api/apiClient';
-import type { Table } from '../../../generated/models';
+import type { Table } from '../../../generated';
 import useTables from '../../../slices/tables/hooks';
 import { Game } from '../../../slices/types';
 import { RootState } from '../../../store/store';
@@ -42,12 +43,37 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [isSetupMode, setIsSetupMode] = useState(true);
   const [settingUp, setSettingUp] = useState(false);
   const [setupError, setSetupError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Generate round options
-  const roundOptions = Array.from({ length: game.numberOfRounds }, (_, i) => ({
-    value: String(i + 1),
-    label: `${t('pages.gameDetail.rounds.round')} ${i + 1}`,
-  }));
+  // Generate round options (memoized)
+  const roundOptions = useMemo(
+    () =>
+      Array.from({ length: game.numberOfRounds }, (_, i) => ({
+        value: String(i + 1),
+        label: `${t('pages.gameDetail.rounds.round')} ${i + 1}`,
+      })),
+    [game.numberOfRounds, t],
+  );
+
+  // Filter and sort tables (memoized)
+  const filteredAndSortedTables = useMemo(() => {
+    let filtered = tables.filter(
+      (table) => table.players && table.players.length > 0,
+    );
+
+    // Filter by search query (search in player names)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((table) =>
+        table.players?.some((player) =>
+          player.name?.toLowerCase().includes(query),
+        ),
+      );
+    }
+
+    // Sort by table number ascending
+    return filtered.sort((a, b) => a.tableNumber - b.tableNumber);
+  }, [tables, searchQuery]);
 
   // Fetch tables for the selected round
   useEffect(() => {
@@ -128,8 +154,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   return (
     <Stack gap="md">
-      {/* Round Selector */}
-      <Group align="flex-end" justify="space-between">
+      {/* Round Selector and Controls */}
+      <Group align="flex-end" justify="space-between" wrap="wrap">
         <Select
           data={roundOptions}
           disabled={isSetupMode}
@@ -138,6 +164,15 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
           value={selectedRound}
           onChange={(value) => setSelectedRound(value || '1')}
         />
+
+        {!isSetupMode && (
+          <TextInput
+            placeholder={t('pages.gameDetail.rounds.searchPlayers')}
+            style={{ width: 250 }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.currentTarget.value)}
+          />
+        )}
 
         {isSetupMode && (
           <Button loading={settingUp} size="md" onClick={handleSetupGame}>
@@ -192,10 +227,24 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
           </Card>
         )}
 
+      {/* No Search Results */}
+      {!loading &&
+        !isSetupMode &&
+        !settingUp &&
+        tables.length > 0 &&
+        filteredAndSortedTables.length === 0 &&
+        searchQuery.trim() && (
+          <Card withBorder padding="lg" radius="md" shadow="sm">
+            <Text c="dimmed" ta="center">
+              {t('pages.gameDetail.rounds.noSearchResults')}
+            </Text>
+          </Card>
+        )}
+
       {/* Tables Display */}
-      {!loading && !settingUp && tables.length > 0 && (
+      {!loading && !settingUp && filteredAndSortedTables.length > 0 && (
         <Stack gap="md">
-          {tables.map((table) => (
+          {filteredAndSortedTables.map((table) => (
             <Card
               key={table.id}
               withBorder

@@ -115,7 +115,6 @@
       "notFound": "Game not found",
       "teamSize": "Team Size",
       "tableSize": "Table Size",
-      "rounds": "Rounds",
       "tabs": {
         "teams": "Teams",
         "rounds": "Rounds",
@@ -137,6 +136,8 @@
         "team": "Team",
         "score": "Score",
         "noTables": "No tables available for this round.",
+        "noSearchResults": "No tables match your search.",
+        "searchPlayers": "Search by player name...",
         "scoresEntered": "Scores Entered",
         "enterScores": "Enter Scores",
         "editScores": "Edit Scores",

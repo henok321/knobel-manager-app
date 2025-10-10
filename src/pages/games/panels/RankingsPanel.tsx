@@ -8,7 +8,7 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -42,14 +42,17 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     (state: RootState) => state.players.entities,
   );
 
-  // Generate round filter options
-  const roundOptions = [
-    { value: 'total', label: t('pages.gameDetail.rankings.totalRanking') },
-    ...Array.from({ length: game.numberOfRounds }, (_, i) => ({
-      value: String(i + 1),
-      label: `${t('pages.gameDetail.rounds.round')} ${i + 1}`,
-    })),
-  ];
+  // Generate round filter options (memoized)
+  const roundOptions = useMemo(
+    () => [
+      { value: 'total', label: t('pages.gameDetail.rankings.totalRanking') },
+      ...Array.from({ length: game.numberOfRounds }, (_, i) => ({
+        value: String(i + 1),
+        label: `${t('pages.gameDetail.rounds.round')} ${i + 1}`,
+      })),
+    ],
+    [game.numberOfRounds, t],
+  );
 
   useEffect(() => {
     const fetchAndCalculateRankings = async () => {

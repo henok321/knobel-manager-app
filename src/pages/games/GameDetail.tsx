@@ -67,7 +67,7 @@ const GameDetail = () => {
                 </Text>
                 <Text c="dimmed">•</Text>
                 <Text c="dimmed" size="sm">
-                  {t('pages.gameDetail.rounds')}: {game.numberOfRounds}
+                  {t('pages.gameDetail.rounds.round')}: {game.numberOfRounds}
                 </Text>
               </Group>
             </div>
