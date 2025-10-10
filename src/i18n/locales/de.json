@@ -1,0 +1,186 @@
+{
+  "global": {
+    "loading": "Lädt...",
+    "errorOccurred": "Ein Fehler ist aufgetreten",
+    "error": "Fehler",
+    "cancel": "Abbrechen"
+  },
+  "header": {
+    "heading": "Knobel-Manager",
+    "logout": "Abmelden",
+    "nav": {
+      "home": "Startseite",
+      "games": "Spiele"
+    }
+  },
+
+  "pages": {
+    "login": {
+      "heading": "Anmelden bei Knobel-Manager",
+      "fields": {
+        "email": {
+          "label": "E-Mail",
+          "placeholder": "mail@beispiel.de",
+          "validationMessage": "Ungültige E-Mail-Adresse"
+        },
+        "password": {
+          "label": "Passwort",
+          "placeholder": "Dein Passwort",
+          "validationMessage": "Passwort muss mindestens 6 Zeichen lang sein"
+        }
+      },
+      "error": {
+        "invalidCredentials": "Ungültige Anmeldedaten",
+        "unknown": "Ein unbekannter Fehler ist aufgetreten"
+      },
+      "submit": "Anmelden"
+    },
+    "home": {
+      "heading": "Startseite",
+      "noActiveGame": "Kein aktives Spiel",
+      "createTeamButton": "Team erstellen",
+      "dashboard": {
+        "title": "Dashboard",
+        "subtitle": "Willkommen beim Knobel Manager",
+        "stats": {
+          "totalGames": "Spiele gesamt",
+          "totalTeams": "Teams gesamt",
+          "activeGame": "Aktives Spiel"
+        },
+        "viewAll": "Alle anzeigen",
+        "activeGame": {
+          "description": "Dein aktuell aktives Turnier",
+          "manage": "Spiel verwalten",
+          "teams": "Teams",
+          "addTeam": "Team hinzufügen",
+          "setupDescription": "Dein Turnier befindet sich im Setup-Modus. Füge Teams hinzu, um zu beginnen.",
+          "inProgressDescription": "Dein Turnier läuft. Trage die Punktzahlen für jede Runde ein.",
+          "setupGame": "Spiel einrichten",
+          "enterScores": "Punkte eintragen",
+          "tables": "Tische",
+          "scoresEntered": "Punkte eingetragen"
+        },
+        "noActiveGame": "Kein aktives Spiel",
+        "noActiveGameDescription": "Aktiviere ein bestehendes Spiel oder erstelle ein neues, um loszulegen.",
+        "selectGameToActivate": "Klicke auf ein Spiel, um es zu aktivieren:",
+        "viewAllGames": "Alle Spiele anzeigen",
+        "or": "oder",
+        "createNewGame": "Neues Spiel erstellen",
+        "createGame": "Neues Spiel erstellen",
+        "recentGames": "Letzte Spiele",
+        "teams": "Teams",
+        "rounds": "Runden"
+      },
+      "team": {
+        "form": {
+          "heading": "Team erstellen",
+          "label": {
+            "name": "Teamname",
+            "players": "Teammitglieder"
+          },
+          "addPlayer": "Mitglied hinzufügen",
+          "removePlayer": "Mitglied entfernen",
+          "submit": "Erstellen"
+        }
+      }
+    },
+    "games": {
+      "heading": "Spiele",
+      "subtitle": "Verwalte alle deine Turniere",
+      "createGameButton": "Spiel erstellen",
+      "search": "Spiele durchsuchen...",
+      "filters": {
+        "all": "Alle",
+        "active": "Aktiv",
+        "setup": "Setup"
+      },
+      "noGames": "Noch keine Spiele vorhanden. Erstelle dein erstes Turnier!",
+      "noResults": "Keine Spiele gefunden, die deiner Suche entsprechen.",
+      "createFirstGame": "Erstelle dein erstes Spiel",
+      "confirmDelete": "Bist du sicher, dass du dieses Spiel löschen möchtest?",
+      "card": {
+        "details": {
+          "teamSize": "Teamgröße",
+          "tableSize": "Tischgröße",
+          "numberOfRounds": "Runden",
+          "teams": "Teams",
+          "status": "Status"
+        },
+        "activateButton": "Aktivieren",
+        "deleteButton": "Löschen",
+        "viewDetails": "Details anzeigen",
+        "isActive": "Aktiv"
+      },
+      "form": {
+        "heading": "Spiel erstellen",
+        "label": {
+          "name": "Name",
+          "teamSize": "Teamgröße",
+          "tableSize": "Tischgröße",
+          "numberOfRounds": "Anzahl der Runden"
+        },
+        "submit": "Erstellen"
+      }
+    },
+    "gameDetail": {
+      "notFound": "Spiel nicht gefunden",
+      "teamSize": "Teamgröße",
+      "tableSize": "Tischgröße",
+      "status": {
+        "setup": "Setup",
+        "in_progress": "Läuft",
+        "completed": "Abgeschlossen"
+      },
+      "actions": {
+        "startGame": "Spiel starten",
+        "completeGame": "Spiel abschließen"
+      },
+      "tabs": {
+        "teams": "Teams",
+        "rounds": "Runden",
+        "rankings": "Rangliste"
+      },
+      "teams": {
+        "addTeam": "Team hinzufügen",
+        "noTeams": "Noch keine Teams vorhanden. Füge dein erstes Team hinzu, um zu beginnen!",
+        "players": "Spieler",
+        "confirmDeleteTeam": "Bist du sicher, dass du dieses Team löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "confirmDeletePlayer": "Bist du sicher, dass du diesen Spieler löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden."
+      },
+      "rounds": {
+        "selectRound": "Runde auswählen",
+        "round": "Runde",
+        "startRound": "Runde starten",
+        "table": "Tisch",
+        "player": "Spieler",
+        "team": "Team",
+        "score": "Punktzahl",
+        "noTables": "Keine Tische für diese Runde verfügbar.",
+        "noSearchResults": "Keine Tische entsprechen deiner Suche.",
+        "searchPlayers": "Nach Spielernamen suchen...",
+        "scoresEntered": "Punkte eingetragen",
+        "enterScores": "Punkte eintragen",
+        "editScores": "Punkte bearbeiten",
+        "saveScores": "Punkte speichern",
+        "setupMatchmaking": "Spielpaarungen einrichten",
+        "rerunMatchmaking": "Spielpaarungen neu berechnen",
+        "setupRequired": "Spielpaarungen müssen eingerichtet werden",
+        "setupDescription": "Klicke auf den Button unten, um Tische und Spielerzuordnungen für alle Runden zu generieren. Der Backend-Algorithmus verteilt die Spieler fair.",
+        "generatingTables": "Generiere Tische und Spielpaarungen...",
+        "setupError": "Fehler beim Einrichten der Spielpaarungen. Bitte versuche es erneut.",
+        "matchmakingInfo": "Das Backend übernimmt die Spielpaarungen und erstellt automatisch Tische"
+      },
+      "rankings": {
+        "teamRankings": "Team-Rangliste",
+        "playerRankings": "Spieler-Rangliste",
+        "rank": "Rang",
+        "team": "Team",
+        "player": "Spieler",
+        "totalScore": "Gesamtpunktzahl",
+        "noData": "Noch keine Punkte eingetragen",
+        "filterByRound": "Nach Runde filtern",
+        "totalRanking": "Gesamt (Alle Runden)"
+      }
+    }
+  }
+}
