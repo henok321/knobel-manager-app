@@ -1,19 +1,29 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { activateGame, createGame, deleteGame } from '../../api/apiClient.ts';
-import { GameRequest, GameResponse } from '../../api/types.ts';
+import { gamesApi } from '../../api/apiClient.ts';
+import {
+  GameCreateRequest,
+  CreateGame201Response,
+} from '../../generated/models';
 
-export const createGameAction = createAsyncThunk<GameResponse, GameRequest>(
-  'games/createGame',
-  async (gameRequest) => await createGame(gameRequest),
-);
+export const createGameAction = createAsyncThunk<
+  CreateGame201Response,
+  GameCreateRequest
+>('games/createGame', async (gameRequest) => {
+  const response = await gamesApi.createGame(gameRequest);
+  return response.data;
+});
 
 export const deleteGameAction = createAsyncThunk<void, number>(
   'games/deleteGame',
-  async (gameID) => await deleteGame(gameID),
+  async (gameID) => {
+    await gamesApi.deleteGame(gameID);
+  },
 );
 
 export const activateGameAction = createAsyncThunk<void, number>(
   'games/activateGame',
-  async (gameID) => await activateGame(gameID),
+  async (gameID) => {
+    await gamesApi.activateGame(gameID);
+  },
 );

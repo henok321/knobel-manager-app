@@ -1,14 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { createTeam } from '../../api/apiClient.ts';
-import { TeamRequest, TeamResponse } from '../../api/types.ts';
+import { teamsApi } from '../../api/apiClient.ts';
+import { TeamsRequest, CreateTeam201Response } from '../../generated/models';
 
 export type CreateTeam = {
   gameID: number;
-  teamRequest: TeamRequest;
+  teamRequest: TeamsRequest;
 };
 
-export const createTeamAction = createAsyncThunk<TeamResponse, CreateTeam>(
-  'teams/createTeam',
-  async (t) => await createTeam(t.gameID, t.teamRequest),
-);
+export const createTeamAction = createAsyncThunk<
+  CreateTeam201Response,
+  CreateTeam
+>('teams/createTeam', async (t) => {
+  const response = await teamsApi.createTeam(t.gameID, t.teamRequest);
+  return response.data;
+});

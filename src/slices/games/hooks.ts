@@ -12,7 +12,7 @@ import {
   selectGamesError,
   selectGamesStatus,
 } from './slice';
-import { GameRequest } from '../../api/types';
+import { GameCreateRequest } from '../../generated/models';
 import { AppDispatch } from '../../store/store';
 import { fetchAll } from '../actions';
 
@@ -29,7 +29,7 @@ const useGames = () => {
   }, [dispatch]);
 
   const createGame = useCallback(
-    (gameRequest: GameRequest) => {
+    (gameRequest: GameCreateRequest) => {
       dispatch(createGameAction(gameRequest));
     },
     [dispatch],

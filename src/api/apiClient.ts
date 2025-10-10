@@ -1,21 +1,14 @@
 import axios from 'axios';
 
-import {
-  GameRequest,
-  GameResponse,
-  GamesResponse,
-  PlayerRequest,
-  PlayerResponse,
-  TeamRequest,
-  TeamResponse,
-} from './types.ts';
-import { auth as firebaseAuth } from '../auth/firebaseConfig.ts';
+import { auth as firebaseAuth } from '../auth/firebaseConfig';
+import { GamesApi, PlayersApi, TeamsApi } from '../generated/api';
+import { Configuration } from '../generated/configuration';
 
-const apiClient = axios.create({
+const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
-apiClient.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   async (config) => {
     const idToken = await firebaseAuth.currentUser?.getIdToken();
     config.headers.Authorization = `Bearer ${idToken}`;
@@ -25,42 +18,26 @@ apiClient.interceptors.request.use(
     Promise.reject(error instanceof Error ? error : new Error(String(error))),
 );
 
-export const getGames = async (): Promise<GamesResponse> => {
-  const response = await apiClient.get<GamesResponse>('/games');
-  return response.data;
-};
+const apiConfiguration = new Configuration({
+  basePath: import.meta.env.VITE_API_URL,
+  accessToken: async () => {
+    const idToken = await firebaseAuth.currentUser?.getIdToken();
+    return idToken || '';
+  },
+});
 
-export const createGame = async (
-  gameRequest: GameRequest,
-): Promise<GameResponse> => {
-  const response = await apiClient.post('/games', gameRequest);
-  return response.data;
-};
-
-export const deleteGame = async (gameID: number) => {
-  await apiClient.delete(`/games/${gameID}`);
-};
-
-export const activateGame = async (gameID: number) => {
-  await apiClient.post(`games/${gameID}/activate`);
-};
-
-export const createTeam = async (
-  gameID: number,
-  teamRequest: TeamRequest,
-): Promise<TeamResponse> => {
-  const response = await apiClient.post(`games/${gameID}/teams`, teamRequest);
-  return response.data;
-};
-
-export const createPlayer = async (
-  gameID: number,
-  teamID: number,
-  playerRequest: PlayerRequest,
-): Promise<PlayerResponse> => {
-  const response = await apiClient.post(
-    `games/${gameID}/team/${teamID}`,
-    playerRequest,
-  );
-  return response.data;
-};
+export const gamesApi = new GamesApi(
+  apiConfiguration,
+  undefined,
+  axiosInstance,
+);
+export const teamsApi = new TeamsApi(
+  apiConfiguration,
+  undefined,
+  axiosInstance,
+);
+export const playersApi = new PlayersApi(
+  apiConfiguration,
+  undefined,
+  axiosInstance,
+);

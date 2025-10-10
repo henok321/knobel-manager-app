@@ -1,17 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NormalizedData } from './types.ts';
-import { getGames } from '../api/apiClient.ts';
-import { GamesResponse } from '../api/types.ts';
+import { gamesApi } from '../api/apiClient.ts';
+import { GetGames200Response } from '../generated/models';
 
 export const fetchAll = createAsyncThunk<NormalizedData>(
   'state/fetchAll',
   async () => {
-    const data = await getGames();
-    return normalizeGameData(data);
+    const response = await gamesApi.getGames();
+    return normalizeGameData(response.data);
   },
 );
-const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
+const normalizeGameData = (apiData: GetGames200Response): NormalizedData => {
   const normalizedData: NormalizedData = {
     activeGameID: undefined,
     games: {},
@@ -53,7 +53,10 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
     apiGame.rounds?.forEach((round) => {
       const roundId = round.id;
       normalizedData.rounds[roundId] = {
-        ...round,
+        id: round.id,
+        roundNumber: round.roundNumber,
+        gameID: apiGame.id,
+        status: apiGame.status,
         tables: round.tables?.map((table) => table.id) || [],
       };
 
