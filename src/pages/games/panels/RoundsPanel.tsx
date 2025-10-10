@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 
 import { gamesApi } from '../../../api/apiClient';
 import type { Table } from '../../../generated';
+import { GameStatusEnum } from '../../../generated';
 import useTables from '../../../slices/tables/hooks';
 import { Game } from '../../../slices/types';
 import { RootState } from '../../../store/store';
@@ -44,6 +45,9 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [settingUp, setSettingUp] = useState(false);
   const [setupError, setSetupError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Permission flags based on game status
+  const canEditScores = game.status === GameStatusEnum.InProgress;
 
   // Generate round options (memoized)
   const roundOptions = useMemo(
@@ -174,11 +178,16 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
           />
         )}
 
-        {isSetupMode && (
-          <Button loading={settingUp} size="md" onClick={handleSetupGame}>
-            {t('pages.gameDetail.rounds.setupMatchmaking')}
-          </Button>
-        )}
+        <Button
+          loading={settingUp}
+          size="md"
+          variant={isSetupMode ? 'filled' : 'light'}
+          onClick={handleSetupGame}
+        >
+          {isSetupMode
+            ? t('pages.gameDetail.rounds.setupMatchmaking')
+            : t('pages.gameDetail.rounds.rerunMatchmaking')}
+        </Button>
       </Group>
 
       {/* Error Alert */}
@@ -265,15 +274,17 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                       </Badge>
                     )}
                   </Group>
-                  <Button
-                    size="sm"
-                    variant="light"
-                    onClick={() => handleOpenScoreEntry(table)}
-                  >
-                    {hasScores(table)
-                      ? t('pages.gameDetail.rounds.editScores')
-                      : t('pages.gameDetail.rounds.enterScores')}
-                  </Button>
+                  {canEditScores && (
+                    <Button
+                      size="sm"
+                      variant="light"
+                      onClick={() => handleOpenScoreEntry(table)}
+                    >
+                      {hasScores(table)
+                        ? t('pages.gameDetail.rounds.editScores')
+                        : t('pages.gameDetail.rounds.enterScores')}
+                    </Button>
+                  )}
                 </Group>
 
                 {/* Players and Scores */}

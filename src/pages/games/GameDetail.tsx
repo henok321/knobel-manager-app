@@ -1,5 +1,6 @@
 import {
   Badge,
+  Button,
   Container,
   Group,
   Stack,
@@ -16,12 +17,13 @@ import RoundsPanel from './panels/RoundsPanel';
 import TeamsPanel from './panels/TeamsPanel';
 import CenterLoader from '../../components/CenterLoader';
 import Layout from '../../components/Layout';
+import { GameStatusEnum, GameUpdateRequest } from '../../generated/models';
 import useGames from '../../slices/games/hooks';
 
 const GameDetail = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const { t } = useTranslation();
-  const { allGames, fetchGames, status } = useGames();
+  const { allGames, fetchGames, status, updateGame } = useGames();
 
   useEffect(() => {
     if (status === 'idle') {
@@ -47,7 +49,32 @@ const GameDetail = () => {
     );
   }
 
-  const isGameActive = game.status === 'active';
+  const handleStatusTransition = (newStatus: GameStatusEnum) => {
+    // Note: The generated GameUpdateRequest type doesn't include status,
+    // but the backend API expects it. This should be fixed by regenerating
+    // the API client from the updated OpenAPI spec.
+    const gameRequest: GameUpdateRequest & { status: GameStatusEnum } = {
+      name: game.name,
+      numberOfRounds: game.numberOfRounds,
+      teamSize: game.teamSize,
+      tableSize: game.tableSize,
+      status: newStatus,
+    };
+    updateGame(game.id, gameRequest);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'setup':
+        return 'gray';
+      case 'in_progress':
+        return 'blue';
+      case 'completed':
+        return 'green';
+      default:
+        return 'gray';
+    }
+  };
 
   return (
     <Layout navbarActive>
@@ -71,13 +98,37 @@ const GameDetail = () => {
                 </Text>
               </Group>
             </div>
-            <Badge
-              color={isGameActive ? 'green' : 'gray'}
-              size="lg"
-              variant="filled"
-            >
-              {game.status}
-            </Badge>
+            <Group gap="sm">
+              <Badge
+                color={getStatusColor(game.status)}
+                size="lg"
+                variant="filled"
+              >
+                {t(`pages.gameDetail.status.${game.status}`)}
+              </Badge>
+              {game.status === GameStatusEnum.Setup && (
+                <Button
+                  color="blue"
+                  size="sm"
+                  onClick={() =>
+                    handleStatusTransition(GameStatusEnum.InProgress)
+                  }
+                >
+                  {t('pages.gameDetail.actions.startGame')}
+                </Button>
+              )}
+              {game.status === GameStatusEnum.InProgress && (
+                <Button
+                  color="green"
+                  size="sm"
+                  onClick={() =>
+                    handleStatusTransition(GameStatusEnum.Completed)
+                  }
+                >
+                  {t('pages.gameDetail.actions.completeGame')}
+                </Button>
+              )}
+            </Group>
           </Group>
 
           {/* Tabs */}

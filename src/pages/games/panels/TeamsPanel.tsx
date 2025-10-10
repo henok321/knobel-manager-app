@@ -13,6 +13,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import { GameStatusEnum } from '../../../generated/models';
 import usePlayers from '../../../slices/players/hooks';
 import useTeams from '../../../slices/teams/hooks';
 import { Game } from '../../../slices/types';
@@ -45,6 +46,13 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         .filter((team) => team !== undefined),
     [game.teams, teamsEntities],
   );
+
+  // Permission flags based on game status
+  const canAddDelete = game.status === GameStatusEnum.Setup;
+  const canEdit =
+    game.status === GameStatusEnum.Setup ||
+    game.status === GameStatusEnum.InProgress;
+  const isCompleted = game.status === GameStatusEnum.Completed;
 
   // Helper to get players for a team
   const getPlayersForTeam = (teamId: number) => {
@@ -102,13 +110,10 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     }
   };
 
-  const isGameActive = game.status === 'active';
-  const isSetupMode = !isGameActive;
-
   return (
     <Stack gap="md">
       {/* Add Team Button */}
-      {!isGameActive && (
+      {canAddDelete && (
         <Button
           leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
           style={{ alignSelf: 'flex-start' }}
@@ -118,8 +123,8 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         </Button>
       )}
 
-      {/* Info message when game not started */}
-      {!isGameActive && teams.length === 0 && (
+      {/* Info message when no teams */}
+      {canAddDelete && teams.length === 0 && (
         <Text c="dimmed" ta="center">
           {t('pages.gameDetail.teams.noTeams')}
         </Text>
@@ -158,23 +163,29 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                   ) : (
                     <Title order={3}>{team.name}</Title>
                   )}
-                  <Group gap="xs">
-                    <ActionIcon
-                      variant="subtle"
-                      onClick={() => handleStartEditTeam(team.id, team.name)}
-                    >
-                      ✏️
-                    </ActionIcon>
-                    {isSetupMode && (
-                      <ActionIcon
-                        color="red"
-                        variant="subtle"
-                        onClick={() => handleDeleteTeam(team.id)}
-                      >
-                        <TrashIcon style={{ width: 16, height: 16 }} />
-                      </ActionIcon>
-                    )}
-                  </Group>
+                  {!isCompleted && (
+                    <Group gap="xs">
+                      {canEdit && (
+                        <ActionIcon
+                          variant="subtle"
+                          onClick={() =>
+                            handleStartEditTeam(team.id, team.name)
+                          }
+                        >
+                          ✏️
+                        </ActionIcon>
+                      )}
+                      {canAddDelete && (
+                        <ActionIcon
+                          color="red"
+                          variant="subtle"
+                          onClick={() => handleDeleteTeam(team.id)}
+                        >
+                          <TrashIcon style={{ width: 16, height: 16 }} />
+                        </ActionIcon>
+                      )}
+                    </Group>
+                  )}
                 </Group>
 
                 {/* Players */}
@@ -207,29 +218,38 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                         ) : (
                           <>
                             <Text size="sm">{player.name}</Text>
-                            <Group gap="xs">
-                              <ActionIcon
-                                size="sm"
-                                variant="subtle"
-                                onClick={() =>
-                                  handleStartEditPlayer(player.id, player.name)
-                                }
-                              >
-                                ✏️
-                              </ActionIcon>
-                              {isSetupMode && (
-                                <ActionIcon
-                                  color="red"
-                                  size="sm"
-                                  variant="subtle"
-                                  onClick={() => handleDeletePlayer(player.id)}
-                                >
-                                  <TrashIcon
-                                    style={{ width: 12, height: 12 }}
-                                  />
-                                </ActionIcon>
-                              )}
-                            </Group>
+                            {!isCompleted && (
+                              <Group gap="xs">
+                                {canEdit && (
+                                  <ActionIcon
+                                    size="sm"
+                                    variant="subtle"
+                                    onClick={() =>
+                                      handleStartEditPlayer(
+                                        player.id,
+                                        player.name,
+                                      )
+                                    }
+                                  >
+                                    ✏️
+                                  </ActionIcon>
+                                )}
+                                {canAddDelete && (
+                                  <ActionIcon
+                                    color="red"
+                                    size="sm"
+                                    variant="subtle"
+                                    onClick={() =>
+                                      handleDeletePlayer(player.id)
+                                    }
+                                  >
+                                    <TrashIcon
+                                      style={{ width: 12, height: 12 }}
+                                    />
+                                  </ActionIcon>
+                                )}
+                              </Group>
+                            )}
                           </>
                         )}
                       </Group>

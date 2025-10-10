@@ -10,6 +10,7 @@ import {
   activateGameAction,
   createGameAction,
   deleteGameAction,
+  updateGameAction,
 } from './actions.ts';
 import { RootState } from '../../store/store.ts';
 import { fetchAll } from '../actions.ts';
@@ -105,6 +106,35 @@ const gamesSlice = createSlice({
       })
       .addCase(activateGameAction.fulfilled, (state, action) => {
         state.activeGameID = action.meta.arg;
+        state.status = 'succeeded';
+      });
+
+    // update game
+    builder
+      .addCase(updateGameAction.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(updateGameAction.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = new Error(action.error.message);
+      })
+      .addCase(updateGameAction.fulfilled, (state, action) => {
+        const game: Game = {
+          id: action.payload.game.id,
+          name: action.payload.game.name,
+          teamSize: action.payload.game.teamSize,
+          teams: action.payload.game.teams?.map((team) => team.id) || [],
+          tableSize: action.payload.game.tableSize,
+          numberOfRounds: action.payload.game.numberOfRounds,
+          status: action.payload.game.status,
+          rounds: action.payload.game.rounds?.map((round) => round.id) || [],
+          owners: action.payload.game.owners.map((owner) => owner.ownerSub),
+        };
+
+        gamesAdapter.updateOne(state, {
+          id: game.id,
+          changes: game,
+        });
         state.status = 'succeeded';
       });
 

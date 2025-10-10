@@ -5,6 +5,7 @@ import {
   activateGameAction,
   createGameAction,
   deleteGameAction,
+  updateGameAction,
 } from './actions';
 import {
   selectActiveGame,
@@ -12,7 +13,7 @@ import {
   selectGamesError,
   selectGamesStatus,
 } from './slice';
-import { GameCreateRequest } from '../../generated/models';
+import { GameCreateRequest, GameUpdateRequest } from '../../generated/models';
 import { AppDispatch } from '../../store/store';
 import { fetchAll } from '../actions';
 
@@ -49,6 +50,13 @@ const useGames = () => {
     [dispatch],
   );
 
+  const updateGame = useCallback(
+    (gameID: number, gameRequest: GameUpdateRequest) => {
+      dispatch(updateGameAction({ gameID, gameRequest }));
+    },
+    [dispatch],
+  );
+
   return {
     allGames,
     activeGame,
@@ -59,6 +67,7 @@ const useGames = () => {
     createGame,
     deleteGame,
     activateGame,
+    updateGame,
   };
 };
 
