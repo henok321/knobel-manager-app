@@ -53,7 +53,7 @@ const GameDetail = () => {
     // Note: The generated GameUpdateRequest type doesn't include status,
     // but the backend API expects it. This should be fixed by regenerating
     // the API client from the updated OpenAPI spec.
-    const gameRequest: GameUpdateRequest & { status: GameStatusEnum } = {
+    const gameRequest: GameUpdateRequest = {
       name: game.name,
       numberOfRounds: game.numberOfRounds,
       teamSize: game.teamSize,
