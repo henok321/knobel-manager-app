@@ -26,12 +26,11 @@ const ScoreEntryModal = ({
 
   const players = table.players || [];
 
-  // Initialize scores from existing data or empty
   const initialScores: Record<number, number> = {};
-  players.forEach((player: Player) => {
+  for (const player of players) {
     const existingScore = table.scores?.find((s) => s.playerID === player.id);
     initialScores[player.id] = existingScore?.score || 0;
-  });
+  }
 
   const handleSubmit = () => {
     const scoresArray = players.map((player: Player) => ({
@@ -60,7 +59,6 @@ const ScoreEntryModal = ({
           {t('pages.gameDetail.rounds.round')} {roundNumber}
         </Text>
 
-        {/* Score inputs for each player */}
         {players.map((player: Player) => (
           <NumberInput
             key={player.id}
@@ -77,7 +75,6 @@ const ScoreEntryModal = ({
           />
         ))}
 
-        {/* Actions */}
         <Group justify="flex-end" mt="md">
           <Button color="gray" variant="subtle" onClick={onClose}>
             {t('global.cancel')}

@@ -41,6 +41,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const playersState = useSelector(
     (state: RootState) => state.players.entities,
   );
+  const tablesStatus = useSelector((state: RootState) => state.tables.status);
 
   const roundOptions = useMemo(
     () => [
@@ -114,6 +115,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     playersState,
     teamsState,
     selectedRound,
+    tablesStatus,
     t,
   ]);
 
