@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
 import { useAuth } from './useAuth.ts';
-import CenterLoader from '../components/CenterLoader.tsx';
+import CenterLoader from '../shared/CenterLoader.tsx';
 
 const ProtectedRoute = () => {
   const { user, loading } = useAuth();

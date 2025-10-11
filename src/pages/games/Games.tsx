@@ -13,13 +13,13 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import GameForm, { GameFormData } from './GameForm';
-import CenterLoader from '../../components/CenterLoader';
-import Layout from '../../components/Layout';
+import CenterLoader from '../../shared/CenterLoader';
+import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
 
 const Games = () => {
@@ -31,6 +31,7 @@ const Games = () => {
     createGame,
     activateGame,
     deleteGame,
+    fetchGames,
   } = useGames();
 
   const [gameModalActive, setGameModalActive] = useState(false);
@@ -38,6 +39,12 @@ const Games = () => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (status === 'idle') {
+      fetchGames();
+    }
+  }, [status, fetchGames]);
 
   const filteredGames = useMemo(
     () =>

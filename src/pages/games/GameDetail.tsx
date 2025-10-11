@@ -15,9 +15,9 @@ import { useParams } from 'react-router-dom';
 import RankingsPanel from './panels/RankingsPanel';
 import RoundsPanel from './panels/RoundsPanel';
 import TeamsPanel from './panels/TeamsPanel';
-import CenterLoader from '../../components/CenterLoader';
-import Layout from '../../components/Layout';
 import { GameStatusEnum, GameUpdateRequest } from '../../generated';
+import CenterLoader from '../../shared/CenterLoader';
+import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
 
 const GameDetail = () => {

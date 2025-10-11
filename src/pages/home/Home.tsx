@@ -15,8 +15,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import TeamForm, { TeamFormData } from './TeamForm';
-import CenterLoader from '../../components/CenterLoader';
-import Layout from '../../components/Layout';
+import CenterLoader from '../../shared/CenterLoader';
+import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
 import useTeams from '../../slices/teams/hooks';
 

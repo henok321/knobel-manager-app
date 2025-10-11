@@ -19,8 +19,8 @@ import { Navigate } from 'react-router-dom';
 
 import { LoginData } from '../auth/AuthContext';
 import { useAuth } from '../auth/useAuth';
-import CenterLoader from '../components/CenterLoader';
-import Layout from '../components/Layout';
+import CenterLoader from '../shared/CenterLoader';
+import Layout from '../shared/Layout';
 
 const Login = (props: PaperProps) => {
   const { user, loading, loginAction } = useAuth();
