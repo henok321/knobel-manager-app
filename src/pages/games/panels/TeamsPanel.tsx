@@ -1,3 +1,4 @@
+import { PencilIcon } from '@heroicons/react/16/solid';
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/solid';
 import {
   ActionIcon,
@@ -27,7 +28,7 @@ interface TeamsPanelProps {
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
   const { createTeam, updateTeam, deleteTeam } = useTeams();
-  const { updatePlayer, deletePlayer } = usePlayers();
+  const { updatePlayer } = usePlayers();
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editingTeam, setEditingTeam] = useState<number | null>(null);
   const [editingPlayer, setEditingPlayer] = useState<number | null>(null);
@@ -100,12 +101,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     setEditedPlayerName('');
   };
 
-  const handleDeletePlayer = (playerId: number) => {
-    if (window.confirm(t('pages.gameDetail.teams.confirmDeletePlayer'))) {
-      deletePlayer(playerId);
-    }
-  };
-
   return (
     <Stack gap="md">
       {/* Add Team Button */}
@@ -166,7 +161,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                             handleStartEditTeam(team.id, team.name)
                           }
                         >
-                          ✏️
+                          <PencilIcon style={{ width: 16, height: 16 }} />
                         </ActionIcon>
                       )}
                       {canAddDelete && (
@@ -224,19 +219,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                                       )
                                     }
                                   >
-                                    ✏️
-                                  </ActionIcon>
-                                )}
-                                {canAddDelete && (
-                                  <ActionIcon
-                                    color="red"
-                                    size="sm"
-                                    variant="subtle"
-                                    onClick={() =>
-                                      handleDeletePlayer(player.id)
-                                    }
-                                  >
-                                    <TrashIcon
+                                    <PencilIcon
                                       style={{ width: 12, height: 12 }}
                                     />
                                   </ActionIcon>

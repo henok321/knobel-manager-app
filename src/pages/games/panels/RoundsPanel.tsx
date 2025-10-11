@@ -154,6 +154,12 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   return (
     <Stack gap="md">
+      <style>{`
+        .rounds-table tbody tr > td:nth-child(2),
+        .rounds-table thead tr > th:nth-child(2) { text-align: center; }
+        .rounds-table tbody tr > td:nth-child(3),
+        .rounds-table thead tr > th:nth-child(3) { text-align: right; }
+      `}</style>
       <Group align="flex-end" justify="space-between" wrap="wrap">
         <Select
           data={roundOptions}
@@ -256,8 +262,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                 <Group align="center" justify="space-between">
                   <Group gap="xs">
                     <Title order={4}>
-                      {t('pages.gameDetail.rounds.table')}
-                      {table.tableNumber + 1}
+                      {`${t('pages.gameDetail.rounds.table')} ${table.tableNumber + 1}`}
                     </Title>
                     {hasScores(table) && (
                       <Badge color="green" variant="light">
@@ -278,7 +283,15 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                   )}
                 </Group>
 
-                <MantineTable>
+                <MantineTable
+                  className="rounds-table"
+                  style={{ tableLayout: 'fixed', width: '100%' }}
+                >
+                  <colgroup>
+                    <col style={{ width: '50%' }} />
+                    <col style={{ width: '30%' }} />
+                    <col style={{ width: '20%' }} />
+                  </colgroup>
                   <MantineTable.Thead>
                     <MantineTable.Tr>
                       <MantineTable.Th>
