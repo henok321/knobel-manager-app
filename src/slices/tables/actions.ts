@@ -11,6 +11,20 @@ export const fetchTablesForRound = createAsyncThunk<
   return response.data;
 });
 
+export const fetchAllTablesForGame = createAsyncThunk<
+  Table[],
+  { gameId: number; numberOfRounds: number }
+>('tables/fetchAllForGame', async ({ gameId, numberOfRounds }) => {
+  const allTables: Table[] = [];
+
+  for (let roundNum = 1; roundNum <= numberOfRounds; roundNum++) {
+    const response = await tablesApi.getTables(gameId, roundNum);
+    allTables.push(...response.data);
+  }
+
+  return allTables;
+});
+
 export const updateScoresForTable = createAsyncThunk<
   Table[],
   {

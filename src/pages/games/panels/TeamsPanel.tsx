@@ -2,6 +2,7 @@ import { PencilIcon } from '@heroicons/react/16/solid';
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/solid';
 import {
   ActionIcon,
+  Badge,
   Button,
   Card,
   Group,
@@ -10,12 +11,14 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { GameStatusEnum } from '../../../generated';
 import usePlayers from '../../../slices/players/hooks';
+import useTables from '../../../slices/tables/hooks';
+import { tablesSelectors } from '../../../slices/tables/slice';
 import useTeams from '../../../slices/teams/hooks';
 import { Game } from '../../../slices/types';
 import { RootState } from '../../../store/store';
@@ -29,6 +32,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
   const { createTeam, updateTeam, deleteTeam } = useTeams();
   const { updatePlayer } = usePlayers();
+  const { fetchAllTables } = useTables();
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editingTeam, setEditingTeam] = useState<number | null>(null);
   const [editingPlayer, setEditingPlayer] = useState<number | null>(null);
@@ -37,6 +41,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const teamsEntities = useSelector((state: RootState) => state.teams.entities);
   const allPlayers = useSelector((state: RootState) => state.players.entities);
+  const allTables = useSelector(tablesSelectors.selectAll);
 
   const teams = useMemo(
     () =>
@@ -51,13 +56,52 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     game.status === GameStatusEnum.Setup ||
     game.status === GameStatusEnum.InProgress;
   const isCompleted = game.status === GameStatusEnum.Completed;
+  const showTableAssignments =
+    game.status === GameStatusEnum.InProgress ||
+    game.status === GameStatusEnum.Completed;
+
+  // Fetch all tables when in progress or completed
+  useEffect(() => {
+    if (showTableAssignments) {
+      fetchAllTables(game.id, game.numberOfRounds);
+    }
+  }, [game.id, game.numberOfRounds, showTableAssignments, fetchAllTables]);
+
+  // Compute player table assignments from Redux state using useMemo
+  const playerTableAssignments = useMemo(() => {
+    const assignments: Record<
+      number,
+      { roundNumber: number; tableNumber: number }[]
+    > = {};
+
+    if (!showTableAssignments) {
+      return assignments;
+    }
+
+    for (const table of allTables) {
+      const players = table.players;
+      if (!players) continue;
+      for (const playerId of players) {
+        const id = playerId.id;
+        assignments[id] ??= [];
+        assignments[id].push({
+          roundNumber: table.roundID,
+          tableNumber: table.tableNumber,
+        });
+      }
+    }
+
+    return assignments;
+  }, [allTables, showTableAssignments]);
 
   const getPlayersForTeam = (teamId: number) => {
     const team = teams.find((t) => t?.id === teamId);
     if (!team) return [];
     return team.players
       .map((playerId) => allPlayers[playerId])
-      .filter((player) => player !== undefined);
+      .filter(
+        (player): player is NonNullable<typeof player> => player !== undefined,
+      );
   };
 
   const handleCreateTeam = (teamData: TeamFormData) => {
@@ -83,7 +127,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   };
 
   const handleDeleteTeam = (teamId: number) => {
-    if (window.confirm(t('pages.gameDetail.teams.confirmDeleteTeam'))) {
+    if (globalThis.confirm(t('pages.gameDetail.teams.confirmDeleteTeam'))) {
       deleteTeam(teamId);
     }
   };
@@ -184,7 +228,13 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                   {players.map((player) => {
                     if (!player) return null;
                     return (
-                      <Group key={player.id} gap="xs" justify="space-between">
+                      <Group
+                        key={player.id}
+                        align="flex-start"
+                        gap="xs"
+                        justify="space-between"
+                        wrap="wrap"
+                      >
                         {editingPlayer === player.id ? (
                           <TextInput
                             size="sm"
@@ -205,7 +255,37 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                           />
                         ) : (
                           <>
-                            <Text size="sm">{player.name}</Text>
+                            <Stack gap="4px" style={{ flex: 1 }}>
+                              <Text size="sm">{player.name}</Text>
+                              {showTableAssignments &&
+                                (playerTableAssignments[player.id]?.length ??
+                                  0) > 0 && (
+                                  <Group gap="4px" wrap="wrap">
+                                    {(playerTableAssignments[player.id] ?? [])
+                                      .slice()
+                                      .sort(
+                                        (a, b) => a.roundNumber - b.roundNumber,
+                                      )
+                                      .map((assignment) => (
+                                        <Badge
+                                          key={`${assignment.roundNumber}-${assignment.tableNumber}`}
+                                          color="blue"
+                                          size="sm"
+                                          variant="light"
+                                        >
+                                          {t(
+                                            'pages.gameDetail.teams.roundShort',
+                                          )}
+                                          {assignment.roundNumber}:
+                                          {t(
+                                            'pages.gameDetail.teams.tableShort',
+                                          )}
+                                          {assignment.tableNumber + 1}
+                                        </Badge>
+                                      ))}
+                                  </Group>
+                                )}
+                            </Stack>
                             {!isCompleted && (
                               <Group gap="xs">
                                 {canEdit && (

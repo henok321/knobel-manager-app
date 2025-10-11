@@ -133,7 +133,8 @@
       },
       "actions": {
         "startGame": "Start Game",
-        "completeGame": "Complete Game"
+        "completeGame": "Complete Game",
+        "completeGameDisabledTooltip": "All scores must be entered for every round before completing the game"
       },
       "tabs": {
         "teams": "Teams",
@@ -145,7 +146,9 @@
         "noTeams": "No teams yet. Add your first team to get started!",
         "players": "Players",
         "confirmDeleteTeam": "Are you sure you want to delete this team? This action cannot be undone.",
-        "confirmDeletePlayer": "Are you sure you want to delete this player? This action cannot be undone."
+        "confirmDeletePlayer": "Are you sure you want to delete this player? This action cannot be undone.",
+        "roundShort": "R",
+        "tableShort": "T"
       },
       "rounds": {
         "selectRound": "Select Round",

@@ -7,9 +7,11 @@ import {
   Tabs,
   Text,
   Title,
+  Tooltip,
 } from '@mantine/core';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import RankingsPanel from './panels/RankingsPanel';
@@ -19,11 +21,15 @@ import { GameStatusEnum, GameUpdateRequest } from '../../generated';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
+import useTables from '../../slices/tables/hooks';
+import { tablesSelectors } from '../../slices/tables/slice';
 
 const GameDetail = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const { t } = useTranslation();
   const { allGames, fetchGames, status, updateGame } = useGames();
+  const { fetchAllTables } = useTables();
+  const allTables = useSelector(tablesSelectors.selectAll);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -32,6 +38,54 @@ const GameDetail = () => {
   }, [status, fetchGames]);
 
   const game = allGames.find((g) => g.id === Number(gameId));
+
+  // Fetch all tables when game is in progress
+  useEffect(() => {
+    if (game && game.status === GameStatusEnum.InProgress) {
+      fetchAllTables(game.id, game.numberOfRounds);
+    }
+  }, [game, fetchAllTables]);
+
+  // Check if all scores are entered using useMemo
+  const canComplete = useMemo(() => {
+    if (!game || game.status !== GameStatusEnum.InProgress) {
+      return false;
+    }
+
+    const tablesByRound: Record<number, typeof allTables> = {};
+    for (const table of allTables) {
+      tablesByRound[table.roundID] ??= [];
+      tablesByRound[table.roundID]?.push(table);
+    }
+
+    // Check all rounds
+    for (let roundNum = 1; roundNum <= game.numberOfRounds; roundNum++) {
+      const tablesForRound = tablesByRound[roundNum];
+
+      // Check if round has any tables
+      if (!tablesForRound || tablesForRound.length === 0) {
+        return false;
+      }
+
+      // Check each table has all scores entered
+      for (const table of tablesForRound) {
+        if (!table.players || table.players.length === 0) {
+          return false;
+        }
+
+        // Check if all players have scores
+        const playerCount = table.players.length;
+        const scoreCount = table.scores?.length || 0;
+
+        if (scoreCount !== playerCount) {
+          return false;
+        }
+      }
+    }
+
+    // All checks passed
+    return true;
+  }, [game, allTables]);
 
   if (status === 'pending' || status === 'idle') {
     return <CenterLoader />;
@@ -118,15 +172,23 @@ const GameDetail = () => {
                 </Button>
               )}
               {game.status === GameStatusEnum.InProgress && (
-                <Button
-                  color="green"
-                  size="sm"
-                  onClick={() =>
-                    handleStatusTransition(GameStatusEnum.Completed)
-                  }
+                <Tooltip
+                  disabled={canComplete}
+                  label={t(
+                    'pages.gameDetail.actions.completeGameDisabledTooltip',
+                  )}
                 >
-                  {t('pages.gameDetail.actions.completeGame')}
-                </Button>
+                  <Button
+                    color="green"
+                    disabled={!canComplete}
+                    size="sm"
+                    onClick={() =>
+                      handleStatusTransition(GameStatusEnum.Completed)
+                    }
+                  >
+                    {t('pages.gameDetail.actions.completeGame')}
+                  </Button>
+                </Tooltip>
               )}
             </Group>
           </Group>

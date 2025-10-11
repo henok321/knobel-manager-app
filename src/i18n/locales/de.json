@@ -133,7 +133,8 @@
       },
       "actions": {
         "startGame": "Spiel starten",
-        "completeGame": "Spiel abschließen"
+        "completeGame": "Spiel abschließen",
+        "completeGameDisabledTooltip": "Alle Punkte müssen für jede Runde eingetragen werden, bevor das Spiel abgeschlossen werden kann"
       },
       "tabs": {
         "teams": "Teams",
@@ -145,7 +146,9 @@
         "noTeams": "Noch keine Teams vorhanden. Füge dein erstes Team hinzu, um zu beginnen!",
         "players": "Spieler",
         "confirmDeleteTeam": "Bist du sicher, dass du dieses Team löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
-        "confirmDeletePlayer": "Bist du sicher, dass du diesen Spieler löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden."
+        "confirmDeletePlayer": "Bist du sicher, dass du diesen Spieler löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "roundShort": "R",
+        "tableShort": "T"
       },
       "rounds": {
         "selectRound": "Runde auswählen",

@@ -1,6 +1,10 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
-import { fetchTablesForRound, updateScoresForTable } from './actions';
+import {
+  fetchTablesForRound,
+  fetchAllTablesForGame,
+  updateScoresForTable,
+} from './actions';
 import { Table } from '../../generated';
 import { RootState } from '../../store/store';
 
@@ -27,12 +31,24 @@ const tablesSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message || 'Failed to fetch tables';
       })
+      .addCase(fetchAllTablesForGame.pending, (state) => {
+        state.status = 'pending';
+        state.error = null;
+      })
+      .addCase(fetchAllTablesForGame.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        tablesAdapter.setAll(state, action.payload);
+      })
+      .addCase(fetchAllTablesForGame.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || 'Failed to fetch all tables';
+      })
       .addCase(updateScoresForTable.pending, (state) => {
         state.status = 'pending';
       })
       .addCase(updateScoresForTable.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        tablesAdapter.setAll(state, action.payload);
+        tablesAdapter.upsertMany(state, action.payload);
       })
       .addCase(updateScoresForTable.rejected, (state, action) => {
         state.status = 'failed';
