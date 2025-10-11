@@ -147,7 +147,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   return (
     <Stack gap="md">
-      {/* Add Team Button */}
       {canAddDelete && (
         <Button
           leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
@@ -318,7 +317,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         })}
       </Stack>
 
-      {/* Team Form Modal */}
       <TeamForm
         createTeam={handleCreateTeam}
         isOpen={isTeamFormOpen}

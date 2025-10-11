@@ -59,13 +59,11 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     [game.numberOfRounds, t],
   );
 
-  // Filter and sort tables (memoized)
   const filteredAndSortedTables = useMemo(() => {
     let filtered = tables.filter(
       (table) => table.players && table.players.length > 0,
     );
 
-    // Filter by search query (search in player names)
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter((table) =>
@@ -75,7 +73,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       );
     }
 
-    // Sort by table number ascending
     return filtered.sort((a, b) => a.tableNumber - b.tableNumber);
   }, [tables, searchQuery]);
 

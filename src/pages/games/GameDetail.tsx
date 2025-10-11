@@ -39,7 +39,6 @@ const GameDetail = () => {
 
   const game = allGames.find((g) => g.id === Number(gameId));
 
-  // Fetch all tables when game is in progress
   useEffect(() => {
     if (game && game.status === GameStatusEnum.InProgress) {
       fetchAllTables(game.id, game.numberOfRounds);
@@ -58,22 +57,18 @@ const GameDetail = () => {
       tablesByRound[table.roundID]?.push(table);
     }
 
-    // Check all rounds
     for (let roundNum = 1; roundNum <= game.numberOfRounds; roundNum++) {
       const tablesForRound = tablesByRound[roundNum];
 
-      // Check if round has any tables
       if (!tablesForRound || tablesForRound.length === 0) {
         return false;
       }
 
-      // Check each table has all scores entered
       for (const table of tablesForRound) {
         if (!table.players || table.players.length === 0) {
           return false;
         }
 
-        // Check if all players have scores
         const playerCount = table.players.length;
         const scoreCount = table.scores?.length || 0;
 
@@ -83,7 +78,6 @@ const GameDetail = () => {
       }
     }
 
-    // All checks passed
     return true;
   }, [game, allTables]);
 
@@ -104,9 +98,6 @@ const GameDetail = () => {
   }
 
   const handleStatusTransition = (newStatus: GameStatusEnum) => {
-    // Note: The generated GameUpdateRequest type doesn't include status,
-    // but the backend API expects it. This should be fixed by regenerating
-    // the API client from the updated OpenAPI spec.
     const gameRequest: GameUpdateRequest = {
       name: game.name,
       numberOfRounds: game.numberOfRounds,
