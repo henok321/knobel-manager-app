@@ -42,7 +42,6 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     (state: RootState) => state.players.entities,
   );
 
-  // Generate round filter options (memoized)
   const roundOptions = useMemo(
     () => [
       { value: 'total', label: t('pages.gameDetail.rankings.totalRanking') },
@@ -60,13 +59,11 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
       setError(null);
 
       try {
-        // Determine which rounds to fetch
         const roundsToFetch =
           selectedRound === 'total'
             ? Array.from({ length: game.numberOfRounds }, (_, i) => i + 1)
             : [Number(selectedRound)];
 
-        // Fetch all tables
         const allTables: TableModel[] = [];
         for (const roundNum of roundsToFetch) {
           try {
@@ -74,7 +71,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
             const tables = response.data;
 
             if (Array.isArray(tables)) {
-              allTables.push(...(tables as TableModel[]));
+              allTables.push(...tables);
             }
           } catch (err) {
             // eslint-disable-next-line no-console
@@ -82,15 +79,12 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
           }
         }
 
-        // Aggregate scores from all fetched tables
         const allScores = aggregateScoresFromTables(allTables);
 
-        // Get all teams for this game
         const gameTeams = game.teams
           .map((teamId) => teamsState[teamId])
           .filter((team) => team !== undefined);
 
-        // Calculate player rankings using mapper
         const playerRankingsData = mapPlayersToRankings(
           gameTeams,
           playersState,
@@ -98,7 +92,6 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
         );
         setPlayerRankings(playerRankingsData);
 
-        // Calculate team rankings using mapper
         const teamRankingsData = mapTeamsToRankings(
           gameTeams,
           playerRankingsData,

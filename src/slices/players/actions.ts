@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { playersApi } from '../../api/apiClient.ts';
-import { Player } from '../../generated/models';
+import { Player } from '../../generated';
 import { RootState } from '../../store/store.ts';
 
 export const updatePlayerAction = createAsyncThunk<

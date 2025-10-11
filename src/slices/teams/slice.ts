@@ -33,7 +33,6 @@ const teamsSlice = createSlice({
   initialState: state,
   reducers: {},
   extraReducers: (builder) => {
-    // fetch teams
     builder
       .addCase(fetchAll.pending, (state) => {
         state.status = 'pending';
@@ -82,12 +81,10 @@ const teamsSlice = createSlice({
 const { selectAll: selectAllTeams } = teamsAdapter.getSelectors<RootState>(
   (state) => state.teams,
 );
-
-const selectTeamsByGameId = createDraftSafeSelector(
+createDraftSafeSelector(
   [selectAllTeams, (_: RootState, gameID: number) => gameID],
   (teams, gameID) => teams.filter((team) => team.gameID === gameID),
 );
-
-export { selectTeamsByGameId, selectAllTeams };
+export { selectAllTeams };
 
 export default teamsSlice.reducer;

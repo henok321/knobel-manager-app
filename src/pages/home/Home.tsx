@@ -47,7 +47,6 @@ const Home = () => {
     return <CenterLoader />;
   }
 
-  // Calculate stats
   const totalGames = allGames.length;
   const totalTeams = allTeams.length;
   const activeGameTeams = activeGame
@@ -119,7 +118,6 @@ const Home = () => {
             </Grid.Col>
           </Grid>
 
-          {/* Active Game Section */}
           {activeGame ? (
             <Card withBorder padding="lg" radius="md" shadow="md">
               <Stack gap="md">
@@ -219,7 +217,6 @@ const Home = () => {
             </Paper>
           )}
 
-          {/* Recent Games Section */}
           {allGames.length > 0 && (
             <div>
               <Group justify="space-between" mb="md">
@@ -267,7 +264,6 @@ const Home = () => {
         </Stack>
       </Container>
 
-      {/* Team Form Modal */}
       {activeGame && (
         <TeamForm
           createTeam={handleCreateTeam}

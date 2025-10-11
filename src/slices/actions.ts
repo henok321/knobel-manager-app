@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NormalizedData } from './types.ts';
 import { gamesApi } from '../api/apiClient.ts';
-import { GetGames200Response } from '../generated/models';
+import { GetGames200Response } from '../generated';
 
 export const fetchAll = createAsyncThunk<NormalizedData>(
   'state/fetchAll',

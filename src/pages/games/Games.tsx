@@ -39,7 +39,6 @@ const Games = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  // Filter and search games
   const filteredGames = useMemo(
     () =>
       allGames.filter((game) => {
@@ -112,7 +111,6 @@ const Games = () => {
             </Button>
           </Group>
 
-          {/* Filters */}
           <Group align="flex-end" justify="space-between">
             <TextInput
               placeholder={t('pages.games.search')}

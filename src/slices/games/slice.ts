@@ -159,7 +159,7 @@ const gamesSlice = createSlice({
       // Find the game that contains this team
       const games = Object.values(state.entities);
       for (const game of games) {
-        if (game && game.teams.includes(teamID)) {
+        if (game?.teams.includes(teamID)) {
           gamesAdapter.updateOne(state, {
             id: game.id,
             changes: {

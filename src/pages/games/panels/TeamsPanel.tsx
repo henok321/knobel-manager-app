@@ -13,7 +13,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { GameStatusEnum } from '../../../generated/models';
+import { GameStatusEnum } from '../../../generated';
 import usePlayers from '../../../slices/players/hooks';
 import useTeams from '../../../slices/teams/hooks';
 import { Game } from '../../../slices/types';
@@ -34,11 +34,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const [editedTeamName, setEditedTeamName] = useState<string>('');
   const [editedPlayerName, setEditedPlayerName] = useState<string>('');
 
-  // Get teams and players for this game from Redux
   const teamsEntities = useSelector((state: RootState) => state.teams.entities);
   const allPlayers = useSelector((state: RootState) => state.players.entities);
 
-  // Memoize teams array to prevent unnecessary rerenders
   const teams = useMemo(
     () =>
       game.teams
@@ -47,14 +45,12 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     [game.teams, teamsEntities],
   );
 
-  // Permission flags based on game status
   const canAddDelete = game.status === GameStatusEnum.Setup;
   const canEdit =
     game.status === GameStatusEnum.Setup ||
     game.status === GameStatusEnum.InProgress;
   const isCompleted = game.status === GameStatusEnum.Completed;
 
-  // Helper to get players for a team
   const getPlayersForTeam = (teamId: number) => {
     const team = teams.find((t) => t?.id === teamId);
     if (!team) return [];
@@ -123,14 +119,12 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         </Button>
       )}
 
-      {/* Info message when no teams */}
       {canAddDelete && teams.length === 0 && (
         <Text c="dimmed" ta="center">
           {t('pages.gameDetail.teams.noTeams')}
         </Text>
       )}
 
-      {/* Teams List */}
       <Stack gap="md">
         {teams.map((team) => {
           if (!team) return null;
@@ -188,7 +182,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                   )}
                 </Group>
 
-                {/* Players */}
                 <Stack gap="xs">
                   <Text fw={500} size="sm">
                     {t('pages.gameDetail.teams.players')}:

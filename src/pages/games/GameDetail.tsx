@@ -17,7 +17,7 @@ import RoundsPanel from './panels/RoundsPanel';
 import TeamsPanel from './panels/TeamsPanel';
 import CenterLoader from '../../components/CenterLoader';
 import Layout from '../../components/Layout';
-import { GameStatusEnum, GameUpdateRequest } from '../../generated/models';
+import { GameStatusEnum, GameUpdateRequest } from '../../generated';
 import useGames from '../../slices/games/hooks';
 
 const GameDetail = () => {

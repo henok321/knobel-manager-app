@@ -79,14 +79,12 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     return filtered.sort((a, b) => a.tableNumber - b.tableNumber);
   }, [tables, searchQuery]);
 
-  // Fetch tables for the selected round
   useEffect(() => {
     if (!game.id || !selectedRound) return;
 
     fetchTables(game.id, Number(selectedRound));
   }, [game.id, selectedRound, fetchTables]);
 
-  // Determine setup mode based on status and error
   useEffect(() => {
     if (status === 'failed' && tablesError?.includes('404')) {
       setIsSetupMode(true);
@@ -102,10 +100,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     setSetupError(null);
 
     try {
-      // Call the setup endpoint to generate tables for all rounds
       await gamesApi.setupGame(game.id);
 
-      // Refresh tables for current round using Redux
       fetchTables(game.id, Number(selectedRound));
       setIsSetupMode(false);
     } catch (err) {
@@ -158,7 +154,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   return (
     <Stack gap="md">
-      {/* Round Selector and Controls */}
       <Group align="flex-end" justify="space-between" wrap="wrap">
         <Select
           data={roundOptions}
@@ -197,7 +192,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         </Alert>
       )}
 
-      {/* Setup Mode */}
       {isSetupMode && !loading && !settingUp && (
         <Card withBorder padding="xl" radius="md">
           <Stack align="center" gap="md">
@@ -214,7 +208,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         </Card>
       )}
 
-      {/* Loading State */}
       {(loading || settingUp) && (
         <Text c="dimmed" ta="center">
           {settingUp
@@ -236,7 +229,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
           </Card>
         )}
 
-      {/* No Search Results */}
       {!loading &&
         !isSetupMode &&
         !settingUp &&
@@ -250,7 +242,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
           </Card>
         )}
 
-      {/* Tables Display */}
       {!loading && !settingUp && filteredAndSortedTables.length > 0 && (
         <Stack gap="md">
           {filteredAndSortedTables.map((table) => (
@@ -287,7 +278,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                   )}
                 </Group>
 
-                {/* Players and Scores */}
                 <MantineTable>
                   <MantineTable.Thead>
                     <MantineTable.Tr>
@@ -327,7 +317,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         </Stack>
       )}
 
-      {/* Score Entry Modal */}
       <ScoreEntryModal
         isOpen={scoreModalOpen}
         roundNumber={Number(selectedRound)}

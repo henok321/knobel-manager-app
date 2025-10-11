@@ -1,11 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { teamsApi } from '../../api/apiClient.ts';
-import {
-  TeamsRequest,
-  CreateTeam201Response,
-  Team,
-} from '../../generated/models';
+import { TeamsRequest, CreateTeam201Response, Team } from '../../generated';
 import { RootState } from '../../store/store.ts';
 
 export type CreateTeam = {

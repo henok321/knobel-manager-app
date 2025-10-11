@@ -7,7 +7,7 @@ import {
   deleteTeamAction,
 } from './actions.ts';
 import { selectAllTeams } from './slice.ts';
-import { TeamsRequest } from '../../generated/models';
+import { TeamsRequest } from '../../generated';
 import { AppDispatch, RootState } from '../../store/store.ts';
 
 const useTeams = () => {

@@ -1,7 +1,7 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
 import { fetchTablesForRound, updateScoresForTable } from './actions';
-import { Table } from '../../generated/models';
+import { Table } from '../../generated';
 import { RootState } from '../../store/store';
 
 export const tablesAdapter = createEntityAdapter<Table>();
@@ -31,7 +31,6 @@ const tablesSlice = createSlice({
         state.status = 'pending';
       })
       .addCase(updateScoresForTable.fulfilled, (state, action) => {
-        // Replace all tables with the updated data from the server
         state.status = 'succeeded';
         tablesAdapter.setAll(state, action.payload);
       })

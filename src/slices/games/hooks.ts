@@ -13,7 +13,7 @@ import {
   selectGamesError,
   selectGamesStatus,
 } from './slice';
-import { GameCreateRequest, GameUpdateRequest } from '../../generated/models';
+import { GameCreateRequest, GameUpdateRequest } from '../../generated';
 import { AppDispatch } from '../../store/store';
 import { fetchAll } from '../actions';
 

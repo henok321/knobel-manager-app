@@ -1,9 +1,4 @@
-import {
-  createDraftSafeSelector,
-  createEntityAdapter,
-  createSlice,
-  EntityState,
-} from '@reduxjs/toolkit';
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store/store.ts';
 import { fetchAll } from '../actions.ts';
@@ -15,9 +10,6 @@ type AdditionalPlayerState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
   error?: Error | null;
 };
-
-export type PlayersState = EntityState<Player, number> & AdditionalPlayerState;
-
 const playersAdapter = createEntityAdapter<Player>();
 
 const state = playersAdapter.getInitialState<AdditionalPlayerState>({
@@ -30,7 +22,6 @@ const playersSlice = createSlice({
   initialState: state,
   reducers: {},
   extraReducers: (builder) => {
-    // fetch games
     builder
       .addCase(fetchAll.pending, (state) => {
         state.status = 'pending';
@@ -44,7 +35,6 @@ const playersSlice = createSlice({
         state.error = new Error(action.error.message);
       });
 
-    // team with players created
     builder
       .addCase(createTeamAction.pending, (state) => {
         state.status = 'pending';
@@ -79,11 +69,6 @@ const { selectAll: selectAllPlayers } = playersAdapter.getSelectors<RootState>(
   (state) => state.players,
 );
 
-const selectPlayersByTeamID = createDraftSafeSelector(
-  [selectAllPlayers, (_: RootState, teamID: number) => teamID],
-  (players, teamID) => players.filter((p) => p.teamID === teamID),
-);
-
-export { selectAllPlayers, selectPlayersByTeamID };
+export { selectAllPlayers };
 
 export default playersSlice.reducer;
