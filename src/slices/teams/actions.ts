@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { teamsApi } from '../../api/apiClient.ts';
-import { TeamsRequest, CreateTeam201Response, Team } from '../../generated';
+import { TeamsRequest, TeamResponse, Team } from '../../generated';
 import { RootState } from '../../store/store.ts';
 
 export type CreateTeam = {
@@ -9,13 +9,13 @@ export type CreateTeam = {
   teamRequest: TeamsRequest;
 };
 
-export const createTeamAction = createAsyncThunk<
-  CreateTeam201Response,
-  CreateTeam
->('teams/createTeam', async (t) => {
-  const response = await teamsApi.createTeam(t.gameID, t.teamRequest);
-  return response.data;
-});
+export const createTeamAction = createAsyncThunk<TeamResponse, CreateTeam>(
+  'teams/createTeam',
+  async (t) => {
+    const response = await teamsApi.createTeam(t.gameID, t.teamRequest);
+    return response.data;
+  },
+);
 
 export const updateTeamAction = createAsyncThunk<
   Team,

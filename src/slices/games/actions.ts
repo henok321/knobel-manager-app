@@ -3,12 +3,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { gamesApi } from '../../api/apiClient.ts';
 import {
   GameCreateRequest,
-  CreateGame201Response,
+  GameResponse,
   GameUpdateRequest,
 } from '../../generated';
 
 export const createGameAction = createAsyncThunk<
-  CreateGame201Response,
+  GameResponse,
   GameCreateRequest
 >('games/createGame', async (gameRequest) => {
   const response = await gamesApi.createGame(gameRequest);
@@ -16,7 +16,7 @@ export const createGameAction = createAsyncThunk<
 });
 
 export const updateGameAction = createAsyncThunk<
-  CreateGame201Response,
+  GameResponse,
   { gameID: number; gameRequest: GameUpdateRequest }
 >('games/updateGame', async ({ gameID, gameRequest }) => {
   const response = await gamesApi.updateGame(gameID, gameRequest);
