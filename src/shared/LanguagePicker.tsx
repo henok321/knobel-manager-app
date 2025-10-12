@@ -14,12 +14,12 @@ const LanguagePicker: React.FC = () => {
   return (
     <Select
       data={[
-        { value: 'en', label: 'English' },
-        { value: 'de', label: 'Deutsch' },
+        { value: 'en', label: '🇬🇧 English' },
+        { value: 'de', label: '🇩🇪 Deutsch' },
       ]}
       size="sm"
       value={i18n.language}
-      w={120}
+      w={150}
       onChange={handleLanguageChange}
     />
   );
