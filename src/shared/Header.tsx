@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import classes from './Header.module.css';
+import LanguagePicker from './LanguagePicker';
 import { useAuth } from '../auth/useAuth';
 
 interface NavItem {
@@ -54,6 +55,8 @@ const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
           <Group className={classes.linkGroup}>{items}</Group>
         </Group>
       )}
+
+      <LanguagePicker />
 
       {navbarActive && (
         <Button

@@ -10,6 +10,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',
+    supportedLngs: ['en', 'de'],
     debug: true,
     detection: {
       order: ['querystring', 'localStorage', 'cookie', 'navigator'],
