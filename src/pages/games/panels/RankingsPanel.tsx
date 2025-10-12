@@ -69,7 +69,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
         for (const roundNum of roundsToFetch) {
           try {
             const response = await tablesApi.getTables(game.id, roundNum);
-            const tables = response.data;
+            const tables = response.data.tables;
 
             if (Array.isArray(tables)) {
               allTables.push(...tables);
