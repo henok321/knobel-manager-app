@@ -60,8 +60,12 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   );
 
   const filteredAndSortedTables = useMemo(() => {
+    // Filter by selected round first
     let filtered = tables.filter(
-      (table) => table.players && table.players.length > 0,
+      (table) =>
+        table.roundID === Number(selectedRound) &&
+        table.players &&
+        table.players.length > 0,
     );
 
     if (searchQuery.trim()) {
@@ -74,7 +78,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     }
 
     return filtered.sort((a, b) => a.tableNumber - b.tableNumber);
-  }, [tables, searchQuery]);
+  }, [tables, searchQuery, selectedRound]);
 
   useEffect(() => {
     if (!game.id || !selectedRound) return;

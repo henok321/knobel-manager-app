@@ -7,25 +7,19 @@ import {
   Grid,
   Group,
   Stack,
-  Tabs,
   Text,
   Title,
-  Tooltip,
 } from '@mantine/core';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { GameStatusEnum, GameUpdateRequest } from '../../generated';
+import GameViewContent from '../../components/GameViewContent';
+import { GameStatusEnum } from '../../generated';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
 import useTables from '../../slices/tables/hooks';
-import { tablesSelectors } from '../../slices/tables/slice';
-import RankingsPanel from '../games/panels/RankingsPanel';
-import RoundsPanel from '../games/panels/RoundsPanel';
-import TeamsPanel from '../games/panels/TeamsPanel';
 
 const badgeColorByStatus = (gameStatus: GameStatusEnum) =>
   gameStatus === GameStatusEnum.InProgress
@@ -37,10 +31,8 @@ const badgeColorByStatus = (gameStatus: GameStatusEnum) =>
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { activeGame, allGames, fetchGames, status, updateGame, activateGame } =
-    useGames();
+  const { activeGame, allGames, fetchGames, status, activateGame } = useGames();
   const { fetchAllTables } = useTables();
-  const allTables = useSelector(tablesSelectors.selectAll);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -53,41 +45,6 @@ const Home = () => {
       fetchAllTables(activeGame.id, activeGame.numberOfRounds);
     }
   }, [activeGame, fetchAllTables]);
-
-  const canComplete = useMemo(() => {
-    if (!activeGame || activeGame.status !== GameStatusEnum.InProgress) {
-      return false;
-    }
-
-    const tablesByRound: Record<number, typeof allTables> = {};
-    for (const table of allTables) {
-      tablesByRound[table.roundID] ??= [];
-      tablesByRound[table.roundID]?.push(table);
-    }
-
-    for (let roundNum = 1; roundNum <= activeGame.numberOfRounds; roundNum++) {
-      const tablesForRound = tablesByRound[roundNum];
-
-      if (!tablesForRound || tablesForRound.length === 0) {
-        return false;
-      }
-
-      for (const table of tablesForRound) {
-        if (!table.players || table.players.length === 0) {
-          return false;
-        }
-
-        const playerCount = table.players.length;
-        const scoreCount = table.scores?.length || 0;
-
-        if (scoreCount !== playerCount) {
-          return false;
-        }
-      }
-    }
-
-    return true;
-  }, [activeGame, allTables]);
 
   if (status === 'pending' || status === 'idle') {
     return <CenterLoader />;
@@ -234,121 +191,10 @@ const Home = () => {
     );
   }
 
-  const handleStatusTransition = (newStatus: GameStatusEnum) => {
-    const gameRequest: GameUpdateRequest = {
-      name: activeGame.name,
-      numberOfRounds: activeGame.numberOfRounds,
-      teamSize: activeGame.teamSize,
-      tableSize: activeGame.tableSize,
-      status: newStatus,
-    };
-    updateGame(activeGame.id, gameRequest);
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'setup':
-        return 'gray';
-      case 'in_progress':
-        return 'blue';
-      case 'completed':
-        return 'green';
-      default:
-        return 'gray';
-    }
-  };
-
   return (
     <Layout navbarActive>
       <Container py="md" size="xl">
-        <Stack gap="md">
-          {/* Game Header */}
-          <Group align="center" justify="space-between">
-            <div>
-              <Title order={1}>{activeGame.name}</Title>
-              <Group gap="xs" mt="xs">
-                <Text c="dimmed" size="sm">
-                  {t('pages.gameDetail.teamSize')}: {activeGame.teamSize}
-                </Text>
-                <Text c="dimmed">•</Text>
-                <Text c="dimmed" size="sm">
-                  {t('pages.gameDetail.tableSize')}: {activeGame.tableSize}
-                </Text>
-                <Text c="dimmed">•</Text>
-                <Text c="dimmed" size="sm">
-                  {t('pages.gameDetail.rounds.round')}:{' '}
-                  {activeGame.numberOfRounds}
-                </Text>
-              </Group>
-            </div>
-            <Group gap="sm">
-              <Badge
-                color={getStatusColor(activeGame.status)}
-                size="lg"
-                variant="filled"
-              >
-                {t(`pages.gameDetail.status.${activeGame.status}`)}
-              </Badge>
-              {activeGame.status === GameStatusEnum.Setup && (
-                <Button
-                  color="blue"
-                  size="sm"
-                  onClick={() =>
-                    handleStatusTransition(GameStatusEnum.InProgress)
-                  }
-                >
-                  {t('pages.gameDetail.actions.startGame')}
-                </Button>
-              )}
-              {activeGame.status === GameStatusEnum.InProgress && (
-                <Tooltip
-                  disabled={canComplete}
-                  label={t(
-                    'pages.gameDetail.actions.completeGameDisabledTooltip',
-                  )}
-                >
-                  <Button
-                    color="green"
-                    disabled={!canComplete}
-                    size="sm"
-                    onClick={() =>
-                      handleStatusTransition(GameStatusEnum.Completed)
-                    }
-                  >
-                    {t('pages.gameDetail.actions.completeGame')}
-                  </Button>
-                </Tooltip>
-              )}
-            </Group>
-          </Group>
-
-          {/* Tabs */}
-          <Tabs defaultValue="teams">
-            <Tabs.List>
-              <Tabs.Tab value="teams">
-                {t('pages.gameDetail.tabs.teams')}
-              </Tabs.Tab>
-              <Tabs.Tab value="rounds">
-                {t('pages.gameDetail.tabs.rounds')}
-              </Tabs.Tab>
-              <Tabs.Tab value="rankings">
-                {t('pages.gameDetail.tabs.rankings')}
-              </Tabs.Tab>
-            </Tabs.List>
-
-            <Tabs.Panel pt="md" value="teams">
-              <TeamsPanel game={activeGame} />
-            </Tabs.Panel>
-
-            <Tabs.Panel pt="md" value="rounds">
-              <RoundsPanel game={activeGame} />
-            </Tabs.Panel>
-
-            <Tabs.Panel pt="md" value="rankings">
-              <RankingsPanel game={activeGame} />
-            </Tabs.Panel>
-          </Tabs>
-        </Stack>
+        <GameViewContent game={activeGame} />
       </Container>
     </Layout>
   );

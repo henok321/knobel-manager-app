@@ -142,7 +142,17 @@
       "actions": {
         "startGame": "Start Game",
         "completeGame": "Complete Game",
-        "completeGameDisabledTooltip": "All scores must be entered for every round before completing the game"
+        "completeGameDisabledTooltip": "All scores must be entered for every round before completing the game",
+        "exportPDF": "Export PDF"
+      },
+      "pdfMenu": {
+        "label": "Export Options",
+        "tablePlan": "Table Plan (All Rounds)",
+        "scoreSheets": "Score Sheets (All Tables)",
+        "teamHandouts": "Team Handouts (All Teams)",
+        "rankingsLabel": "Rankings",
+        "rankingsAll": "All Rounds (Total)",
+        "rankingsRound": "Round {{round}}"
       },
       "tabs": {
         "teams": "Teams",
@@ -192,6 +202,59 @@
         "filterByRound": "Filter by Round",
         "totalRanking": "Total (All Rounds)"
       }
+    }
+  },
+  "pdf": {
+    "teamHandout": {
+      "title": "Team Handout",
+      "team": "Team",
+      "round": "Round",
+      "table": "Table",
+      "tableAssignment": "Table Assignment",
+      "notAssigned": "Not Assigned",
+      "summary": "Team Summary",
+      "player": "Player",
+      "filename": "Team_Handout",
+      "allTeamsTitle": "All Team Handouts",
+      "allTeamsSubtitle": "Complete Tournament Schedule for All Teams",
+      "allTeamsFilename": "All_Team_Handouts"
+    },
+    "tablePlan": {
+      "title": "Table Plan",
+      "subtitle": "Tournament Matchmaking Overview",
+      "round": "Round",
+      "table": "Table",
+      "player": "Player",
+      "team": "Team",
+      "players": "Players",
+      "noTables": "No tables assigned for this round",
+      "filename": "Table_Plan"
+    },
+    "scoreSheets": {
+      "title": "Score Sheets",
+      "subtitle": "Manual Score Entry",
+      "round": "Round",
+      "table": "Table",
+      "instructions": "The winner of the table receives 4 points + remaining lives, the runner-up receives 3 points, etc.",
+      "player": "Player",
+      "team": "Team",
+      "score": "Score",
+      "notes": "Notes:",
+      "filename": "Score_Sheets"
+    },
+    "rankings": {
+      "title": "Rankings",
+      "subtitle": "Current Standings",
+      "round": "Round",
+      "total": "Total (All Rounds)",
+      "teamRankings": "Team Rankings",
+      "playerRankings": "Player Rankings",
+      "rank": "Rank",
+      "team": "Team",
+      "player": "Player",
+      "totalScore": "Total Score",
+      "noData": "No ranking data available",
+      "filename": "Rankings"
     }
   }
 }

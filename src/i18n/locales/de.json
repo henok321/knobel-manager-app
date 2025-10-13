@@ -39,6 +39,14 @@
       "heading": "Startseite",
       "noActiveGame": "Kein aktives Spiel",
       "createTeamButton": "Team erstellen",
+      "picker": {
+        "title": "Aktives Spiel auswählen",
+        "subtitle": "Wähle ein Spiel zum Verwalten",
+        "noGames": "Keine Spiele verfügbar. Erstelle dein erstes Spiel, um loszulegen!",
+        "createGame": "Neues Spiel erstellen",
+        "selectGame": "Dieses Spiel auswählen",
+        "teams": "Teams"
+      },
       "dashboard": {
         "title": "Dashboard",
         "subtitle": "Willkommen beim Knobel Manager",
@@ -134,7 +142,17 @@
       "actions": {
         "startGame": "Spiel starten",
         "completeGame": "Spiel abschließen",
-        "completeGameDisabledTooltip": "Alle Punkte müssen für jede Runde eingetragen werden, bevor das Spiel abgeschlossen werden kann"
+        "completeGameDisabledTooltip": "Alle Punkte müssen für jede Runde eingetragen werden, bevor das Spiel abgeschlossen werden kann",
+        "exportPDF": "PDF exportieren"
+      },
+      "pdfMenu": {
+        "label": "Export-Optionen",
+        "tablePlan": "Tischplan (Alle Runden)",
+        "scoreSheets": "Punktebögen (Alle Tische)",
+        "teamHandouts": "Team-Handouts (Alle Teams)",
+        "rankingsLabel": "Ranglisten",
+        "rankingsAll": "Alle Runden (Gesamt)",
+        "rankingsRound": "Runde {{round}}"
       },
       "tabs": {
         "teams": "Teams",
@@ -184,6 +202,59 @@
         "filterByRound": "Nach Runde filtern",
         "totalRanking": "Gesamt (Alle Runden)"
       }
+    }
+  },
+  "pdf": {
+    "teamHandout": {
+      "title": "Team-Handout",
+      "team": "Team",
+      "round": "Runde",
+      "table": "Tisch",
+      "tableAssignment": "Tischzuweisung",
+      "notAssigned": "Nicht zugewiesen",
+      "summary": "Team-Übersicht",
+      "player": "Spieler",
+      "filename": "Team_Handout",
+      "allTeamsTitle": "Alle Team-Handouts",
+      "allTeamsSubtitle": "Vollständiger Turnierplan für alle Teams",
+      "allTeamsFilename": "Alle_Team_Handouts"
+    },
+    "tablePlan": {
+      "title": "Tischplan",
+      "subtitle": "Turnier-Spielpaarungen Übersicht",
+      "round": "Runde",
+      "table": "Tisch",
+      "player": "Spieler",
+      "team": "Team",
+      "players": "Spieler",
+      "noTables": "Keine Tische für diese Runde zugewiesen",
+      "filename": "Tischplan"
+    },
+    "scoreSheets": {
+      "title": "Punktebögen",
+      "subtitle": "Manuelle Punkteeintragung",
+      "round": "Runde",
+      "table": "Tisch",
+      "instructions": "Der Tischsieger bekommt 4 Punkte + verbleibende Leben, der Zweitplatzierte bekommt 3 Punkte usw.",
+      "player": "Spieler",
+      "team": "Team",
+      "score": "Punktzahl",
+      "notes": "Notizen:",
+      "filename": "Punkteboegen"
+    },
+    "rankings": {
+      "title": "Ranglisten",
+      "subtitle": "Aktuelle Platzierungen",
+      "round": "Runde",
+      "total": "Gesamt (Alle Runden)",
+      "teamRankings": "Team-Rangliste",
+      "playerRankings": "Spieler-Rangliste",
+      "rank": "Rang",
+      "team": "Team",
+      "player": "Spieler",
+      "totalScore": "Gesamtpunktzahl",
+      "noData": "Keine Ranglistendaten verfügbar",
+      "filename": "Ranglisten"
     }
   }
 }

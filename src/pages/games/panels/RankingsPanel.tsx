@@ -1,13 +1,4 @@
-import {
-  Alert,
-  Card,
-  Group,
-  Select,
-  Stack,
-  Table,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Alert, Card, Select, Stack, Table, Text, Title } from '@mantine/core';
 import { useMemo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -138,15 +129,13 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   return (
     <Stack gap="xl">
       {/* Round Filter */}
-      <Group justify="flex-start">
-        <Select
-          data={roundOptions}
-          label={t('pages.gameDetail.rankings.filterByRound')}
-          style={{ width: 250 }}
-          value={selectedRound}
-          onChange={(value) => setSelectedRound(value || 'total')}
-        />
-      </Group>
+      <Select
+        data={roundOptions}
+        label={t('pages.gameDetail.rankings.filterByRound')}
+        style={{ width: 250 }}
+        value={selectedRound}
+        onChange={(value) => setSelectedRound(value || 'total')}
+      />
 
       {/* Team Rankings */}
       <Card withBorder padding="lg" radius="md" shadow="sm">
