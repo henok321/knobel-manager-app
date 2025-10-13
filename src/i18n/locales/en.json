@@ -39,6 +39,14 @@
       "heading": "Home",
       "noActiveGame": "No active game",
       "createTeamButton": "Create Team",
+      "picker": {
+        "title": "Select Active Game",
+        "subtitle": "Choose a game to manage",
+        "noGames": "No games available. Create your first game to get started!",
+        "createGame": "Create New Game",
+        "selectGame": "Select This Game",
+        "teams": "Teams"
+      },
       "dashboard": {
         "title": "Dashboard",
         "subtitle": "Welcome to Knobel Manager",

@@ -1,3 +1,4 @@
+import { PlusIcon } from '@heroicons/react/24/solid';
 import {
   Badge,
   Button,
@@ -5,27 +6,34 @@ import {
   Container,
   Grid,
   Group,
-  Paper,
   Stack,
+  Tabs,
   Text,
   Title,
+  Tooltip,
 } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import TeamForm, { TeamFormData } from './TeamForm';
+import { GameStatusEnum, GameUpdateRequest } from '../../generated';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
-import useTeams from '../../slices/teams/hooks';
+import useTables from '../../slices/tables/hooks';
+import { tablesSelectors } from '../../slices/tables/slice';
+import RankingsPanel from '../games/panels/RankingsPanel';
+import RoundsPanel from '../games/panels/RoundsPanel';
+import TeamsPanel from '../games/panels/TeamsPanel';
 
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { allGames, activeGame, fetchGames, status } = useGames();
-  const { allTeams, createTeam } = useTeams();
-  const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
+  const { activeGame, allGames, fetchGames, status, updateGame, activateGame } =
+    useGames();
+  const { fetchAllTables } = useTables();
+  const allTables = useSelector(tablesSelectors.selectAll);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -33,245 +41,315 @@ const Home = () => {
     }
   }, [status, fetchGames]);
 
-  const handleCreateTeam = (teamData: TeamFormData) => {
-    if (!activeGame) return;
-    const teamsRequest = {
-      name: teamData.name,
-      players: teamData.members.map((name) => ({ name })),
-    };
-    createTeam(activeGame.id, teamsRequest);
-    setIsTeamFormOpen(false);
-  };
+  useEffect(() => {
+    if (activeGame && activeGame.status === GameStatusEnum.InProgress) {
+      fetchAllTables(activeGame.id, activeGame.numberOfRounds);
+    }
+  }, [activeGame, fetchAllTables]);
+
+  // Check if all scores are entered using useMemo
+  const canComplete = useMemo(() => {
+    if (!activeGame || activeGame.status !== GameStatusEnum.InProgress) {
+      return false;
+    }
+
+    const tablesByRound: Record<number, typeof allTables> = {};
+    for (const table of allTables) {
+      tablesByRound[table.roundID] ??= [];
+      tablesByRound[table.roundID]?.push(table);
+    }
+
+    for (let roundNum = 1; roundNum <= activeGame.numberOfRounds; roundNum++) {
+      const tablesForRound = tablesByRound[roundNum];
+
+      if (!tablesForRound || tablesForRound.length === 0) {
+        return false;
+      }
+
+      for (const table of tablesForRound) {
+        if (!table.players || table.players.length === 0) {
+          return false;
+        }
+
+        const playerCount = table.players.length;
+        const scoreCount = table.scores?.length || 0;
+
+        if (scoreCount !== playerCount) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }, [activeGame, allTables]);
 
   if (status === 'pending' || status === 'idle') {
     return <CenterLoader />;
   }
 
-  const totalGames = allGames.length;
-  const totalTeams = allTeams.length;
-  const activeGameTeams = activeGame
-    ? allTeams.filter((team) => activeGame.teams.includes(team?.id || 0)).length
-    : 0;
+  // Show game picker when no active game
+  if (!activeGame) {
+    return (
+      <Layout navbarActive>
+        <Container py="xl" size="xl">
+          <Stack gap="xl">
+            {/* Header */}
+            <div>
+              <Title mb="xs" order={1}>
+                {t('pages.home.picker.title')}
+              </Title>
+              <Text c="dimmed" size="lg">
+                {t('pages.home.picker.subtitle')}
+              </Text>
+            </div>
 
-  return (
-    <Layout navbarActive>
-      <Container py="xl" size="xl">
-        <Stack gap="xl">
-          {/* Header */}
-          <div>
-            <Title mb="xs" order={1}>
-              {t('pages.home.dashboard.title')}
-            </Title>
-            <Text c="dimmed" size="lg">
-              {t('pages.home.dashboard.subtitle')}
-            </Text>
-          </div>
-
-          {/* Stats Cards */}
-          <Grid>
-            <Grid.Col span={{ base: 12, sm: 4 }}>
-              <Paper withBorder p="md" radius="md" shadow="sm">
-                <Stack gap="xs">
-                  <Text c="dimmed" fw={700} size="xs" tt="uppercase">
-                    {t('pages.home.dashboard.stats.totalGames')}
+            {/* No games state */}
+            {allGames.length === 0 ? (
+              <Card withBorder p="xl" radius="md">
+                <Stack align="center" gap="md">
+                  <Text c="dimmed" size="lg" ta="center">
+                    {t('pages.home.picker.noGames')}
                   </Text>
-                  <Group align="center" justify="space-between">
-                    <Text fw={700} size="xl">
-                      {totalGames}
-                    </Text>
-                    <Button
-                      size="xs"
-                      variant="light"
-                      onClick={() => navigate('/games')}
-                    >
-                      {t('pages.home.dashboard.viewAll')}
-                    </Button>
-                  </Group>
-                </Stack>
-              </Paper>
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, sm: 4 }}>
-              <Paper withBorder p="md" radius="md" shadow="sm">
-                <Stack gap="xs">
-                  <Text c="dimmed" fw={700} size="xs" tt="uppercase">
-                    {t('pages.home.dashboard.stats.totalTeams')}
-                  </Text>
-                  <Text fw={700} size="xl">
-                    {totalTeams}
-                  </Text>
-                </Stack>
-              </Paper>
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, sm: 4 }}>
-              <Paper withBorder p="md" radius="md" shadow="sm">
-                <Stack gap="xs">
-                  <Text c="dimmed" fw={700} size="xs" tt="uppercase">
-                    {t('pages.home.dashboard.stats.activeGame')}
-                  </Text>
-                  <Text fw={700} size="xl">
-                    {activeGame ? '1' : '0'}
-                  </Text>
-                </Stack>
-              </Paper>
-            </Grid.Col>
-          </Grid>
-
-          {activeGame ? (
-            <Card withBorder padding="lg" radius="md" shadow="md">
-              <Stack gap="md">
-                <Group align="center" justify="space-between">
-                  <div>
-                    <Group gap="xs" mb="xs">
-                      <Title order={2}>{activeGame.name}</Title>
-                      <Badge
-                        color={
-                          activeGame.status === 'active' ? 'green' : 'blue'
-                        }
-                        size="lg"
-                        variant="filled"
-                      >
-                        {activeGame.status}
-                      </Badge>
-                    </Group>
-                    <Text c="dimmed">
-                      {t('pages.home.dashboard.activeGame.description')}
-                    </Text>
-                  </div>
                   <Button
+                    leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
                     size="lg"
-                    onClick={() => navigate(`/games/${activeGame.id}`)}
+                    onClick={() => navigate('/games')}
                   >
-                    {t('pages.home.dashboard.activeGame.manage')}
+                    {t('pages.home.picker.createGame')}
+                  </Button>
+                </Stack>
+              </Card>
+            ) : (
+              <>
+                {/* Action Button */}
+                <Group justify="flex-end">
+                  <Button
+                    leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
+                    size="md"
+                    variant="light"
+                    onClick={() => navigate('/games')}
+                  >
+                    {t('pages.home.picker.createGame')}
                   </Button>
                 </Group>
 
-                {/* Game Details Grid */}
+                {/* Games Grid */}
                 <Grid>
-                  <Grid.Col span={{ base: 6, sm: 3 }}>
-                    <Stack gap={4}>
-                      <Text c="dimmed" size="sm">
-                        {t('pages.gameDetail.teamSize')}
-                      </Text>
-                      <Text fw={600} size="lg">
-                        {activeGame.teamSize}
-                      </Text>
-                    </Stack>
-                  </Grid.Col>
-                  <Grid.Col span={{ base: 6, sm: 3 }}>
-                    <Stack gap={4}>
-                      <Text c="dimmed" size="sm">
-                        {t('pages.gameDetail.tableSize')}
-                      </Text>
-                      <Text fw={600} size="lg">
-                        {activeGame.tableSize}
-                      </Text>
-                    </Stack>
-                  </Grid.Col>
-                  <Grid.Col span={{ base: 6, sm: 3 }}>
-                    <Stack gap={4}>
-                      <Text c="dimmed" size="sm">
-                        {t('pages.gameDetail.rounds.round')}
-                      </Text>
-                      <Text fw={600} size="lg">
-                        {activeGame.numberOfRounds}
-                      </Text>
-                    </Stack>
-                  </Grid.Col>
-                  <Grid.Col span={{ base: 6, sm: 3 }}>
-                    <Stack gap={4}>
-                      <Text c="dimmed" size="sm">
-                        {t('pages.home.dashboard.activeGame.teams')}
-                      </Text>
-                      <Text fw={600} size="lg">
-                        {activeGameTeams}
-                      </Text>
-                    </Stack>
-                  </Grid.Col>
-                </Grid>
+                  {allGames.map((game) => (
+                    <Grid.Col key={game.id} span={{ base: 12, md: 6, lg: 4 }}>
+                      <Card
+                        withBorder
+                        padding="lg"
+                        radius="md"
+                        shadow="sm"
+                        style={{
+                          height: '100%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                      >
+                        <Stack
+                          gap="md"
+                          style={{
+                            flex: 1,
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <div>
+                            {/* Header */}
+                            <Group mb="md">
+                              <div style={{ flex: 1 }}>
+                                <Title mb="xs" order={3}>
+                                  {game.name}
+                                </Title>
+                                <Badge
+                                  color={
+                                    game.status === GameStatusEnum.InProgress
+                                      ? 'blue'
+                                      : game.status === GameStatusEnum.Completed
+                                        ? 'green'
+                                        : 'gray'
+                                  }
+                                  variant="light"
+                                >
+                                  {t(`pages.gameDetail.status.${game.status}`)}
+                                </Badge>
+                              </div>
+                            </Group>
 
-                {/* Quick Actions */}
-                {activeGame.status !== 'active' && (
-                  <Group gap="sm" mt="md">
-                    <Button
-                      variant="light"
-                      onClick={() => setIsTeamFormOpen(true)}
-                    >
-                      {t('pages.home.dashboard.activeGame.addTeam')}
-                    </Button>
-                  </Group>
-                )}
-              </Stack>
-            </Card>
-          ) : (
-            <Paper withBorder p="xl" radius="md">
-              <Stack align="center" gap="md">
-                <Text c="dimmed" size="lg" ta="center">
-                  {t('pages.home.dashboard.noActiveGame')}
-                </Text>
-                <Button size="lg" onClick={() => navigate('/games')}>
-                  {t('pages.home.dashboard.createGame')}
-                </Button>
-              </Stack>
-            </Paper>
-          )}
+                            {/* Details */}
+                            <Stack gap="xs">
+                              <Group gap="xs">
+                                <Text c="dimmed" size="sm">
+                                  {t('pages.gameDetail.teamSize')}:
+                                </Text>
+                                <Text fw={600} size="sm">
+                                  {game.teamSize}
+                                </Text>
+                              </Group>
+                              <Group gap="xs">
+                                <Text c="dimmed" size="sm">
+                                  {t('pages.gameDetail.tableSize')}:
+                                </Text>
+                                <Text fw={600} size="sm">
+                                  {game.tableSize}
+                                </Text>
+                              </Group>
+                              <Group gap="xs">
+                                <Text c="dimmed" size="sm">
+                                  {t('pages.gameDetail.rounds.round')}:
+                                </Text>
+                                <Text fw={600} size="sm">
+                                  {game.numberOfRounds}
+                                </Text>
+                              </Group>
+                              <Group gap="xs">
+                                <Text c="dimmed" size="sm">
+                                  {t('pages.home.picker.teams')}:
+                                </Text>
+                                <Text fw={600} size="sm">
+                                  {game.teams.length}
+                                </Text>
+                              </Group>
+                            </Stack>
+                          </div>
 
-          {allGames.length > 0 && (
-            <div>
-              <Group justify="space-between" mb="md">
-                <Title order={3}>{t('pages.home.dashboard.recentGames')}</Title>
-                <Button variant="subtle" onClick={() => navigate('/games')}>
-                  {t('pages.home.dashboard.viewAll')}
-                </Button>
-              </Group>
-              <Grid>
-                {allGames.slice(0, 3).map((game) => (
-                  <Grid.Col key={game.id} span={{ base: 12, sm: 6, md: 4 }}>
-                    <Card
-                      withBorder
-                      padding="md"
-                      radius="md"
-                      shadow="sm"
-                      style={{ cursor: 'pointer', height: '100%' }}
-                      onClick={() => navigate(`/games/${game.id}`)}
-                    >
-                      <Stack gap="xs">
-                        <Group align="center" justify="space-between">
-                          <Text fw={600} size="lg">
-                            {game.name}
-                          </Text>
-                          <Badge
-                            color={game.status === 'active' ? 'green' : 'gray'}
-                            size="sm"
-                            variant="light"
+                          {/* Actions */}
+                          <Button
+                            fullWidth
+                            onClick={() => activateGame(game.id)}
                           >
-                            {game.status}
-                          </Badge>
-                        </Group>
-                        <Text c="dimmed" size="sm">
-                          {game.teams.length} {t('pages.home.dashboard.teams')}{' '}
-                          • {game.numberOfRounds}{' '}
-                          {t('pages.home.dashboard.rounds')}
-                        </Text>
-                      </Stack>
-                    </Card>
-                  </Grid.Col>
-                ))}
-              </Grid>
+                            {t('pages.home.picker.selectGame')}
+                          </Button>
+                        </Stack>
+                      </Card>
+                    </Grid.Col>
+                  ))}
+                </Grid>
+              </>
+            )}
+          </Stack>
+        </Container>
+      </Layout>
+    );
+  }
+
+  const handleStatusTransition = (newStatus: GameStatusEnum) => {
+    const gameRequest: GameUpdateRequest = {
+      name: activeGame.name,
+      numberOfRounds: activeGame.numberOfRounds,
+      teamSize: activeGame.teamSize,
+      tableSize: activeGame.tableSize,
+      status: newStatus,
+    };
+    updateGame(activeGame.id, gameRequest);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'setup':
+        return 'gray';
+      case 'in_progress':
+        return 'blue';
+      case 'completed':
+        return 'green';
+      default:
+        return 'gray';
+    }
+  };
+
+  return (
+    <Layout navbarActive>
+      <Container py="md" size="xl">
+        <Stack gap="md">
+          {/* Game Header */}
+          <Group align="center" justify="space-between">
+            <div>
+              <Title order={1}>{activeGame.name}</Title>
+              <Group gap="xs" mt="xs">
+                <Text c="dimmed" size="sm">
+                  {t('pages.gameDetail.teamSize')}: {activeGame.teamSize}
+                </Text>
+                <Text c="dimmed">•</Text>
+                <Text c="dimmed" size="sm">
+                  {t('pages.gameDetail.tableSize')}: {activeGame.tableSize}
+                </Text>
+                <Text c="dimmed">•</Text>
+                <Text c="dimmed" size="sm">
+                  {t('pages.gameDetail.rounds.round')}:{' '}
+                  {activeGame.numberOfRounds}
+                </Text>
+              </Group>
             </div>
-          )}
+            <Group gap="sm">
+              <Badge
+                color={getStatusColor(activeGame.status)}
+                size="lg"
+                variant="filled"
+              >
+                {t(`pages.gameDetail.status.${activeGame.status}`)}
+              </Badge>
+              {activeGame.status === GameStatusEnum.Setup && (
+                <Button
+                  color="blue"
+                  size="sm"
+                  onClick={() =>
+                    handleStatusTransition(GameStatusEnum.InProgress)
+                  }
+                >
+                  {t('pages.gameDetail.actions.startGame')}
+                </Button>
+              )}
+              {activeGame.status === GameStatusEnum.InProgress && (
+                <Tooltip
+                  disabled={canComplete}
+                  label={t(
+                    'pages.gameDetail.actions.completeGameDisabledTooltip',
+                  )}
+                >
+                  <Button
+                    color="green"
+                    disabled={!canComplete}
+                    size="sm"
+                    onClick={() =>
+                      handleStatusTransition(GameStatusEnum.Completed)
+                    }
+                  >
+                    {t('pages.gameDetail.actions.completeGame')}
+                  </Button>
+                </Tooltip>
+              )}
+            </Group>
+          </Group>
+
+          {/* Tabs */}
+          <Tabs defaultValue="teams">
+            <Tabs.List>
+              <Tabs.Tab value="teams">
+                {t('pages.gameDetail.tabs.teams')}
+              </Tabs.Tab>
+              <Tabs.Tab value="rounds">
+                {t('pages.gameDetail.tabs.rounds')}
+              </Tabs.Tab>
+              <Tabs.Tab value="rankings">
+                {t('pages.gameDetail.tabs.rankings')}
+              </Tabs.Tab>
+            </Tabs.List>
+
+            <Tabs.Panel pt="md" value="teams">
+              <TeamsPanel game={activeGame} />
+            </Tabs.Panel>
+
+            <Tabs.Panel pt="md" value="rounds">
+              <RoundsPanel game={activeGame} />
+            </Tabs.Panel>
+
+            <Tabs.Panel pt="md" value="rankings">
+              <RankingsPanel game={activeGame} />
+            </Tabs.Panel>
+          </Tabs>
         </Stack>
       </Container>
-
-      {activeGame && (
-        <TeamForm
-          createTeam={handleCreateTeam}
-          isOpen={isTeamFormOpen}
-          teamSize={activeGame.teamSize}
-          onClose={() => setIsTeamFormOpen(false)}
-        />
-      )}
     </Layout>
   );
 };
