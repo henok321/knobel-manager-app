@@ -235,7 +235,7 @@
       "subtitle": "Manual Score Entry",
       "round": "Round",
       "table": "Table",
-      "instructions": "The winner of the table receives 4 points + remaining lives, the runner-up receives 3 points, etc.",
+      "instructions": "The winner of the table receives 4 points + remaining lives, the runner-up receives 3 points, etc. Once the game is over, the runner-up submits this score sheet to the tournament management.",
       "player": "Player",
       "team": "Team",
       "score": "Score",

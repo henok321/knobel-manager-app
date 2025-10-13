@@ -56,11 +56,14 @@ export const generateScoreSheets = (
       );
       startY += 15;
 
-      // Instructions
+      // Instructions - wrap text if too long (max width: 180mm)
       doc.setFontSize(10);
       doc.setFont('helvetica', 'italic');
-      doc.text(t('pdf.scoreSheets.instructions'), 14, startY);
-      startY += 10;
+      const instructionsText = t('pdf.scoreSheets.instructions');
+      const wrappedInstructions = doc.splitTextToSize(instructionsText, 180);
+      doc.text(wrappedInstructions, 14, startY);
+      // Calculate height based on number of lines (each line is ~5 units)
+      startY += wrappedInstructions.length * 5 + 5;
 
       // Build table data with players and blank score fields
       const scoreData: (string | number)[][] = [];

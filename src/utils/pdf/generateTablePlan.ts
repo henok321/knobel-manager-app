@@ -36,43 +36,44 @@ export const generateTablePlan = (data: TablePlanData, t: TFunction): void => {
       (a, b) => a.tableNumber - b.tableNumber,
     );
 
-    if (startY > 240) {
+    // Start each new round on a new page (except the first round)
+    if (roundNum > 1) {
       doc.addPage();
       startY = 20;
     }
 
-    doc.setFontSize(14);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.text(`${t('pdf.tablePlan.round')} ${roundNum}`, 14, startY);
-    startY += 8;
+    startY += 10; // Increased space after round headline
 
     if (roundTables.length === 0) {
-      doc.setFontSize(9);
+      doc.setFontSize(8);
       doc.setFont('helvetica', 'italic');
       doc.text(t('pdf.tablePlan.noTables'), 14, startY);
-      startY += 8;
+      startY += 6;
     } else {
       // For each table, create a section with table name as headline
       for (const table of roundTables) {
-        // Estimate table height: header (11) + title (6) + rows (players * 10) + spacing (8)
-        const estimatedHeight = 11 + 6 + (table.players?.length || 0) * 10 + 8;
+        // Estimate table height: header (9) + title (4) + rows (players * 8) + spacing (5)
+        const estimatedHeight = 9 + 4 + (table.players?.length || 0) * 8 + 5;
 
         // Check if table will fit on current page (portrait A4 height is ~297mm)
         // Leave margin of 20 at bottom
-        if (startY + estimatedHeight > 260) {
+        if (startY + estimatedHeight > 270) {
           doc.addPage();
           startY = 20;
         }
 
         // Table headline
-        doc.setFontSize(11);
+        doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
         doc.text(
           `${t('pdf.tablePlan.table')} ${table.tableNumber + 1}`,
           14,
           startY,
         );
-        startY += 6;
+        startY += 4;
 
         // Build player data for this table
         const playerData: (string | number)[][] = [];
@@ -99,9 +100,9 @@ export const generateTablePlan = (data: TablePlanData, t: TFunction): void => {
           head: [[t('pdf.tablePlan.player'), t('pdf.tablePlan.team')]],
           body: playerData,
           theme: 'striped',
-          headStyles: { fillColor: [66, 139, 202], fontSize: 9 },
+          headStyles: { fillColor: [66, 139, 202], fontSize: 8 },
           margin: { left: 14, right: 14 },
-          styles: { fontSize: 9, cellPadding: 3 },
+          styles: { fontSize: 8, cellPadding: 1.5 },
           columnStyles: {
             0: { cellWidth: 80 },
             1: { cellWidth: 80 },
@@ -110,7 +111,7 @@ export const generateTablePlan = (data: TablePlanData, t: TFunction): void => {
 
         startY =
           (doc as unknown as { lastAutoTable: { finalY: number } })
-            .lastAutoTable.finalY + 8;
+            .lastAutoTable.finalY + 5;
       }
     }
   }
