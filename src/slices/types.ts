@@ -4,7 +4,7 @@ export type Game = {
   teamSize: number;
   tableSize: number;
   numberOfRounds: number;
-  status: string;
+  status: 'in_progress' | 'setup' | 'completed';
   teams: number[];
   rounds: number[];
   owners: string[];

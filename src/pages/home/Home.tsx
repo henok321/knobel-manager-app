@@ -27,6 +27,13 @@ import RankingsPanel from '../games/panels/RankingsPanel';
 import RoundsPanel from '../games/panels/RoundsPanel';
 import TeamsPanel from '../games/panels/TeamsPanel';
 
+const badgeColorByStatus = (gameStatus: GameStatusEnum) =>
+  gameStatus === GameStatusEnum.InProgress
+    ? 'blue'
+    : gameStatus === GameStatusEnum.Completed
+      ? 'green'
+      : 'gray';
+
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -47,7 +54,6 @@ const Home = () => {
     }
   }, [activeGame, fetchAllTables]);
 
-  // Check if all scores are entered using useMemo
   const canComplete = useMemo(() => {
     if (!activeGame || activeGame.status !== GameStatusEnum.InProgress) {
       return false;
@@ -163,13 +169,7 @@ const Home = () => {
                                   {game.name}
                                 </Title>
                                 <Badge
-                                  color={
-                                    game.status === GameStatusEnum.InProgress
-                                      ? 'blue'
-                                      : game.status === GameStatusEnum.Completed
-                                        ? 'green'
-                                        : 'gray'
-                                  }
+                                  color={badgeColorByStatus(game.status)}
                                   variant="light"
                                 >
                                   {t(`pages.gameDetail.status.${game.status}`)}

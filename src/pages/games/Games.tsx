@@ -54,8 +54,8 @@ const Games = () => {
           .includes(searchQuery.toLowerCase());
         const matchesFilter =
           filterStatus === 'all' ||
-          (filterStatus === 'active' && game.status === 'active') ||
-          (filterStatus === 'setup' && game.status !== 'active');
+          (filterStatus === 'active' && game.status === 'in_progress') ||
+          (filterStatus === 'setup' && game.status === 'setup');
         return matchesSearch && matchesFilter;
       }),
     [allGames, searchQuery, filterStatus],
@@ -187,11 +187,15 @@ const Games = () => {
                               <Group gap="xs">
                                 <Badge
                                   color={
-                                    game.status === 'active' ? 'green' : 'gray'
+                                    game.status === 'in_progress'
+                                      ? 'blue'
+                                      : game.status === 'completed'
+                                        ? 'green'
+                                        : 'gray'
                                   }
                                   variant="light"
                                 >
-                                  {game.status}
+                                  {t(`pages.gameDetail.status.${game.status}`)}
                                 </Badge>
                                 {isActiveGame && (
                                   <Badge color="blue" variant="filled">
