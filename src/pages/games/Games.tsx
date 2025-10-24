@@ -1,4 +1,3 @@
-import { PlusIcon } from '@heroicons/react/24/solid';
 import {
   Button,
   Card,
@@ -11,6 +10,7 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -112,7 +112,7 @@ const Games = () => {
               </Text>
             </div>
             <Button
-              leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
+              leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
               size="lg"
               onClick={() => setGameModalActive(true)}
             >

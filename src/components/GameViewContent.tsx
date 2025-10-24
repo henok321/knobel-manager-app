@@ -1,4 +1,3 @@
-import { CheckCircleIcon, CogIcon, PlayIcon } from '@heroicons/react/24/solid';
 import {
   Badge,
   Button,
@@ -11,6 +10,7 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
+import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -192,11 +192,11 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'setup':
-        return <CogIcon style={{ width: 16, height: 16 }} />;
+        return <IconSettings style={{ width: 16, height: 16 }} />;
       case 'in_progress':
-        return <PlayIcon style={{ width: 16, height: 16 }} />;
+        return <IconPlayerPlay style={{ width: 16, height: 16 }} />;
       case 'completed':
-        return <CheckCircleIcon style={{ width: 16, height: 16 }} />;
+        return <IconCheck style={{ width: 16, height: 16 }} />;
       default:
         return null;
     }

@@ -1,4 +1,3 @@
-import { CheckCircleIcon, ClockIcon } from '@heroicons/react/24/solid';
 import {
   Alert,
   Badge,
@@ -12,6 +11,7 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
+import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useMemo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -270,7 +270,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                       <Badge
                         color="green"
                         leftSection={
-                          <CheckCircleIcon style={{ width: 14, height: 14 }} />
+                          <IconCheck style={{ width: 14, height: 14 }} />
                         }
                         variant="light"
                       >
@@ -280,7 +280,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                       <Badge
                         color="gray"
                         leftSection={
-                          <ClockIcon style={{ width: 14, height: 14 }} />
+                          <IconClock style={{ width: 14, height: 14 }} />
                         }
                         variant="light"
                       >

@@ -29,7 +29,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
   const [opened, { toggle }] = useDisclosure(false);
-  const [setLanguageMenuOpened] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { logOut } = useAuth();
@@ -84,10 +83,7 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
           {/* Right: User Menu (Desktop) */}
           {navbarActive && (
             <Group gap="xs" visibleFrom="sm">
-              <UserMenu
-                onLogout={logOut}
-                onOpenLanguageMenu={() => setLanguageMenuOpened(true)}
-              />
+              <UserMenu onLogout={logOut} />
             </Group>
           )}
 

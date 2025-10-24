@@ -1,10 +1,4 @@
 import {
-  CheckCircleIcon,
-  CogIcon,
-  PlayIcon,
-  TrashIcon,
-} from '@heroicons/react/24/solid';
-import {
   ActionIcon,
   Badge,
   Button,
@@ -14,6 +8,12 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
+import {
+  IconCheck,
+  IconPlayerPlay,
+  IconSettings,
+  IconTrash,
+} from '@tabler/icons-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -31,11 +31,11 @@ interface GameListItemProps {
 const getStatusIcon = (status: GameStatusEnum) => {
   switch (status) {
     case GameStatusEnum.Setup:
-      return <CogIcon style={{ width: 14, height: 14 }} />;
+      return <IconSettings style={{ width: 14, height: 14 }} />;
     case GameStatusEnum.InProgress:
-      return <PlayIcon style={{ width: 14, height: 14 }} />;
+      return <IconPlayerPlay style={{ width: 14, height: 14 }} />;
     case GameStatusEnum.Completed:
-      return <CheckCircleIcon style={{ width: 14, height: 14 }} />;
+      return <IconCheck style={{ width: 14, height: 14 }} />;
     default:
       return null;
   }
@@ -136,7 +136,7 @@ const GameListItem = ({
               variant="subtle"
               onClick={handleDelete}
             >
-              <TrashIcon style={{ width: 20, height: 20 }} />
+              <IconTrash style={{ width: 20, height: 20 }} />
             </ActionIcon>
           </Group>
         </Group>

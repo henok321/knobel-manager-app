@@ -1,5 +1,5 @@
-import { PlusIcon } from '@heroicons/react/24/solid';
 import { Button, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -53,7 +53,7 @@ const Home = () => {
 
             <Group gap="md">
               <Button
-                leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
+                leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
                 size="lg"
                 onClick={() => navigate('/games')}
               >

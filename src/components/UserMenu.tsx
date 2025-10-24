@@ -1,5 +1,5 @@
 import { Avatar, Group, Menu, Text, UnstyledButton, rem } from '@mantine/core';
-import { IconChevronDown, IconLanguage, IconLogout } from '@tabler/icons-react';
+import { IconChevronDown, IconLogout } from '@tabler/icons-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,13 +7,9 @@ import { useAuth } from '../auth/useAuth';
 
 interface UserMenuProps {
   onLogout: () => void;
-  onOpenLanguageMenu: () => void;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({
-  onLogout,
-  onOpenLanguageMenu,
-}) => {
+const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
 
@@ -59,15 +55,6 @@ const UserMenu: React.FC<UserMenuProps> = ({
 
       <Menu.Dropdown>
         <Menu.Label>{t('header.nav.settings')}</Menu.Label>
-
-        <Menu.Item
-          leftSection={
-            <IconLanguage style={{ width: rem(16), height: rem(16) }} />
-          }
-          onClick={onOpenLanguageMenu}
-        >
-          {t('header.nav.language')}
-        </Menu.Item>
 
         <Menu.Divider />
 
