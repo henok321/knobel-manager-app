@@ -3,7 +3,8 @@
     "loading": "Lädt...",
     "errorOccurred": "Ein Fehler ist aufgetreten",
     "error": "Fehler",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "delete": "Löschen"
   },
   "header": {
     "heading": "Knobel-Manager",
@@ -105,6 +106,7 @@
       "noGames": "Noch keine Spiele vorhanden. Erstelle dein erstes Turnier!",
       "noResults": "Keine Spiele gefunden, die deiner Suche entsprechen.",
       "createFirstGame": "Erstelle dein erstes Spiel",
+      "deleteGame": "Spiel löschen",
       "confirmDelete": "Bist du sicher, dass du dieses Spiel löschen möchtest?",
       "card": {
         "details": {
@@ -163,10 +165,12 @@
         "addTeam": "Team hinzufügen",
         "noTeams": "Noch keine Teams vorhanden. Füge dein erstes Team hinzu, um zu beginnen!",
         "players": "Spieler",
+        "deleteTeam": "Team löschen",
         "confirmDeleteTeam": "Bist du sicher, dass du dieses Team löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
         "confirmDeletePlayer": "Bist du sicher, dass du diesen Spieler löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
         "roundShort": "R",
-        "tableShort": "T"
+        "tableShort": "T",
+        "cannotAddTeamsAfterStart": "Teams können nach dem Spielstart nicht hinzugefügt werden"
       },
       "rounds": {
         "selectRound": "Runde auswählen",

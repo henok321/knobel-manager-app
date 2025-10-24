@@ -8,6 +8,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import {
   IconCheck,
   IconPlayerPlay,
@@ -65,9 +66,18 @@ const GameListItem = ({
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm(t('pages.games.confirmDelete'))) {
-      onDelete(game.id);
-    }
+    modals.openConfirmModal({
+      title: t('pages.games.deleteGame'),
+      children: <Text size="sm">{t('pages.games.confirmDelete')}</Text>,
+      labels: {
+        confirm: t('global.delete'),
+        cancel: t('global.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm: () => {
+        onDelete(game.id);
+      },
+    });
   };
 
   const handleOpen = () => {

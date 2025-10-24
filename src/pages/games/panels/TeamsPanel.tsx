@@ -9,6 +9,7 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -134,9 +135,20 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   };
 
   const handleDeleteTeam = (teamId: number) => {
-    if (globalThis.confirm(t('pages.gameDetail.teams.confirmDeleteTeam'))) {
-      deleteTeam(teamId);
-    }
+    modals.openConfirmModal({
+      title: t('pages.gameDetail.teams.deleteTeam'),
+      children: (
+        <Text size="sm">{t('pages.gameDetail.teams.confirmDeleteTeam')}</Text>
+      ),
+      labels: {
+        confirm: t('global.delete'),
+        cancel: t('global.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm: () => {
+        deleteTeam(teamId);
+      },
+    });
   };
 
   return (

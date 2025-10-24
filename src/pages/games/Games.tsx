@@ -10,6 +10,7 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -89,9 +90,18 @@ const Games = () => {
   };
 
   const handleDeleteGame = (gameID: number) => {
-    if (confirm(t('pages.games.confirmDelete'))) {
-      deleteGame(gameID);
-    }
+    modals.openConfirmModal({
+      title: t('pages.games.deleteGame'),
+      children: <Text size="sm">{t('pages.games.confirmDelete')}</Text>,
+      labels: {
+        confirm: t('global.delete'),
+        cancel: t('global.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm: () => {
+        deleteGame(gameID);
+      },
+    });
   };
 
   const hasGames =

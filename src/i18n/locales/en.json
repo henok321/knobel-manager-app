@@ -4,7 +4,8 @@
     "errorOccurred": "An error occurred",
     "error": "Error",
     "cancel": "Cancel",
-    "success": "Success"
+    "success": "Success",
+    "delete": "Delete"
   },
   "header": {
     "heading": "Knobel Manager",
@@ -108,6 +109,7 @@
       "noGames": "No games yet. Create your first tournament!",
       "noResults": "No games found matching your search.",
       "createFirstGame": "Create Your First Game",
+      "deleteGame": "Delete Game",
       "confirmDelete": "Are you sure you want to delete this game?",
       "card": {
         "details": {
@@ -181,6 +183,7 @@
         "noTeams": "No teams yet. Add your first team to get started!",
         "players": "Players",
         "player": "Player",
+        "deleteTeam": "Delete Team",
         "confirmDeleteTeam": "Are you sure you want to delete this team? This action cannot be undone.",
         "confirmDeletePlayer": "Are you sure you want to delete this player? This action cannot be undone.",
         "editTeamDialog": "Edit Team",
