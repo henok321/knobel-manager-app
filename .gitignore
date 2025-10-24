@@ -33,3 +33,6 @@ CLAUDE.md
 
 # generated files
 src/generated
+
+# vite local cert
+.cert
