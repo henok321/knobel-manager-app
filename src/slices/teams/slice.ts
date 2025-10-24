@@ -5,6 +5,7 @@ import {
   EntityState,
 } from '@reduxjs/toolkit';
 
+import { RootState } from '../../store/store.ts';
 import { fetchAll } from '../actions.ts';
 import { Team } from '../types.ts';
 import {
@@ -12,7 +13,6 @@ import {
   updateTeamAction,
   deleteTeamAction,
 } from './actions.ts';
-import { RootState } from '../../store/store.ts';
 
 type AdditionalTeamState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
