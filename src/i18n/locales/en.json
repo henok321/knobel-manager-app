@@ -3,7 +3,8 @@
     "loading": "Loading...",
     "errorOccurred": "An error occurred",
     "error": "Error",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "success": "Success"
   },
   "header": {
     "heading": "Knobel Manager",
@@ -115,9 +116,14 @@
           "status": "Status"
         },
         "activateButton": "Activate",
+        "activateTooltip": "Set as active game to access quickly from Home page",
+        "activateTooltipDisabled": "This game is already active",
+        "activeGameTooltip": "Currently selected for quick access on Home page",
         "deleteButton": "Delete",
         "viewDetails": "View Details",
-        "isActive": "Active"
+        "isActive": "Active",
+        "gameCreated": "Game \"{{name}}\" created successfully",
+        "teamAdded": "Team \"{{name}}\" added successfully"
       },
       "form": {
         "heading": "Create game",
@@ -141,8 +147,16 @@
       },
       "actions": {
         "startGame": "Start Game",
+        "startGameConfirmation": "Are you sure you want to start this tournament? After starting:",
+        "startGameWarning1": "You won't be able to add more teams",
+        "startGameWarning2": "Table assignments will be generated",
+        "startGameWarning3": "You can begin entering scores",
+        "gameStartedNotification": "Game Started",
+        "gameStartedMessage": "Setup matchmaking in the Rounds tab to begin",
         "completeGame": "Complete Game",
+        "completeGameConfirmation": "Are you sure you want to complete this tournament? This will finalize all scores and rankings.",
         "completeGameDisabledTooltip": "All scores must be entered for every round before completing the game",
+        "scoreProgress": "Score progress: {{completed}} of {{total}} tables completed",
         "exportPDF": "Export PDF"
       },
       "pdfMenu": {
@@ -161,6 +175,7 @@
       },
       "teams": {
         "addTeam": "Add Team",
+        "cannotAddTeamsAfterStart": "Cannot add teams after tournament has started",
         "noTeams": "No teams yet. Add your first team to get started!",
         "players": "Players",
         "confirmDeleteTeam": "Are you sure you want to delete this team? This action cannot be undone.",
@@ -180,9 +195,11 @@
         "noSearchResults": "No tables match your search.",
         "searchPlayers": "Search by player name...",
         "scoresEntered": "Scores Entered",
+        "scoresPending": "Pending",
         "enterScores": "Enter Scores",
         "editScores": "Edit Scores",
         "saveScores": "Save Scores",
+        "scoresSaved": "Scores saved for Table {{table}}",
         "setupMatchmaking": "Setup Matchmaking",
         "rerunMatchmaking": "Re-run Matchmaking",
         "setupRequired": "Matchmaking Setup Required",
@@ -199,6 +216,9 @@
         "player": "Player",
         "totalScore": "Total Score",
         "noData": "No scores entered yet",
+        "noScoresYet": "No Scores Yet",
+        "noScoresMessage": "Rankings will appear here once you enter scores in the Rounds tab.",
+        "noScoresInstructions": "Start by setting up matchmaking, then enter scores for each table.",
         "filterByRound": "Filter by Round",
         "totalRanking": "Total (All Rounds)"
       }

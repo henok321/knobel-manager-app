@@ -1,3 +1,4 @@
+import { CheckCircleIcon, ClockIcon } from '@heroicons/react/24/solid';
 import {
   Alert,
   Badge,
@@ -265,9 +266,25 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                     <Title order={4}>
                       {`${t('pages.gameDetail.rounds.table')} ${table.tableNumber + 1}`}
                     </Title>
-                    {hasScores(table) && (
-                      <Badge color="green" variant="light">
+                    {hasScores(table) ? (
+                      <Badge
+                        color="green"
+                        leftSection={
+                          <CheckCircleIcon style={{ width: 14, height: 14 }} />
+                        }
+                        variant="light"
+                      >
                         {t('pages.gameDetail.rounds.scoresEntered')}
+                      </Badge>
+                    ) : (
+                      <Badge
+                        color="gray"
+                        leftSection={
+                          <ClockIcon style={{ width: 14, height: 14 }} />
+                        }
+                        variant="light"
+                      >
+                        {t('pages.gameDetail.rounds.scoresPending')}
                       </Badge>
                     )}
                   </Group>

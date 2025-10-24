@@ -1,4 +1,13 @@
-import { Burger, Button, Container, Group, Title } from '@mantine/core';
+import {
+  Burger,
+  Button,
+  Container,
+  Drawer,
+  Divider,
+  Group,
+  Stack,
+  Title,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,51 +39,95 @@ const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
 
   const [active, setActive] = useState(location.pathname);
 
-  const items = navItem.map(({ path, label }) => (
+  const handleNavClick = (path: string) => {
+    setActive(path);
+    toggle();
+  };
+
+  const desktopItems = navItem.map(({ path, label }) => (
     <NavLink
       key={path}
       className={classes.link}
       data-active={active === path || undefined}
       to={path}
-      onClick={() => {
-        setActive(path);
-      }}
+      onClick={() => setActive(path)}
+    >
+      {label}
+    </NavLink>
+  ));
+
+  const mobileItems = navItem.map(({ path, label }) => (
+    <NavLink
+      key={path}
+      className={classes.mobileLink}
+      data-active={active === path || undefined}
+      to={path}
+      onClick={() => handleNavClick(path)}
     >
       {label}
     </NavLink>
   ));
 
   return (
-    <Container className={classes.inner} size="md">
-      <Title className={classes.appTitle} order={3}>
-        {t('header.heading', 'Knobel Manager')}
-      </Title>
+    <>
+      <Container className={classes.inner} size="md">
+        <Title className={classes.appTitle} order={3}>
+          {t('header.heading', 'Knobel Manager')}
+        </Title>
 
-      {navbarActive && (
-        <Group className={classes.navGroup} visibleFrom="xs">
-          <Group className={classes.linkGroup}>{items}</Group>
-        </Group>
-      )}
+        {navbarActive && (
+          <Group className={classes.navGroup} visibleFrom="xs">
+            <Group className={classes.linkGroup}>{desktopItems}</Group>
+          </Group>
+        )}
 
-      <LanguagePicker />
+        <LanguagePicker />
 
-      {navbarActive && (
-        <Button
-          className={classes.logoutButton}
-          color="red"
-          radius="md"
-          size="sm"
-          variant="outline"
-          onClick={logOut}
-        >
-          {t('header.logout')}{' '}
-        </Button>
-      )}
+        {navbarActive && (
+          <Button
+            className={classes.logoutButton}
+            color="red"
+            radius="md"
+            size="sm"
+            variant="outline"
+            onClick={logOut}
+          >
+            {t('header.logout')}
+          </Button>
+        )}
 
-      {navbarActive && (
-        <Burger hiddenFrom="xs" opened={opened} size="sm" onClick={toggle} />
-      )}
-    </Container>
+        {navbarActive && (
+          <Burger hiddenFrom="xs" opened={opened} size="sm" onClick={toggle} />
+        )}
+      </Container>
+
+      <Drawer
+        opened={opened}
+        position="right"
+        size="xs"
+        title={t('header.heading', 'Knobel Manager')}
+        onClose={toggle}
+      >
+        <Stack gap="md">
+          <Stack gap="xs">{mobileItems}</Stack>
+
+          <Divider />
+
+          <Button
+            fullWidth
+            color="red"
+            size="md"
+            variant="outline"
+            onClick={() => {
+              logOut();
+              toggle();
+            }}
+          >
+            {t('header.logout')}
+          </Button>
+        </Stack>
+      </Drawer>
+    </>
   );
 };
 

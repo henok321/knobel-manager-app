@@ -1,5 +1,6 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { Modal, Text, TextInput, Button, Group, Stack } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -30,6 +31,11 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createTeam({ name: teamName, members: players });
+    notifications.show({
+      title: t('global.success'),
+      message: t('pages.games.card.teamAdded', { name: teamName }),
+      color: 'green',
+    });
     handleClose();
   };
 

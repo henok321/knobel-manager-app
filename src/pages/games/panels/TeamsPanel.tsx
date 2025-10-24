@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   Title,
+  Tooltip,
 } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -147,7 +148,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   return (
     <Stack gap="md">
-      {canAddDelete && (
+      {canAddDelete ? (
         <Button
           leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
           style={{ alignSelf: 'flex-start' }}
@@ -155,6 +156,16 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         >
           {t('pages.gameDetail.teams.addTeam')}
         </Button>
+      ) : (
+        <Tooltip label={t('pages.gameDetail.teams.cannotAddTeamsAfterStart')}>
+          <Button
+            disabled
+            leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
+            style={{ alignSelf: 'flex-start' }}
+          >
+            {t('pages.gameDetail.teams.addTeam')}
+          </Button>
+        </Tooltip>
       )}
 
       {canAddDelete && teams.length === 0 && (

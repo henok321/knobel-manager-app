@@ -1,4 +1,5 @@
 import { Button, Group, Modal, NumberInput, Stack, Text } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -38,6 +39,13 @@ const ScoreEntryModal = ({
       score: scores[player.id] ?? initialScores[player.id] ?? 0,
     }));
     onSubmit(scoresArray);
+    notifications.show({
+      title: t('global.success'),
+      message: t('pages.gameDetail.rounds.scoresSaved', {
+        table: table.tableNumber,
+      }),
+      color: 'green',
+    });
     onClose();
   };
 

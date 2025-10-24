@@ -1,4 +1,9 @@
-import { PlusIcon } from '@heroicons/react/24/solid';
+import {
+  CheckCircleIcon,
+  CogIcon,
+  PlayIcon,
+  PlusIcon,
+} from '@heroicons/react/24/solid';
 import {
   Badge,
   Button,
@@ -27,6 +32,19 @@ const badgeColorByStatus = (gameStatus: GameStatusEnum) =>
     : gameStatus === GameStatusEnum.Completed
       ? 'green'
       : 'gray';
+
+const getStatusIcon = (status: GameStatusEnum) => {
+  switch (status) {
+    case GameStatusEnum.Setup:
+      return <CogIcon style={{ width: 14, height: 14 }} />;
+    case GameStatusEnum.InProgress:
+      return <PlayIcon style={{ width: 14, height: 14 }} />;
+    case GameStatusEnum.Completed:
+      return <CheckCircleIcon style={{ width: 14, height: 14 }} />;
+    default:
+      return null;
+  }
+};
 
 const Home = () => {
   const { t } = useTranslation();
@@ -127,6 +145,7 @@ const Home = () => {
                                 </Title>
                                 <Badge
                                   color={badgeColorByStatus(game.status)}
+                                  leftSection={getStatusIcon(game.status)}
                                   variant="light"
                                 >
                                   {t(`pages.gameDetail.status.${game.status}`)}

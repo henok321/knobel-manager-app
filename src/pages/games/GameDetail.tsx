@@ -1,8 +1,9 @@
-import { Container, Text } from '@mantine/core';
+import { Container, Stack, Text } from '@mantine/core';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import Breadcrumbs from '../../components/Breadcrumbs';
 import GameViewContent from '../../components/GameViewContent';
 import { GameStatusEnum } from '../../generated';
 import CenterLoader from '../../shared/CenterLoader';
@@ -46,10 +47,19 @@ const GameDetail = () => {
     );
   }
 
+  const breadcrumbItems = [
+    { label: t('header.nav.home'), path: '/' },
+    { label: t('header.nav.games'), path: '/games' },
+    { label: game.name },
+  ];
+
   return (
     <Layout navbarActive>
       <Container py="md" size="xl">
-        <GameViewContent game={game} />
+        <Stack gap="lg">
+          <Breadcrumbs items={breadcrumbItems} />
+          <GameViewContent game={game} />
+        </Stack>
       </Container>
     </Layout>
   );

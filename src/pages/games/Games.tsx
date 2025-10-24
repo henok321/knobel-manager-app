@@ -1,4 +1,9 @@
-import { PlusIcon } from '@heroicons/react/24/solid';
+import {
+  CheckCircleIcon,
+  CogIcon,
+  PlayIcon,
+  PlusIcon,
+} from '@heroicons/react/24/solid';
 import {
   Badge,
   Button,
@@ -12,6 +17,7 @@ import {
   Text,
   TextInput,
   Title,
+  Tooltip,
 } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -39,6 +45,19 @@ const Games = () => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'setup':
+        return <CogIcon style={{ width: 14, height: 14 }} />;
+      case 'in_progress':
+        return <PlayIcon style={{ width: 14, height: 14 }} />;
+      case 'completed':
+        return <CheckCircleIcon style={{ width: 14, height: 14 }} />;
+      default:
+        return null;
+    }
+  };
 
   useEffect(() => {
     if (status === 'idle') {
@@ -193,14 +212,21 @@ const Games = () => {
                                         ? 'green'
                                         : 'gray'
                                   }
+                                  leftSection={getStatusIcon(game.status)}
                                   variant="light"
                                 >
                                   {t(`pages.gameDetail.status.${game.status}`)}
                                 </Badge>
                                 {isActiveGame && (
-                                  <Badge color="blue" variant="filled">
-                                    {t('pages.games.card.isActive')}
-                                  </Badge>
+                                  <Tooltip
+                                    label={t(
+                                      'pages.games.card.activeGameTooltip',
+                                    )}
+                                  >
+                                    <Badge color="blue" variant="filled">
+                                      {t('pages.games.card.isActive')}
+                                    </Badge>
+                                  </Tooltip>
                                 )}
                               </Group>
                             </div>
@@ -252,16 +278,26 @@ const Games = () => {
                             {t('pages.games.card.viewDetails')}
                           </Button>
                           <Group gap="xs">
-                            <Button
-                              color="blue"
-                              disabled={isActiveGame}
-                              flex={1}
-                              size="sm"
-                              variant="light"
-                              onClick={() => handleActivateGame(game.id)}
+                            <Tooltip
+                              label={
+                                isActiveGame
+                                  ? t(
+                                      'pages.games.card.activateTooltipDisabled',
+                                    )
+                                  : t('pages.games.card.activateTooltip')
+                              }
                             >
-                              {t('pages.games.card.activateButton')}
-                            </Button>
+                              <Button
+                                color="blue"
+                                disabled={isActiveGame}
+                                flex={1}
+                                size="sm"
+                                variant="light"
+                                onClick={() => handleActivateGame(game.id)}
+                              >
+                                {t('pages.games.card.activateButton')}
+                              </Button>
+                            </Tooltip>
                             <Button
                               color="red"
                               flex={1}
