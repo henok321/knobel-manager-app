@@ -1,24 +1,20 @@
 import {
   CheckCircleIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
   CogIcon,
-  EllipsisVerticalIcon,
   PlayIcon,
+  TrashIcon,
 } from '@heroicons/react/24/solid';
 import {
   ActionIcon,
   Badge,
   Button,
   Card,
-  Collapse,
   Divider,
   Group,
-  Menu,
   Stack,
   Text,
 } from '@mantine/core';
-import { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -66,25 +62,27 @@ const GameListItem = ({
 }: GameListItemProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(false);
 
-  const handleDelete = () => {
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (confirm(t('pages.games.confirmDelete'))) {
       onDelete(game.id);
     }
   };
 
+  const handleOpen = () => {
+    navigate(`/games/${game.id}`);
+  };
+
+  const handleActivate = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onActivate(game.id);
+  };
+
   return (
-    <Card
-      withBorder
-      padding="md"
-      radius="md"
-      shadow="sm"
-      style={{ cursor: 'pointer' }}
-      onClick={() => setExpanded(!expanded)}
-    >
+    <Card withBorder padding="md" radius="md" shadow="sm">
       <Stack gap="sm">
-        {/* Main Row */}
+        {/* Header Row */}
         <Group align="center" justify="space-between" wrap="nowrap">
           {/* Left: Active indicator + Name + Status */}
           <Group gap="sm" style={{ flex: 1, minWidth: 0 }}>
@@ -124,111 +122,61 @@ const GameListItem = ({
 
           {/* Right: Actions */}
           <Group gap="xs" wrap="nowrap">
-            <Button
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/games/${game.id}`);
-              }}
-            >
+            {!isActive && (
+              <Button size="sm" variant="light" onClick={handleActivate}>
+                {t('pages.games.card.activateButton')}
+              </Button>
+            )}
+            <Button size="sm" onClick={handleOpen}>
               {t('pages.games.card.viewDetails')}
             </Button>
-
-            <Menu position="bottom-end" shadow="md" width={200}>
-              <Menu.Target>
-                <ActionIcon
-                  color="gray"
-                  size="lg"
-                  variant="subtle"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <EllipsisVerticalIcon style={{ width: 20, height: 20 }} />
-                </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                {!isActive && (
-                  <>
-                    <Menu.Item
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onActivate(game.id);
-                      }}
-                    >
-                      {t('pages.games.card.activateButton')}
-                    </Menu.Item>
-                    <Divider />
-                  </>
-                )}
-                <Menu.Item
-                  color="red"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete();
-                  }}
-                >
-                  {t('pages.games.card.deleteButton')}
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-
             <ActionIcon
-              color="gray"
-              size="sm"
+              color="red"
+              size="lg"
               variant="subtle"
-              onClick={(e) => {
-                e.stopPropagation();
-                setExpanded(!expanded);
-              }}
+              onClick={handleDelete}
             >
-              {expanded ? (
-                <ChevronUpIcon style={{ width: 16, height: 16 }} />
-              ) : (
-                <ChevronDownIcon style={{ width: 16, height: 16 }} />
-              )}
+              <TrashIcon style={{ width: 20, height: 20 }} />
             </ActionIcon>
           </Group>
         </Group>
 
-        {/* Expanded Details */}
-        <Collapse in={expanded}>
-          <Divider mb="sm" />
-          <Stack gap="xs">
-            <Group gap="md">
-              <div>
-                <Text c="dimmed" size="xs">
-                  {t('pages.games.card.details.teamSize')}
-                </Text>
-                <Text fw={600} size="sm">
-                  {game.teamSize}
-                </Text>
-              </div>
-              <div>
-                <Text c="dimmed" size="xs">
-                  {t('pages.games.card.details.tableSize')}
-                </Text>
-                <Text fw={600} size="sm">
-                  {game.tableSize}
-                </Text>
-              </div>
-              <div>
-                <Text c="dimmed" size="xs">
-                  {t('pages.games.card.details.numberOfRounds')}
-                </Text>
-                <Text fw={600} size="sm">
-                  {game.numberOfRounds}
-                </Text>
-              </div>
-              <div>
-                <Text c="dimmed" size="xs">
-                  {t('pages.games.card.details.teams')}
-                </Text>
-                <Text fw={600} size="sm">
-                  {game.teams.length}
-                </Text>
-              </div>
-            </Group>
-          </Stack>
-        </Collapse>
+        {/* Always Visible Details */}
+        <Divider />
+        <Group gap="md">
+          <div>
+            <Text c="dimmed" size="xs">
+              {t('pages.games.card.details.teamSize')}
+            </Text>
+            <Text fw={600} size="sm">
+              {game.teamSize}
+            </Text>
+          </div>
+          <div>
+            <Text c="dimmed" size="xs">
+              {t('pages.games.card.details.tableSize')}
+            </Text>
+            <Text fw={600} size="sm">
+              {game.tableSize}
+            </Text>
+          </div>
+          <div>
+            <Text c="dimmed" size="xs">
+              {t('pages.games.card.details.numberOfRounds')}
+            </Text>
+            <Text fw={600} size="sm">
+              {game.numberOfRounds}
+            </Text>
+          </div>
+          <div>
+            <Text c="dimmed" size="xs">
+              {t('pages.games.card.details.teams')}
+            </Text>
+            <Text fw={600} size="sm">
+              {game.teams.length}
+            </Text>
+          </div>
+        </Group>
       </Stack>
     </Card>
   );
