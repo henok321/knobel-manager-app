@@ -80,15 +80,24 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
             </Box>
           )}
 
-          {/* Right: User Menu (Desktop) */}
+          {/* Right: Language Picker + User Menu (Desktop) */}
           {navbarActive && (
             <Group gap="xs" visibleFrom="sm">
+              <LanguagePicker
+                currentLanguage={currentLanguage}
+                onLanguageChange={setCurrentLanguage}
+              />
               <UserMenu onLogout={logOut} />
             </Group>
           )}
 
           {/* Language Picker for Login Page */}
-          {!navbarActive && <LanguagePicker />}
+          {!navbarActive && (
+            <LanguagePicker
+              currentLanguage={currentLanguage}
+              onLanguageChange={setCurrentLanguage}
+            />
+          )}
 
           {/* Mobile Burger */}
           {navbarActive && (

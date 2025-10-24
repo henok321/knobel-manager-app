@@ -56,8 +56,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
       <Menu.Dropdown>
         <Menu.Label>{t('header.nav.settings')}</Menu.Label>
 
-        <Menu.Divider />
-
         <Menu.Item
           color="red"
           leftSection={
