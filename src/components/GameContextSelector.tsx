@@ -1,13 +1,20 @@
-import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import {
   Badge,
+  Box,
   Button,
   Divider,
   Group,
   Menu,
   Stack,
   Text,
+  UnstyledButton,
+  rem,
 } from '@mantine/core';
+import {
+  IconChevronDown,
+  IconPlus,
+  IconListDetails,
+} from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -103,22 +110,41 @@ const GameContextSelector = ({
   return (
     <Menu position="bottom" shadow="md" width={320}>
       <Menu.Target>
-        <Button
-          rightSection={<ChevronDownIcon style={{ width: 16, height: 16 }} />}
-          size="sm"
-          variant="subtle"
+        <UnstyledButton
+          style={{
+            padding: '8px 12px',
+            borderRadius: 'var(--mantine-radius-sm)',
+            border:
+              '1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4))',
+            backgroundColor:
+              'light-dark(var(--mantine-color-white), var(--mantine-color-dark-6))',
+            transition: 'background-color 150ms ease',
+            width: '100%',
+            maxWidth: isMobile ? '100%' : '400px',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor =
+              'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5))';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor =
+              'light-dark(var(--mantine-color-white), var(--mantine-color-dark-6))';
+          }}
         >
-          <Stack gap={0}>
-            <Group gap="xs">
-              <Text fw={600} size="sm">
+          <Group gap="xs" wrap="nowrap">
+            <Box style={{ flex: 1, minWidth: 0 }}>
+              <Text fw={600} size="sm" truncate="end">
                 {activeGame.name}
               </Text>
-            </Group>
-            <Text c="dimmed" size="xs">
-              {getGameSummary(activeGame, t)}
-            </Text>
-          </Stack>
-        </Button>
+              <Text c="dimmed" size="xs" truncate="end">
+                {getGameSummary(activeGame, t)}
+              </Text>
+            </Box>
+            <IconChevronDown
+              style={{ width: rem(16), height: rem(16), flexShrink: 0 }}
+            />
+          </Group>
+        </UnstyledButton>
       </Menu.Target>
 
       <Menu.Dropdown>
@@ -188,21 +214,23 @@ const GameContextSelector = ({
 
         {/* Actions Section */}
         <Divider my="xs" />
-        <Menu.Item onClick={handleCreateGame}>
-          <Group gap="xs">
-            <Text size="lg">➕</Text>
-            <Text fw={600} size="sm">
-              {t('pages.games.createGameButton')}
-            </Text>
-          </Group>
+        <Menu.Item
+          leftSection={<IconPlus style={{ width: rem(16), height: rem(16) }} />}
+          onClick={handleCreateGame}
+        >
+          <Text fw={600} size="sm">
+            {t('pages.games.createGameButton')}
+          </Text>
         </Menu.Item>
-        <Menu.Item onClick={handleNavigateToGames}>
-          <Group gap="xs">
-            <Text size="lg">📚</Text>
-            <Text fw={500} size="sm">
-              {t('pages.games.heading')}
-            </Text>
-          </Group>
+        <Menu.Item
+          leftSection={
+            <IconListDetails style={{ width: rem(16), height: rem(16) }} />
+          }
+          onClick={handleNavigateToGames}
+        >
+          <Text fw={500} size="sm">
+            {t('pages.games.heading')}
+          </Text>
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

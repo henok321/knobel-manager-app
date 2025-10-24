@@ -1,16 +1,17 @@
 import {
+  Box,
   Burger,
   Button,
-  Container,
-  Drawer,
   Divider,
+  Drawer,
   Group,
-  Menu,
   Stack,
   Text,
+  ThemeIcon,
   Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { IconDice } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +20,7 @@ import classes from './Header.module.css';
 import LanguagePicker from './LanguagePicker';
 import { useAuth } from '../auth/useAuth';
 import GameContextSelector from '../components/GameContextSelector';
+import UserMenu from '../components/UserMenu';
 
 interface HeaderProps {
   navbarActive?: boolean;
@@ -27,6 +29,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
   const [opened, { toggle }] = useDisclosure(false);
+  const [setLanguageMenuOpened] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { logOut } = useAuth();
@@ -34,83 +37,74 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
 
   return (
     <>
-      <div
+      <Box
         style={{
-          borderBottom: '1px solid var(--mantine-color-gray-3)',
+          borderBottom:
+            '1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4))',
           backgroundColor: 'var(--mantine-color-body)',
         }}
       >
-        <Container size="xl">
+        <Group
+          align="center"
+          h={60}
+          justify="space-between"
+          maw={1440}
+          mx="auto"
+          px="xl"
+          wrap="nowrap"
+        >
+          {/* Left: Logo */}
           <Group
-            align="center"
-            h={60}
-            justify="space-between"
-            px="md"
-            wrap="nowrap"
+            gap="xs"
+            style={{ cursor: 'pointer' }}
+            onClick={() => navigate('/')}
           >
-            {/* Left: Logo */}
-            <Title
-              className={classes.appTitle}
-              order={3}
-              style={{ cursor: 'pointer' }}
-              onClick={() => navigate('/')}
-            >
-              🎲 {t('header.heading', 'Knobel Manager')}
+            <ThemeIcon size="lg" variant="light">
+              <IconDice />
+            </ThemeIcon>
+            <Title className={classes.appTitle} fw={700} order={4}>
+              {t('header.heading', 'Knobel Manager')}
             </Title>
-
-            {/* Center: Game Context Selector (Desktop) */}
-            {navbarActive && (
-              <Group gap="md" style={{ flex: 1 }} visibleFrom="xs">
-                <GameContextSelector onOpenGameForm={onOpenGameForm} />
-              </Group>
-            )}
-
-            {/* Right: User Menu (Desktop) */}
-            {navbarActive && (
-              <Group gap="xs" visibleFrom="xs">
-                <Menu position="bottom-end" shadow="md" width={200}>
-                  <Menu.Target>
-                    <Button size="sm" variant="subtle">
-                      👤
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Label>{t('header.nav.settings')}</Menu.Label>
-                    <Menu.Item closeMenuOnClick={false}>
-                      <Group justify="space-between">
-                        <Text size="sm">{t('header.nav.language')}</Text>
-                        <LanguagePicker
-                          currentLanguage={currentLanguage}
-                          onLanguageChange={setCurrentLanguage}
-                        />
-                      </Group>
-                    </Menu.Item>
-                    <Divider />
-                    <Menu.Item onClick={logOut}>
-                      <Text c="red" fw={500}>
-                        {t('header.logout')}
-                      </Text>
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              </Group>
-            )}
-
-            {/* Language Picker for Login Page */}
-            {!navbarActive && <LanguagePicker />}
-
-            {/* Mobile Burger */}
-            {navbarActive && (
-              <Burger
-                hiddenFrom="xs"
-                opened={opened}
-                size="sm"
-                onClick={toggle}
-              />
-            )}
           </Group>
-        </Container>
-      </div>
+
+          {/* Center: Game Context Selector (Desktop) */}
+          {navbarActive && (
+            <Box
+              style={{
+                flex: 1,
+                maxWidth: 400,
+                marginInline: 'auto',
+              }}
+              visibleFrom="sm"
+            >
+              <GameContextSelector onOpenGameForm={onOpenGameForm} />
+            </Box>
+          )}
+
+          {/* Right: User Menu (Desktop) */}
+          {navbarActive && (
+            <Group gap="xs" visibleFrom="sm">
+              <UserMenu
+                onLogout={logOut}
+                onOpenLanguageMenu={() => setLanguageMenuOpened(true)}
+              />
+            </Group>
+          )}
+
+          {/* Language Picker for Login Page */}
+          {!navbarActive && <LanguagePicker />}
+
+          {/* Mobile Burger */}
+          {navbarActive && (
+            <Burger
+              hiddenFrom="sm"
+              opened={opened}
+              size="sm"
+              onClick={toggle}
+            />
+          )}
+        </Group>
+      </Box>
 
       {/* Mobile Drawer */}
       <Drawer
