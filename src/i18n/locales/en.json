@@ -11,7 +11,9 @@
     "logout": "Logout",
     "nav": {
       "home": "Home",
-      "games": "Games"
+      "games": "Games",
+      "settings": "Settings",
+      "language": "Language"
     }
   },
 

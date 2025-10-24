@@ -36,7 +36,17 @@ const getGameSummary = (game: Game, t: (key: string) => string) => {
   return `${statusText} • ${teamsCount} ${t('pages.home.picker.teams').toLowerCase()} • ${roundsText}`;
 };
 
-const GameContextSelector = () => {
+interface GameContextSelectorProps {
+  onOpenGameForm?: () => void;
+  isMobile?: boolean;
+  onClose?: () => void;
+}
+
+const GameContextSelector = ({
+  onOpenGameForm,
+  isMobile = false,
+  onClose,
+}: GameContextSelectorProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { activeGame, allGames, activateGame } = useGames();
@@ -54,6 +64,27 @@ const GameContextSelector = () => {
   const handleSwitchGame = (gameId: number) => {
     activateGame(gameId);
     navigate('/');
+    if (isMobile && onClose) {
+      onClose();
+    }
+  };
+
+  const handleNavigateToGames = () => {
+    navigate('/games');
+    if (isMobile && onClose) {
+      onClose();
+    }
+  };
+
+  const handleCreateGame = () => {
+    if (onOpenGameForm) {
+      onOpenGameForm();
+    } else {
+      navigate('/games');
+    }
+    if (isMobile && onClose) {
+      onClose();
+    }
   };
 
   if (!activeGame) {
@@ -105,6 +136,12 @@ const GameContextSelector = () => {
               {t(`pages.gameDetail.status.${activeGame.status}`)}
             </Badge>
           }
+          onClick={() => {
+            navigate(`/games/${activeGame.id}`);
+            if (isMobile && onClose) {
+              onClose();
+            }
+          }}
         >
           <Stack gap={0}>
             <Text fw={600} size="sm">
@@ -151,15 +188,21 @@ const GameContextSelector = () => {
 
         {/* Actions Section */}
         <Divider my="xs" />
-        <Menu.Item onClick={() => navigate('/games')}>
-          <Text fw={500} size="sm">
-            📚 {t('pages.games.heading')}
-          </Text>
+        <Menu.Item onClick={handleCreateGame}>
+          <Group gap="xs">
+            <Text size="lg">➕</Text>
+            <Text fw={600} size="sm">
+              {t('pages.games.createGameButton')}
+            </Text>
+          </Group>
         </Menu.Item>
-        <Menu.Item onClick={() => navigate('/games')}>
-          <Text fw={500} size="sm">
-            ➕ {t('pages.games.createGameButton')}
-          </Text>
+        <Menu.Item onClick={handleNavigateToGames}>
+          <Group gap="xs">
+            <Text size="lg">📚</Text>
+            <Text fw={500} size="sm">
+              {t('pages.games.heading')}
+            </Text>
+          </Group>
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

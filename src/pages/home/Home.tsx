@@ -36,8 +36,8 @@ const Home = () => {
   // Show welcome CTA when no active game
   if (!activeGame) {
     return (
-      <Layout navbarActive>
-        <Container py="xl" size="md">
+      <Layout navbarActive onOpenGameForm={() => navigate('/games')}>
+        <Container py="xl" size="xl">
           <Stack align="center" gap="xl" py="xl">
             <Stack align="center" gap="md">
               <Text size="80px">🎲</Text>
@@ -76,7 +76,7 @@ const Home = () => {
   }
 
   return (
-    <Layout navbarActive>
+    <Layout navbarActive onOpenGameForm={() => navigate('/games')}>
       <Container py="md" size="xl">
         <GameViewContent game={activeGame} />
       </Container>
