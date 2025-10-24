@@ -61,4 +61,8 @@ export const tablesSelectors = tablesAdapter.getSelectors<RootState>(
   (state) => state.tables,
 );
 
+export const selectAllTables = tablesSelectors.selectAll;
+export const selectTablesStatus = (state: RootState) => state.tables.status;
+export const selectTablesError = (state: RootState) => state.tables.error;
+
 export default tablesSlice.reducer;

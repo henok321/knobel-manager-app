@@ -1,1 +1,42 @@
+const { TextEncoder, TextDecoder } = require('util');
+const { ReadableStream, TransformStream } = require('web-streams-polyfill');
+
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+global.ReadableStream = ReadableStream;
+global.TransformStream = TransformStream;
+
+class BroadcastChannelMock {
+  constructor(name) {
+    this.name = name;
+  }
+  postMessage() {}
+  close() {}
+  addEventListener() {}
+  removeEventListener() {}
+}
+global.BroadcastChannel = BroadcastChannelMock;
+
+global.importMeta = {
+  env: {
+    PROD: false,
+    VITE_API_URL: 'http://localhost:8080',
+  },
+};
+
+require('whatwg-fetch');
 require('@testing-library/jest-dom');
+
+jest.mock('./src/auth/firebaseConfig', () => ({
+  auth: {
+    currentUser: {
+      getIdToken: jest.fn().mockResolvedValue('mock-token'),
+    },
+  },
+}));
+
+const { server } = require('./src/test/setup/msw');
+
+beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());

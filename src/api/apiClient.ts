@@ -10,8 +10,20 @@ import {
   TeamsApi,
 } from '../generated';
 
+// In test environment (Node), need absolute URL. In browser, relative URL works.
+const getBaseURL = () => {
+  if (import.meta.env.PROD) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // Check if running in Node/Jest (no window object)
+  if (typeof window === 'undefined') {
+    return 'http://localhost/api';
+  }
+  return '/api';
+};
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.PROD ? import.meta.env.VITE_API_URL : '/api',
+  baseURL: getBaseURL(),
 });
 
 axiosInstance.interceptors.request.use(

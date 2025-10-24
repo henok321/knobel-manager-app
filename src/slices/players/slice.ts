@@ -53,14 +53,30 @@ const playersSlice = createSlice({
           })) || [];
         playersAdapter.addMany(state, players);
       })
+      .addCase(updatePlayerAction.pending, (state) => {
+        state.status = 'pending';
+      })
       .addCase(updatePlayerAction.fulfilled, (state, action) => {
         playersAdapter.updateOne(state, {
           id: action.payload.id,
           changes: { name: action.payload.name },
         });
+        state.status = 'succeeded';
+      })
+      .addCase(updatePlayerAction.rejected, (state, action) => {
+        state.error = new Error(action.error.message);
+        state.status = 'failed';
+      })
+      .addCase(deletePlayerAction.pending, (state) => {
+        state.status = 'pending';
       })
       .addCase(deletePlayerAction.fulfilled, (state, action) => {
         playersAdapter.removeOne(state, action.payload);
+        state.status = 'succeeded';
+      })
+      .addCase(deletePlayerAction.rejected, (state, action) => {
+        state.error = new Error(action.error.message);
+        state.status = 'failed';
       });
   },
 });
@@ -69,6 +85,9 @@ const { selectAll: selectAllPlayers } = playersAdapter.getSelectors<RootState>(
   (state) => state.players,
 );
 
-export { selectAllPlayers };
+const selectPlayersStatus = (state: RootState) => state.players.status;
+const selectPlayersError = (state: RootState) => state.players.error;
+
+export { selectAllPlayers, selectPlayersStatus, selectPlayersError };
 
 export default playersSlice.reducer;

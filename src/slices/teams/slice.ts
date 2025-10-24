@@ -66,14 +66,30 @@ const teamsSlice = createSlice({
         teamsAdapter.addOne(state, team);
         state.status = 'succeeded';
       })
+      .addCase(updateTeamAction.pending, (state) => {
+        state.status = 'pending';
+      })
       .addCase(updateTeamAction.fulfilled, (state, action) => {
         teamsAdapter.updateOne(state, {
           id: action.payload.id,
           changes: { name: action.payload.name },
         });
+        state.status = 'succeeded';
+      })
+      .addCase(updateTeamAction.rejected, (state, action) => {
+        state.error = new Error(action.error.message);
+        state.status = 'failed';
+      })
+      .addCase(deleteTeamAction.pending, (state) => {
+        state.status = 'pending';
       })
       .addCase(deleteTeamAction.fulfilled, (state, action) => {
         teamsAdapter.removeOne(state, action.payload);
+        state.status = 'succeeded';
+      })
+      .addCase(deleteTeamAction.rejected, (state, action) => {
+        state.error = new Error(action.error.message);
+        state.status = 'failed';
       });
   },
 });
@@ -85,6 +101,10 @@ createDraftSafeSelector(
   [selectAllTeams, (_: RootState, gameID: number) => gameID],
   (teams, gameID) => teams.filter((team) => team.gameID === gameID),
 );
-export { selectAllTeams };
+
+const selectTeamsStatus = (state: RootState) => state.teams.status;
+const selectTeamsError = (state: RootState) => state.teams.error;
+
+export { selectAllTeams, selectTeamsStatus, selectTeamsError };
 
 export default teamsSlice.reducer;
