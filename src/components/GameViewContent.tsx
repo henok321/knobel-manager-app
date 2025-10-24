@@ -33,13 +33,27 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   const { updateGame } = useGames();
   const allTables = useSelector(tablesSelectors.selectAll);
 
-  // Load persisted tab from localStorage
+  // Get default tab based on game status
+  const getDefaultTab = () => {
+    switch (game.status) {
+      case GameStatusEnum.Setup:
+        return 'teams';
+      case GameStatusEnum.InProgress:
+        return 'rounds';
+      case GameStatusEnum.Completed:
+        return 'rankings';
+      default:
+        return 'teams';
+    }
+  };
+
+  // Load persisted tab from localStorage, fallback to status-based default
   const getPersistedTab = () => {
     try {
       const stored = localStorage.getItem(`gameTab_${game.id}`);
-      return stored || 'teams';
+      return stored || getDefaultTab();
     } catch {
-      return 'teams';
+      return getDefaultTab();
     }
   };
 
@@ -248,16 +262,45 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         </Group>
       </Group>
 
-      {/* Tabs */}
+      {/* Tabs - Order changes based on game status */}
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tabs.List>
-          <Tabs.Tab value="teams">{t('pages.gameDetail.tabs.teams')}</Tabs.Tab>
-          <Tabs.Tab value="rounds">
-            {t('pages.gameDetail.tabs.rounds')}
-          </Tabs.Tab>
-          <Tabs.Tab value="rankings">
-            {t('pages.gameDetail.tabs.rankings')}
-          </Tabs.Tab>
+          {game.status === GameStatusEnum.Setup && (
+            <>
+              <Tabs.Tab value="teams">
+                {t('pages.gameDetail.tabs.teams')}
+              </Tabs.Tab>
+              <Tabs.Tab value="rankings">
+                {t('pages.gameDetail.tabs.rankings')}
+              </Tabs.Tab>
+            </>
+          )}
+          {game.status === GameStatusEnum.InProgress && (
+            <>
+              <Tabs.Tab value="rounds">
+                {t('pages.gameDetail.tabs.rounds')}
+              </Tabs.Tab>
+              <Tabs.Tab value="rankings">
+                {t('pages.gameDetail.tabs.rankings')}
+              </Tabs.Tab>
+              <Tabs.Tab value="teams">
+                {t('pages.gameDetail.tabs.teams')}
+              </Tabs.Tab>
+            </>
+          )}
+          {game.status === GameStatusEnum.Completed && (
+            <>
+              <Tabs.Tab value="rankings">
+                {t('pages.gameDetail.tabs.rankings')}
+              </Tabs.Tab>
+              <Tabs.Tab value="rounds">
+                {t('pages.gameDetail.tabs.rounds')}
+              </Tabs.Tab>
+              <Tabs.Tab value="teams">
+                {t('pages.gameDetail.tabs.teams')}
+              </Tabs.Tab>
+            </>
+          )}
         </Tabs.List>
 
         <Tabs.Panel pt="md" value="teams">
