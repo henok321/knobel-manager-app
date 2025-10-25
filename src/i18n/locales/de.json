@@ -221,6 +221,8 @@
         "rerunMatchmaking": "Spielpaarungen neu berechnen",
         "setupRequired": "Spielpaarungen müssen eingerichtet werden",
         "setupDescription": "Klicke auf den Button unten, um Tische und Spielerzuordnungen für alle Runden zu generieren. Der Backend-Algorithmus verteilt die Spieler fair.",
+        "setupNotAvailable": "Spielpaarungen nicht verfügbar",
+        "setupNotAvailableDescription": "Spielpaarungen können nur im Setup-Modus eingerichtet werden. Dieses Spiel wurde bereits gestartet oder abgeschlossen.",
         "generatingTables": "Generiere Tische und Spielpaarungen...",
         "setupError": "Fehler beim Einrichten der Spielpaarungen. Bitte versuche es erneut.",
         "matchmakingInfo": "Das Backend übernimmt die Spielpaarungen und erstellt automatisch Tische"

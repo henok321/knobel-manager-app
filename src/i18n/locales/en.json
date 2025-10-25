@@ -221,6 +221,8 @@
         "rerunMatchmaking": "Re-run Matchmaking",
         "setupRequired": "Matchmaking Setup Required",
         "setupDescription": "Click the button below to generate tables and player assignments for all rounds. This will use the backend matchmaking algorithm to distribute players fairly.",
+        "setupNotAvailable": "Matchmaking Not Available",
+        "setupNotAvailableDescription": "Matchmaking can only be set up when the game is in setup mode. This game has already started or been completed.",
         "generatingTables": "Generating tables and matchmaking...",
         "setupError": "Failed to setup matchmaking. Please try again.",
         "matchmakingInfo": "Backend will handle matchmaking and create tables automatically"

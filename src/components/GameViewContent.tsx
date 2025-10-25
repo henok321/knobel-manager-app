@@ -270,6 +270,9 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
               <Tabs.Tab value="teams">
                 {t('pages.gameDetail.tabs.teams')}
               </Tabs.Tab>
+              <Tabs.Tab value="rounds">
+                {t('pages.gameDetail.tabs.rounds')}
+              </Tabs.Tab>
               <Tabs.Tab value="rankings">
                 {t('pages.gameDetail.tabs.rankings')}
               </Tabs.Tab>
