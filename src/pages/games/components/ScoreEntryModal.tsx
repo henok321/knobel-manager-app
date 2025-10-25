@@ -80,7 +80,7 @@ const ScoreEntryModal = ({
             defaultValue={initialScores[player.id]}
             label={player.name}
             min={0}
-            placeholder="0"
+            placeholder={t('pages.gameDetail.rounds.scorePlaceholder')}
             onChange={(value) =>
               setScores((prev) => ({
                 ...prev,

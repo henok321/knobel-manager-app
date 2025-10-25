@@ -4,6 +4,7 @@
     "errorOccurred": "Ein Fehler ist aufgetreten",
     "error": "Fehler",
     "cancel": "Abbrechen",
+    "success": "Erfolg",
     "delete": "Löschen",
     "save": "Speichern"
   },
@@ -12,7 +13,13 @@
     "logout": "Abmelden",
     "nav": {
       "home": "Startseite",
-      "games": "Spiele"
+      "games": "Spiele",
+      "settings": "Einstellungen",
+      "language": "Sprache",
+      "languages": {
+        "english": "🇬🇧 English",
+        "german": "🇩🇪 Deutsch"
+      }
     }
   },
 
@@ -118,9 +125,14 @@
           "status": "Status"
         },
         "activateButton": "Aktivieren",
+        "activateTooltip": "Als aktives Spiel festlegen für schnellen Zugriff von der Startseite",
+        "activateTooltipDisabled": "Dieses Spiel ist bereits aktiv",
+        "activeGameTooltip": "Aktuell für schnellen Zugriff auf der Startseite ausgewählt",
         "deleteButton": "Löschen",
         "viewDetails": "Details anzeigen",
-        "isActive": "Aktiv"
+        "isActive": "Aktiv",
+        "gameCreated": "Spiel \"{{name}}\" erfolgreich erstellt",
+        "teamAdded": "Team \"{{name}}\" erfolgreich hinzugefügt"
       },
       "form": {
         "heading": "Spiel erstellen",
@@ -144,8 +156,16 @@
       },
       "actions": {
         "startGame": "Spiel starten",
+        "startGameConfirmation": "Bist du sicher, dass du dieses Turnier starten möchtest? Nach dem Start:",
+        "startGameWarning1": "Du kannst keine weiteren Teams hinzufügen",
+        "startGameWarning2": "Tischzuweisungen werden generiert",
+        "startGameWarning3": "Du kannst mit dem Eintragen der Punkte beginnen",
+        "gameStartedNotification": "Spiel gestartet",
+        "gameStartedMessage": "Richte die Spielpaarungen im Runden-Tab ein, um zu beginnen",
         "completeGame": "Spiel abschließen",
+        "completeGameConfirmation": "Bist du sicher, dass du dieses Turnier abschließen möchtest? Dies wird alle Punkte und Ranglisten finalisieren.",
         "completeGameDisabledTooltip": "Alle Punkte müssen für jede Runde eingetragen werden, bevor das Spiel abgeschlossen werden kann",
+        "scoreProgress": "Punkte-Fortschritt: {{completed}} von {{total}} Tischen abgeschlossen",
         "exportPDF": "PDF exportieren"
       },
       "pdfMenu": {
@@ -164,14 +184,20 @@
       },
       "teams": {
         "addTeam": "Team hinzufügen",
+        "cannotAddTeamsAfterStart": "Teams können nach dem Spielstart nicht hinzugefügt werden",
         "noTeams": "Noch keine Teams vorhanden. Füge dein erstes Team hinzu, um zu beginnen!",
         "players": "Spieler",
+        "player": "Spieler",
         "deleteTeam": "Team löschen",
         "confirmDeleteTeam": "Bist du sicher, dass du dieses Team löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
         "confirmDeletePlayer": "Bist du sicher, dass du diesen Spieler löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "editTeamDialog": "Team bearbeiten",
+        "teamName": "Teamname",
+        "teamNamePlaceholder": "Teamname eingeben",
+        "playerName": "Spielername",
+        "playerNamePlaceholder": "Spielername eingeben",
         "roundShort": "R",
-        "tableShort": "T",
-        "cannotAddTeamsAfterStart": "Teams können nach dem Spielstart nicht hinzugefügt werden"
+        "tableShort": "T"
       },
       "rounds": {
         "selectRound": "Runde auswählen",
@@ -181,13 +207,16 @@
         "player": "Spieler",
         "team": "Team",
         "score": "Punktzahl",
+        "scorePlaceholder": "0",
         "noTables": "Keine Tische für diese Runde verfügbar.",
         "noSearchResults": "Keine Tische entsprechen deiner Suche.",
         "searchPlayers": "Nach Spielernamen suchen...",
         "scoresEntered": "Punkte eingetragen",
+        "scoresPending": "Ausstehend",
         "enterScores": "Punkte eintragen",
         "editScores": "Punkte bearbeiten",
         "saveScores": "Punkte speichern",
+        "scoresSaved": "Punkte für Tisch {{table}} gespeichert",
         "setupMatchmaking": "Spielpaarungen einrichten",
         "rerunMatchmaking": "Spielpaarungen neu berechnen",
         "setupRequired": "Spielpaarungen müssen eingerichtet werden",
@@ -204,6 +233,9 @@
         "player": "Spieler",
         "totalScore": "Gesamtpunktzahl",
         "noData": "Noch keine Punkte eingetragen",
+        "noScoresYet": "Noch keine Punkte",
+        "noScoresMessage": "Ranglisten werden hier angezeigt, sobald du Punkte im Runden-Tab einträgst.",
+        "noScoresInstructions": "Beginne mit der Einrichtung der Spielpaarungen und trage dann Punkte für jeden Tisch ein.",
         "filterByRound": "Nach Runde filtern",
         "totalRanking": "Gesamt (Alle Runden)"
       }

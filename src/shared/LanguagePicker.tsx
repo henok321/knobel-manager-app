@@ -11,7 +11,7 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({
   currentLanguage,
   onLanguageChange,
 }) => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const handleLanguageChange = (value: string | null) => {
     if (value) {
@@ -25,8 +25,8 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({
   return (
     <Select
       data={[
-        { value: 'en', label: '🇬🇧 English' },
-        { value: 'de', label: '🇩🇪 Deutsch' },
+        { value: 'en', label: t('header.nav.languages.english') },
+        { value: 'de', label: t('header.nav.languages.german') },
       ]}
       size="sm"
       value={currentLanguage || i18n.language}

@@ -28,15 +28,15 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     this.setState({
       error,
       errorInfo,
     });
 
     // Log error to console in development
-    // eslint-disable-next-line no-process-env
-    if (process.env.NODE_ENV === 'development') {
+
+    if (import.meta.env.MODE === 'development') {
       // eslint-disable-next-line no-console
       console.error('ErrorBoundary caught an error:', error, errorInfo);
     }
@@ -53,7 +53,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     });
   };
 
-  render(): ReactNode {
+  override render(): ReactNode {
     if (this.state.hasError) {
       return (
         <Container py="xl" size="md">
@@ -66,8 +66,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               </Text>
             </Alert>
 
-            {/* eslint-disable-next-line no-process-env */}
-            {process.env.NODE_ENV === 'development' && this.state.errorInfo && (
+            {import.meta.env.MODE === 'development' && this.state.errorInfo && (
               <Alert color="yellow" title="Component Stack" variant="light">
                 <Text
                   component="pre"

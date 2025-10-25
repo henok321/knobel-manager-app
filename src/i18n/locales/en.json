@@ -15,7 +15,11 @@
       "home": "Home",
       "games": "Games",
       "settings": "Settings",
-      "language": "Language"
+      "language": "Language",
+      "languages": {
+        "english": "🇬🇧 English",
+        "german": "🇩🇪 Deutsch"
+      }
     }
   },
 
@@ -203,6 +207,7 @@
         "player": "Player",
         "team": "Team",
         "score": "Score",
+        "scorePlaceholder": "0",
         "noTables": "No tables available for this round.",
         "noSearchResults": "No tables match your search.",
         "searchPlayers": "Search by player name...",
