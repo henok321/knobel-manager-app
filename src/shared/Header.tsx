@@ -12,7 +12,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconDice } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,7 +32,6 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { logOut } = useAuth();
-  const [currentLanguage, setCurrentLanguage] = useState<string>('en');
 
   return (
     <>
@@ -83,21 +82,13 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
           {/* Right: Language Picker + User Menu (Desktop) */}
           {navbarActive && (
             <Group gap="xs" visibleFrom="sm">
-              <LanguagePicker
-                currentLanguage={currentLanguage}
-                onLanguageChange={setCurrentLanguage}
-              />
+              <LanguagePicker />
               <UserMenu onLogout={logOut} />
             </Group>
           )}
 
           {/* Language Picker for Login Page */}
-          {!navbarActive && (
-            <LanguagePicker
-              currentLanguage={currentLanguage}
-              onLanguageChange={setCurrentLanguage}
-            />
-          )}
+          {!navbarActive && <LanguagePicker />}
 
           {/* Mobile Burger */}
           {navbarActive && (
@@ -132,10 +123,7 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
             <Text fw={500} size="sm">
               {t('header.nav.language')}
             </Text>
-            <LanguagePicker
-              currentLanguage={currentLanguage}
-              onLanguageChange={setCurrentLanguage}
-            />
+            <LanguagePicker />
           </Group>
 
           <Divider />
