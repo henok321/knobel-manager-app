@@ -6,7 +6,7 @@
   "scripts": {
     "prod": "vite --mode production",
     "local": "vite --mode development",
-    "api:gen": "openapi-generator-cli generate -i https://raw.githubusercontent.com/henok321/knobel-manager-service/refs/heads/main/spec/openapi.yaml -g typescript-axios -o src/generated --additional-properties=withSeparateModelsAndApi=true,modelPropertyNaming=original,supportsES6=true,apiPackage=apis,modelPackage=models",
+    "api:gen": "openapi-generator-cli generate -i https://knobel-manager-service.fly.dev/openapi.yaml -g typescript-axios -o src/generated --additional-properties=withSeparateModelsAndApi=true,modelPropertyNaming=original,supportsES6=true,apiPackage=apis,modelPackage=models",
     "build": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
