@@ -15,6 +15,7 @@ import {
   IconPlus,
   IconListDetails,
 } from '@tabler/icons-react';
+import { useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -58,32 +59,39 @@ const GameContextSelector = ({
   const navigate = useNavigate();
   const { activeGame, allGames, activateGame } = useGames();
 
-  // Get recent games (excluding active game, max 3)
-  const recentGames = allGames
-    .filter((game) => game.id !== activeGame?.id)
-    .filter(
-      (game) =>
-        game.status === GameStatusEnum.Setup ||
-        game.status === GameStatusEnum.InProgress,
-    )
-    .slice(0, 3);
+  // Get recent games (excluding active game, max 3) - memoized to prevent filtering on every render
+  const recentGames = useMemo(
+    () =>
+      allGames
+        .filter((game) => game.id !== activeGame?.id)
+        .filter(
+          (game) =>
+            game.status === GameStatusEnum.Setup ||
+            game.status === GameStatusEnum.InProgress,
+        )
+        .slice(0, 3),
+    [allGames, activeGame?.id],
+  );
 
-  const handleSwitchGame = (gameId: number) => {
-    activateGame(gameId);
-    navigate('/');
-    if (isMobile && onClose) {
-      onClose();
-    }
-  };
+  const handleSwitchGame = useCallback(
+    (gameId: number) => {
+      activateGame(gameId);
+      navigate('/');
+      if (isMobile && onClose) {
+        onClose();
+      }
+    },
+    [activateGame, navigate, isMobile, onClose],
+  );
 
-  const handleNavigateToGames = () => {
+  const handleNavigateToGames = useCallback(() => {
     navigate('/games');
     if (isMobile && onClose) {
       onClose();
     }
-  };
+  }, [navigate, isMobile, onClose]);
 
-  const handleCreateGame = () => {
+  const handleCreateGame = useCallback(() => {
     if (onOpenGameForm) {
       onOpenGameForm();
     } else {
@@ -92,7 +100,7 @@ const GameContextSelector = ({
     if (isMobile && onClose) {
       onClose();
     }
-  };
+  }, [onOpenGameForm, navigate, isMobile, onClose]);
 
   if (!activeGame) {
     return (

@@ -1,4 +1,5 @@
 import { Group, Table, Text } from '@mantine/core';
+import { memo } from 'react';
 
 import { PlayerRanking, TeamRanking } from '../../../utils/rankingsMapper';
 
@@ -21,11 +22,11 @@ interface PlayerRankingRowProps {
   isTopRank?: boolean;
 }
 
-export const PlayerRankingRow = ({
+export const PlayerRankingRow = memo(function PlayerRankingRow({
   ranking,
   rank,
   isTopRank = false,
-}: PlayerRankingRowProps) => {
+}: PlayerRankingRowProps) {
   const medal = getMedalEmoji(rank);
 
   return (
@@ -51,7 +52,7 @@ export const PlayerRankingRow = ({
       </Table.Td>
     </Table.Tr>
   );
-};
+});
 
 interface TeamRankingRowProps {
   ranking: TeamRanking;
@@ -59,11 +60,11 @@ interface TeamRankingRowProps {
   isTopRank?: boolean;
 }
 
-export const TeamRankingRow = ({
+export const TeamRankingRow = memo(function TeamRankingRow({
   ranking,
   rank,
   isTopRank = false,
-}: TeamRankingRowProps) => {
+}: TeamRankingRowProps) {
   const medal = getMedalEmoji(rank);
 
   return (
@@ -84,4 +85,4 @@ export const TeamRankingRow = ({
       </Table.Td>
     </Table.Tr>
   );
-};
+});

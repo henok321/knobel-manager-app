@@ -192,4 +192,4 @@ const GameListItem = ({
   );
 };
 
-export default GameListItem;
+export default React.memo(GameListItem);
