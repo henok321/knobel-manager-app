@@ -5,7 +5,8 @@
     "error": "Error",
     "cancel": "Cancel",
     "success": "Success",
-    "delete": "Delete"
+    "delete": "Delete",
+    "save": "Save"
   },
   "header": {
     "heading": "Knobel Manager",

@@ -4,7 +4,8 @@
     "errorOccurred": "Ein Fehler ist aufgetreten",
     "error": "Fehler",
     "cancel": "Abbrechen",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "save": "Speichern"
   },
   "header": {
     "heading": "Knobel-Manager",
