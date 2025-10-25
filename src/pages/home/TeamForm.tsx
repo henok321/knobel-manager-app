@@ -1,5 +1,6 @@
-import { PlusIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { Modal, Text, TextInput, Button, Group, Stack } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -30,6 +31,11 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createTeam({ name: teamName, members: players });
+    notifications.show({
+      title: t('global.success'),
+      message: t('pages.games.card.teamAdded', { name: teamName }),
+      color: 'green',
+    });
     handleClose();
   };
 
@@ -105,7 +111,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
                     variant="subtle"
                     onClick={() => removePlayer(index)}
                   >
-                    <TrashIcon style={{ width: 20, height: 20 }} />
+                    <IconTrash style={{ width: 20, height: 20 }} />
                   </Button>
                 </Group>
               ))}
@@ -113,7 +119,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
                 aria-label={t('pages.home.team.form.addPlayer')}
                 color="green"
                 disabled={players.length >= teamSize}
-                leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
+                leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
                 mt="xs"
                 size="xs"
                 type="button"

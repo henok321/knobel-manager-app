@@ -1,5 +1,5 @@
-import { DocumentArrowDownIcon } from '@heroicons/react/24/solid';
 import { Button, Menu } from '@mantine/core';
+import { IconFileDownload } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -220,9 +220,7 @@ const PdfExportMenu = ({
     <Menu shadow="md" width={250}>
       <Menu.Target>
         <Button
-          leftSection={
-            <DocumentArrowDownIcon style={{ width: 16, height: 16 }} />
-          }
+          leftSection={<IconFileDownload style={{ width: 16, height: 16 }} />}
           size={size}
           variant={variant}
         >

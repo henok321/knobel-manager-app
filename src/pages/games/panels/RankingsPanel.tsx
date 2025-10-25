@@ -27,6 +27,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const [playerRankings, setPlayerRankings] = useState<PlayerRanking[]>([]);
   const [teamRankings, setTeamRankings] = useState<TeamRanking[]>([]);
   const [selectedRound, setSelectedRound] = useState<string>('total');
+  const [hasNoScores, setHasNoScores] = useState(false);
 
   const teamsState = useSelector((state: RootState) => state.teams.entities);
   const playersState = useSelector(
@@ -72,6 +73,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
         }
 
         const allScores = aggregateScoresFromTables(allTables);
+        setHasNoScores(Object.keys(allScores).length === 0);
 
         const gameTeams = game.teams
           .map((teamId) => teamsState[teamId])
@@ -123,6 +125,22 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
       <Alert color="red" title={t('global.error')}>
         {error}
       </Alert>
+    );
+  }
+
+  if (hasNoScores && teamRankings.length === 0) {
+    return (
+      <Card withBorder padding="xl" radius="md">
+        <Stack align="center" gap="md">
+          <Title order={4}>{t('pages.gameDetail.rankings.noScoresYet')}</Title>
+          <Text c="dimmed" size="sm" ta="center">
+            {t('pages.gameDetail.rankings.noScoresMessage')}
+          </Text>
+          <Text c="dimmed" size="sm" ta="center">
+            {t('pages.gameDetail.rankings.noScoresInstructions')}
+          </Text>
+        </Stack>
+      </Card>
     );
   }
 

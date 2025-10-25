@@ -37,3 +37,27 @@
     color: var(--mantine-color-white);
   }
 }
+
+.mobileLink {
+  display: block;
+  line-height: 1;
+  padding: 12px 16px;
+  border-radius: var(--mantine-radius-md);
+  text-decoration: none;
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  font-size: var(--mantine-font-size-md);
+  font-weight: 500;
+  transition: background-color 100ms ease;
+
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-6)
+    );
+  }
+
+  [data-mantine-color-scheme] &[data-active] {
+    background-color: var(--mantine-color-blue-filled);
+    color: var(--mantine-color-white);
+  }
+}

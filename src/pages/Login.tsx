@@ -87,8 +87,11 @@ const Login = (props: PaperProps) => {
           <TextInput
             required
             disabled={submitting}
-            error={form.errors.email && 'Invalid email'}
-            label="Email"
+            error={
+              form.errors.email &&
+              t('pages.login.fields.email.validationMessage')
+            }
+            label={t('pages.login.fields.email.label')}
             placeholder={t('pages.login.fields.email.placeholder')}
             radius="md"
             value={form.values.email}

@@ -11,6 +11,7 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
+import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useMemo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -48,6 +49,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   // Permission flags based on game status
   const canEditScores = game.status === GameStatusEnum.InProgress;
+  const canSetupMatchmaking = game.status === GameStatusEnum.Setup;
 
   // Generate round options (memoized)
   const roundOptions = useMemo(
@@ -161,36 +163,36 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         .rounds-table tbody tr > td:nth-child(3),
         .rounds-table thead tr > th:nth-child(3) { text-align: right; }
       `}</style>
-      <Group align="flex-end" justify="space-between" wrap="wrap">
-        <Select
-          data={roundOptions}
-          disabled={isSetupMode}
-          label={t('pages.gameDetail.rounds.selectRound')}
-          style={{ width: 200 }}
-          value={selectedRound}
-          onChange={(value) => setSelectedRound(value || '1')}
-        />
+      {!isSetupMode && (
+        <Group align="flex-end" justify="space-between" wrap="wrap">
+          <Select
+            data={roundOptions}
+            disabled={isSetupMode}
+            label={t('pages.gameDetail.rounds.selectRound')}
+            style={{ width: 200 }}
+            value={selectedRound}
+            onChange={(value) => setSelectedRound(value || '1')}
+          />
 
-        {!isSetupMode && (
           <TextInput
             placeholder={t('pages.gameDetail.rounds.searchPlayers')}
             style={{ width: 250 }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
           />
-        )}
 
-        <Button
-          loading={settingUp}
-          size="md"
-          variant={isSetupMode ? 'filled' : 'light'}
-          onClick={handleSetupGame}
-        >
-          {isSetupMode
-            ? t('pages.gameDetail.rounds.setupMatchmaking')
-            : t('pages.gameDetail.rounds.rerunMatchmaking')}
-        </Button>
-      </Group>
+          {canSetupMatchmaking && (
+            <Button
+              loading={settingUp}
+              size="md"
+              variant="light"
+              onClick={handleSetupGame}
+            >
+              {t('pages.gameDetail.rounds.rerunMatchmaking')}
+            </Button>
+          )}
+        </Group>
+      )}
 
       {/* Error Alert */}
       {displayError && (
@@ -199,7 +201,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         </Alert>
       )}
 
-      {isSetupMode && !loading && !settingUp && (
+      {isSetupMode && !loading && !settingUp && canSetupMatchmaking && (
         <Card withBorder padding="xl" radius="md">
           <Stack align="center" gap="md">
             <Title order={4}>
@@ -211,6 +213,19 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
             <Button loading={settingUp} size="lg" onClick={handleSetupGame}>
               {t('pages.gameDetail.rounds.setupMatchmaking')}
             </Button>
+          </Stack>
+        </Card>
+      )}
+
+      {isSetupMode && !loading && !settingUp && !canSetupMatchmaking && (
+        <Card withBorder padding="xl" radius="md">
+          <Stack align="center" gap="md">
+            <Title order={4}>
+              {t('pages.gameDetail.rounds.setupNotAvailable')}
+            </Title>
+            <Text c="dimmed" size="sm" ta="center">
+              {t('pages.gameDetail.rounds.setupNotAvailableDescription')}
+            </Text>
           </Stack>
         </Card>
       )}
@@ -265,9 +280,25 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                     <Title order={4}>
                       {`${t('pages.gameDetail.rounds.table')} ${table.tableNumber + 1}`}
                     </Title>
-                    {hasScores(table) && (
-                      <Badge color="green" variant="light">
+                    {hasScores(table) ? (
+                      <Badge
+                        color="green"
+                        leftSection={
+                          <IconCheck style={{ width: 14, height: 14 }} />
+                        }
+                        variant="light"
+                      >
                         {t('pages.gameDetail.rounds.scoresEntered')}
+                      </Badge>
+                    ) : (
+                      <Badge
+                        color="gray"
+                        leftSection={
+                          <IconClock style={{ width: 14, height: 14 }} />
+                        }
+                        variant="light"
+                      >
+                        {t('pages.gameDetail.rounds.scoresPending')}
                       </Badge>
                     )}
                   </Group>
