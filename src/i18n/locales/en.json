@@ -3,14 +3,23 @@
     "loading": "Loading...",
     "errorOccurred": "An error occurred",
     "error": "Error",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "success": "Success",
+    "delete": "Delete",
+    "save": "Save"
   },
   "header": {
     "heading": "Knobel Manager",
     "logout": "Logout",
     "nav": {
       "home": "Home",
-      "games": "Games"
+      "games": "Games",
+      "settings": "Settings",
+      "language": "Language",
+      "languages": {
+        "english": "🇬🇧 English",
+        "german": "🇩🇪 Deutsch"
+      }
     }
   },
 
@@ -105,6 +114,7 @@
       "noGames": "No games yet. Create your first tournament!",
       "noResults": "No games found matching your search.",
       "createFirstGame": "Create Your First Game",
+      "deleteGame": "Delete Game",
       "confirmDelete": "Are you sure you want to delete this game?",
       "card": {
         "details": {
@@ -115,9 +125,14 @@
           "status": "Status"
         },
         "activateButton": "Activate",
+        "activateTooltip": "Set as active game to access quickly from Home page",
+        "activateTooltipDisabled": "This game is already active",
+        "activeGameTooltip": "Currently selected for quick access on Home page",
         "deleteButton": "Delete",
         "viewDetails": "View Details",
-        "isActive": "Active"
+        "isActive": "Active",
+        "gameCreated": "Game \"{{name}}\" created successfully",
+        "teamAdded": "Team \"{{name}}\" added successfully"
       },
       "form": {
         "heading": "Create game",
@@ -141,8 +156,16 @@
       },
       "actions": {
         "startGame": "Start Game",
+        "startGameConfirmation": "Are you sure you want to start this tournament? After starting:",
+        "startGameWarning1": "You won't be able to add more teams",
+        "startGameWarning2": "Table assignments will be generated",
+        "startGameWarning3": "You can begin entering scores",
+        "gameStartedNotification": "Game Started",
+        "gameStartedMessage": "Setup matchmaking in the Rounds tab to begin",
         "completeGame": "Complete Game",
+        "completeGameConfirmation": "Are you sure you want to complete this tournament? This will finalize all scores and rankings.",
         "completeGameDisabledTooltip": "All scores must be entered for every round before completing the game",
+        "scoreProgress": "Score progress: {{completed}} of {{total}} tables completed",
         "exportPDF": "Export PDF"
       },
       "pdfMenu": {
@@ -161,10 +184,18 @@
       },
       "teams": {
         "addTeam": "Add Team",
+        "cannotAddTeamsAfterStart": "Cannot add teams after tournament has started",
         "noTeams": "No teams yet. Add your first team to get started!",
         "players": "Players",
+        "player": "Player",
+        "deleteTeam": "Delete Team",
         "confirmDeleteTeam": "Are you sure you want to delete this team? This action cannot be undone.",
         "confirmDeletePlayer": "Are you sure you want to delete this player? This action cannot be undone.",
+        "editTeamDialog": "Edit Team",
+        "teamName": "Team Name",
+        "teamNamePlaceholder": "Enter team name",
+        "playerName": "Player Name",
+        "playerNamePlaceholder": "Enter player name",
         "roundShort": "R",
         "tableShort": "T"
       },
@@ -176,17 +207,22 @@
         "player": "Player",
         "team": "Team",
         "score": "Score",
+        "scorePlaceholder": "0",
         "noTables": "No tables available for this round.",
         "noSearchResults": "No tables match your search.",
         "searchPlayers": "Search by player name...",
         "scoresEntered": "Scores Entered",
+        "scoresPending": "Pending",
         "enterScores": "Enter Scores",
         "editScores": "Edit Scores",
         "saveScores": "Save Scores",
+        "scoresSaved": "Scores saved for Table {{table}}",
         "setupMatchmaking": "Setup Matchmaking",
         "rerunMatchmaking": "Re-run Matchmaking",
         "setupRequired": "Matchmaking Setup Required",
         "setupDescription": "Click the button below to generate tables and player assignments for all rounds. This will use the backend matchmaking algorithm to distribute players fairly.",
+        "setupNotAvailable": "Matchmaking Not Available",
+        "setupNotAvailableDescription": "Matchmaking can only be set up when the game is in setup mode. This game has already started or been completed.",
         "generatingTables": "Generating tables and matchmaking...",
         "setupError": "Failed to setup matchmaking. Please try again.",
         "matchmakingInfo": "Backend will handle matchmaking and create tables automatically"
@@ -199,6 +235,9 @@
         "player": "Player",
         "totalScore": "Total Score",
         "noData": "No scores entered yet",
+        "noScoresYet": "No Scores Yet",
+        "noScoresMessage": "Rankings will appear here once you enter scores in the Rounds tab.",
+        "noScoresInstructions": "Start by setting up matchmaking, then enter scores for each table.",
         "filterByRound": "Filter by Round",
         "totalRanking": "Total (All Rounds)"
       }

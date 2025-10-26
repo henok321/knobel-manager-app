@@ -7,6 +7,7 @@ import {
   Stack,
   Group,
 } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,6 +38,11 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
       numberOfRounds: Number(formData.get('numberOfRounds')),
     };
     createGame(game);
+    notifications.show({
+      title: t('global.success'),
+      message: t('pages.games.card.gameCreated', { name: game.name }),
+      color: 'green',
+    });
     onClose();
   };
 

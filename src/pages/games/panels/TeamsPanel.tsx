@@ -1,5 +1,3 @@
-import { PencilIcon } from '@heroicons/react/16/solid';
-import { PlusIcon, TrashIcon } from '@heroicons/react/24/solid';
 import {
   ActionIcon,
   Badge,
@@ -8,13 +6,16 @@ import {
   Group,
   Stack,
   Text,
-  TextInput,
   Title,
+  Tooltip,
 } from '@mantine/core';
+import { modals } from '@mantine/modals';
+import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import EditTeamDialog from '../../../components/EditTeamDialog';
 import { GameStatusEnum } from '../../../generated';
 import usePlayers from '../../../slices/players/hooks';
 import useTables from '../../../slices/tables/hooks';
@@ -32,12 +33,10 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
   const { createTeam, updateTeam, deleteTeam } = useTeams();
   const { updatePlayer } = usePlayers();
-  const { fetchAllTables } = useTables();
+  const { fetchAllTables, status } = useTables();
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
-  const [editingTeam, setEditingTeam] = useState<number | null>(null);
-  const [editingPlayer, setEditingPlayer] = useState<number | null>(null);
-  const [editedTeamName, setEditedTeamName] = useState<string>('');
-  const [editedPlayerName, setEditedPlayerName] = useState<string>('');
+  const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
+  const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
 
   const teamsEntities = useSelector((state: RootState) => state.teams.entities);
   const allPlayers = useSelector((state: RootState) => state.players.entities);
@@ -56,27 +55,24 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     game.status === GameStatusEnum.Setup ||
     game.status === GameStatusEnum.InProgress;
   const isCompleted = game.status === GameStatusEnum.Completed;
-  const showTableAssignments =
-    game.status === GameStatusEnum.InProgress ||
-    game.status === GameStatusEnum.Completed;
 
-  // Fetch all tables when in progress or completed
+  const roundsCount = useMemo(
+    () => game.rounds?.length || 0,
+    [game.rounds?.length],
+  );
+
   useEffect(() => {
-    if (showTableAssignments) {
+    if (roundsCount > 0 && status === 'idle') {
       fetchAllTables(game.id, game.numberOfRounds);
     }
-  }, [game.id, game.numberOfRounds, showTableAssignments, fetchAllTables]);
+  }, [game.id, game.numberOfRounds, roundsCount, fetchAllTables, status]);
 
-  // Compute player table assignments from Redux state using useMemo
+  let showTableAssignments;
   const playerTableAssignments = useMemo(() => {
     const assignments: Record<
       number,
       { roundNumber: number; tableNumber: number }[]
     > = {};
-
-    if (!showTableAssignments) {
-      return assignments;
-    }
 
     for (const table of allTables) {
       const players = table.players;
@@ -92,7 +88,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     }
 
     return assignments;
-  }, [allTables, showTableAssignments]);
+  }, [allTables]);
 
   const getPlayersForTeam = (teamId: number) => {
     const team = teams.find((t) => t?.id === teamId);
@@ -113,48 +109,65 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     setIsTeamFormOpen(false);
   };
 
-  const handleStartEditTeam = (teamId: number, currentName: string) => {
-    setEditingTeam(teamId);
-    setEditedTeamName(currentName);
+  const handleStartEditTeam = (teamId: number) => {
+    setEditingTeamId(teamId);
+    setEditTeamDialogOpen(true);
   };
 
-  const handleSaveTeamName = (teamId: number) => {
-    if (editedTeamName.trim()) {
-      updateTeam(teamId, editedTeamName.trim());
+  const handleSaveTeam = (
+    teamName: string,
+    players: { id: number; name: string }[],
+  ) => {
+    if (editingTeamId) {
+      // Update team name
+      updateTeam(editingTeamId, teamName);
+
+      // Update all player names
+      players.forEach((player) => {
+        updatePlayer(player.id, player.name);
+      });
     }
-    setEditingTeam(null);
-    setEditedTeamName('');
+    setEditTeamDialogOpen(false);
+    setEditingTeamId(null);
   };
 
   const handleDeleteTeam = (teamId: number) => {
-    if (globalThis.confirm(t('pages.gameDetail.teams.confirmDeleteTeam'))) {
-      deleteTeam(teamId);
-    }
-  };
-
-  const handleStartEditPlayer = (playerId: number, currentName: string) => {
-    setEditingPlayer(playerId);
-    setEditedPlayerName(currentName);
-  };
-
-  const handleSavePlayerName = (playerId: number) => {
-    if (editedPlayerName.trim()) {
-      updatePlayer(playerId, editedPlayerName.trim());
-    }
-    setEditingPlayer(null);
-    setEditedPlayerName('');
+    modals.openConfirmModal({
+      title: t('pages.gameDetail.teams.deleteTeam'),
+      children: (
+        <Text size="sm">{t('pages.gameDetail.teams.confirmDeleteTeam')}</Text>
+      ),
+      labels: {
+        confirm: t('global.delete'),
+        cancel: t('global.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm: () => {
+        deleteTeam(teamId);
+      },
+    });
   };
 
   return (
     <Stack gap="md">
-      {canAddDelete && (
+      {canAddDelete ? (
         <Button
-          leftSection={<PlusIcon style={{ width: 20, height: 20 }} />}
+          leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
           style={{ alignSelf: 'flex-start' }}
           onClick={() => setIsTeamFormOpen(true)}
         >
           {t('pages.gameDetail.teams.addTeam')}
         </Button>
+      ) : (
+        <Tooltip label={t('pages.gameDetail.teams.cannotAddTeamsAfterStart')}>
+          <Button
+            disabled
+            leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
+            style={{ alignSelf: 'flex-start' }}
+          >
+            {t('pages.gameDetail.teams.addTeam')}
+          </Button>
+        </Tooltip>
       )}
 
       {canAddDelete && teams.length === 0 && (
@@ -171,40 +184,17 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
           return (
             <Card key={team.id} withBorder padding="lg" radius="md" shadow="sm">
               <Stack gap="md">
-                {/* Team Name */}
+                {/* Team Name with Edit/Delete Actions */}
                 <Group align="center" justify="space-between">
-                  {editingTeam === team.id ? (
-                    <Group style={{ flex: 1 }}>
-                      <TextInput
-                        style={{ flex: 1 }}
-                        value={editedTeamName}
-                        onBlur={() => handleSaveTeamName(team.id)}
-                        onChange={(e) =>
-                          setEditedTeamName(e.currentTarget.value)
-                        }
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            handleSaveTeamName(team.id);
-                          } else if (e.key === 'Escape') {
-                            setEditingTeam(null);
-                            setEditedTeamName('');
-                          }
-                        }}
-                      />
-                    </Group>
-                  ) : (
-                    <Title order={3}>{team.name}</Title>
-                  )}
+                  <Title order={3}>{team.name}</Title>
                   {!isCompleted && (
                     <Group gap="xs">
                       {canEdit && (
                         <ActionIcon
                           variant="subtle"
-                          onClick={() =>
-                            handleStartEditTeam(team.id, team.name)
-                          }
+                          onClick={() => handleStartEditTeam(team.id)}
                         >
-                          <PencilIcon style={{ width: 16, height: 16 }} />
+                          <IconPencil style={{ width: 16, height: 16 }} />
                         </ActionIcon>
                       )}
                       {canAddDelete && (
@@ -213,7 +203,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                           variant="subtle"
                           onClick={() => handleDeleteTeam(team.id)}
                         >
-                          <TrashIcon style={{ width: 16, height: 16 }} />
+                          <IconTrash style={{ width: 16, height: 16 }} />
                         </ActionIcon>
                       )}
                     </Group>
@@ -234,79 +224,31 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                         justify="space-between"
                         wrap="wrap"
                       >
-                        {editingPlayer === player.id ? (
-                          <TextInput
-                            size="sm"
-                            style={{ flex: 1 }}
-                            value={editedPlayerName}
-                            onBlur={() => handleSavePlayerName(player.id)}
-                            onChange={(e) =>
-                              setEditedPlayerName(e.currentTarget.value)
-                            }
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                handleSavePlayerName(player.id);
-                              } else if (e.key === 'Escape') {
-                                setEditingPlayer(null);
-                                setEditedPlayerName('');
-                              }
-                            }}
-                          />
-                        ) : (
-                          <>
-                            <Stack gap="4px" style={{ flex: 1 }}>
-                              <Text size="sm">{player.name}</Text>
-                              {showTableAssignments &&
-                                (playerTableAssignments[player.id]?.length ??
-                                  0) > 0 && (
-                                  <Group gap="4px" wrap="wrap">
-                                    {(playerTableAssignments[player.id] ?? [])
-                                      .slice()
-                                      .sort(
-                                        (a, b) => a.roundNumber - b.roundNumber,
-                                      )
-                                      .map((assignment) => (
-                                        <Badge
-                                          key={`${assignment.roundNumber}-${assignment.tableNumber}`}
-                                          color="blue"
-                                          size="sm"
-                                          variant="light"
-                                        >
-                                          {t(
-                                            'pages.gameDetail.teams.roundShort',
-                                          )}
-                                          {assignment.roundNumber}:
-                                          {t(
-                                            'pages.gameDetail.teams.tableShort',
-                                          )}
-                                          {assignment.tableNumber + 1}
-                                        </Badge>
-                                      ))}
-                                  </Group>
-                                )}
-                            </Stack>
-                            {!isCompleted && (
-                              <Group gap="xs">
-                                {canEdit && (
-                                  <ActionIcon
-                                    size="sm"
-                                    variant="subtle"
-                                    onClick={() =>
-                                      handleStartEditPlayer(
-                                        player.id,
-                                        player.name,
-                                      )
-                                    }
-                                  >
-                                    <PencilIcon
-                                      style={{ width: 12, height: 12 }}
-                                    />
-                                  </ActionIcon>
-                                )}
+                        <Stack gap="4px" style={{ flex: 1 }}>
+                          <Text size="sm">{player.name}</Text>
+                          {showTableAssignments &&
+                            (playerTableAssignments[player.id]?.length ?? 0) >
+                              0 && (
+                              <Group gap="4px" wrap="wrap">
+                                {(playerTableAssignments[player.id] ?? [])
+                                  .slice()
+                                  .sort((a, b) => a.roundNumber - b.roundNumber)
+                                  .map((assignment) => (
+                                    <Badge
+                                      key={`${assignment.roundNumber}-${assignment.tableNumber}`}
+                                      color="blue"
+                                      size="sm"
+                                      variant="light"
+                                    >
+                                      {t('pages.gameDetail.teams.roundShort')}
+                                      {assignment.roundNumber}:
+                                      {t('pages.gameDetail.teams.tableShort')}
+                                      {assignment.tableNumber + 1}
+                                    </Badge>
+                                  ))}
                               </Group>
                             )}
-                          </>
-                        )}
+                        </Stack>
                       </Group>
                     );
                   })}
@@ -323,6 +265,19 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         teamSize={game.teamSize}
         onClose={() => setIsTeamFormOpen(false)}
       />
+
+      {editingTeamId && (
+        <EditTeamDialog
+          isOpen={editTeamDialogOpen}
+          players={getPlayersForTeam(editingTeamId)}
+          teamName={teams.find((t) => t?.id === editingTeamId)?.name || ''}
+          onClose={() => {
+            setEditTeamDialogOpen(false);
+            setEditingTeamId(null);
+          }}
+          onSave={handleSaveTeam}
+        />
+      )}
     </Stack>
   );
 };

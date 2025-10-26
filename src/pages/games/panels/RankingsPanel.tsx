@@ -1,15 +1,12 @@
-import { Alert, Card, Select, Stack, Table, Text, Title } from '@mantine/core';
+import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
 import { useMemo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { tablesApi } from '../../../api/apiClient';
-import { Table as TableModel } from '../../../generated/models';
+import useTables from '../../../slices/tables/hooks.ts';
 import { Game } from '../../../slices/types';
 import { RootState } from '../../../store/store';
 import {
-  PlayerRanking,
-  TeamRanking,
   mapPlayersToRankings,
   mapTeamsToRankings,
 } from '../../../utils/rankingsMapper';
@@ -22,17 +19,13 @@ interface RankingsPanelProps {
 
 const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [playerRankings, setPlayerRankings] = useState<PlayerRanking[]>([]);
-  const [teamRankings, setTeamRankings] = useState<TeamRanking[]>([]);
   const [selectedRound, setSelectedRound] = useState<string>('total');
 
   const teamsState = useSelector((state: RootState) => state.teams.entities);
   const playersState = useSelector(
     (state: RootState) => state.players.entities,
   );
-  const tablesStatus = useSelector((state: RootState) => state.tables.status);
+  const { fetchAllTables, tables, status } = useTables();
 
   const roundOptions = useMemo(
     () => [
@@ -45,70 +38,59 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     [game.numberOfRounds, t],
   );
 
+  const roundsCount = useMemo(
+    () => game.rounds?.length || 0,
+    [game.rounds?.length],
+  );
+
   useEffect(() => {
-    const fetchAndCalculateRankings = async () => {
-      setLoading(true);
-      setError(null);
+    if (roundsCount > 0 && status === 'idle') {
+      fetchAllTables(game.id, game.numberOfRounds);
+    }
+  }, [roundsCount, status, fetchAllTables, game.id, game.numberOfRounds]);
 
-      try {
-        const roundsToFetch =
-          selectedRound === 'total'
-            ? Array.from({ length: game.numberOfRounds }, (_, i) => i + 1)
-            : [Number(selectedRound)];
+  const filteredTables = useMemo(() => {
+    if (!Array.isArray(tables) || tables.length === 0) {
+      return [];
+    }
 
-        const allTables: TableModel[] = [];
-        for (const roundNum of roundsToFetch) {
-          try {
-            const response = await tablesApi.getTables(game.id, roundNum);
-            const tables = response.data.tables;
+    if (selectedRound === 'total') {
+      return tables;
+    }
 
-            if (Array.isArray(tables)) {
-              allTables.push(...tables);
-            }
-          } catch (err) {
-            // eslint-disable-next-line no-console
-            console.warn(`No tables for round ${roundNum}`, err);
-          }
-        }
+    const roundNum = Number(selectedRound);
+    return tables.filter((table) => table.roundID === roundNum);
+  }, [tables, selectedRound]);
 
-        const allScores = aggregateScoresFromTables(allTables);
+  const allScores = useMemo(
+    () => aggregateScoresFromTables(filteredTables),
+    [filteredTables],
+  );
 
-        const gameTeams = game.teams
-          .map((teamId) => teamsState[teamId])
-          .filter((team) => team !== undefined);
+  const hasNoScores = useMemo(
+    () => Object.keys(allScores).length === 0,
+    [allScores],
+  );
 
-        const playerRankingsData = mapPlayersToRankings(
-          gameTeams,
-          playersState,
-          allScores,
-        );
-        setPlayerRankings(playerRankingsData);
+  const gameTeams = useMemo(
+    () =>
+      game.teams
+        .map((teamId) => teamsState[teamId])
+        .filter((team) => team !== undefined),
+    [game.teams, teamsState],
+  );
 
-        const teamRankingsData = mapTeamsToRankings(
-          gameTeams,
-          playerRankingsData,
-        );
-        setTeamRankings(teamRankingsData);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : t('global.errorOccurred'),
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+  const playerRankings = useMemo(
+    () => mapPlayersToRankings(gameTeams, playersState, allScores),
+    [gameTeams, playersState, allScores],
+  );
 
-    fetchAndCalculateRankings();
-  }, [
-    game.id,
-    game.numberOfRounds,
-    game.teams,
-    playersState,
-    teamsState,
-    selectedRound,
-    tablesStatus,
-    t,
-  ]);
+  const teamRankings = useMemo(
+    () => mapTeamsToRankings(gameTeams, playerRankings),
+    [gameTeams, playerRankings],
+  );
+
+  const loading = status === 'pending';
 
   if (loading) {
     return (
@@ -118,11 +100,19 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     );
   }
 
-  if (error) {
+  if (hasNoScores && teamRankings.length === 0) {
     return (
-      <Alert color="red" title={t('global.error')}>
-        {error}
-      </Alert>
+      <Card withBorder padding="xl" radius="md">
+        <Stack align="center" gap="md">
+          <Title order={4}>{t('pages.gameDetail.rankings.noScoresYet')}</Title>
+          <Text c="dimmed" size="sm" ta="center">
+            {t('pages.gameDetail.rankings.noScoresMessage')}
+          </Text>
+          <Text c="dimmed" size="sm" ta="center">
+            {t('pages.gameDetail.rankings.noScoresInstructions')}
+          </Text>
+        </Stack>
+      </Card>
     );
   }
 

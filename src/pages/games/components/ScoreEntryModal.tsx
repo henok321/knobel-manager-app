@@ -1,5 +1,6 @@
 import { Button, Group, Modal, NumberInput, Stack, Text } from '@mantine/core';
-import { useState } from 'react';
+import { notifications } from '@mantine/notifications';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Player, Table } from '../../../generated';
@@ -22,15 +23,20 @@ const ScoreEntryModal = ({
   const { t } = useTranslation();
   const [scores, setScores] = useState<Record<number, number>>({});
 
+  const players = useMemo(() => table?.players || [], [table?.players]);
+
+  const initialScores = useMemo(() => {
+    const scoreMap: Record<number, number> = {};
+    for (const player of players) {
+      const existingScore = table?.scores?.find(
+        (s) => s.playerID === player.id,
+      );
+      scoreMap[player.id] = existingScore?.score || 0;
+    }
+    return scoreMap;
+  }, [players, table?.scores]);
+
   if (!table) return null;
-
-  const players = table.players || [];
-
-  const initialScores: Record<number, number> = {};
-  for (const player of players) {
-    const existingScore = table.scores?.find((s) => s.playerID === player.id);
-    initialScores[player.id] = existingScore?.score || 0;
-  }
 
   const handleSubmit = () => {
     const scoresArray = players.map((player: Player) => ({
@@ -38,6 +44,13 @@ const ScoreEntryModal = ({
       score: scores[player.id] ?? initialScores[player.id] ?? 0,
     }));
     onSubmit(scoresArray);
+    notifications.show({
+      title: t('global.success'),
+      message: t('pages.gameDetail.rounds.scoresSaved', {
+        table: table.tableNumber,
+      }),
+      color: 'green',
+    });
     onClose();
   };
 
@@ -65,7 +78,7 @@ const ScoreEntryModal = ({
             defaultValue={initialScores[player.id]}
             label={player.name}
             min={0}
-            placeholder="0"
+            placeholder={t('pages.gameDetail.rounds.scorePlaceholder')}
             onChange={(value) =>
               setScores((prev) => ({
                 ...prev,
