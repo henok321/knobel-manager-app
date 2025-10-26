@@ -14,7 +14,7 @@ const Layout: React.FC<LayoutProps> = ({
   children,
   onOpenGameForm,
 }) => (
-  <AppShell header={{ height: 60 }} padding="0">
+  <AppShell header={{ height: 60 }} padding={0}>
     <AppShell.Header>
       <Header navbarActive={navbarActive} onOpenGameForm={onOpenGameForm} />
     </AppShell.Header>
