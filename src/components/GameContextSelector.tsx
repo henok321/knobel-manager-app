@@ -119,25 +119,28 @@ const GameContextSelector = ({
     <Menu position="bottom" shadow="md" width={320}>
       <Menu.Target>
         <UnstyledButton
-          style={{
+          sx={(theme) => ({
             padding: '8px 12px',
-            borderRadius: 'var(--mantine-radius-sm)',
-            border:
-              '1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4))',
+            borderRadius: theme.radius.sm,
+            border: `1px solid ${
+              theme.colorScheme === 'dark'
+                ? theme.colors.dark[4]
+                : theme.colors.gray[3]
+            }`,
             backgroundColor:
-              'light-dark(var(--mantine-color-white), var(--mantine-color-dark-6))',
+              theme.colorScheme === 'dark'
+                ? theme.colors.dark[6]
+                : theme.white,
             transition: 'background-color 150ms ease',
             width: '100%',
             maxWidth: isMobile ? '100%' : '400px',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor =
-              'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5))';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor =
-              'light-dark(var(--mantine-color-white), var(--mantine-color-dark-6))';
-          }}
+            '&:hover': {
+              backgroundColor:
+                theme.colorScheme === 'dark'
+                  ? theme.colors.dark[5]
+                  : theme.colors.gray[0],
+            },
+          })}
         >
           <Group gap="xs" wrap="nowrap">
             <Box style={{ flex: 1, minWidth: 0 }}>
