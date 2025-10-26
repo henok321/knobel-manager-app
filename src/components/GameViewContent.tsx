@@ -2,6 +2,7 @@ import {
   Badge,
   Button,
   Group,
+  Skeleton,
   Stack,
   Tabs,
   Text,
@@ -11,11 +12,10 @@ import {
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import PdfExportMenu from './PdfExportMenu';
 import { GameStatusEnum, GameUpdateRequest } from '../generated';
 import RankingsPanel from '../pages/games/panels/RankingsPanel';
 import RoundsPanel from '../pages/games/panels/RoundsPanel';
@@ -23,6 +23,8 @@ import TeamsPanel from '../pages/games/panels/TeamsPanel';
 import useGames from '../slices/games/hooks';
 import { tablesSelectors } from '../slices/tables/slice';
 import { Game } from '../slices/types';
+
+const PdfExportMenu = lazy(() => import('./PdfExportMenu'));
 
 interface GameViewContentProps {
   game: Game;
@@ -258,7 +260,9 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
               </Button>
             </Tooltip>
           )}
-          <PdfExportMenu game={game} />
+          <Suspense fallback={<Skeleton height={36} width={120} />}>
+            <PdfExportMenu game={game} />
+          </Suspense>
         </Group>
       </Group>
 

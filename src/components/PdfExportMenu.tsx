@@ -3,6 +3,7 @@ import { IconFileDownload } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import { tablesApi } from '../api/apiClient';
 import { GameStatusEnum } from '../generated';
 import { tablesSelectors } from '../slices/tables/slice';
 import { Game } from '../slices/types';
@@ -13,6 +14,11 @@ import {
   generateAllTeamHandouts,
   generateRankings,
 } from '../utils/pdf';
+import {
+  mapPlayersToRankings,
+  mapTeamsToRankings,
+} from '../utils/rankingsMapper';
+import { aggregateScoresFromTables } from '../utils/scoreAggregator';
 
 interface PdfExportMenuProps {
   game: Game;
@@ -162,15 +168,6 @@ const PdfExportMenu = ({
 
   const handleExportRankings = async (roundNumber?: number) => {
     try {
-      // Import necessary functions from rankings utilities
-      const { tablesApi } = await import('../api/apiClient');
-      const { mapPlayersToRankings, mapTeamsToRankings } = await import(
-        '../utils/rankingsMapper'
-      );
-      const { aggregateScoresFromTables } = await import(
-        '../utils/scoreAggregator'
-      );
-
       const roundsToFetch = roundNumber
         ? [roundNumber]
         : Array.from({ length: game.numberOfRounds }, (_, i) => i + 1);
