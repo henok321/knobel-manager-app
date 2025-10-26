@@ -21,18 +21,17 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
     <Menu position="bottom-end" shadow="md" width={220}>
       <Menu.Target>
         <UnstyledButton
-          style={{
+          sx={(theme) => ({
             padding: '8px 12px',
-            borderRadius: 'var(--mantine-radius-sm)',
+            borderRadius: theme.radius.sm,
             transition: 'background-color 150ms ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor =
-              'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }}
+            backgroundColor: 'transparent',
+            '&:hover': {
+              backgroundColor: theme.colorScheme === 'dark'
+                ? theme.colors.dark[6]
+                : theme.colors.gray[0],
+            },
+          })}
         >
           <Group gap="xs" wrap="nowrap">
             <Avatar color="blue" radius="xl" size="sm">
