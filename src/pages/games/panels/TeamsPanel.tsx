@@ -33,7 +33,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
   const { createTeam, updateTeam, deleteTeam } = useTeams();
   const { updatePlayer } = usePlayers();
-  const { fetchAllTables } = useTables();
+  const { fetchAllTables, status } = useTables();
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
@@ -55,27 +55,24 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     game.status === GameStatusEnum.Setup ||
     game.status === GameStatusEnum.InProgress;
   const isCompleted = game.status === GameStatusEnum.Completed;
-  const showTableAssignments =
-    game.status === GameStatusEnum.InProgress ||
-    game.status === GameStatusEnum.Completed;
 
-  // Fetch all tables when in progress or completed
+  const roundsCount = useMemo(
+    () => game.rounds?.length || 0,
+    [game.rounds?.length],
+  );
+
   useEffect(() => {
-    if (showTableAssignments) {
+    if (roundsCount > 0 && status === 'idle') {
       fetchAllTables(game.id, game.numberOfRounds);
     }
-  }, [game.id, game.numberOfRounds, showTableAssignments, fetchAllTables]);
+  }, [game.id, game.numberOfRounds, roundsCount, fetchAllTables, status]);
 
-  // Compute player table assignments from Redux state using useMemo
+  let showTableAssignments;
   const playerTableAssignments = useMemo(() => {
     const assignments: Record<
       number,
       { roundNumber: number; tableNumber: number }[]
     > = {};
-
-    if (!showTableAssignments) {
-      return assignments;
-    }
 
     for (const table of allTables) {
       const players = table.players;
@@ -91,7 +88,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     }
 
     return assignments;
-  }, [allTables, showTableAssignments]);
+  }, [allTables]);
 
   const getPlayersForTeam = (teamId: number) => {
     const team = teams.find((t) => t?.id === teamId);

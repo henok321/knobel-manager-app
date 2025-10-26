@@ -23,10 +23,8 @@ const ScoreEntryModal = ({
   const { t } = useTranslation();
   const [scores, setScores] = useState<Record<number, number>>({});
 
-  // Memoize players to prevent dependency issues
   const players = useMemo(() => table?.players || [], [table?.players]);
 
-  // Memoize initial scores calculation to prevent O(n*m) on every render
   const initialScores = useMemo(() => {
     const scoreMap: Record<number, number> = {};
     for (const player of players) {

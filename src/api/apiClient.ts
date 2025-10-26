@@ -10,7 +10,6 @@ import {
   TeamsApi,
 } from '../generated';
 
-// In test environment (Node), need absolute URL. In browser, relative URL works.
 const getBaseURL = () => {
   if (import.meta.env.PROD) {
     return import.meta.env.VITE_API_URL;

@@ -5,29 +5,20 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import GameViewContent from '../../components/GameViewContent';
-import { GameStatusEnum } from '../../generated';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
-import useTables from '../../slices/tables/hooks';
 
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { activeGame, allGames, fetchGames, status } = useGames();
-  const { fetchAllTables } = useTables();
 
   useEffect(() => {
     if (status === 'idle') {
       fetchGames();
     }
   }, [status, fetchGames]);
-
-  useEffect(() => {
-    if (activeGame && activeGame.status === GameStatusEnum.InProgress) {
-      fetchAllTables(activeGame.id, activeGame.numberOfRounds);
-    }
-  }, [activeGame, fetchAllTables]);
 
   if (status === 'pending' || status === 'idle') {
     return <CenterLoader />;

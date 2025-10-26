@@ -12,7 +12,7 @@ import {
   Title,
 } from '@mantine/core';
 import { IconCheck, IconClock } from '@tabler/icons-react';
-import { useMemo, useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -42,16 +42,16 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [selectedRound, setSelectedRound] = useState<string>('1');
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
-  const [isSetupMode, setIsSetupMode] = useState(true);
   const [settingUp, setSettingUp] = useState(false);
   const [setupError, setSetupError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Permission flags based on game status
+  // Derived state - no need for useState
   const canEditScores = game.status === GameStatusEnum.InProgress;
   const canSetupMatchmaking = game.status === GameStatusEnum.Setup;
+  const hasRounds = (game.rounds?.length || 0) > 0;
+  const isSetupMode = !hasRounds || tables.length === 0;
 
-  // Generate round options (memoized)
   const roundOptions = useMemo(
     () =>
       Array.from({ length: game.numberOfRounds }, (_, i) => ({
@@ -62,12 +62,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   );
 
   const filteredAndSortedTables = useMemo(() => {
-    // Filter by selected round first
     let filtered = tables.filter(
-      (table) =>
-        table.roundID === Number(selectedRound) &&
-        table.players &&
-        table.players.length > 0,
+      (table) => table.players && table.players.length > 0,
     );
 
     if (searchQuery.trim()) {
@@ -80,23 +76,13 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     }
 
     return filtered.sort((a, b) => a.tableNumber - b.tableNumber);
-  }, [tables, searchQuery, selectedRound]);
+  }, [tables, searchQuery]);
 
   useEffect(() => {
-    if (!game.id || !selectedRound) return;
+    if (!game.id || !selectedRound || !hasRounds) return;
 
     fetchTables(game.id, Number(selectedRound));
-  }, [game.id, selectedRound, fetchTables]);
-
-  useEffect(() => {
-    if (status === 'failed' && tablesError?.includes('404')) {
-      setIsSetupMode(true);
-    } else if (status === 'succeeded' && tables.length > 0) {
-      setIsSetupMode(false);
-    } else if (status === 'succeeded' && tables.length === 0) {
-      setIsSetupMode(true);
-    }
-  }, [status, tablesError, tables.length]);
+  }, [game.id, selectedRound, fetchTables, hasRounds]);
 
   const handleSetupGame = async () => {
     setSettingUp(true);
@@ -104,9 +90,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
     try {
       await gamesApi.setupGame(game.id);
-
+      // Fetch tables will update Redux store, which will automatically update isSetupMode
       fetchTables(game.id, Number(selectedRound));
-      setIsSetupMode(false);
     } catch (err) {
       const errorMessage =
         (
@@ -163,11 +148,10 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         .rounds-table tbody tr > td:nth-child(3),
         .rounds-table thead tr > th:nth-child(3) { text-align: right; }
       `}</style>
-      {!isSetupMode && (
+      {(!isSetupMode || game.status === GameStatusEnum.InProgress) && (
         <Group align="flex-end" justify="space-between" wrap="wrap">
           <Select
             data={roundOptions}
-            disabled={isSetupMode}
             label={t('pages.gameDetail.rounds.selectRound')}
             style={{ width: 200 }}
             value={selectedRound}
@@ -194,7 +178,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         </Group>
       )}
 
-      {/* Error Alert */}
       {displayError && (
         <Alert color="red" title={t('global.error')}>
           {displayError}
