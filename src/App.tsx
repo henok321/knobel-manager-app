@@ -15,6 +15,7 @@ const Login = lazy(() => import('./pages/Login.tsx'));
 const Home = lazy(() => import('./pages/home/Home.tsx'));
 const Games = lazy(() => import('./pages/games/Games.tsx'));
 const GameDetail = lazy(() => import('./pages/games/GameDetail.tsx'));
+const PrintView = lazy(() => import('./pages/games/PrintView.tsx'));
 
 const App = () => (
   <ErrorBoundary>
@@ -30,6 +31,7 @@ const App = () => (
                   <Route element={<Home />} path="/" />
                   <Route element={<Games />} path="/games" />
                   <Route element={<GameDetail />} path="/games/:gameId" />
+                  <Route element={<PrintView />} path="/games/:gameId/print" />
                 </Route>
               </Routes>
             </Suspense>

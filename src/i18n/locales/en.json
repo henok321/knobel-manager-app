@@ -166,10 +166,20 @@
         "completeGameConfirmation": "Are you sure you want to complete this tournament? This will finalize all scores and rankings.",
         "completeGameDisabledTooltip": "All scores must be entered for every round before completing the game",
         "scoreProgress": "Score progress: {{completed}} of {{total}} tables completed",
-        "exportPDF": "Export PDF"
+        "exportPDF": "Export PDF",
+        "printView": "Print View"
       },
       "pdfMenu": {
         "label": "Export Options",
+        "tablePlan": "Table Plan (All Rounds)",
+        "scoreSheets": "Score Sheets (All Tables)",
+        "teamHandouts": "Team Handouts (All Teams)",
+        "rankingsLabel": "Rankings",
+        "rankingsAll": "All Rounds (Total)",
+        "rankingsRound": "Round {{round}}"
+      },
+      "printMenu": {
+        "label": "Print Options",
         "tablePlan": "Table Plan (All Rounds)",
         "scoreSheets": "Score Sheets (All Tables)",
         "teamHandouts": "Team Handouts (All Teams)",
@@ -241,17 +251,25 @@
         "filterByRound": "Filter by Round",
         "totalRanking": "Total (All Rounds)"
       }
+    },
+    "printView": {
+      "back": "Back to Game",
+      "print": "Print",
+      "invalidType": "Invalid print view type"
     }
   },
   "pdf": {
     "teamHandout": {
       "title": "Team Handout",
+      "subtitle": "Complete Tournament Schedule for All Teams",
+      "subtitleSingle": "Tournament Schedule for Selected Team",
       "team": "Team",
       "round": "Round",
       "table": "Table",
       "tableAssignment": "Table Assignment",
+      "assignments": "Player Assignments",
       "notAssigned": "Not Assigned",
-      "summary": "Team Summary",
+      "summary": "{{players}} players across {{rounds}} rounds",
       "player": "Player",
       "filename": "Team_Handout",
       "allTeamsTitle": "All Team Handouts",
@@ -278,7 +296,8 @@
       "player": "Player",
       "team": "Team",
       "score": "Score",
-      "notes": "Notes:",
+      "notes": "Notes",
+      "notesPlaceholder": "Additional notes or remarks...",
       "filename": "Score_Sheets"
     },
     "rankings": {

@@ -250,7 +250,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                 <Group align="center" justify="space-between">
                   <Group gap="xs">
                     <Title order={4}>
-                      {`${t('pages.gameDetail.rounds.table')} ${table.tableNumber + 1}`}
+                      {`${t('pages.gameDetail.rounds.table')} ${table.tableNumber}`}
                     </Title>
                     {hasScores(table) ? (
                       <Badge

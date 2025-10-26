@@ -24,7 +24,7 @@ import useGames from '../slices/games/hooks';
 import { tablesSelectors } from '../slices/tables/slice';
 import { Game } from '../slices/types';
 
-const PdfExportMenu = lazy(() => import('./PdfExportMenu'));
+const PrintMenu = lazy(() => import('./PrintMenu'));
 
 interface GameViewContentProps {
   game: Game;
@@ -261,7 +261,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
             </Tooltip>
           )}
           <Suspense fallback={<Skeleton height={36} width={120} />}>
-            <PdfExportMenu game={game} />
+            <PrintMenu game={game} />
           </Suspense>
         </Group>
       </Group>

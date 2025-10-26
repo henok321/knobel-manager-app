@@ -4,7 +4,7 @@ import { scoresApi, tablesApi } from '../../api/apiClient';
 import { Table } from '../../generated';
 
 export const fetchTablesForRound = createAsyncThunk<
-  Table[],
+  (Table & { roundNumber: number })[],
   { gameId: number; roundNumber: number }
 >('tables/fetchForRound', async ({ gameId, roundNumber }) => {
   const response = await tablesApi.getTables(gameId, roundNumber);
@@ -15,10 +15,10 @@ export const fetchTablesForRound = createAsyncThunk<
 });
 
 export const fetchAllTablesForGame = createAsyncThunk<
-  Table[],
+  (Table & { roundNumber: number })[],
   { gameId: number; numberOfRounds: number }
 >('tables/fetchAllForGame', async ({ gameId, numberOfRounds }) => {
-  const allTables: Table[] = [];
+  const allTables: (Table & { roundNumber: number })[] = [];
 
   for (let roundNum = 1; roundNum <= numberOfRounds; roundNum++) {
     const response = await tablesApi.getTables(gameId, roundNum);
@@ -33,7 +33,7 @@ export const fetchAllTablesForGame = createAsyncThunk<
 });
 
 export const updateScoresForTable = createAsyncThunk<
-  Table[],
+  (Table & { roundNumber: number })[],
   {
     gameId: number;
     roundNumber: number;

@@ -1,0 +1,110 @@
+/* Print styles for print view pages */
+
+@media print {
+  /* Hide print controls when printing */
+  .print-controls {
+    display: none !important;
+  }
+
+  /* Ensure page breaks work correctly */
+  .print-page-break {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  /* Prevent page breaks inside elements */
+  .table-card,
+  table,
+  .mantine-Paper-root {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Remove shadows and backgrounds for cleaner print */
+  .mantine-Paper-root {
+    box-shadow: none !important;
+    background: white !important;
+  }
+
+  /* Ensure tables print properly */
+  table {
+    border-collapse: collapse;
+  }
+
+  /* Ensure proper table sizing */
+  .tables-grid {
+    display: block;
+  }
+
+  .table-card {
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+  }
+
+  /* Optimize text for print */
+  body {
+    color: black;
+    background: white;
+  }
+
+  /* Remove unnecessary spacing */
+  .print-header {
+    margin-bottom: 2rem;
+  }
+
+  /* Ensure badges print well */
+  .mantine-Badge-root {
+    border: 1px solid currentColor;
+  }
+
+  /* Handle links for print */
+  a {
+    text-decoration: underline;
+    color: black;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+
+  /* Header stays at top of first page only */
+  .print-header {
+    page-break-after: avoid;
+  }
+
+  /* Ensure round titles stay with their content */
+  h3 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+}
+
+/* Screen styles for print view (not when printing) */
+@media screen {
+  .print-controls {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+    border-bottom: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .print-page-break {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  /* Add visual separator between "pages" on screen */
+  .print-page-break:not(:last-child) {
+    border-bottom: 2px dashed #dee2e6;
+  }
+}

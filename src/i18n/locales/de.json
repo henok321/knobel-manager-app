@@ -166,10 +166,20 @@
         "completeGameConfirmation": "Bist du sicher, dass du dieses Turnier abschließen möchtest? Dies wird alle Punkte und Ranglisten finalisieren.",
         "completeGameDisabledTooltip": "Alle Punkte müssen für jede Runde eingetragen werden, bevor das Spiel abgeschlossen werden kann",
         "scoreProgress": "Punkte-Fortschritt: {{completed}} von {{total}} Tischen abgeschlossen",
-        "exportPDF": "PDF exportieren"
+        "exportPDF": "PDF exportieren",
+        "printView": "Druckansicht"
       },
       "pdfMenu": {
         "label": "Export-Optionen",
+        "tablePlan": "Tischplan (Alle Runden)",
+        "scoreSheets": "Punktebögen (Alle Tische)",
+        "teamHandouts": "Team-Handouts (Alle Teams)",
+        "rankingsLabel": "Ranglisten",
+        "rankingsAll": "Alle Runden (Gesamt)",
+        "rankingsRound": "Runde {{round}}"
+      },
+      "printMenu": {
+        "label": "Druckoptionen",
         "tablePlan": "Tischplan (Alle Runden)",
         "scoreSheets": "Punktebögen (Alle Tische)",
         "teamHandouts": "Team-Handouts (Alle Teams)",
@@ -241,17 +251,25 @@
         "filterByRound": "Nach Runde filtern",
         "totalRanking": "Gesamt (Alle Runden)"
       }
+    },
+    "printView": {
+      "back": "Zurück zum Spiel",
+      "print": "Drucken",
+      "invalidType": "Ungültiger Druckansichtstyp"
     }
   },
   "pdf": {
     "teamHandout": {
       "title": "Team-Handout",
+      "subtitle": "Vollständiger Turnierplan für alle Teams",
+      "subtitleSingle": "Turnierplan für ausgewähltes Team",
       "team": "Team",
       "round": "Runde",
       "table": "Tisch",
       "tableAssignment": "Tischzuweisung",
+      "assignments": "Spielerzuweisungen",
       "notAssigned": "Nicht zugewiesen",
-      "summary": "Team-Übersicht",
+      "summary": "{{players}} Spieler über {{rounds}} Runden",
       "player": "Spieler",
       "filename": "Team_Handout",
       "allTeamsTitle": "Alle Team-Handouts",
@@ -278,7 +296,8 @@
       "player": "Spieler",
       "team": "Team",
       "score": "Punktzahl",
-      "notes": "Notizen:",
+      "notes": "Notizen",
+      "notesPlaceholder": "Zusätzliche Notizen oder Anmerkungen...",
       "filename": "Punkteboegen"
     },
     "rankings": {
