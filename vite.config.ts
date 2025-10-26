@@ -24,5 +24,21 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            if (
+              id.includes('node_modules/jspdf') ||
+              id.includes('node_modules/html2canvas') ||
+              id.includes('node_modules/dompurify')
+            ) {
+              return 'vendor-pdf';
+            }
+            return undefined;
+          },
+        },
+      },
+    },
   };
 });

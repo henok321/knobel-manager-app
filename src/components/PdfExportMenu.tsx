@@ -162,7 +162,6 @@ const PdfExportMenu = ({
 
   const handleExportRankings = async (roundNumber?: number) => {
     try {
-      // Import necessary functions from rankings utilities
       const { tablesApi } = await import('../api/apiClient');
       const { mapPlayersToRankings, mapTeamsToRankings } = await import(
         '../utils/rankingsMapper'
