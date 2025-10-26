@@ -55,7 +55,7 @@ export default [
       ...react.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       ...prettierConfig.rules,
-      'prettier/prettier': 'warn',
+      'prettier/prettier': 'error',
 
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
