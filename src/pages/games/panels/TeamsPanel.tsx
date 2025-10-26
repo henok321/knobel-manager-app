@@ -67,7 +67,8 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     }
   }, [game.id, game.numberOfRounds, roundsCount, fetchAllTables, status]);
 
-  let showTableAssignments;
+  const showTableAssignments = allTables.length > 0;
+
   const playerTableAssignments = useMemo(() => {
     const assignments: Record<
       number,
@@ -77,11 +78,14 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     for (const table of allTables) {
       const players = table.players;
       if (!players) continue;
+      const tableRoundNumber =
+        (table as typeof table & { roundNumber?: number }).roundNumber ||
+        table.roundID;
       for (const playerId of players) {
         const id = playerId.id;
         assignments[id] ??= [];
         assignments[id].push({
-          roundNumber: table.roundID,
+          roundNumber: tableRoundNumber,
           tableNumber: table.tableNumber,
         });
       }
