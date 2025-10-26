@@ -53,7 +53,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     });
   };
 
-  override render(): ReactNode {
+  render(): ReactNode {
     if (this.state.hasError) {
       return (
         <Container py="xl" size="md">
