@@ -20,6 +20,10 @@ import type { Table } from '../../../generated';
 import { GameStatusEnum } from '../../../generated';
 import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
+import {
+  selectTablesForRoundWithSearch,
+  selectAllTables,
+} from '../../../slices/tables/slice';
 import { Game } from '../../../slices/types';
 import { RootState } from '../../../store/store';
 import { PlayerScoreRow } from '../components/PlayerScoreRow';
@@ -33,13 +37,13 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
   const { setupGame, status: gamesStatus } = useGames();
   const {
-    tables,
     status: tablesStatus,
     error: tablesError,
-    fetchTables,
+    fetchAllTables,
     updateScores,
   } = useTables();
   const teamsEntities = useSelector((state: RootState) => state.teams.entities);
+  const allTables = useSelector(selectAllTables);
   const [selectedRound, setSelectedRound] = useState<string>('1');
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
@@ -50,7 +54,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const canEditScores = game.status === GameStatusEnum.InProgress;
   const canSetupMatchmaking = game.status === GameStatusEnum.Setup;
   const hasRounds = (game.rounds?.length || 0) > 0;
-  const isSetupMode = !hasRounds || tables.length === 0;
+  const isSetupMode = !hasRounds || allTables.length === 0;
 
   const roundOptions = useMemo(
     () =>
@@ -61,35 +65,22 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     [game.numberOfRounds, t],
   );
 
-  const filteredAndSortedTables = useMemo(() => {
-    let filtered = tables.filter(
-      (table) => table.players && table.players.length > 0,
-    );
-
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter((table) =>
-        table.players?.some((player) =>
-          player.name?.toLowerCase().includes(query),
-        ),
-      );
-    }
-
-    return filtered.sort((a, b) => a.tableNumber - b.tableNumber);
-  }, [tables, searchQuery]);
+  const filteredAndSortedTables = useSelector((state: RootState) =>
+    selectTablesForRoundWithSearch(state, Number(selectedRound), searchQuery),
+  );
 
   useEffect(() => {
-    if (!game.id || !selectedRound || !hasRounds) return;
+    if (!game.id || !hasRounds || tablesStatus !== 'idle') return;
 
-    fetchTables(game.id, Number(selectedRound));
-  }, [game.id, selectedRound, fetchTables, hasRounds]);
+    fetchAllTables(game.id, game.numberOfRounds);
+  }, [game.id, hasRounds, tablesStatus, fetchAllTables, game.numberOfRounds]);
 
   const handleSetupGame = async () => {
     setSetupError(null);
 
     try {
       await setupGame(game.id);
-      fetchTables(game.id, Number(selectedRound));
+      fetchAllTables(game.id, game.numberOfRounds);
     } catch (err) {
       const errorMessage =
         (
@@ -220,11 +211,10 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         </Text>
       )}
 
-      {/* No Tables (after setup failed or empty) */}
       {!loading &&
         !isSetupMode &&
         !settingUp &&
-        tables.length === 0 &&
+        allTables.length === 0 &&
         !displayError && (
           <Card withBorder padding="lg" radius="md" shadow="sm">
             <Text c="dimmed" ta="center">
@@ -236,7 +226,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       {!loading &&
         !isSetupMode &&
         !settingUp &&
-        tables.length > 0 &&
+        allTables.length > 0 &&
         filteredAndSortedTables.length === 0 &&
         searchQuery.trim() && (
           <Card withBorder padding="lg" radius="md" shadow="sm">

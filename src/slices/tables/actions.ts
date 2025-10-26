@@ -8,7 +8,10 @@ export const fetchTablesForRound = createAsyncThunk<
   { gameId: number; roundNumber: number }
 >('tables/fetchForRound', async ({ gameId, roundNumber }) => {
   const response = await tablesApi.getTables(gameId, roundNumber);
-  return response.data.tables;
+  return response.data.tables.map((table) => ({
+    ...table,
+    roundNumber,
+  }));
 });
 
 export const fetchAllTablesForGame = createAsyncThunk<
@@ -19,7 +22,11 @@ export const fetchAllTablesForGame = createAsyncThunk<
 
   for (let roundNum = 1; roundNum <= numberOfRounds; roundNum++) {
     const response = await tablesApi.getTables(gameId, roundNum);
-    allTables.push(...response.data.tables);
+    const tablesWithRoundNumber = response.data.tables.map((table) => ({
+      ...table,
+      roundNumber: roundNum,
+    }));
+    allTables.push(...tablesWithRoundNumber);
   }
 
   return allTables;
@@ -39,6 +46,9 @@ export const updateScoresForTable = createAsyncThunk<
     await scoresApi.updateScores(gameId, roundNumber, tableNumber, { scores });
 
     const response = await tablesApi.getTables(gameId, roundNumber);
-    return response.data.tables;
+    return response.data.tables.map((table) => ({
+      ...table,
+      roundNumber,
+    }));
   },
 );

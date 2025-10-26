@@ -130,7 +130,6 @@ const Games = () => {
             </Button>
           </Group>
 
-          {/* Search */}
           {hasGames && (
             <TextInput
               placeholder={t('pages.games.search')}
@@ -158,7 +157,6 @@ const Games = () => {
             </Card>
           )}
 
-          {/* Active & In Progress Games */}
           {activeAndInProgressGames.length > 0 && (
             <Stack gap="md">
               <Title order={3}>
@@ -177,7 +175,6 @@ const Games = () => {
             </Stack>
           )}
 
-          {/* Completed Games */}
           {completedGames.length > 0 && (
             <Stack gap="md">
               <Divider />

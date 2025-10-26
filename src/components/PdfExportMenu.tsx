@@ -30,7 +30,6 @@ const PdfExportMenu = ({
   const teamsById = useSelector((state: RootState) => state.teams.entities);
   const playersById = useSelector((state: RootState) => state.players.entities);
 
-  // Only show if game is in progress or completed
   if (game.status === GameStatusEnum.Setup) {
     return null;
   }
@@ -46,7 +45,6 @@ const PdfExportMenu = ({
       }
     }
 
-    // Convert Redux teams to generated Team type
     type ConvertedTeam = {
       id: number;
       name: string;

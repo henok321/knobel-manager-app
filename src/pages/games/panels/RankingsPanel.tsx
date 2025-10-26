@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import useTables from '../../../slices/tables/hooks.ts';
+import { selectTablesByRoundNumber } from '../../../slices/tables/slice';
 import { Game } from '../../../slices/types';
 import { RootState } from '../../../store/store';
 import {
@@ -25,7 +26,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const playersState = useSelector(
     (state: RootState) => state.players.entities,
   );
-  const { fetchAllTables, tables, status } = useTables();
+  const { fetchAllTables, status } = useTables();
 
   const roundOptions = useMemo(
     () => [
@@ -49,18 +50,12 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     }
   }, [roundsCount, status, fetchAllTables, game.id, game.numberOfRounds]);
 
-  const filteredTables = useMemo(() => {
-    if (!Array.isArray(tables) || tables.length === 0) {
-      return [];
-    }
-
-    if (selectedRound === 'total') {
-      return tables;
-    }
-
-    const roundNum = Number(selectedRound);
-    return tables.filter((table) => table.roundID === roundNum);
-  }, [tables, selectedRound]);
+  const filteredTables = useSelector((state: RootState) =>
+    selectTablesByRoundNumber(
+      state,
+      selectedRound === 'total' ? null : Number(selectedRound),
+    ),
+  );
 
   const allScores = useMemo(
     () => aggregateScoresFromTables(filteredTables),

@@ -1,4 +1,8 @@
-import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+import {
+  createEntityAdapter,
+  createSlice,
+  createSelector,
+} from '@reduxjs/toolkit';
 
 import {
   fetchTablesForRound,
@@ -64,5 +68,53 @@ export const tablesSelectors = tablesAdapter.getSelectors<RootState>(
 export const selectAllTables = tablesSelectors.selectAll;
 export const selectTablesStatus = (state: RootState) => state.tables.status;
 export const selectTablesError = (state: RootState) => state.tables.error;
+
+export const selectTablesByRoundNumber = createSelector(
+  [
+    selectAllTables,
+    (_state: RootState, roundNumber: number | null) => roundNumber,
+  ],
+  (tables, roundNumber) => {
+    if (roundNumber === null) {
+      return tables;
+    }
+    return tables.filter(
+      (table) =>
+        (table as Table & { roundNumber?: number }).roundNumber === roundNumber,
+    );
+  },
+);
+
+export const selectTablesForRoundWithSearch = createSelector(
+  [
+    selectAllTables,
+    (_state: RootState, roundNumber: number) => roundNumber,
+    (_state: RootState, _roundNumber: number, searchQuery: string) =>
+      searchQuery,
+  ],
+  (tables, roundNumber, searchQuery) => {
+    // Filter by round and ensure players exist
+    let filtered = tables.filter(
+      (table) =>
+        (table as Table & { roundNumber?: number }).roundNumber ===
+          roundNumber &&
+        table.players &&
+        table.players.length > 0,
+    );
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((table) =>
+        table.players?.some((player) =>
+          player.name?.toLowerCase().includes(query),
+        ),
+      );
+    }
+
+    // Sort by table number
+    return filtered.sort((a, b) => a.tableNumber - b.tableNumber);
+  },
+);
 
 export default tablesSlice.reducer;
