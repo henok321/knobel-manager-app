@@ -16,9 +16,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { gamesApi } from '../../../api/apiClient';
 import type { Table } from '../../../generated';
 import { GameStatusEnum } from '../../../generated';
+import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
 import { Game } from '../../../slices/types';
 import { RootState } from '../../../store/store';
@@ -31,9 +31,10 @@ interface RoundsPanelProps {
 
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
+  const { setupGame, status: gamesStatus } = useGames();
   const {
     tables,
-    status,
+    status: tablesStatus,
     error: tablesError,
     fetchTables,
     updateScores,
@@ -42,7 +43,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [selectedRound, setSelectedRound] = useState<string>('1');
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
-  const [settingUp, setSettingUp] = useState(false);
   const [setupError, setSetupError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -85,12 +85,10 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   }, [game.id, selectedRound, fetchTables, hasRounds]);
 
   const handleSetupGame = async () => {
-    setSettingUp(true);
     setSetupError(null);
 
     try {
-      await gamesApi.setupGame(game.id);
-      // Fetch tables will update Redux store, which will automatically update isSetupMode
+      await setupGame(game.id);
       fetchTables(game.id, Number(selectedRound));
     } catch (err) {
       const errorMessage =
@@ -103,8 +101,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         (err as Error).message ||
         t('pages.gameDetail.rounds.setupError');
       setSetupError(errorMessage);
-    } finally {
-      setSettingUp(false);
     }
   };
 
@@ -135,10 +131,13 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   const hasScores = (table: Table) => table.scores && table.scores.length > 0;
 
-  const loading = status === 'pending';
+  const settingUp = gamesStatus === 'pending';
+  const loading = tablesStatus === 'pending';
   const displayError =
     setupError ||
-    (status === 'failed' && !tablesError?.includes('404') ? tablesError : null);
+    (tablesStatus === 'failed' && !tablesError?.includes('404')
+      ? tablesError
+      : null);
 
   return (
     <Stack gap="md">

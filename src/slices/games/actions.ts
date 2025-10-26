@@ -36,3 +36,12 @@ export const activateGameAction = createAsyncThunk<void, number>(
     await gamesApi.activateGame(gameID);
   },
 );
+
+export const setupGameAction = createAsyncThunk<GameResponse, number>(
+  'games/setupGame',
+  async (gameID) => {
+    await gamesApi.setupGame(gameID);
+    const response = await gamesApi.getGame(gameID);
+    return { game: response.data };
+  },
+);

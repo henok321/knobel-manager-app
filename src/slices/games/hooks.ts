@@ -5,6 +5,7 @@ import {
   activateGameAction,
   createGameAction,
   deleteGameAction,
+  setupGameAction,
   updateGameAction,
 } from './actions';
 import {
@@ -57,6 +58,11 @@ const useGames = () => {
     [dispatch],
   );
 
+  const setupGame = useCallback(
+    (gameID: number) => dispatch(setupGameAction(gameID)),
+    [dispatch],
+  );
+
   return {
     allGames,
     activeGame,
@@ -68,6 +74,7 @@ const useGames = () => {
     deleteGame,
     activateGame,
     updateGame,
+    setupGame,
   };
 };
 

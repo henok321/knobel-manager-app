@@ -134,4 +134,40 @@ export const gamesHandlers = [
     `${BASE_URL}/games/:id/activate`,
     () => new HttpResponse(null, { status: 200 }),
   ),
+
+  http.post(
+    `${BASE_URL}/games/:id/setup`,
+    () => new HttpResponse(null, { status: 200 }),
+  ),
+
+  http.get(`${BASE_URL}/games/:id`, ({ params }) => {
+    const gameID = Number(params.id);
+
+    const game: GameResponse['game'] = {
+      id: gameID,
+      name: 'Game to Setup',
+      teamSize: 3,
+      tableSize: 4,
+      numberOfRounds: 5,
+      status: 'in_progress',
+      owners: [
+        {
+          gameID,
+          ownerSub: 'test-user-123',
+        },
+      ],
+      teams: [],
+      rounds: [
+        {
+          id: 1,
+          roundNumber: 1,
+          gameID,
+          status: 'in_progress',
+          tables: [],
+        },
+      ],
+    };
+
+    return HttpResponse.json(game);
+  }),
 ];

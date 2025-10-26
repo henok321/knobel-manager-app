@@ -8,6 +8,7 @@ import {
   activateGameAction,
   createGameAction,
   deleteGameAction,
+  setupGameAction,
   updateGameAction,
 } from './actions';
 import {
@@ -248,6 +249,82 @@ describe('Games Actions + Slice', () => {
       const state = store.getState();
       expect(selectGamesStatus(state)).toBe('failed');
       expect(selectGamesError(state)).toBeDefined();
+    });
+  });
+
+  describe('setupGameAction', () => {
+    it('should setup game and update state with rounds', async () => {
+      const store = createTestStore();
+
+      await store.dispatch(
+        createGameAction({
+          name: 'Game to Setup',
+          teamSize: 3,
+          tableSize: 4,
+          numberOfRounds: 5,
+        }),
+      );
+
+      const games = selectAllGames(store.getState());
+      const gameID = games[0]?.id;
+
+      expect(gameID).toBeDefined();
+      expect(games[0]?.rounds).toEqual([]);
+      expect(games[0]?.status).toBe('setup');
+
+      await store.dispatch(setupGameAction(gameID!));
+
+      const state = store.getState();
+      const updatedGames = selectAllGames(state);
+
+      expect(updatedGames).toHaveLength(1);
+      expect(updatedGames[0]?.id).toBe(gameID);
+      expect(updatedGames[0]?.rounds).toBeDefined();
+      expect(selectGamesStatus(state)).toBe('succeeded');
+    });
+
+    it('should handle API error', async () => {
+      server.use(
+        http.post(
+          'http://localhost/api/games/:id/setup',
+          () => new HttpResponse(null, { status: 500 }),
+        ),
+      );
+
+      const store = createTestStore();
+
+      await store.dispatch(setupGameAction(1));
+
+      const state = store.getState();
+      expect(selectGamesStatus(state)).toBe('failed');
+      expect(selectGamesError(state)).toBeDefined();
+    });
+
+    it('should transition status idle → pending → succeeded', async () => {
+      const store = createTestStore();
+
+      await store.dispatch(
+        createGameAction({
+          name: 'Game to Setup',
+          teamSize: 3,
+          tableSize: 4,
+          numberOfRounds: 5,
+        }),
+      );
+
+      const games = selectAllGames(store.getState());
+      const gameID = games[0]?.id;
+
+      expect(gameID).toBeDefined();
+      expect(selectGamesStatus(store.getState())).toBe('succeeded');
+
+      const promise = store.dispatch(setupGameAction(gameID!));
+
+      expect(selectGamesStatus(store.getState())).toBe('pending');
+
+      await promise;
+
+      expect(selectGamesStatus(store.getState())).toBe('succeeded');
     });
   });
 });
