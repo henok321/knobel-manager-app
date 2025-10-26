@@ -5,17 +5,18 @@ import {
   Divider,
   Group,
   Menu,
+  rem,
   Stack,
   Text,
   UnstyledButton,
-  rem,
+  useMantineTheme,
 } from '@mantine/core';
 import {
   IconChevronDown,
-  IconPlus,
   IconListDetails,
+  IconPlus,
 } from '@tabler/icons-react';
-import { useMemo, useCallback } from 'react';
+import { CSSProperties, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -57,6 +58,7 @@ const GameContextSelector = ({
 }: GameContextSelectorProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const theme = useMantineTheme();
   const { activeGame, allGames, activateGame } = useGames();
 
   // Get recent games (excluding active game, max 3) - memoized to prevent filtering on every render
@@ -115,32 +117,28 @@ const GameContextSelector = ({
     );
   }
 
+  const buttonStyle: CSSProperties = {
+    padding: '8px 12px',
+    borderRadius: theme.radius.sm,
+    border: `1px solid var(--mantine-color-gray-3)`,
+    backgroundColor: 'var(--mantine-color-body)',
+    transition: 'background-color 150ms ease',
+    width: '100%',
+    maxWidth: isMobile ? '100%' : '400px',
+  };
+
   return (
     <Menu position="bottom" shadow="md" width={320}>
       <Menu.Target>
         <UnstyledButton
-          sx={(theme) => ({
-            padding: '8px 12px',
-            borderRadius: theme.radius.sm,
-            border: `1px solid ${
-              theme.colorScheme === 'dark'
-                ? theme.colors.dark[4]
-                : theme.colors.gray[3]
-            }`,
-            backgroundColor:
-              theme.colorScheme === 'dark'
-                ? theme.colors.dark[6]
-                : theme.white,
-            transition: 'background-color 150ms ease',
-            width: '100%',
-            maxWidth: isMobile ? '100%' : '400px',
-            '&:hover': {
-              backgroundColor:
-                theme.colorScheme === 'dark'
-                  ? theme.colors.dark[5]
-                  : theme.colors.gray[0],
+          style={buttonStyle}
+          styles={{
+            root: {
+              '&:hover': {
+                backgroundColor: 'var(--mantine-color-gray-0)',
+              },
             },
-          })}
+          }}
         >
           <Group gap="xs" wrap="nowrap">
             <Box style={{ flex: 1, minWidth: 0 }}>
@@ -193,7 +191,6 @@ const GameContextSelector = ({
           </Stack>
         </Menu.Item>
 
-        {/* Recent Games Section */}
         {recentGames.length > 0 && (
           <>
             <Divider my="xs" />
@@ -223,7 +220,6 @@ const GameContextSelector = ({
           </>
         )}
 
-        {/* Actions Section */}
         <Divider my="xs" />
         <Menu.Item
           leftSection={<IconPlus style={{ width: rem(16), height: rem(16) }} />}

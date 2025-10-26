@@ -1,6 +1,14 @@
-import { Avatar, Group, Menu, Text, UnstyledButton, rem } from '@mantine/core';
+import {
+  Avatar,
+  Group,
+  Menu,
+  Text,
+  UnstyledButton,
+  rem,
+  useMantineTheme,
+} from '@mantine/core';
 import { IconChevronDown, IconLogout } from '@tabler/icons-react';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '../auth/useAuth';
@@ -12,26 +20,31 @@ interface UserMenuProps {
 const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const theme = useMantineTheme();
 
   const userInitial = user?.email?.charAt(0).toUpperCase() || 'U';
   const userDisplayName =
     user?.displayName || user?.email?.split('@')[0] || 'User';
 
+  const buttonStyle: CSSProperties = {
+    padding: '8px 12px',
+    borderRadius: theme.radius.sm,
+    transition: 'background-color 150ms ease',
+    backgroundColor: 'transparent',
+  };
+
   return (
     <Menu position="bottom-end" shadow="md" width={220}>
       <Menu.Target>
         <UnstyledButton
-          sx={(theme) => ({
-            padding: '8px 12px',
-            borderRadius: theme.radius.sm,
-            transition: 'background-color 150ms ease',
-            backgroundColor: 'transparent',
-            '&:hover': {
-              backgroundColor: theme.colorScheme === 'dark'
-                ? theme.colors.dark[6]
-                : theme.colors.gray[0],
+          style={buttonStyle}
+          styles={{
+            root: {
+              '&:hover': {
+                backgroundColor: 'var(--mantine-color-gray-0)',
+              },
             },
-          })}
+          }}
         >
           <Group gap="xs" wrap="nowrap">
             <Avatar color="blue" radius="xl" size="sm">
