@@ -24,7 +24,6 @@ const Home = () => {
     return <CenterLoader />;
   }
 
-  // Show welcome CTA when no active game
   if (!activeGame) {
     return (
       <Layout navbarActive onOpenGameForm={() => navigate('/games')}>

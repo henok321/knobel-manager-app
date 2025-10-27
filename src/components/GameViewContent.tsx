@@ -35,7 +35,6 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   const { updateGame } = useGames();
   const allTables = useSelector(tablesSelectors.selectAll);
 
-  // Get default tab based on game status
   const getDefaultTab = () => {
     switch (game.status) {
       case GameStatusEnum.Setup:
@@ -49,7 +48,6 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
     }
   };
 
-  // Load persisted tab from localStorage, fallback to status-based default
   const getPersistedTab = () => {
     try {
       const stored = localStorage.getItem(`gameTab_${game.id}`);
@@ -61,18 +59,12 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const [activeTab, setActiveTab] = useState<string | null>(getPersistedTab());
 
-  // Persist tab changes to localStorage
   useEffect(() => {
     if (activeTab) {
-      try {
-        localStorage.setItem(`gameTab_${game.id}`, activeTab);
-      } catch {
-        // Silently fail if localStorage is not available
-      }
+      localStorage.setItem(`gameTab_${game.id}`, activeTab);
     }
   }, [activeTab, game.id]);
 
-  // Check if all scores are entered and calculate progress
   const scoreProgress = useMemo(() => {
     if (!game || game.status !== GameStatusEnum.InProgress) {
       return { canComplete: false, completed: 0, total: 0 };
@@ -220,7 +212,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
             </Text>
             <Text c="dimmed">•</Text>
             <Text c="dimmed" size="sm">
-              {t('pages.gameDetail.rounds.round')}: {game.numberOfRounds}
+              {t('pages.gameDetail.numberOfRounds')}: {game.numberOfRounds}
             </Text>
           </Group>
         </div>

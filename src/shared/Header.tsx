@@ -51,7 +51,6 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
           px="xl"
           wrap="nowrap"
         >
-          {/* Left: Logo */}
           <Group
             gap="xs"
             style={{ cursor: 'pointer' }}
@@ -79,7 +78,6 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
             </Box>
           )}
 
-          {/* Right: Language Picker + User Menu (Desktop) */}
           {navbarActive && (
             <Group gap="xs" visibleFrom="sm">
               <LanguagePicker />
@@ -87,10 +85,8 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
             </Group>
           )}
 
-          {/* Language Picker for Login Page */}
           {!navbarActive && <LanguagePicker />}
 
-          {/* Mobile Burger */}
           {navbarActive && (
             <Burger
               hiddenFrom="sm"
@@ -102,7 +98,6 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
         </Group>
       </Box>
 
-      {/* Mobile Drawer */}
       <Drawer
         opened={opened}
         position="right"

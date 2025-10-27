@@ -157,6 +157,7 @@
       "notFound": "Game not found",
       "teamSize": "Team Size",
       "tableSize": "Table Size",
+      "numberOfRounds": "Number of Rounds",
       "status": {
         "setup": "Setup",
         "in_progress": "In Progress",

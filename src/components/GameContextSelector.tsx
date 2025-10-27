@@ -38,11 +38,8 @@ const getStatusColor = (status: GameStatusEnum) => {
 };
 
 const getGameSummary = (game: Game, t: (key: string) => string) => {
-  const statusText = t(`pages.gameDetail.status.${game.status}`);
   const teamsCount = game.teams.length;
-  const roundsText = `${game.numberOfRounds} ${t('pages.gameDetail.rounds.round').toLowerCase()}`;
-
-  return `${statusText} • ${teamsCount} ${t('pages.home.picker.teams').toLowerCase()} • ${roundsText}`;
+  return `${t(`pages.gameDetail.status.${game.status}`)} • ${t('pages.home.picker.teams')}: ${teamsCount}  • ${t('pages.gameDetail.numberOfRounds')}: ${game.numberOfRounds}`;
 };
 
 interface GameContextSelectorProps {
@@ -157,7 +154,6 @@ const GameContextSelector = ({
       </Menu.Target>
 
       <Menu.Dropdown>
-        {/* Current Game Section */}
         <Menu.Label>
           {t('pages.home.dashboard.activeGame.description')}
         </Menu.Label>
@@ -183,10 +179,9 @@ const GameContextSelector = ({
               {activeGame.name}
             </Text>
             <Text c="dimmed" size="xs">
-              {activeGame.teams.length}{' '}
-              {t('pages.home.picker.teams').toLowerCase()} •{' '}
-              {activeGame.numberOfRounds}{' '}
-              {t('pages.gameDetail.rounds.round').toLowerCase()}
+              {t('pages.home.picker.teams')}: {activeGame.teams.length} •{' '}
+              {t('pages.gameDetail.numberOfRounds')} :{' '}
+              {activeGame.numberOfRounds}
             </Text>
           </Stack>
         </Menu.Item>

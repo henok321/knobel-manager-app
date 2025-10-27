@@ -157,6 +157,7 @@
       "notFound": "Spiel nicht gefunden",
       "teamSize": "Teamgröße",
       "tableSize": "Tischgröße",
+      "numberOfRounds": "Anzahl der Runden",
       "status": {
         "setup": "Setup",
         "in_progress": "Läuft",
