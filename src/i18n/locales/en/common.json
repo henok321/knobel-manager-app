@@ -1,0 +1,53 @@
+{
+  "actions": {
+    "loading": "Loading...",
+    "error": "Error",
+    "errorOccurred": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "save": "Save"
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "errorDetails": "Error Details",
+    "unexpectedError": "An unexpected error occurred",
+    "componentStack": "Component Stack",
+    "tryAgain": "Try Again",
+    "goToHomePage": "Go to Home Page"
+  },
+  "header": {
+    "heading": "Knobel Manager",
+    "logout": "Logout",
+    "nav": {
+      "home": "Home",
+      "games": "Games",
+      "settings": "Settings",
+      "language": "Language",
+      "languages": {
+        "english": "🇬🇧 English",
+        "german": "🇩🇪 Deutsch"
+      }
+    }
+  },
+  "login": {
+    "heading": "Login to your account",
+    "fields": {
+      "email": {
+        "label": "Email",
+        "placeholder": "mail@example.com",
+        "validationMessage": "Invalid email address"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Your password",
+        "validationMessage": "Password must be at least 6 characters long"
+      }
+    },
+    "error": {
+      "invalidCredentials": "Invalid login credentials",
+      "unknown": "An unknown error occurred"
+    },
+    "submit": "Login"
+  }
+}

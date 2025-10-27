@@ -20,7 +20,7 @@ const ScoreEntryModal = ({
   onClose,
   onSubmit,
 }: ScoreEntryModalProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gameDetail', 'common']);
   const [scores, setScores] = useState<Record<number, number>>({});
 
   const players = useMemo(() => table?.players || [], [table?.players]);
@@ -45,8 +45,8 @@ const ScoreEntryModal = ({
     }));
     onSubmit(scoresArray);
     notifications.show({
-      title: t('global.success'),
-      message: t('pages.gameDetail.rounds.scoresSaved', {
+      title: t('actions.success'),
+      message: t('rounds.scoresSaved', {
         table: table.tableNumber,
       }),
       color: 'green',
@@ -61,15 +61,14 @@ const ScoreEntryModal = ({
       size="md"
       title={
         <Text fw={600} size="xl">
-          {t('pages.gameDetail.rounds.enterScores')} -{' '}
-          {t('pages.gameDetail.rounds.table')} {table.tableNumber}
+          {t('rounds.enterScores')} - {t('rounds.table')} {table.tableNumber}
         </Text>
       }
       onClose={onClose}
     >
       <Stack gap="md">
         <Text c="dimmed" size="sm">
-          {t('pages.gameDetail.rounds.round')} {roundNumber}
+          {t('rounds.round')} {roundNumber}
         </Text>
 
         {players.map((player: Player) => (
@@ -78,7 +77,7 @@ const ScoreEntryModal = ({
             defaultValue={initialScores[player.id]}
             label={player.name}
             min={0}
-            placeholder={t('pages.gameDetail.rounds.scorePlaceholder')}
+            placeholder={t('rounds.scorePlaceholder')}
             onChange={(value) =>
               setScores((prev) => ({
                 ...prev,
@@ -90,11 +89,9 @@ const ScoreEntryModal = ({
 
         <Group justify="flex-end" mt="md">
           <Button color="gray" variant="subtle" onClick={onClose}>
-            {t('global.cancel')}
+            {t('actions.cancel')}
           </Button>
-          <Button onClick={handleSubmit}>
-            {t('pages.gameDetail.rounds.saveScores')}
-          </Button>
+          <Button onClick={handleSubmit}>{t('rounds.saveScores')}</Button>
         </Group>
       </Stack>
     </Modal>

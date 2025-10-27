@@ -40,11 +40,9 @@ const Login = (props: PaperProps) => {
       email: (val) =>
         /^\S+@\S+$/.test(val)
           ? null
-          : t('pages.login.fields.email.validationMessage'),
+          : t('login.fields.email.validationMessage'),
       password: (val) =>
-        val.length <= 6
-          ? t('pages.login.fields.password.validationMessage')
-          : null,
+        val.length <= 6 ? t('login.fields.password.validationMessage') : null,
     },
   });
 
@@ -54,9 +52,9 @@ const Login = (props: PaperProps) => {
 
     if (loginResult) {
       if (loginResult.code === 'INVALID_CREDENTIALS') {
-        setLoginError(t('pages.login.error.invalidCredentials'));
+        setLoginError(t('login.error.invalidCredentials'));
       } else {
-        setLoginError(t('pages.login.error.unknown'));
+        setLoginError(t('login.error.unknown'));
       }
     } else {
       setLoginError(null);
@@ -75,7 +73,7 @@ const Login = (props: PaperProps) => {
   const renderLoginForm = () => (
     <>
       <Text fw={500} pb="md" size="lg">
-        {t('pages.login.heading')}
+        {t('login.heading')}
       </Text>
 
       <form
@@ -88,11 +86,10 @@ const Login = (props: PaperProps) => {
             required
             disabled={submitting}
             error={
-              form.errors.email &&
-              t('pages.login.fields.email.validationMessage')
+              form.errors.email && t('login.fields.email.validationMessage')
             }
-            label={t('pages.login.fields.email.label')}
-            placeholder={t('pages.login.fields.email.placeholder')}
+            label={t('login.fields.email.label')}
+            placeholder={t('login.fields.email.placeholder')}
             radius="md"
             value={form.values.email}
             onChange={(event) =>
@@ -105,10 +102,10 @@ const Login = (props: PaperProps) => {
             disabled={submitting}
             error={
               form.errors.password &&
-              t('pages.login.fields.password.validationMessage')
+              t('login.fields.password.validationMessage')
             }
-            label={t('pages.login.fields.password.label')}
-            placeholder={t('pages.login.fields.password.placeholder')}
+            label={t('login.fields.password.label')}
+            placeholder={t('login.fields.password.placeholder')}
             radius="md"
             value={form.values.password}
             onChange={(event) =>
@@ -130,7 +127,7 @@ const Login = (props: PaperProps) => {
             radius="xl"
             type="submit"
           >
-            {upperFirst(t('pages.login.submit'))}
+            {upperFirst(t('login.submit'))}
           </Button>
         </Group>
       </form>

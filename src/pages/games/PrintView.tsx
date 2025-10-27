@@ -20,7 +20,7 @@ import '../../styles/print.css';
 const PrintView = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const [searchParams] = useSearchParams();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gameDetail', 'common']);
   const navigate = useNavigate();
   const { allGames, fetchGames, status } = useGames();
   const { fetchAllTables, status: tablesStatus } = useTables();
@@ -56,7 +56,7 @@ const PrintView = () => {
     return (
       <Container py="md">
         <Text c="red" size="xl">
-          {t('pages.gameDetail.notFound')}
+          {t('notFound')}
         </Text>
       </Container>
     );

@@ -25,7 +25,7 @@ export interface GameFormProps {
 }
 
 const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['games', 'common']);
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,8 +39,8 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
     };
     createGame(game);
     notifications.show({
-      title: t('global.success'),
-      message: t('pages.games.card.gameCreated', { name: game.name }),
+      title: t('actions.success'),
+      message: t('card.gameCreated', { name: game.name }),
       color: 'green',
     });
     onClose();
@@ -52,7 +52,7 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
       opened={isOpen}
       title={
         <Text fw={600} size="xl">
-          {t('pages.games.form.heading')}
+          {t('form.heading')}
         </Text>
       }
       onClose={onClose}
@@ -63,32 +63,32 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
             autoFocus
             required
             id="name"
-            label={t('pages.games.form.label.name')}
+            label={t('form.label.name')}
             name="name"
           />
           <NumberInput
             required
             id="teamSize"
-            label={t('pages.games.form.label.teamSize')}
+            label={t('form.label.teamSize')}
             min={1}
             name="teamSize"
           />
           <NumberInput
             required
             id="tableSize"
-            label={t('pages.games.form.label.tableSize')}
+            label={t('form.label.tableSize')}
             min={1}
             name="tableSize"
           />
           <NumberInput
             required
             id="numberOfRounds"
-            label={t('pages.games.form.label.numberOfRounds')}
+            label={t('form.label.numberOfRounds')}
             min={1}
             name="numberOfRounds"
           />
           <Group justify="flex-end" mt="md">
-            <Button type="submit">{t('pages.games.form.submit')}</Button>
+            <Button type="submit">{t('form.submit')}</Button>
           </Group>
         </Stack>
       </form>

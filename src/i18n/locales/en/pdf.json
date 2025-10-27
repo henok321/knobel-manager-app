@@ -1,0 +1,57 @@
+{
+  "teamHandout": {
+    "title": "Team Handout",
+    "subtitle": "Complete Tournament Schedule for All Teams",
+    "subtitleSingle": "Tournament Schedule for Selected Team",
+    "team": "Team",
+    "round": "Round",
+    "table": "Table",
+    "tableAssignment": "Table Assignment",
+    "assignments": "Player Assignments",
+    "notAssigned": "Not Assigned",
+    "summary": "{{players}} players across {{rounds}} rounds",
+    "player": "Player",
+    "filename": "Team_Handout",
+    "allTeamsTitle": "All Team Handouts",
+    "allTeamsSubtitle": "Complete Tournament Schedule for All Teams",
+    "allTeamsFilename": "All_Team_Handouts"
+  },
+  "tablePlan": {
+    "title": "Table Plan",
+    "subtitle": "Tournament Matchmaking Overview",
+    "round": "Round",
+    "table": "Table",
+    "player": "Player",
+    "team": "Team",
+    "players": "Players",
+    "noTables": "No tables assigned for this round",
+    "filename": "Table_Plan"
+  },
+  "scoreSheets": {
+    "title": "Score Sheets",
+    "subtitle": "Manual Score Entry",
+    "round": "Round",
+    "table": "Table",
+    "instructions": "The winner of the table receives 4 points + remaining lives, the runner-up receives 3 points, etc. Once the game is over, the runner-up submits this score sheet to the tournament management.",
+    "player": "Player",
+    "team": "Team",
+    "score": "Score",
+    "notes": "Notes",
+    "notesPlaceholder": "Additional notes or remarks...",
+    "filename": "Score_Sheets"
+  },
+  "rankings": {
+    "title": "Rankings",
+    "subtitle": "Current Standings",
+    "round": "Round",
+    "total": "Total (All Rounds)",
+    "teamRankings": "Team Rankings",
+    "playerRankings": "Player Rankings",
+    "rank": "Rank",
+    "team": "Team",
+    "player": "Player",
+    "totalScore": "Total Score",
+    "noData": "No ranking data available",
+    "filename": "Rankings"
+  }
+}

@@ -61,17 +61,17 @@ const GameListItem = ({
   onActivate,
   onDelete,
 }: GameListItemProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['games', 'common']);
   const navigate = useNavigate();
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     modals.openConfirmModal({
-      title: t('pages.games.deleteGame'),
-      children: <Text size="sm">{t('pages.games.confirmDelete')}</Text>,
+      title: t('deleteGame'),
+      children: <Text size="sm">{t('confirmDelete')}</Text>,
       labels: {
-        confirm: t('global.delete'),
-        cancel: t('global.cancel'),
+        confirm: t('actions.delete'),
+        cancel: t('actions.cancel'),
       },
       confirmProps: { color: 'red' },
       onConfirm: () => {
@@ -134,11 +134,11 @@ const GameListItem = ({
           <Group gap="xs" wrap="nowrap">
             {!isActive && (
               <Button size="sm" variant="light" onClick={handleActivate}>
-                {t('pages.games.card.activateButton')}
+                {t('card.activateButton')}
               </Button>
             )}
             <Button size="sm" onClick={handleOpen}>
-              {t('pages.games.card.viewDetails')}
+              {t('card.viewDetails')}
             </Button>
             <ActionIcon
               color="red"
@@ -156,7 +156,7 @@ const GameListItem = ({
         <Group gap="md">
           <div>
             <Text c="dimmed" size="xs">
-              {t('pages.games.card.details.teamSize')}
+              {t('card.details.teamSize')}
             </Text>
             <Text fw={600} size="sm">
               {game.teamSize}
@@ -164,7 +164,7 @@ const GameListItem = ({
           </div>
           <div>
             <Text c="dimmed" size="xs">
-              {t('pages.games.card.details.tableSize')}
+              {t('card.details.tableSize')}
             </Text>
             <Text fw={600} size="sm">
               {game.tableSize}
@@ -172,7 +172,7 @@ const GameListItem = ({
           </div>
           <div>
             <Text c="dimmed" size="xs">
-              {t('pages.games.card.details.numberOfRounds')}
+              {t('card.details.numberOfRounds')}
             </Text>
             <Text fw={600} size="sm">
               {game.numberOfRounds}
@@ -180,7 +180,7 @@ const GameListItem = ({
           </div>
           <div>
             <Text c="dimmed" size="xs">
-              {t('pages.games.card.details.teams')}
+              {t('card.details.teams')}
             </Text>
             <Text fw={600} size="sm">
               {game.teams.length}

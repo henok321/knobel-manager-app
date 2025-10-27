@@ -10,7 +10,7 @@ import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
 
 const Home = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['home', 'common']);
   const navigate = useNavigate();
   const { activeGame, allGames, fetchGames, status } = useGames();
 
@@ -32,12 +32,12 @@ const Home = () => {
             <Stack align="center" gap="md">
               <Text size="80px">🎲</Text>
               <Title order={1} ta="center">
-                {t('pages.home.noActiveGame')}
+                {t('noActiveGame')}
               </Title>
               <Text c="dimmed" size="lg" ta="center">
                 {allGames.length === 0
-                  ? t('pages.home.picker.noGames')
-                  : t('pages.home.dashboard.noActiveGameDescription')}
+                  ? t('picker.noGames')
+                  : t('dashboard.noActiveGameDescription')}
               </Text>
             </Stack>
 
@@ -47,7 +47,7 @@ const Home = () => {
                 size="lg"
                 onClick={() => navigate('/games')}
               >
-                {t('pages.home.picker.createGame')}
+                {t('picker.createGame')}
               </Button>
               {allGames.length > 0 && (
                 <Button
@@ -55,7 +55,7 @@ const Home = () => {
                   variant="light"
                   onClick={() => navigate('/games')}
                 >
-                  {t('pages.home.dashboard.viewAllGames')}
+                  {t('dashboard.viewAllGames')}
                 </Button>
               )}
             </Group>

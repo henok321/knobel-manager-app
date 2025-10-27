@@ -39,7 +39,7 @@ const getStatusColor = (status: GameStatusEnum) => {
 
 const getGameSummary = (game: Game, t: (key: string) => string) => {
   const teamsCount = game.teams.length;
-  return `${t(`pages.gameDetail.status.${game.status}`)} • ${t('pages.home.picker.teams')}: ${teamsCount}  • ${t('pages.gameDetail.numberOfRounds')}: ${game.numberOfRounds}`;
+  return `${t(`pages.gameDetail.status.${game.status}`)} • ${t('picker.teams')}: ${teamsCount}  • ${t('pages.gameDetail.numberOfRounds')}: ${game.numberOfRounds}`;
 };
 
 interface GameContextSelectorProps {
@@ -53,12 +53,11 @@ const GameContextSelector = ({
   isMobile = false,
   onClose,
 }: GameContextSelectorProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['home', 'common']);
   const navigate = useNavigate();
   const theme = useMantineTheme();
   const { activeGame, allGames, activateGame } = useGames();
 
-  // Get recent games (excluding active game, max 3) - memoized to prevent filtering on every render
   const recentGames = useMemo(
     () =>
       allGames
@@ -109,7 +108,7 @@ const GameContextSelector = ({
         variant="subtle"
         onClick={() => navigate('/')}
       >
-        {t('pages.home.picker.selectGame')}
+        {t('picker.selectGame')}
       </Button>
     );
   }
@@ -154,9 +153,7 @@ const GameContextSelector = ({
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>
-          {t('pages.home.dashboard.activeGame.description')}
-        </Menu.Label>
+        <Menu.Label>{t('dashboard.activeGame.description')}</Menu.Label>
         <Menu.Item
           leftSection={
             <Badge
@@ -179,7 +176,7 @@ const GameContextSelector = ({
               {activeGame.name}
             </Text>
             <Text c="dimmed" size="xs">
-              {t('pages.home.picker.teams')}: {activeGame.teams.length} •{' '}
+              {t('picker.teams')}: {activeGame.teams.length} •{' '}
               {t('pages.gameDetail.numberOfRounds')} :{' '}
               {activeGame.numberOfRounds}
             </Text>
@@ -189,7 +186,7 @@ const GameContextSelector = ({
         {recentGames.length > 0 && (
           <>
             <Divider my="xs" />
-            <Menu.Label>{t('pages.home.dashboard.recentGames')}</Menu.Label>
+            <Menu.Label>{t('dashboard.recentGames')}</Menu.Label>
             {recentGames.map((game) => (
               <Menu.Item
                 key={game.id}

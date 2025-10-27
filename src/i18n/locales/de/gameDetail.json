@@ -1,0 +1,111 @@
+{
+  "notFound": "Spiel nicht gefunden",
+  "teamSize": "Teamgröße",
+  "tableSize": "Tischgröße",
+  "numberOfRounds": "Anzahl der Runden",
+  "status": {
+    "setup": "Setup",
+    "in_progress": "Läuft",
+    "completed": "Abgeschlossen"
+  },
+  "actions": {
+    "startGame": "Spiel starten",
+    "startGameConfirmation": "Bist du sicher, dass du dieses Turnier starten möchtest? Nach dem Start:",
+    "startGameWarning1": "Du kannst keine weiteren Teams hinzufügen",
+    "startGameWarning2": "Tischzuweisungen werden generiert",
+    "startGameWarning3": "Du kannst mit dem Eintragen der Punkte beginnen",
+    "gameStartedNotification": "Spiel gestartet",
+    "gameStartedMessage": "Richte die Spielpaarungen im Runden-Tab ein, um zu beginnen",
+    "completeGame": "Spiel abschließen",
+    "completeGameConfirmation": "Bist du sicher, dass du dieses Turnier abschließen möchtest? Dies wird alle Punkte und Ranglisten finalisieren.",
+    "completeGameDisabledTooltip": "Alle Punkte müssen für jede Runde eingetragen werden, bevor das Spiel abgeschlossen werden kann",
+    "scoreProgress": "Punkte-Fortschritt: {{completed}} von {{total}} Tischen abgeschlossen",
+    "exportPDF": "PDF exportieren",
+    "printView": "Druckansicht"
+  },
+  "pdfMenu": {
+    "label": "Export-Optionen",
+    "tablePlan": "Tischplan (Alle Runden)",
+    "scoreSheets": "Punktebögen (Alle Tische)",
+    "teamHandouts": "Team-Handouts (Alle Teams)",
+    "rankingsLabel": "Ranglisten",
+    "rankingsAll": "Alle Runden (Gesamt)",
+    "rankingsRound": "Runde {{round}}"
+  },
+  "printMenu": {
+    "label": "Druckoptionen",
+    "tablePlan": "Tischplan (Alle Runden)",
+    "scoreSheets": "Punktebögen (Alle Tische)",
+    "teamHandouts": "Team-Handouts (Alle Teams)",
+    "rankingsLabel": "Ranglisten",
+    "rankingsAll": "Alle Runden (Gesamt)",
+    "rankingsRound": "Runde {{round}}"
+  },
+  "tabs": {
+    "teams": "Teams",
+    "rounds": "Runden",
+    "rankings": "Rangliste"
+  },
+  "teams": {
+    "addTeam": "Team hinzufügen",
+    "cannotAddTeamsAfterStart": "Teams können nach dem Spielstart nicht hinzugefügt werden",
+    "noTeams": "Noch keine Teams vorhanden. Füge dein erstes Team hinzu, um zu beginnen!",
+    "players": "Spieler",
+    "player": "Spieler",
+    "deleteTeam": "Team löschen",
+    "confirmDeleteTeam": "Bist du sicher, dass du dieses Team löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirmDeletePlayer": "Bist du sicher, dass du diesen Spieler löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "editTeamDialog": "Team bearbeiten",
+    "teamName": "Teamname",
+    "teamNamePlaceholder": "Teamname eingeben",
+    "playerName": "Spielername",
+    "playerNamePlaceholder": "Spielername eingeben"
+  },
+  "rounds": {
+    "selectRound": "Runde auswählen",
+    "round": "Runde",
+    "startRound": "Runde starten",
+    "table": "Tisch",
+    "player": "Spieler",
+    "team": "Team",
+    "score": "Punktzahl",
+    "scorePlaceholder": "0",
+    "noTables": "Keine Tische für diese Runde verfügbar.",
+    "noSearchResults": "Keine Tische entsprechen deiner Suche.",
+    "searchPlayers": "Nach Spielernamen suchen...",
+    "scoresEntered": "Punkte eingetragen",
+    "scoresPending": "Ausstehend",
+    "enterScores": "Punkte eintragen",
+    "editScores": "Punkte bearbeiten",
+    "saveScores": "Punkte speichern",
+    "scoresSaved": "Punkte für Tisch {{table}} gespeichert",
+    "setupMatchmaking": "Spielpaarungen einrichten",
+    "rerunMatchmaking": "Spielpaarungen neu berechnen",
+    "setupRequired": "Spielpaarungen müssen eingerichtet werden",
+    "setupDescription": "Klicke auf den Button unten, um Tische und Spielerzuordnungen für alle Runden zu generieren. Der Backend-Algorithmus verteilt die Spieler fair.",
+    "setupNotAvailable": "Spielpaarungen nicht verfügbar",
+    "setupNotAvailableDescription": "Spielpaarungen können nur im Setup-Modus eingerichtet werden. Dieses Spiel wurde bereits gestartet oder abgeschlossen.",
+    "generatingTables": "Generiere Tische und Spielpaarungen...",
+    "setupError": "Fehler beim Einrichten der Spielpaarungen. Bitte versuche es erneut.",
+    "matchmakingInfo": "Das Backend übernimmt die Spielpaarungen und erstellt automatisch Tische"
+  },
+  "rankings": {
+    "teamRankings": "Team-Rangliste",
+    "playerRankings": "Spieler-Rangliste",
+    "rank": "Rang",
+    "team": "Team",
+    "player": "Spieler",
+    "totalScore": "Gesamtpunktzahl",
+    "noData": "Noch keine Punkte eingetragen",
+    "noScoresYet": "Noch keine Punkte",
+    "noScoresMessage": "Ranglisten werden hier angezeigt, sobald du Punkte im Runden-Tab einträgst.",
+    "noScoresInstructions": "Beginne mit der Einrichtung der Spielpaarungen und trage dann Punkte für jeden Tisch ein.",
+    "filterByRound": "Nach Runde filtern",
+    "totalRanking": "Gesamt (Alle Runden)"
+  },
+  "printView": {
+    "back": "Zurück zum Spiel",
+    "print": "Drucken",
+    "invalidType": "Ungültiger Druckansichtstyp"
+  }
+}

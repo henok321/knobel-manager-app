@@ -21,7 +21,7 @@ const EditTeamDialogContent = ({
   onClose,
   onSave,
 }: Omit<EditTeamDialogProps, 'isOpen'>) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gameDetail', 'common']);
   const initialPlayerNames = useMemo(() => {
     const names: Record<number, string> = {};
     players.forEach((p) => {
@@ -65,8 +65,8 @@ const EditTeamDialogContent = ({
       <TextInput
         autoFocus
         data-autofocus
-        label={t('pages.gameDetail.teams.teamName')}
-        placeholder={t('pages.gameDetail.teams.teamNamePlaceholder')}
+        label={t('teams.teamName')}
+        placeholder={t('teams.teamNamePlaceholder')}
         value={name}
         onChange={(e) => setName(e.currentTarget.value)}
         onKeyDown={handleKeyDown}
@@ -76,8 +76,8 @@ const EditTeamDialogContent = ({
         {players.map((player, index) => (
           <TextInput
             key={player.id}
-            label={`${t('pages.gameDetail.teams.player')} ${index + 1}`}
-            placeholder={t('pages.gameDetail.teams.playerNamePlaceholder')}
+            label={`${t('teams.player')} ${index + 1}`}
+            placeholder={t('teams.playerNamePlaceholder')}
             value={playerNames[player.id] || player.name}
             onChange={(e) => updatePlayerName(player.id, e.currentTarget.value)}
             onKeyDown={handleKeyDown}
@@ -87,10 +87,10 @@ const EditTeamDialogContent = ({
 
       <Group gap="sm" justify="flex-end" mt="md">
         <Button variant="subtle" onClick={onClose}>
-          {t('global.cancel')}
+          {t('actions.cancel')}
         </Button>
         <Button disabled={!name.trim()} onClick={handleSave}>
-          {t('global.save')}
+          {t('actions.save')}
         </Button>
       </Group>
     </Stack>
@@ -104,7 +104,7 @@ const EditTeamDialog = ({
   onClose,
   onSave,
 }: EditTeamDialogProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gameDetail', 'common']);
   const dialogKey = `${isOpen}-${teamName}-${players.map((p) => p.id).join('-')}`;
 
   return (
@@ -112,7 +112,7 @@ const EditTeamDialog = ({
       centered
       opened={isOpen}
       size="md"
-      title={t('pages.gameDetail.teams.editTeamDialog')}
+      title={t('teams.editTeamDialog')}
       onClose={onClose}
     >
       <EditTeamDialogContent

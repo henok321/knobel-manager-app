@@ -1,0 +1,53 @@
+{
+  "actions": {
+    "loading": "Lädt...",
+    "error": "Fehler",
+    "errorOccurred": "Ein Fehler ist aufgetreten",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "save": "Speichern"
+  },
+  "errorBoundary": {
+    "title": "Etwas ist schiefgelaufen",
+    "errorDetails": "Fehlerdetails",
+    "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten",
+    "componentStack": "Komponenten-Stack",
+    "tryAgain": "Erneut versuchen",
+    "goToHomePage": "Zur Startseite"
+  },
+  "header": {
+    "heading": "Knobel-Manager",
+    "logout": "Abmelden",
+    "nav": {
+      "home": "Startseite",
+      "games": "Spiele",
+      "settings": "Einstellungen",
+      "language": "Sprache",
+      "languages": {
+        "english": "🇬🇧 English",
+        "german": "🇩🇪 Deutsch"
+      }
+    }
+  },
+  "login": {
+    "heading": "Anmelden bei Knobel-Manager",
+    "fields": {
+      "email": {
+        "label": "E-Mail",
+        "placeholder": "mail@beispiel.de",
+        "validationMessage": "Ungültige E-Mail-Adresse"
+      },
+      "password": {
+        "label": "Passwort",
+        "placeholder": "Dein Passwort",
+        "validationMessage": "Passwort muss mindestens 6 Zeichen lang sein"
+      }
+    },
+    "error": {
+      "invalidCredentials": "Ungültige Anmeldedaten",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten"
+    },
+    "submit": "Anmelden"
+  }
+}

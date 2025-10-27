@@ -15,12 +15,12 @@ export const generateRankings = (data: RankingsData, t: TFunction): void => {
   const { gameName, teamRankings, playerRankings, roundNumber } = data;
 
   const roundLabel = roundNumber
-    ? `${t('pdf.rankings.round')} ${roundNumber}`
-    : t('pdf.rankings.total');
+    ? `${t('rankings.round', { ns: 'pdf' })} ${roundNumber}`
+    : t('rankings.total', { ns: 'pdf' });
 
   const doc = createPDF({
-    title: `${gameName} - ${t('pdf.rankings.title')}`,
-    subtitle: `${t('pdf.rankings.subtitle')} - ${roundLabel}`,
+    title: `${gameName} - ${t('rankings.title', { ns: 'pdf' })}`,
+    subtitle: `${t('rankings.subtitle', { ns: 'pdf' })} - ${roundLabel}`,
   });
 
   let startY = 40;
@@ -28,7 +28,7 @@ export const generateRankings = (data: RankingsData, t: TFunction): void => {
   // Team Rankings Section
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(t('pdf.rankings.teamRankings'), 14, startY);
+  doc.text(t('rankings.teamRankings', { ns: 'pdf' }), 14, startY);
   startY += 10;
 
   const teamTableData: (string | number)[][] = teamRankings.map(
@@ -38,16 +38,16 @@ export const generateRankings = (data: RankingsData, t: TFunction): void => {
   if (teamTableData.length === 0) {
     doc.setFontSize(10);
     doc.setFont('helvetica', 'italic');
-    doc.text(t('pdf.rankings.noData'), 14, startY);
+    doc.text(t('rankings.noData', { ns: 'pdf' }), 14, startY);
     startY += 15;
   } else {
     autoTable(doc, {
       startY,
       head: [
         [
-          t('pdf.rankings.rank'),
-          t('pdf.rankings.team'),
-          t('pdf.rankings.totalScore'),
+          t('rankings.rank', { ns: 'pdf' }),
+          t('rankings.team', { ns: 'pdf' }),
+          t('rankings.totalScore', { ns: 'pdf' }),
         ],
       ],
       body: teamTableData,
@@ -75,7 +75,7 @@ export const generateRankings = (data: RankingsData, t: TFunction): void => {
 
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(t('pdf.rankings.playerRankings'), 14, startY);
+  doc.text(t('rankings.playerRankings', { ns: 'pdf' }), 14, startY);
   startY += 10;
 
   const playerTableData: (string | number)[][] = playerRankings.map(
@@ -90,16 +90,16 @@ export const generateRankings = (data: RankingsData, t: TFunction): void => {
   if (playerTableData.length === 0) {
     doc.setFontSize(10);
     doc.setFont('helvetica', 'italic');
-    doc.text(t('pdf.rankings.noData'), 14, startY);
+    doc.text(t('rankings.noData', { ns: 'pdf' }), 14, startY);
   } else {
     autoTable(doc, {
       startY,
       head: [
         [
-          t('pdf.rankings.rank'),
-          t('pdf.rankings.player'),
-          t('pdf.rankings.team'),
-          t('pdf.rankings.totalScore'),
+          t('rankings.rank', { ns: 'pdf' }),
+          t('rankings.player', { ns: 'pdf' }),
+          t('rankings.team', { ns: 'pdf' }),
+          t('rankings.totalScore', { ns: 'pdf' }),
         ],
       ],
       body: playerTableData,
@@ -117,8 +117,8 @@ export const generateRankings = (data: RankingsData, t: TFunction): void => {
   }
 
   const filename = roundNumber
-    ? `${gameName}_${t('pdf.rankings.filename')}_Round${roundNumber}.pdf`
-    : `${gameName}_${t('pdf.rankings.filename')}_Total.pdf`;
+    ? `${gameName}_${t('rankings.filename', { ns: 'pdf' })}_Round${roundNumber}.pdf`
+    : `${gameName}_${t('rankings.filename', { ns: 'pdf' })}_Total.pdf`;
 
   doc.save(filename);
 };

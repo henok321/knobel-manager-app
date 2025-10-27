@@ -19,8 +19,8 @@ export const generateTeamHandout = (
   const { team, players, tables, gameName, numberOfRounds } = data;
 
   const doc = createPDF({
-    title: `${gameName} - ${t('pdf.teamHandout.title')}`,
-    subtitle: `${t('pdf.teamHandout.team')}: ${team.name}`,
+    title: `${gameName} - ${t('teamHandout.title', { ns: 'pdf' })}`,
+    subtitle: `${t('teamHandout.team', { ns: 'pdf' })}: ${team.name}`,
   });
 
   // Group tables by round
@@ -55,13 +55,13 @@ export const generateTeamHandout = (
 
       if (playerTable) {
         playerTableData.push([
-          `${t('pdf.teamHandout.round')} ${roundNum}`,
-          `${t('pdf.teamHandout.table')} ${playerTable.tableNumber + 1}`,
+          `${t('teamHandout.round', { ns: 'pdf' })} ${roundNum}`,
+          `${t('teamHandout.table', { ns: 'pdf' })} ${playerTable.tableNumber + 1}`,
         ]);
       } else {
         playerTableData.push([
-          `${t('pdf.teamHandout.round')} ${roundNum}`,
-          t('pdf.teamHandout.notAssigned'),
+          `${t('teamHandout.round', { ns: 'pdf' })} ${roundNum}`,
+          t('teamHandout.notAssigned', { ns: 'pdf' }),
         ]);
       }
     }
@@ -69,7 +69,10 @@ export const generateTeamHandout = (
     autoTable(doc, {
       startY,
       head: [
-        [t('pdf.teamHandout.round'), t('pdf.teamHandout.tableAssignment')],
+        [
+          t('teamHandout.round', { ns: 'pdf' }),
+          t('teamHandout.tableAssignment', { ns: 'pdf' }),
+        ],
       ],
       body: playerTableData,
       theme: 'grid',
@@ -90,7 +93,7 @@ export const generateTeamHandout = (
 
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(t('pdf.teamHandout.summary'), 14, startY);
+  doc.text(t('teamHandout.summary', { ns: 'pdf' }), 14, startY);
   startY += 10;
 
   // Summary table: Round -> Players and their tables
@@ -106,8 +109,8 @@ export const generateTeamHandout = (
       summaryData.push([
         player.name,
         playerTable
-          ? `${t('pdf.teamHandout.table')} ${playerTable.tableNumber + 1}`
-          : t('pdf.teamHandout.notAssigned'),
+          ? `${t('teamHandout.table', { ns: 'pdf' })} ${playerTable.tableNumber + 1}`
+          : t('teamHandout.notAssigned', { ns: 'pdf' }),
       ]);
     }
 
@@ -118,12 +121,21 @@ export const generateTeamHandout = (
 
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text(`${t('pdf.teamHandout.round')} ${roundNum}`, 14, startY);
+    doc.text(
+      `${t('teamHandout.round', { ns: 'pdf' })} ${roundNum}`,
+      14,
+      startY,
+    );
     startY += 5;
 
     autoTable(doc, {
       startY,
-      head: [[t('pdf.teamHandout.player'), t('pdf.teamHandout.table')]],
+      head: [
+        [
+          t('teamHandout.player', { ns: 'pdf' }),
+          t('teamHandout.table', { ns: 'pdf' }),
+        ],
+      ],
       body: summaryData,
       theme: 'striped',
       headStyles: { fillColor: [66, 139, 202] },
@@ -135,7 +147,9 @@ export const generateTeamHandout = (
         .finalY + 10;
   }
 
-  doc.save(`${gameName}_${team.name}_${t('pdf.teamHandout.filename')}.pdf`);
+  doc.save(
+    `${gameName}_${team.name}_${t('teamHandout.filename', { ns: 'pdf' })}.pdf`,
+  );
 };
 
 // Generate all team handouts in a single PDF
@@ -151,8 +165,8 @@ export const generateAllTeamHandouts = (
   const { gameName, numberOfRounds, tables, teams } = data;
 
   const doc = createPDF({
-    title: `${gameName} - ${t('pdf.teamHandout.allTeamsTitle')}`,
-    subtitle: t('pdf.teamHandout.allTeamsSubtitle'),
+    title: `${gameName} - ${t('teamHandout.allTeamsTitle', { ns: 'pdf' })}`,
+    subtitle: t('teamHandout.allTeamsSubtitle', { ns: 'pdf' }),
   });
 
   // Group tables by round
@@ -193,8 +207,8 @@ export const generateAllTeamHandouts = (
         summaryData.push([
           player.name,
           playerTable
-            ? `${t('pdf.teamHandout.table')} ${playerTable.tableNumber + 1}`
-            : t('pdf.teamHandout.notAssigned'),
+            ? `${t('teamHandout.table', { ns: 'pdf' })} ${playerTable.tableNumber + 1}`
+            : t('teamHandout.notAssigned', { ns: 'pdf' }),
         ]);
       }
 
@@ -205,12 +219,21 @@ export const generateAllTeamHandouts = (
 
       doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
-      doc.text(`${t('pdf.teamHandout.round')} ${roundNum}`, 14, startY);
+      doc.text(
+        `${t('teamHandout.round', { ns: 'pdf' })} ${roundNum}`,
+        14,
+        startY,
+      );
       startY += 5;
 
       autoTable(doc, {
         startY,
-        head: [[t('pdf.teamHandout.player'), t('pdf.teamHandout.table')]],
+        head: [
+          [
+            t('teamHandout.player', { ns: 'pdf' }),
+            t('teamHandout.table', { ns: 'pdf' }),
+          ],
+        ],
         body: summaryData,
         theme: 'striped',
         headStyles: { fillColor: [66, 139, 202], fontSize: 9 },
@@ -224,5 +247,7 @@ export const generateAllTeamHandouts = (
     }
   }
 
-  doc.save(`${gameName}_${t('pdf.teamHandout.allTeamsFilename')}.pdf`);
+  doc.save(
+    `${gameName}_${t('teamHandout.allTeamsFilename', { ns: 'pdf' })}.pdf`,
+  );
 };

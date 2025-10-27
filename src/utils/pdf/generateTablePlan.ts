@@ -16,8 +16,8 @@ export const generateTablePlan = (data: TablePlanData, t: TFunction): void => {
   const { gameName, numberOfRounds, tables, playersById, teamsById } = data;
 
   const doc = createPDF({
-    title: `${gameName} - ${t('pdf.tablePlan.title')}`,
-    subtitle: t('pdf.tablePlan.subtitle'),
+    title: `${gameName} - ${t('tablePlan.title', { ns: 'pdf' })}`,
+    subtitle: t('tablePlan.subtitle', { ns: 'pdf' }),
     orientation: 'portrait',
   });
 
@@ -44,13 +44,13 @@ export const generateTablePlan = (data: TablePlanData, t: TFunction): void => {
 
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text(`${t('pdf.tablePlan.round')} ${roundNum}`, 14, startY);
+    doc.text(`${t('tablePlan.round', { ns: 'pdf' })} ${roundNum}`, 14, startY);
     startY += 10; // Increased space after round headline
 
     if (roundTables.length === 0) {
       doc.setFontSize(8);
       doc.setFont('helvetica', 'italic');
-      doc.text(t('pdf.tablePlan.noTables'), 14, startY);
+      doc.text(t('tablePlan.noTables', { ns: 'pdf' }), 14, startY);
       startY += 6;
     } else {
       // For each table, create a section with table name as headline
@@ -69,7 +69,7 @@ export const generateTablePlan = (data: TablePlanData, t: TFunction): void => {
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
         doc.text(
-          `${t('pdf.tablePlan.table')} ${table.tableNumber + 1}`,
+          `${t('tablePlan.table', { ns: 'pdf' })} ${table.tableNumber + 1}`,
           14,
           startY,
         );
@@ -97,7 +97,12 @@ export const generateTablePlan = (data: TablePlanData, t: TFunction): void => {
 
         autoTable(doc, {
           startY,
-          head: [[t('pdf.tablePlan.player'), t('pdf.tablePlan.team')]],
+          head: [
+            [
+              t('tablePlan.player', { ns: 'pdf' }),
+              t('tablePlan.team', { ns: 'pdf' }),
+            ],
+          ],
           body: playerData,
           theme: 'striped',
           headStyles: { fillColor: [66, 139, 202], fontSize: 8 },
@@ -116,5 +121,5 @@ export const generateTablePlan = (data: TablePlanData, t: TFunction): void => {
     }
   }
 
-  doc.save(`${gameName}_${t('pdf.tablePlan.filename')}.pdf`);
+  doc.save(`${gameName}_${t('tablePlan.filename', { ns: 'pdf' })}.pdf`);
 };

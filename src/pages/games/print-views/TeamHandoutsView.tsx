@@ -28,7 +28,7 @@ const TeamHandoutsView = ({
   teamsEntities,
   teamId,
 }: TeamHandoutsViewProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['pdf', 'common']);
 
   // Filter teams to display
   const teams = Object.values(teamsEntities).filter(
@@ -81,7 +81,7 @@ const TeamHandoutsView = ({
             {/* Player assignments */}
             <div>
               <Text fw={500} mb="sm">
-                {t('pdf.teamHandout.assignments')}
+                {t('teamHandout.assignments')}
               </Text>
 
               {teamPlayers.map((player) => {
@@ -95,8 +95,8 @@ const TeamHandoutsView = ({
                       <Table striped withTableBorder>
                         <Table.Thead>
                           <Table.Tr>
-                            <Table.Th>{t('pdf.teamHandout.round')}</Table.Th>
-                            <Table.Th>{t('pdf.teamHandout.table')}</Table.Th>
+                            <Table.Th>{t('teamHandout.round')}</Table.Th>
+                            <Table.Th>{t('teamHandout.table')}</Table.Th>
                           </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
@@ -108,17 +108,17 @@ const TeamHandoutsView = ({
                             return (
                               <Table.Tr key={roundNum}>
                                 <Table.Td>
-                                  {t('pdf.teamHandout.round')} {roundNum}
+                                  {t('teamHandout.round')} {roundNum}
                                 </Table.Td>
                                 <Table.Td>
                                   {assignment ? (
                                     <Badge color="blue">
-                                      {t('pdf.teamHandout.table')}{' '}
+                                      {t('teamHandout.table')}{' '}
                                       {assignment.tableNumber + 1}
                                     </Badge>
                                   ) : (
                                     <Text c="dimmed" fs="italic">
-                                      {t('pdf.teamHandout.notAssigned')}
+                                      {t('teamHandout.notAssigned')}
                                     </Text>
                                   )}
                                 </Table.Td>
@@ -137,7 +137,7 @@ const TeamHandoutsView = ({
             <Divider />
             <div>
               <Text c="dimmed" size="sm">
-                {t('pdf.teamHandout.summary', {
+                {t('teamHandout.summary', {
                   players: teamPlayers.length,
                   rounds: game.numberOfRounds,
                 })}
@@ -155,12 +155,10 @@ const TeamHandoutsView = ({
       <div className="print-header">
         <Title order={1}>{game.name}</Title>
         <Title c="dimmed" fw={400} order={2}>
-          {t('pdf.teamHandout.title')}
+          {t('teamHandout.title')}
         </Title>
         <Text c="dimmed" size="sm">
-          {teamId
-            ? t('pdf.teamHandout.subtitleSingle')
-            : t('pdf.teamHandout.subtitle')}
+          {teamId ? t('teamHandout.subtitleSingle') : t('teamHandout.subtitle')}
         </Text>
       </div>
 

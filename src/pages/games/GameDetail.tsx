@@ -11,7 +11,7 @@ import useGames from '../../slices/games/hooks';
 
 const GameDetail = () => {
   const { gameId } = useParams<{ gameId: string }>();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gameDetail', 'common']);
   const navigate = useNavigate();
   const { allGames, fetchGames, status } = useGames();
 
@@ -32,7 +32,7 @@ const GameDetail = () => {
       <Layout navbarActive onOpenGameForm={() => navigate('/games')}>
         <Container py="md">
           <Text c="red" size="xl">
-            {t('pages.gameDetail.notFound')}
+            {t('notFound')}
           </Text>
         </Container>
       </Layout>
