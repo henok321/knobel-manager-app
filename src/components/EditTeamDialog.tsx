@@ -109,6 +109,7 @@ const EditTeamDialog = ({
 
   return (
     <Modal
+      centered
       opened={isOpen}
       size="md"
       title={t('pages.gameDetail.teams.editTeamDialog')}

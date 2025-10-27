@@ -72,14 +72,14 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
                 maxWidth: 400,
                 marginInline: 'auto',
               }}
-              visibleFrom="sm"
+              visibleFrom="md"
             >
               <GameContextSelector onOpenGameForm={onOpenGameForm} />
             </Box>
           )}
 
           {navbarActive && (
-            <Group gap="xs" visibleFrom="sm">
+            <Group gap="xs" visibleFrom="md">
               <LanguagePicker />
               <UserMenu onLogout={logOut} />
             </Group>
@@ -89,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
 
           {navbarActive && (
             <Burger
-              hiddenFrom="sm"
+              hiddenFrom="md"
               opened={opened}
               size="sm"
               onClick={toggle}
