@@ -1,7 +1,8 @@
 import { Alert, Button, Container, Stack, Text, Title } from '@mantine/core';
 import { Component, ErrorInfo, ReactNode } from 'react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
-interface ErrorBoundaryProps {
+interface ErrorBoundaryProps extends WithTranslation {
   children: ReactNode;
 }
 
@@ -54,20 +55,31 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   };
 
   override render(): ReactNode {
+    const { t } = this.props;
+
     if (this.state.hasError) {
       return (
         <Container py="xl" size="md">
           <Stack gap="lg">
-            <Title order={1}>Something went wrong</Title>
+            <Title order={1}>{t('errorBoundary.title')}</Title>
 
-            <Alert color="red" title="Error Details" variant="filled">
+            <Alert
+              color="red"
+              title={t('errorBoundary.errorDetails')}
+              variant="filled"
+            >
               <Text size="sm">
-                {this.state.error?.message || 'An unexpected error occurred'}
+                {this.state.error?.message ||
+                  t('errorBoundary.unexpectedError')}
               </Text>
             </Alert>
 
             {import.meta.env.MODE === 'development' && this.state.errorInfo && (
-              <Alert color="yellow" title="Component Stack" variant="light">
+              <Alert
+                color="yellow"
+                title={t('errorBoundary.componentStack')}
+                variant="light"
+              >
                 <Text
                   component="pre"
                   size="xs"
@@ -82,7 +94,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               </Alert>
             )}
 
-            <Button onClick={this.handleReset}>Try Again</Button>
+            <Button onClick={this.handleReset}>
+              {t('errorBoundary.tryAgain')}
+            </Button>
 
             <Button
               component="a"
@@ -92,7 +106,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 window.location.href = '/';
               }}
             >
-              Go to Home Page
+              {t('errorBoundary.goToHomePage')}
             </Button>
           </Stack>
         </Container>
@@ -103,4 +117,4 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
-export default ErrorBoundary;
+export default withTranslation()(ErrorBoundary);

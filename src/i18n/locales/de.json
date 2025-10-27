@@ -8,6 +8,14 @@
     "delete": "Löschen",
     "save": "Speichern"
   },
+  "errorBoundary": {
+    "title": "Etwas ist schiefgelaufen",
+    "errorDetails": "Fehlerdetails",
+    "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten",
+    "componentStack": "Komponenten-Stack",
+    "tryAgain": "Erneut versuchen",
+    "goToHomePage": "Zur Startseite"
+  },
   "header": {
     "heading": "Knobel-Manager",
     "logout": "Abmelden",

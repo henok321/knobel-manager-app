@@ -8,6 +8,14 @@
     "delete": "Delete",
     "save": "Save"
   },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "errorDetails": "Error Details",
+    "unexpectedError": "An unexpected error occurred",
+    "componentStack": "Component Stack",
+    "tryAgain": "Try Again",
+    "goToHomePage": "Go to Home Page"
+  },
   "header": {
     "heading": "Knobel Manager",
     "logout": "Logout",
