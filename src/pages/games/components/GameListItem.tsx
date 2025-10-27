@@ -61,7 +61,7 @@ const GameListItem = ({
   onActivate,
   onDelete,
 }: GameListItemProps) => {
-  const { t } = useTranslation(['games', 'common']);
+  const { t } = useTranslation(['games', 'gameDetail', 'home', 'common']);
   const navigate = useNavigate();
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -118,13 +118,13 @@ const GameListItem = ({
                   size="sm"
                   variant="light"
                 >
-                  {t(`pages.gameDetail.status.${game.status}`)}
+                  {t(`status.${game.status}`, { ns: 'gameDetail' })}
                 </Badge>
                 <Text c="dimmed" size="xs">
                   {game.teams.length}{' '}
-                  {t('pages.home.picker.teams').toLowerCase()} •{' '}
+                  {t('picker.teams', { ns: 'home' }).toLowerCase()} •{' '}
                   {game.numberOfRounds}{' '}
-                  {t('pages.gameDetail.rounds.round').toLowerCase()}
+                  {t('rounds.round', { ns: 'gameDetail' }).toLowerCase()}
                 </Text>
               </Group>
             </Stack>

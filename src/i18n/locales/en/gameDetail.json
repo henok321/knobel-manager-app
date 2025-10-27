@@ -59,7 +59,9 @@
     "teamName": "Team Name",
     "teamNamePlaceholder": "Enter team name",
     "playerName": "Player Name",
-    "playerNamePlaceholder": "Enter player name"
+    "playerNamePlaceholder": "Enter player name",
+    "roundShort": "R",
+    "tableShort": "T"
   },
   "rounds": {
     "selectRound": "Select Round",

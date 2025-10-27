@@ -37,9 +37,12 @@ const getStatusColor = (status: GameStatusEnum) => {
   }
 };
 
-const getGameSummary = (game: Game, t: (key: string) => string) => {
+const getGameSummary = (
+  game: Game,
+  t: ReturnType<typeof useTranslation>['t'],
+) => {
   const teamsCount = game.teams.length;
-  return `${t(`pages.gameDetail.status.${game.status}`)} • ${t('picker.teams')}: ${teamsCount}  • ${t('pages.gameDetail.numberOfRounds')}: ${game.numberOfRounds}`;
+  return `${t(`status.${game.status}`, { ns: 'gameDetail' })} • ${t('picker.teams')}: ${teamsCount}  • ${t('numberOfRounds', { ns: 'gameDetail' })}: ${game.numberOfRounds}`;
 };
 
 interface GameContextSelectorProps {
@@ -53,7 +56,7 @@ const GameContextSelector = ({
   isMobile = false,
   onClose,
 }: GameContextSelectorProps) => {
-  const { t } = useTranslation(['home', 'common']);
+  const { t } = useTranslation(['home', 'gameDetail', 'games', 'common']);
   const navigate = useNavigate();
   const theme = useMantineTheme();
   const { activeGame, allGames, activateGame } = useGames();
@@ -161,7 +164,7 @@ const GameContextSelector = ({
               size="sm"
               variant="dot"
             >
-              {t(`pages.gameDetail.status.${activeGame.status}`)}
+              {t(`status.${activeGame.status}`, { ns: 'gameDetail' })}
             </Badge>
           }
           onClick={() => {
@@ -177,7 +180,7 @@ const GameContextSelector = ({
             </Text>
             <Text c="dimmed" size="xs">
               {t('picker.teams')}: {activeGame.teams.length} •{' '}
-              {t('pages.gameDetail.numberOfRounds')} :{' '}
+              {t('numberOfRounds', { ns: 'gameDetail' })} :{' '}
               {activeGame.numberOfRounds}
             </Text>
           </Stack>
@@ -196,7 +199,7 @@ const GameContextSelector = ({
                     size="sm"
                     variant="dot"
                   >
-                    {t(`pages.gameDetail.status.${game.status}`)}
+                    {t(`status.${game.status}`, { ns: 'gameDetail' })}
                   </Badge>
                 }
                 onClick={() => handleSwitchGame(game.id)}
@@ -218,7 +221,7 @@ const GameContextSelector = ({
           onClick={handleCreateGame}
         >
           <Text fw={600} size="sm">
-            {t('pages.games.createGameButton')}
+            {t('createGameButton', { ns: 'games' })}
           </Text>
         </Menu.Item>
         <Menu.Item
@@ -228,7 +231,7 @@ const GameContextSelector = ({
           onClick={handleNavigateToGames}
         >
           <Text fw={500} size="sm">
-            {t('pages.games.heading')}
+            {t('heading', { ns: 'games' })}
           </Text>
         </Menu.Item>
       </Menu.Dropdown>

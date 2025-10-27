@@ -111,7 +111,7 @@ const PrintView = () => {
           />
         );
       default:
-        return <Text c="red">{t('pages.printView.invalidType')}</Text>;
+        return <Text c="red">{t('printView.invalidType')}</Text>;
     }
   };
 
@@ -126,13 +126,13 @@ const PrintView = () => {
               variant="default"
               onClick={handleBack}
             >
-              {t('pages.printView.back')}
+              {t('printView.back')}
             </Button>
             <Button
               leftSection={<IconPrinter size={16} />}
               onClick={handlePrint}
             >
-              {t('pages.printView.print')}
+              {t('printView.print')}
             </Button>
           </Group>
         </Container>

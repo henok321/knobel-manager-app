@@ -17,7 +17,7 @@ export interface TeamFormProps {
 }
 
 const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
-  const { t } = useTranslation(['home', 'common']);
+  const { t } = useTranslation(['home', 'games', 'common']);
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState(['']);
 
@@ -33,7 +33,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
     createTeam({ name: teamName, members: players });
     notifications.show({
       title: t('actions.success'),
-      message: t('pages.games.card.teamAdded', { name: teamName }),
+      message: t('card.teamAdded', { name: teamName, ns: 'games' }),
       color: 'green',
     });
     handleClose();

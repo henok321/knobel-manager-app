@@ -36,7 +36,7 @@ const Games = () => {
 
   const [gameModalActive, setGameModalActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { t } = useTranslation(['games', 'common']);
+  const { t } = useTranslation(['games', 'gameDetail', 'common']);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -175,7 +175,9 @@ const Games = () => {
           {completedGames.length > 0 && (
             <Stack gap="md">
               <Divider />
-              <Title order={3}>{t('pages.gameDetail.status.completed')}</Title>
+              <Title order={3}>
+                {t('status.completed', { ns: 'gameDetail' })}
+              </Title>
               {completedGames.map((game) => (
                 <GameListItem
                   key={game.id}
