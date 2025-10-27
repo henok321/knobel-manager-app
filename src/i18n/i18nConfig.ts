@@ -11,7 +11,7 @@ i18n
   .init({
     fallbackLng: 'en',
     supportedLngs: ['en', 'de'],
-    debug: true,
+    debug: !import.meta.env.PROD,
     detection: {
       order: ['querystring', 'localStorage', 'cookie', 'navigator'],
       caches: ['localStorage', 'cookie'],

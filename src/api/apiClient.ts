@@ -14,7 +14,6 @@ const getBaseURL = () => {
   if (import.meta.env.PROD) {
     return import.meta.env.VITE_API_URL;
   }
-  // Check if running in Node/Jest (no window object)
   if (typeof window === 'undefined') {
     return 'http://localhost/api';
   }
