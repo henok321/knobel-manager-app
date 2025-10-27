@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { AuthProvider } from './auth/AuthContext.tsx';
 import ProtectedRoute from './auth/ProtectedRoute.tsx';
-import ErrorBoundary from './components/ErrorBoundary.tsx';
+import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import CenterLoader from './shared/CenterLoader.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';

@@ -12,7 +12,10 @@ interface ErrorBoundaryState {
   errorInfo: ErrorInfo | null;
 }
 
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundaryComponent extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
@@ -35,15 +38,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       errorInfo,
     });
 
-    // Log error to console in development
-
     if (import.meta.env.MODE === 'development') {
       // eslint-disable-next-line no-console
       console.error('ErrorBoundary caught an error:', error, errorInfo);
     }
-
-    // In production, you could send this to an error tracking service
-    // e.g., Sentry, LogRocket, etc.
   }
 
   handleReset = (): void => {
@@ -117,4 +115,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
-export default withTranslation()(ErrorBoundary);
+const TranslatedErrorBoundary = withTranslation()(ErrorBoundaryComponent);
+TranslatedErrorBoundary.displayName = 'ErrorBoundary';
+
+export { TranslatedErrorBoundary as ErrorBoundary };
