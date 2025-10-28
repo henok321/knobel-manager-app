@@ -245,7 +245,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                                       {t('teams.roundShort')}
                                       {assignment.roundNumber}:
                                       {t('teams.tableShort')}
-                                      {assignment.tableNumber + 1}
+                                      {assignment.tableNumber}
                                     </Badge>
                                   ))}
                               </Group>

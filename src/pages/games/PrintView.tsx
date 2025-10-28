@@ -15,7 +15,7 @@ import useTables from '../../slices/tables/hooks';
 import { selectAllTables } from '../../slices/tables/slice';
 import { Team } from '../../slices/types';
 import { RootState } from '../../store/store';
-import '../../styles/print.css';
+import './print-views/print.css';
 
 const PrintView = () => {
   const { gameId } = useParams<{ gameId: string }>();
@@ -117,7 +117,6 @@ const PrintView = () => {
 
   return (
     <>
-      {/* Print controls - hidden when printing */}
       <div className="print-controls">
         <Container py="md" size="xl">
           <Group justify="space-between">
@@ -138,7 +137,6 @@ const PrintView = () => {
         </Container>
       </div>
 
-      {/* Print content */}
       <Container py="md" size="xl">
         <Stack gap="lg">{renderView()}</Stack>
       </Container>

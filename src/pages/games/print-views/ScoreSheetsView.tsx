@@ -53,7 +53,7 @@ const ScoreSheetsView = ({
                 <div>
                   <Title order={3}>
                     {t('scoreSheets.round')} {table.roundNumber} -{' '}
-                    {t('scoreSheets.table')} {table.tableNumber + 1}
+                    {t('scoreSheets.table')} {table.tableNumber}
                   </Title>
                   <Text c="dimmed" size="sm">
                     {game.name}

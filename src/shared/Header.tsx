@@ -16,7 +16,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import classes from './Header.module.css';
 import LanguagePicker from './LanguagePicker';
 import { useAuth } from '../auth/useAuth';
 import GameContextSelector from '../components/GameContextSelector';
@@ -59,7 +58,7 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
             <ThemeIcon size="lg" variant="light">
               <IconDice />
             </ThemeIcon>
-            <Title className={classes.appTitle} fw={700} order={4}>
+            <Title fw={700} order={4}>
               {t('header.heading', 'Knobel Manager')}
             </Title>
           </Group>

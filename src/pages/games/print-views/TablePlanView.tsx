@@ -74,7 +74,7 @@ const TablePlanView = ({
                         >
                           <Stack gap="xs">
                             <Title order={4} size="h5">
-                              {t('tablePlan.table')} {table.tableNumber + 1}
+                              {t('tablePlan.table')} {table.tableNumber}
                             </Title>
                             <Table highlightOnHover striped>
                               <Table.Thead>

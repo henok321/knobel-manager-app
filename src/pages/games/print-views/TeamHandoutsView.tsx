@@ -114,7 +114,7 @@ const TeamHandoutsView = ({
                                   {assignment ? (
                                     <Badge color="blue">
                                       {t('teamHandout.table')}{' '}
-                                      {assignment.tableNumber + 1}
+                                      {assignment.tableNumber}
                                     </Badge>
                                   ) : (
                                     <Text c="dimmed" fs="italic">
