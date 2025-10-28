@@ -1,4 +1,4 @@
-import { Button, Group, Modal, Stack, TextInput } from '@mantine/core';
+import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
 import { useState, useMemo, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -112,7 +112,11 @@ const EditTeamDialog = ({
       centered
       opened={isOpen}
       size="md"
-      title={t('teams.editTeamDialog')}
+      title={
+        <Text fw={600} size="xl">
+          {t('teams.editTeamDialog')}
+        </Text>
+      }
       onClose={onClose}
     >
       <EditTeamDialogContent
