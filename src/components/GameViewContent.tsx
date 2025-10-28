@@ -31,7 +31,7 @@ interface GameViewContentProps {
 }
 
 const GameViewContent = ({ game }: GameViewContentProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gameDetail', 'common']);
   const { updateGame } = useGames();
   const allTables = useSelector(tablesSelectors.selectAll);
 
@@ -123,30 +123,28 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const confirmStartGame = () => {
     modals.openConfirmModal({
-      title: t('pages.gameDetail.actions.startGame'),
+      title: t('actions.startGame'),
       children: (
         <Stack gap="sm">
-          <Text size="sm">
-            {t('pages.gameDetail.actions.startGameConfirmation')}
-          </Text>
+          <Text size="sm">{t('actions.startGameConfirmation')}</Text>
           <Text component="ul" ml="md" size="sm">
-            <li>{t('pages.gameDetail.actions.startGameWarning1')}</li>
-            <li>{t('pages.gameDetail.actions.startGameWarning2')}</li>
-            <li>{t('pages.gameDetail.actions.startGameWarning3')}</li>
+            <li>{t('actions.startGameWarning1')}</li>
+            <li>{t('actions.startGameWarning2')}</li>
+            <li>{t('actions.startGameWarning3')}</li>
           </Text>
         </Stack>
       ),
       labels: {
-        confirm: t('pages.gameDetail.actions.startGame'),
-        cancel: t('global.cancel'),
+        confirm: t('actions.startGame'),
+        cancel: t('actions.cancel'),
       },
       confirmProps: { color: 'blue' },
       onConfirm: () => {
         handleStatusTransition(GameStatusEnum.InProgress);
         setActiveTab('rounds');
         notifications.show({
-          title: t('pages.gameDetail.actions.gameStartedNotification'),
-          message: t('pages.gameDetail.actions.gameStartedMessage'),
+          title: t('actions.gameStartedNotification'),
+          message: t('actions.gameStartedMessage'),
           color: 'blue',
         });
       },
@@ -155,15 +153,11 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const confirmCompleteGame = () => {
     modals.openConfirmModal({
-      title: t('pages.gameDetail.actions.completeGame'),
-      children: (
-        <Text size="sm">
-          {t('pages.gameDetail.actions.completeGameConfirmation')}
-        </Text>
-      ),
+      title: t('actions.completeGame'),
+      children: <Text size="sm">{t('actions.completeGameConfirmation')}</Text>,
       labels: {
-        confirm: t('pages.gameDetail.actions.completeGame'),
-        cancel: t('global.cancel'),
+        confirm: t('actions.completeGame'),
+        cancel: t('actions.cancel'),
       },
       confirmProps: { color: 'green' },
       onConfirm: () => handleStatusTransition(GameStatusEnum.Completed),
@@ -204,15 +198,15 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           <Title order={1}>{game.name}</Title>
           <Group gap="xs" mt="xs">
             <Text c="dimmed" size="sm">
-              {t('pages.gameDetail.teamSize')}: {game.teamSize}
+              {t('teamSize')}: {game.teamSize}
             </Text>
             <Text c="dimmed">•</Text>
             <Text c="dimmed" size="sm">
-              {t('pages.gameDetail.tableSize')}: {game.tableSize}
+              {t('tableSize')}: {game.tableSize}
             </Text>
             <Text c="dimmed">•</Text>
             <Text c="dimmed" size="sm">
-              {t('pages.gameDetail.numberOfRounds')}: {game.numberOfRounds}
+              {t('numberOfRounds')}: {game.numberOfRounds}
             </Text>
           </Group>
         </div>
@@ -223,11 +217,11 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
             size="lg"
             variant="filled"
           >
-            {t(`pages.gameDetail.status.${game.status}`)}
+            {t(`status.${game.status}`)}
           </Badge>
           {game.status === GameStatusEnum.Setup && (
             <Button color="blue" size="sm" onClick={confirmStartGame}>
-              {t('pages.gameDetail.actions.startGame')}
+              {t('actions.startGame')}
             </Button>
           )}
           {game.status === GameStatusEnum.InProgress && (
@@ -236,7 +230,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
               label={
                 canComplete
                   ? undefined
-                  : t('pages.gameDetail.actions.scoreProgress', {
+                  : t('actions.scoreProgress', {
                       completed: scoreProgress.completed,
                       total: scoreProgress.total,
                     })
@@ -248,7 +242,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
                 size="sm"
                 onClick={confirmCompleteGame}
               >
-                {t('pages.gameDetail.actions.completeGame')}
+                {t('actions.completeGame')}
               </Button>
             </Tooltip>
           )}
@@ -263,41 +257,23 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         <Tabs.List>
           {game.status === GameStatusEnum.Setup && (
             <>
-              <Tabs.Tab value="teams">
-                {t('pages.gameDetail.tabs.teams')}
-              </Tabs.Tab>
-              <Tabs.Tab value="rounds">
-                {t('pages.gameDetail.tabs.rounds')}
-              </Tabs.Tab>
-              <Tabs.Tab value="rankings">
-                {t('pages.gameDetail.tabs.rankings')}
-              </Tabs.Tab>
+              <Tabs.Tab value="teams">{t('tabs.teams')}</Tabs.Tab>
+              <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>
+              <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
             </>
           )}
           {game.status === GameStatusEnum.InProgress && (
             <>
-              <Tabs.Tab value="rounds">
-                {t('pages.gameDetail.tabs.rounds')}
-              </Tabs.Tab>
-              <Tabs.Tab value="rankings">
-                {t('pages.gameDetail.tabs.rankings')}
-              </Tabs.Tab>
-              <Tabs.Tab value="teams">
-                {t('pages.gameDetail.tabs.teams')}
-              </Tabs.Tab>
+              <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>
+              <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
+              <Tabs.Tab value="teams">{t('tabs.teams')}</Tabs.Tab>
             </>
           )}
           {game.status === GameStatusEnum.Completed && (
             <>
-              <Tabs.Tab value="rankings">
-                {t('pages.gameDetail.tabs.rankings')}
-              </Tabs.Tab>
-              <Tabs.Tab value="rounds">
-                {t('pages.gameDetail.tabs.rounds')}
-              </Tabs.Tab>
-              <Tabs.Tab value="teams">
-                {t('pages.gameDetail.tabs.teams')}
-              </Tabs.Tab>
+              <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
+              <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>
+              <Tabs.Tab value="teams">{t('tabs.teams')}</Tabs.Tab>
             </>
           )}
         </Tabs.List>

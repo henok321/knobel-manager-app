@@ -1,0 +1,57 @@
+{
+  "heading": "Home",
+  "noActiveGame": "No active game",
+  "createTeamButton": "Create Team",
+  "picker": {
+    "title": "Select Active Game",
+    "subtitle": "Choose a game to manage",
+    "noGames": "No games available. Create your first game to get started!",
+    "createGame": "Create New Game",
+    "selectGame": "Select This Game",
+    "teams": "Teams"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Welcome to Knobel Manager",
+    "stats": {
+      "totalGames": "Total Games",
+      "totalTeams": "Total Teams",
+      "activeGame": "Active Game"
+    },
+    "viewAll": "View All",
+    "activeGame": {
+      "description": "Your current active tournament",
+      "setupDescription": "Your tournament is in setup mode. Add teams to get started.",
+      "inProgressDescription": "Your tournament is in progress. Enter scores for each round.",
+      "manage": "Manage Game",
+      "teams": "Teams",
+      "addTeam": "Add Team",
+      "setupGame": "Setup Game",
+      "enterScores": "Enter Scores",
+      "tables": "tables",
+      "scoresEntered": "scores entered"
+    },
+    "noActiveGame": "No Active Game",
+    "noActiveGameDescription": "Get started by activating an existing game or creating a new one.",
+    "selectGameToActivate": "Click on a game to activate it:",
+    "viewAllGames": "View All Games",
+    "or": "or",
+    "createNewGame": "Create New Game",
+    "createGame": "Create New Game",
+    "recentGames": "Recent Games",
+    "teams": "teams",
+    "rounds": "rounds"
+  },
+  "team": {
+    "form": {
+      "heading": "Create team",
+      "label": {
+        "name": "Team name",
+        "players": "Team members"
+      },
+      "addPlayer": "Add member",
+      "removePlayer": "Remove member",
+      "submit": "Create"
+    }
+  }
+}

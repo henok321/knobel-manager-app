@@ -25,7 +25,7 @@ const PdfExportMenu = ({
   size = 'sm',
   variant = 'light',
 }: PdfExportMenuProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gameDetail', 'common']);
   const allTables = useSelector(tablesSelectors.selectAll);
   const teamsById = useSelector((state: RootState) => state.teams.entities);
   const playersById = useSelector((state: RootState) => state.players.entities);
@@ -221,25 +221,25 @@ const PdfExportMenu = ({
           size={size}
           variant={variant}
         >
-          {t('pages.gameDetail.actions.exportPDF')}
+          {t('actions.exportPDF')}
         </Button>
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>{t('pages.gameDetail.pdfMenu.label')}</Menu.Label>
+        <Menu.Label>{t('pdfMenu.label')}</Menu.Label>
         <Menu.Item onClick={handleExportTablePlan}>
-          {t('pages.gameDetail.pdfMenu.tablePlan')}
+          {t('pdfMenu.tablePlan')}
         </Menu.Item>
         <Menu.Item onClick={handleExportScoreSheets}>
-          {t('pages.gameDetail.pdfMenu.scoreSheets')}
+          {t('pdfMenu.scoreSheets')}
         </Menu.Item>
         <Menu.Item onClick={handleExportAllTeamHandouts}>
-          {t('pages.gameDetail.pdfMenu.teamHandouts')}
+          {t('pdfMenu.teamHandouts')}
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Label>{t('pages.gameDetail.pdfMenu.rankingsLabel')}</Menu.Label>
+        <Menu.Label>{t('pdfMenu.rankingsLabel')}</Menu.Label>
         <Menu.Item onClick={() => handleExportRankings()}>
-          {t('pages.gameDetail.pdfMenu.rankingsAll')}
+          {t('pdfMenu.rankingsAll')}
         </Menu.Item>
         {Array.from({ length: game.numberOfRounds }, (_, i) => i + 1).map(
           (roundNum) => (
@@ -247,7 +247,7 @@ const PdfExportMenu = ({
               key={roundNum}
               onClick={() => handleExportRankings(roundNum)}
             >
-              {t('pages.gameDetail.pdfMenu.rankingsRound', {
+              {t('pdfMenu.rankingsRound', {
                 round: roundNum,
               })}
             </Menu.Item>

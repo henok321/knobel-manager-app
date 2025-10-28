@@ -18,7 +18,7 @@ const ScoreSheetsView = ({
   playersEntities: _playersEntities,
   teamsEntities,
 }: ScoreSheetsViewProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['pdf', 'common']);
 
   // Sort tables by round and table number
   const sortedTables = [...tables].sort((a, b) => {
@@ -34,10 +34,10 @@ const ScoreSheetsView = ({
       <div className="print-header">
         <Title order={1}>{game.name}</Title>
         <Title c="dimmed" fw={400} order={2}>
-          {t('pdf.scoreSheets.title')}
+          {t('scoreSheets.title')}
         </Title>
         <Text c="dimmed" size="sm">
-          {t('pdf.scoreSheets.subtitle')}
+          {t('scoreSheets.subtitle')}
         </Text>
       </div>
 
@@ -52,8 +52,8 @@ const ScoreSheetsView = ({
                 {/* Sheet header */}
                 <div>
                   <Title order={3}>
-                    {t('pdf.scoreSheets.round')} {table.roundNumber} -{' '}
-                    {t('pdf.scoreSheets.table')} {table.tableNumber + 1}
+                    {t('scoreSheets.round')} {table.roundNumber} -{' '}
+                    {t('scoreSheets.table')} {table.tableNumber + 1}
                   </Title>
                   <Text c="dimmed" size="sm">
                     {game.name}
@@ -64,17 +64,17 @@ const ScoreSheetsView = ({
 
                 {/* Instructions */}
                 <Text fw={500} size="sm">
-                  {t('pdf.scoreSheets.instructions')}
+                  {t('scoreSheets.instructions')}
                 </Text>
 
                 {/* Score table */}
                 <Table striped withColumnBorders withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
-                      <Table.Th>{t('pdf.scoreSheets.player')}</Table.Th>
-                      <Table.Th>{t('pdf.scoreSheets.team')}</Table.Th>
+                      <Table.Th>{t('scoreSheets.player')}</Table.Th>
+                      <Table.Th>{t('scoreSheets.team')}</Table.Th>
                       <Table.Th style={{ width: '120px' }}>
-                        {t('pdf.scoreSheets.score')}
+                        {t('scoreSheets.score')}
                       </Table.Th>
                     </Table.Tr>
                   </Table.Thead>
@@ -97,11 +97,11 @@ const ScoreSheetsView = ({
                 {/* Notes section */}
                 <div>
                   <Text fw={500} mb="xs">
-                    {t('pdf.scoreSheets.notes')}
+                    {t('scoreSheets.notes')}
                   </Text>
                   <Paper withBorder p="md" style={{ minHeight: '100px' }}>
                     <Text c="dimmed" size="sm">
-                      {t('pdf.scoreSheets.notesPlaceholder')}
+                      {t('scoreSheets.notesPlaceholder')}
                     </Text>
                   </Paper>
                 </div>

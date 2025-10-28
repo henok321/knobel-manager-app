@@ -19,7 +19,7 @@ interface RankingsPanelProps {
 }
 
 const RankingsPanel = ({ game }: RankingsPanelProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gameDetail', 'common']);
   const [selectedRound, setSelectedRound] = useState<string>('total');
 
   const teamsState = useSelector((state: RootState) => state.teams.entities);
@@ -30,10 +30,10 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
 
   const roundOptions = useMemo(
     () => [
-      { value: 'total', label: t('pages.gameDetail.rankings.totalRanking') },
+      { value: 'total', label: t('rankings.totalRanking') },
       ...Array.from({ length: game.numberOfRounds }, (_, i) => ({
         value: String(i + 1),
-        label: `${t('pages.gameDetail.rounds.round')} ${i + 1}`,
+        label: `${t('rounds.round')} ${i + 1}`,
       })),
     ],
     [game.numberOfRounds, t],
@@ -90,7 +90,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   if (loading) {
     return (
       <Text c="dimmed" ta="center">
-        {t('global.loading')}
+        {t('actions.loading')}
       </Text>
     );
   }
@@ -99,12 +99,12 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     return (
       <Card withBorder padding="xl" radius="md">
         <Stack align="center" gap="md">
-          <Title order={4}>{t('pages.gameDetail.rankings.noScoresYet')}</Title>
+          <Title order={4}>{t('rankings.noScoresYet')}</Title>
           <Text c="dimmed" size="sm" ta="center">
-            {t('pages.gameDetail.rankings.noScoresMessage')}
+            {t('rankings.noScoresMessage')}
           </Text>
           <Text c="dimmed" size="sm" ta="center">
-            {t('pages.gameDetail.rankings.noScoresInstructions')}
+            {t('rankings.noScoresInstructions')}
           </Text>
         </Stack>
       </Card>
@@ -116,7 +116,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
       {/* Round Filter */}
       <Select
         data={roundOptions}
-        label={t('pages.gameDetail.rankings.filterByRound')}
+        label={t('rankings.filterByRound')}
         style={{ width: 250 }}
         value={selectedRound}
         onChange={(value) => setSelectedRound(value || 'total')}
@@ -125,13 +125,13 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
       {/* Team Rankings */}
       <Card withBorder padding="lg" radius="md" shadow="sm">
         <Stack gap="md">
-          <Title order={3}>{t('pages.gameDetail.rankings.teamRankings')}</Title>
+          <Title order={3}>{t('rankings.teamRankings')}</Title>
           <Table>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>{t('pages.gameDetail.rankings.rank')}</Table.Th>
-                <Table.Th>{t('pages.gameDetail.rankings.team')}</Table.Th>
-                <Table.Th>{t('pages.gameDetail.rankings.totalScore')}</Table.Th>
+                <Table.Th>{t('rankings.rank')}</Table.Th>
+                <Table.Th>{t('rankings.team')}</Table.Th>
+                <Table.Th>{t('rankings.totalScore')}</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -139,7 +139,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
                 <Table.Tr>
                   <Table.Td colSpan={3}>
                     <Text c="dimmed" ta="center">
-                      {t('pages.gameDetail.rankings.noData')}
+                      {t('rankings.noData')}
                     </Text>
                   </Table.Td>
                 </Table.Tr>
@@ -161,16 +161,14 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
       {/* Player Rankings */}
       <Card withBorder padding="lg" radius="md" shadow="sm">
         <Stack gap="md">
-          <Title order={3}>
-            {t('pages.gameDetail.rankings.playerRankings')}
-          </Title>
+          <Title order={3}>{t('rankings.playerRankings')}</Title>
           <Table>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>{t('pages.gameDetail.rankings.rank')}</Table.Th>
-                <Table.Th>{t('pages.gameDetail.rankings.player')}</Table.Th>
-                <Table.Th>{t('pages.gameDetail.rankings.team')}</Table.Th>
-                <Table.Th>{t('pages.gameDetail.rankings.totalScore')}</Table.Th>
+                <Table.Th>{t('rankings.rank')}</Table.Th>
+                <Table.Th>{t('rankings.player')}</Table.Th>
+                <Table.Th>{t('rankings.team')}</Table.Th>
+                <Table.Th>{t('rankings.totalScore')}</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -178,7 +176,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
                 <Table.Tr>
                   <Table.Td colSpan={4}>
                     <Text c="dimmed" ta="center">
-                      {t('pages.gameDetail.rankings.noData')}
+                      {t('rankings.noData')}
                     </Text>
                   </Table.Td>
                 </Table.Tr>

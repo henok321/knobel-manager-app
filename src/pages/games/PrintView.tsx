@@ -20,7 +20,7 @@ import '../../styles/print.css';
 const PrintView = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const [searchParams] = useSearchParams();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gameDetail', 'common']);
   const navigate = useNavigate();
   const { allGames, fetchGames, status } = useGames();
   const { fetchAllTables, status: tablesStatus } = useTables();
@@ -56,7 +56,7 @@ const PrintView = () => {
     return (
       <Container py="md">
         <Text c="red" size="xl">
-          {t('pages.gameDetail.notFound')}
+          {t('notFound')}
         </Text>
       </Container>
     );
@@ -111,7 +111,7 @@ const PrintView = () => {
           />
         );
       default:
-        return <Text c="red">{t('pages.printView.invalidType')}</Text>;
+        return <Text c="red">{t('printView.invalidType')}</Text>;
     }
   };
 
@@ -126,13 +126,13 @@ const PrintView = () => {
               variant="default"
               onClick={handleBack}
             >
-              {t('pages.printView.back')}
+              {t('printView.back')}
             </Button>
             <Button
               leftSection={<IconPrinter size={16} />}
               onClick={handlePrint}
             >
-              {t('pages.printView.print')}
+              {t('printView.print')}
             </Button>
           </Group>
         </Container>

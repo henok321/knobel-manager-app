@@ -1,0 +1,57 @@
+{
+  "teamHandout": {
+    "title": "Team-Handout",
+    "subtitle": "Vollständiger Turnierplan für alle Teams",
+    "subtitleSingle": "Turnierplan für ausgewähltes Team",
+    "team": "Team",
+    "round": "Runde",
+    "table": "Tisch",
+    "tableAssignment": "Tischzuweisung",
+    "assignments": "Spielerzuweisungen",
+    "notAssigned": "Nicht zugewiesen",
+    "summary": "{{players}} Spieler über {{rounds}} Runden",
+    "player": "Spieler",
+    "filename": "Team_Handout",
+    "allTeamsTitle": "Alle Team-Handouts",
+    "allTeamsSubtitle": "Vollständiger Turnierplan für alle Teams",
+    "allTeamsFilename": "Alle_Team_Handouts"
+  },
+  "tablePlan": {
+    "title": "Tischplan",
+    "subtitle": "Turnier-Spielpaarungen Übersicht",
+    "round": "Runde",
+    "table": "Tisch",
+    "player": "Spieler",
+    "team": "Team",
+    "players": "Spieler",
+    "noTables": "Keine Tische für diese Runde zugewiesen",
+    "filename": "Tischplan"
+  },
+  "scoreSheets": {
+    "title": "Punktebögen",
+    "subtitle": "Manuelle Punkteeintragung",
+    "round": "Runde",
+    "table": "Tisch",
+    "instructions": "Der Tischsieger bekommt 4 Punkte + verbleibende Leben, der Zweitplatzierte bekommt 3 Punkte usw. Sobald das Spiel beendet wurde, gibt der Zweitplatzierte diesen Punktebogen bei der Turnierleitung ab.",
+    "player": "Spieler",
+    "team": "Team",
+    "score": "Punktzahl",
+    "notes": "Notizen",
+    "notesPlaceholder": "Zusätzliche Notizen oder Anmerkungen...",
+    "filename": "Punkteboegen"
+  },
+  "rankings": {
+    "title": "Ranglisten",
+    "subtitle": "Aktuelle Platzierungen",
+    "round": "Runde",
+    "total": "Gesamt (Alle Runden)",
+    "teamRankings": "Team-Rangliste",
+    "playerRankings": "Spieler-Rangliste",
+    "rank": "Rang",
+    "team": "Team",
+    "player": "Spieler",
+    "totalScore": "Gesamtpunktzahl",
+    "noData": "Keine Ranglistendaten verfügbar",
+    "filename": "Ranglisten"
+  }
+}

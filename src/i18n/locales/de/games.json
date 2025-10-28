@@ -1,0 +1,44 @@
+{
+  "heading": "Spiele",
+  "subtitle": "Verwalte alle deine Turniere",
+  "createGameButton": "Spiel erstellen",
+  "search": "Spiele durchsuchen...",
+  "filters": {
+    "all": "Alle",
+    "active": "Aktiv",
+    "setup": "Setup"
+  },
+  "noGames": "Noch keine Spiele vorhanden. Erstelle dein erstes Turnier!",
+  "noResults": "Keine Spiele gefunden, die deiner Suche entsprechen.",
+  "createFirstGame": "Erstelle dein erstes Spiel",
+  "deleteGame": "Spiel löschen",
+  "confirmDelete": "Bist du sicher, dass du dieses Spiel löschen möchtest?",
+  "card": {
+    "details": {
+      "teamSize": "Teamgröße",
+      "tableSize": "Tischgröße",
+      "numberOfRounds": "Runden",
+      "teams": "Teams",
+      "status": "Status"
+    },
+    "activateButton": "Aktivieren",
+    "activateTooltip": "Als aktives Spiel festlegen für schnellen Zugriff von der Startseite",
+    "activateTooltipDisabled": "Dieses Spiel ist bereits aktiv",
+    "activeGameTooltip": "Aktuell für schnellen Zugriff auf der Startseite ausgewählt",
+    "deleteButton": "Löschen",
+    "viewDetails": "Details anzeigen",
+    "isActive": "Aktiv",
+    "gameCreated": "Spiel \"{{name}}\" erfolgreich erstellt",
+    "teamAdded": "Team \"{{name}}\" erfolgreich hinzugefügt"
+  },
+  "form": {
+    "heading": "Spiel erstellen",
+    "label": {
+      "name": "Name",
+      "teamSize": "Teamgröße",
+      "tableSize": "Tischgröße",
+      "numberOfRounds": "Anzahl der Runden"
+    },
+    "submit": "Erstellen"
+  }
+}

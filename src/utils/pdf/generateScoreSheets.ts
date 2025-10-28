@@ -19,8 +19,8 @@ export const generateScoreSheets = (
   const { gameName, numberOfRounds, tables, playersById, teamsById } = data;
 
   const doc = createPDF({
-    title: `${gameName} - ${t('pdf.scoreSheets.title')}`,
-    subtitle: t('pdf.scoreSheets.subtitle'),
+    title: `${gameName} - ${t('scoreSheets.title', { ns: 'pdf' })}`,
+    subtitle: t('scoreSheets.subtitle', { ns: 'pdf' }),
   });
 
   // Group tables by round
@@ -50,7 +50,7 @@ export const generateScoreSheets = (
       doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
       doc.text(
-        `${t('pdf.scoreSheets.round')} ${roundNum} - ${t('pdf.scoreSheets.table')} ${table.tableNumber + 1}`,
+        `${t('scoreSheets.round', { ns: 'pdf' })} ${roundNum} - ${t('scoreSheets.table', { ns: 'pdf' })} ${table.tableNumber + 1}`,
         14,
         startY,
       );
@@ -59,7 +59,7 @@ export const generateScoreSheets = (
       // Instructions - wrap text if too long (max width: 180mm)
       doc.setFontSize(10);
       doc.setFont('helvetica', 'italic');
-      const instructionsText = t('pdf.scoreSheets.instructions');
+      const instructionsText = t('scoreSheets.instructions', { ns: 'pdf' });
       const wrappedInstructions = doc.splitTextToSize(instructionsText, 180);
       doc.text(wrappedInstructions, 14, startY);
       // Calculate height based on number of lines (each line is ~5 units)
@@ -84,9 +84,9 @@ export const generateScoreSheets = (
         startY,
         head: [
           [
-            t('pdf.scoreSheets.player'),
-            t('pdf.scoreSheets.team'),
-            t('pdf.scoreSheets.score'),
+            t('scoreSheets.player', { ns: 'pdf' }),
+            t('scoreSheets.team', { ns: 'pdf' }),
+            t('scoreSheets.score', { ns: 'pdf' }),
           ],
         ],
         body: scoreData,
@@ -108,7 +108,7 @@ export const generateScoreSheets = (
       // Add notes section
       doc.setFontSize(12);
       doc.setFont('helvetica', 'bold');
-      doc.text(t('pdf.scoreSheets.notes'), 14, finalY);
+      doc.text(t('scoreSheets.notes', { ns: 'pdf' }), 14, finalY);
 
       doc.setFont('helvetica', 'normal');
       doc.setDrawColor(200);
@@ -119,5 +119,5 @@ export const generateScoreSheets = (
     }
   }
 
-  doc.save(`${gameName}_${t('pdf.scoreSheets.filename')}.pdf`);
+  doc.save(`${gameName}_${t('scoreSheets.filename', { ns: 'pdf' })}.pdf`);
 };
