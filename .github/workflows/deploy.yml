@@ -103,6 +103,9 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Knip (production check)
+        run: npm run knip:ci
+
   deploy:
     runs-on: ubuntu-latest
     needs: [lint, test, audit]

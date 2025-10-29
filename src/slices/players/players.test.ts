@@ -5,7 +5,7 @@
 import { http, HttpResponse } from 'msw';
 
 import { updatePlayerAction, deletePlayerAction } from './actions';
-import { selectAllPlayers, selectPlayersStatus } from './slice';
+import { selectAllPlayers } from './slice';
 import { server } from '../../test/setup/msw';
 import { createTestStore } from '../../test/setup/store';
 import { createTeamAction } from '../teams/actions';
@@ -75,7 +75,7 @@ describe('Players Actions + Slice', () => {
       );
 
       const state = store.getState();
-      expect(selectPlayersStatus(state)).toBe('failed');
+      expect(state.players.status).toBe('failed');
     });
 
     it('should handle player not found error', async () => {
@@ -176,7 +176,7 @@ describe('Players Actions + Slice', () => {
       await store.dispatch(deletePlayerAction(playerID!));
 
       const state = store.getState();
-      expect(selectPlayersStatus(state)).toBe('failed');
+      expect(state.players.status).toBe('failed');
     });
 
     it('should handle player not found error', async () => {
@@ -212,7 +212,7 @@ describe('Players Actions + Slice', () => {
       expect(players).toHaveLength(2);
       expect(players[0]?.name).toBe('Player 1');
       expect(players[1]?.name).toBe('Player 2');
-      expect(selectPlayersStatus(state)).toBe('succeeded');
+      expect(state.players.status).toBe('succeeded');
     });
   });
 });

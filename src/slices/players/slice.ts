@@ -85,9 +85,6 @@ const { selectAll: selectAllPlayers } = playersAdapter.getSelectors<RootState>(
   (state) => state.players,
 );
 
-const selectPlayersStatus = (state: RootState) => state.players.status;
-const selectPlayersError = (state: RootState) => state.players.error;
-
-export { selectAllPlayers, selectPlayersStatus, selectPlayersError };
+export { selectAllPlayers };
 
 export default playersSlice.reducer;

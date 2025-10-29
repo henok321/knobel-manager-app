@@ -4,7 +4,7 @@ import { teamsApi } from '../../api/apiClient.ts';
 import { TeamsRequest, TeamResponse, Team } from '../../generated';
 import { RootState } from '../../store/store.ts';
 
-export type CreateTeam = {
+type CreateTeam = {
   gameID: number;
   teamRequest: TeamsRequest;
 };

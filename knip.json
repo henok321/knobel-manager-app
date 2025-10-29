@@ -1,0 +1,14 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "ignore": [
+    "coverage/**",
+    "dist/**",
+    "build/**",
+    "src/generated/**",
+    "src/test/**"
+  ],
+  "jest": {
+    "config": ["jest.config.js"],
+    "entry": ["jest.setup.js"]
+  }
+}

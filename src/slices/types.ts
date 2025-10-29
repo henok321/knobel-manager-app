@@ -23,7 +23,7 @@ export type Player = {
   teamID: number;
 };
 
-export type Round = {
+type Round = {
   id: number;
   roundNumber: number;
   gameID: number;
@@ -31,14 +31,14 @@ export type Round = {
   tables: number[];
 };
 
-export type Table = {
+type Table = {
   id: number;
   tableNumber: number;
   roundID: number;
   players: number[];
 };
 
-export type Score = {
+type Score = {
   id: number;
   playerID: number;
   tableID: number;

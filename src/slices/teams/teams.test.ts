@@ -9,7 +9,7 @@ import {
   updateTeamAction,
   deleteTeamAction,
 } from './actions';
-import { selectAllTeams, selectTeamsError, selectTeamsStatus } from './slice';
+import { selectAllTeams } from './slice';
 import { server } from '../../test/setup/msw';
 import { createTestStore } from '../../test/setup/store';
 
@@ -33,7 +33,7 @@ describe('Teams Actions + Slice', () => {
       expect(teams).toHaveLength(1);
       expect(teams[0]?.name).toBe('Test Team');
       expect(teams[0]?.gameID).toBe(1);
-      expect(selectTeamsStatus(state)).toBe('succeeded');
+      expect(state.teams.status).toBe('succeeded');
     });
 
     it('should handle API error', async () => {
@@ -56,13 +56,13 @@ describe('Teams Actions + Slice', () => {
       );
 
       const state = store.getState();
-      expect(selectTeamsStatus(state)).toBe('failed');
-      expect(selectTeamsError(state)).toBeDefined();
+      expect(state.teams.status).toBe('failed');
+      expect(state.teams.error).toBeDefined();
     });
 
     it('should transition status idle → pending → succeeded', async () => {
       const store = createTestStore();
-      expect(selectTeamsStatus(store.getState())).toBe('idle');
+      expect(store.getState().teams.status).toBe('idle');
 
       const promise = store.dispatch(
         createTeamAction({
@@ -73,11 +73,11 @@ describe('Teams Actions + Slice', () => {
         }),
       );
 
-      expect(selectTeamsStatus(store.getState())).toBe('pending');
+      expect(store.getState().teams.status).toBe('pending');
 
       await promise;
 
-      expect(selectTeamsStatus(store.getState())).toBe('succeeded');
+      expect(store.getState().teams.status).toBe('succeeded');
     });
 
     it('should create team with players', async () => {
@@ -165,7 +165,7 @@ describe('Teams Actions + Slice', () => {
       );
 
       const state = store.getState();
-      expect(selectTeamsStatus(state)).toBe('failed');
+      expect(state.teams.status).toBe('failed');
     });
 
     it('should handle team not found error', async () => {
@@ -238,7 +238,7 @@ describe('Teams Actions + Slice', () => {
       await store.dispatch(deleteTeamAction(teamID!));
 
       const state = store.getState();
-      expect(selectTeamsStatus(state)).toBe('failed');
+      expect(state.teams.status).toBe('failed');
     });
   });
 });

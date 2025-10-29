@@ -9,7 +9,7 @@ export interface TeamFormData {
   members: string[];
 }
 
-export interface TeamFormProps {
+interface TeamFormProps {
   teamSize: number;
   isOpen: boolean;
   onClose: () => void;

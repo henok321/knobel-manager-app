@@ -18,7 +18,7 @@ export interface GameFormData {
   numberOfRounds: number;
 }
 
-export interface GameFormProps {
+interface GameFormProps {
   isOpen: boolean;
   onClose: () => void;
   createGame: (game: GameFormData) => void;

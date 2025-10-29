@@ -12,7 +12,7 @@ import {
 import { Table } from '../../generated';
 import { RootState } from '../../store/store';
 
-export const tablesAdapter = createEntityAdapter<Table>();
+const tablesAdapter = createEntityAdapter<Table>();
 
 const tablesSlice = createSlice({
   name: 'tables',
@@ -66,8 +66,6 @@ export const tablesSelectors = tablesAdapter.getSelectors<RootState>(
 );
 
 export const selectAllTables = tablesSelectors.selectAll;
-export const selectTablesStatus = (state: RootState) => state.tables.status;
-export const selectTablesError = (state: RootState) => state.tables.error;
 
 export const selectTablesByRoundNumber = createSelector(
   [

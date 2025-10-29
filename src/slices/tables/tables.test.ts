@@ -9,11 +9,7 @@ import {
   fetchAllTablesForGame,
   updateScoresForTable,
 } from './actions';
-import {
-  selectAllTables,
-  selectTablesError,
-  selectTablesStatus,
-} from './slice';
+import { selectAllTables } from './slice';
 import { server } from '../../test/setup/msw';
 import { createTestStore } from '../../test/setup/store';
 
@@ -36,7 +32,7 @@ describe('Tables Actions + Slice', () => {
       expect(tables[0]?.roundID).toBe(1);
       expect(tables[0]?.tableNumber).toBe(1);
       expect(tables[1]?.tableNumber).toBe(2);
-      expect(selectTablesStatus(state)).toBe('succeeded');
+      expect(state.tables.status).toBe('succeeded');
     });
 
     it('should handle API error', async () => {
@@ -57,13 +53,13 @@ describe('Tables Actions + Slice', () => {
       );
 
       const state = store.getState();
-      expect(selectTablesStatus(state)).toBe('failed');
-      expect(selectTablesError(state)).toBeDefined();
+      expect(state.tables.status).toBe('failed');
+      expect(state.tables.error).toBeDefined();
     });
 
     it('should transition status idle → pending → succeeded', async () => {
       const store = createTestStore();
-      expect(selectTablesStatus(store.getState())).toBe('idle');
+      expect(store.getState().tables.status).toBe('idle');
 
       const promise = store.dispatch(
         fetchTablesForRound({
@@ -72,11 +68,11 @@ describe('Tables Actions + Slice', () => {
         }),
       );
 
-      expect(selectTablesStatus(store.getState())).toBe('pending');
+      expect(store.getState().tables.status).toBe('pending');
 
       await promise;
 
-      expect(selectTablesStatus(store.getState())).toBe('succeeded');
+      expect(store.getState().tables.status).toBe('succeeded');
     });
   });
 
@@ -98,7 +94,7 @@ describe('Tables Actions + Slice', () => {
       expect(tables.filter((t) => t.roundID === 1)).toHaveLength(2);
       expect(tables.filter((t) => t.roundID === 2)).toHaveLength(2);
       expect(tables.filter((t) => t.roundID === 3)).toHaveLength(2);
-      expect(selectTablesStatus(state)).toBe('succeeded');
+      expect(state.tables.status).toBe('succeeded');
     });
 
     it('should handle API error', async () => {
@@ -119,13 +115,13 @@ describe('Tables Actions + Slice', () => {
       );
 
       const state = store.getState();
-      expect(selectTablesStatus(state)).toBe('failed');
-      expect(selectTablesError(state)).toBeDefined();
+      expect(state.tables.status).toBe('failed');
+      expect(state.tables.error).toBeDefined();
     });
 
     it('should transition status idle → pending → succeeded', async () => {
       const store = createTestStore();
-      expect(selectTablesStatus(store.getState())).toBe('idle');
+      expect(store.getState().tables.status).toBe('idle');
 
       const promise = store.dispatch(
         fetchAllTablesForGame({
@@ -134,11 +130,11 @@ describe('Tables Actions + Slice', () => {
         }),
       );
 
-      expect(selectTablesStatus(store.getState())).toBe('pending');
+      expect(store.getState().tables.status).toBe('pending');
 
       await promise;
 
-      expect(selectTablesStatus(store.getState())).toBe('succeeded');
+      expect(store.getState().tables.status).toBe('succeeded');
     });
   });
 
@@ -171,7 +167,7 @@ describe('Tables Actions + Slice', () => {
       const tables = selectAllTables(state);
 
       expect(tables).toHaveLength(2);
-      expect(selectTablesStatus(state)).toBe('succeeded');
+      expect(state.tables.status).toBe('succeeded');
     });
 
     it('should handle API error', async () => {
@@ -194,8 +190,8 @@ describe('Tables Actions + Slice', () => {
       );
 
       const state = store.getState();
-      expect(selectTablesStatus(state)).toBe('failed');
-      expect(selectTablesError(state)).toBeDefined();
+      expect(state.tables.status).toBe('failed');
+      expect(state.tables.error).toBeDefined();
     });
 
     it('should upsert tables after update', async () => {

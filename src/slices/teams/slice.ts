@@ -2,7 +2,6 @@ import {
   createDraftSafeSelector,
   createEntityAdapter,
   createSlice,
-  EntityState,
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store/store.ts';
@@ -18,8 +17,6 @@ type AdditionalTeamState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
   error?: Error | null;
 };
-
-export type TeamsState = EntityState<Team, number> & AdditionalTeamState;
 
 const teamsAdapter = createEntityAdapter<Team>();
 
@@ -102,9 +99,6 @@ createDraftSafeSelector(
   (teams, gameID) => teams.filter((team) => team.gameID === gameID),
 );
 
-const selectTeamsStatus = (state: RootState) => state.teams.status;
-const selectTeamsError = (state: RootState) => state.teams.error;
-
-export { selectAllTeams, selectTeamsStatus, selectTeamsError };
+export { selectAllTeams };
 
 export default teamsSlice.reducer;

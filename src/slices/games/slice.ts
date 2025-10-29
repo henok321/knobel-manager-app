@@ -2,7 +2,6 @@ import {
   createEntityAdapter,
   createSelector,
   createSlice,
-  EntityState,
 } from '@reduxjs/toolkit';
 
 import { Game } from '../types.ts';
@@ -22,8 +21,6 @@ type AdditionalGamesState = {
   error?: Error | null;
   activeGameID?: number;
 };
-
-export type GamesState = EntityState<Game, number> & AdditionalGamesState;
 
 const gamesAdapter = createEntityAdapter<Game>();
 
