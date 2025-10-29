@@ -14,11 +14,6 @@
   ],
   "eslint.format.enable": true,
   "prettier.requireConfig": true,
-  "css.validate": false,
-  "scss.validate": false,
-  "less.validate": false,
-  "stylelint.enable": true,
-  "stylelint.validate": ["css", "scss", "less", "postcss"],
   "editor.quickSuggestions": {
     "strings": true
   },

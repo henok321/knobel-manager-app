@@ -1,64 +1,54 @@
 # Knobel Manager App
 
-## Synopsis
+Tournament manager for the dice game "Knobeln" (aka "Schocken"). React 19 + TypeScript + Redux Toolkit + Mantine UI.
 
-The main goal of this project is to build a React application from scratch with a modern but also stable tech stack.
+## Architecture
 
-This app is a small tournament manager for the dice game "Knobeln" or "Schocken".
-
-## Backend
-
-This web app usess an API provided by [Knobel Mangager Service](https://github.com/henok321/knobel-manager-service)
-
-## Authentication
-
-The service uses JWT for authentication that is provided by Firebase Authentication.
-
-## Build and run
-
-### Prerequisites
-
-Install NodeJS version from `.nvmrc` file.
-
-```shell
-nvm install
-nvm use
+```mermaid
+graph LR
+    A[Web App<br/>React + Redux] -->|JWT Token| B[Firebase Auth]
+    A -->|API Requests<br/>+ JWT Header| C[Knobel Manager API<br/>fly.io]
+    B -->|Token| A
+    C -->|Games, Teams,<br/>Players, Scores| A
 ```
 
-### Install dependencies
+## Setup
 
-Installs all dependencies and initializes the husky hooks.
-
-```shell
+```bash
+nvm install && nvm use
 npm install
 ```
 
-### Update dependencies
+## Development
 
-```shell
-npx npm-check-updates -i
+```bash
+npm run local  # Dev server with local API (requires backend at localhost:8080)
+npm run prod   # Dev server with production API
 ```
 
-### Linting
+## Build & Deploy
 
-Run `eslint` and `prettier` and auto fix issues. Will also be executed before each commit by husky.
-
-```shell
-npm run fix
+```bash
+npm run build   # Production build
+npm run deploy  # Build + Firebase deploy
 ```
 
-### Development
+## Code Quality
 
-Run the development server.
-
-#### Local API
-
-```shell
-npm run local
+```bash
+npm run fix   # Auto-fix linting and formatting (runs on pre-commit)
+npm run lint  # ESLint check
+npm test      # Run tests
+npm run knip  # Check for unused files/dependencies
 ```
 
-#### Production API
+## Maintenance
 
-```shell
-npm run prod
+```bash
+npx npm-check-updates -i  # Update dependencies interactively
+npm run clean             # Remove node_modules and dist
 ```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
