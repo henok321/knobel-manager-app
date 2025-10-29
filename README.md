@@ -1,13 +1,15 @@
 # Knobel Manager App
 
-Tournament manager for the dice game "Knobeln" (aka "Schocken"). React 19 + TypeScript + Redux Toolkit + Mantine UI.
+Tournament manager for the dice game "Knobeln" (aka "Schocken"). React 19 + TypeScript + Redux Toolkit + Mantine UI
+
+**Backend service**: [knobel-manager-service](https://github.com/henok321/knobel-manager-service)
 
 ## Architecture
 
 ```mermaid
 graph LR
     A[Web App<br/>React + Redux] -->|JWT Token| B[Firebase Auth]
-    A -->|API Requests<br/>+ JWT Header| C[Knobel Manager API<br/>fly.io]
+    A -->|API Requests<br/>+ JWT Header| C[Knobel Manager Service<br/>fly.io]
     B -->|Token| A
     C -->|Games, Teams,<br/>Players, Scores| A
 ```
