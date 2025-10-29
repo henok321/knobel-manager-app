@@ -19,38 +19,45 @@ graph LR
 ## Setup
 
 ```bash
+# Install Node.js and pnpm
 nvm install && nvm use
-npm install
+corepack enable pnpm
+
+# Or install pnpm globally if corepack is not available
+npm install -g pnpm@10
+
+# Install dependencies
+pnpm install
 ```
 
 ## Development
 
 ```bash
-npm run local  # Dev server with local API (requires backend at localhost:8080)
-npm run prod   # Dev server with production API
+pnpm local  # Dev server with local API (requires backend at localhost:8080)
+pnpm prod   # Dev server with production API
 ```
 
 ## Build & Deploy
 
 ```bash
-npm run build   # Production build
-npm run deploy  # Build + Firebase deploy
+pnpm build   # Production build
+pnpm deploy  # Build + Firebase deploy
 ```
 
 ## Code Quality
 
 ```bash
-npm run fix   # Auto-fix linting and formatting (runs on pre-commit)
-npm run lint  # ESLint check
-npm test      # Run tests
-npm run knip  # Check for unused files/dependencies
+pnpm fix   # Auto-fix linting and formatting (runs on pre-commit)
+pnpm lint  # ESLint check
+pnpm test  # Run tests
+pnpm knip  # Check for unused files/dependencies
 ```
 
 ## Maintenance
 
 ```bash
-npx npm-check-updates -i  # Update dependencies interactively
-npm run clean             # Remove node_modules and dist
+pnpm update -i -L  # Update dependencies interactively
+pnpm clean         # Remove node_modules and dist
 ```
 
 ## License

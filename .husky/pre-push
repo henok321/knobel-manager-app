@@ -1,4 +1,4 @@
-npm audit --audit-level=high
-npm run knip
-npm run lint
-npm test
+pnpm audit --audit-level=high
+pnpm knip
+pnpm lint
+pnpm test

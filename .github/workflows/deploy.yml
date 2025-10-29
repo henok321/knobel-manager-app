@@ -33,17 +33,28 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Cache npm dependencies
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache pnpm dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-npm-
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install dependencies
-        run: npm ci
-      - name: NPM Audit
-        run: npm audit --audit-level=high
+        run: pnpm install --frozen-lockfile
+
+      - name: pnpm Audit
+        run: pnpm audit --audit-level=high
 
   lint:
     runs-on: ubuntu-latest
@@ -57,22 +68,31 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Cache npm dependencies
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache pnpm dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-npm-
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Generate api client from OpenAPI spec
-        run: npm run api:gen
+        run: pnpm api:gen
 
       - name: Run linting checks
-        run: npm run lint
+        run: pnpm lint
 
   test:
     runs-on: ubuntu-latest
@@ -86,25 +106,34 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Cache npm dependencies
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache pnpm dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-npm-
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Generate api client from OpenAPI spec
-        run: npm run api:gen
+        run: pnpm api:gen
 
       - name: Run tests
-        run: npm test
+        run: pnpm test
 
       - name: Knip (production check)
-        run: npm run knip:ci
+        run: pnpm knip:ci
 
   deploy:
     runs-on: ubuntu-latest
@@ -123,22 +152,31 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Cache npm dependencies
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache pnpm dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-npm-
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Generate api client from OpenAPI spec
-        run: npm run api:gen
+        run: pnpm api:gen
 
       - name: Build
-        run: npm run build
+        run: pnpm build
 
       - name: Deploy to Firebase (Production)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

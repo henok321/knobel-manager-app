@@ -1,0 +1,8 @@
+onlyBuiltDependencies:
+  - '@firebase/util'
+  - '@nestjs/core'
+  - '@openapitools/openapi-generator-cli'
+  - esbuild
+  - msw
+  - protobufjs
+  - unrs-resolver
