@@ -23,6 +23,7 @@ export default [
       'CLAUDE.md',
       '.claude',
       'src/generated',
+      '.yarn',
     ],
   },
 
