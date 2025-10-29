@@ -15,6 +15,7 @@ const useTables = () => {
   const status = useSelector((state: RootState) => state.tables.status);
   const error = useSelector((state: RootState) => state.tables.error);
 
+  // fetch
   const fetchTables = useCallback(
     (gameId: number, roundNumber: number) => {
       dispatch(fetchTablesForRound({ gameId, roundNumber }));
