@@ -14,7 +14,7 @@
     "fix": "npm run lint:fix && npm run format && npm run lint",
     "test": "jest",
     "knip": "knip --strict",
-    "knip:fix": "knip --strict --fix",
+    "knip:fix": "knip --strict --fix --format",
     "knip:ci": "knip --production --include files,dependencies",
     "preview": "vite preview",
     "prepare": "husky",
