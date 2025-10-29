@@ -14,9 +14,6 @@ export interface TeamRanking {
   totalScore: number;
 }
 
-/**
- * Maps players and their scores to PlayerRanking objects
- */
 export const mapPlayersToRankings = (
   teams: Team[],
   playersState: Record<number, Player | undefined>,
@@ -44,23 +41,18 @@ export const mapPlayersToRankings = (
   return rankings.sort((a, b) => b.totalScore - a.totalScore);
 };
 
-/**
- * Maps teams and aggregated player scores to TeamRanking objects
- */
 export const mapTeamsToRankings = (
   teams: Team[],
   playerRankings: PlayerRanking[],
 ): TeamRanking[] => {
   const teamScores: Record<number, number> = {};
 
-  // Initialize all teams with 0 score
   teams.forEach((team) => {
     if (team) {
       teamScores[team.id] = 0;
     }
   });
 
-  // Add up player scores for each team
   playerRankings.forEach((playerRank) => {
     teamScores[playerRank.teamId] =
       (teamScores[playerRank.teamId] || 0) + playerRank.totalScore;
