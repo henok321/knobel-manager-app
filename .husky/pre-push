@@ -1,3 +1,4 @@
+npm run tidy
 npm audit --audit-level=high
 npm run lint
 npm run test
