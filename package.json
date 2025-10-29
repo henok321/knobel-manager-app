@@ -15,7 +15,6 @@
     "test": "jest",
     "knip": "knip --strict",
     "knip:fix": "knip --strict --fix",
-    "knip:prod": "knip --production",
     "knip:ci": "knip --production --include files,dependencies",
     "preview": "vite preview",
     "prepare": "husky",
