@@ -70,36 +70,19 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       return { canComplete: false, completed: 0, total: 0 };
     }
 
-    const tablesByRound: Record<number, typeof allTables> = {};
-    for (const table of allTables) {
-      tablesByRound[table.roundID] ??= [];
-      tablesByRound[table.roundID]?.push(table);
-    }
+    const totalTables = allTables.length;
 
-    let completedTables = 0;
-    let totalTables = 0;
-
-    for (let roundNum = 1; roundNum <= game.numberOfRounds; roundNum++) {
-      const tablesForRound = tablesByRound[roundNum];
-
-      if (!tablesForRound || tablesForRound.length === 0) {
-        continue;
+    const completedTables = allTables.reduce((acc, table) => {
+      if (!table.players || table.players.length === 0) {
+        return acc;
       }
 
-      for (const table of tablesForRound) {
-        if (!table.players || table.players.length === 0) {
-          continue;
-        }
+      const totalTableScore =
+        table.scores?.reduce((scoreAcc, score) => scoreAcc + score.score, 0) ||
+        0;
 
-        totalTables++;
-        const playerCount = table.players.length;
-        const scoreCount = table.scores?.length || 0;
-
-        if (scoreCount === playerCount) {
-          completedTables++;
-        }
-      }
-    }
+      return totalTableScore > 0 ? acc + 1 : acc;
+    }, 0);
 
     return {
       canComplete: completedTables === totalTables && totalTables > 0,

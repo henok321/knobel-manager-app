@@ -108,7 +108,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [ lint, test, audit ]
+    needs: [lint, test, audit]
 
     concurrency:
       group: 'deploy-${{ github.ref }}'
