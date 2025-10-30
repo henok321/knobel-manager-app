@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  activateGameAction,
   createGameAction,
   deleteGameAction,
   setupGameAction,
@@ -13,6 +12,7 @@ import {
   selectAllGames,
   selectGamesError,
   selectGamesStatus,
+  setActiveGame,
 } from './slice';
 import { GameCreateRequest, GameUpdateRequest } from '../../generated';
 import { AppDispatch } from '../../store/store';
@@ -46,7 +46,7 @@ const useGames = () => {
 
   const activateGame = useCallback(
     (gameID: number) => {
-      dispatch(activateGameAction(gameID));
+      dispatch(setActiveGame(gameID));
     },
     [dispatch],
   );

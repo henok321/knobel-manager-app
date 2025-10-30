@@ -30,13 +30,6 @@ export const deleteGameAction = createAsyncThunk<void, number>(
   },
 );
 
-export const activateGameAction = createAsyncThunk<void, number>(
-  'games/activateGame',
-  async (gameID) => {
-    await gamesApi.activateGame(gameID);
-  },
-);
-
 export const setupGameAction = createAsyncThunk<GameResponse, number>(
   'games/setupGame',
   async (gameID) => {

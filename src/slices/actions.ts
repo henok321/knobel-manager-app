@@ -1,8 +1,10 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NormalizedData } from './types.ts';
 import { gamesApi } from '../api/apiClient.ts';
 import { GamesResponse } from '../generated';
+
+export const resetStore = createAction('store/reset');
 
 export const fetchAll = createAsyncThunk<NormalizedData>(
   'state/fetchAll',
@@ -13,7 +15,6 @@ export const fetchAll = createAsyncThunk<NormalizedData>(
 );
 const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
   const normalizedData: NormalizedData = {
-    activeGameID: undefined,
     games: {},
     teams: {},
     players: {},
@@ -21,8 +22,6 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
     tables: {},
     scores: {},
   };
-
-  normalizedData.activeGameID = apiData.activeGameID;
 
   apiData.games.forEach((apiGame) => {
     const gameId = apiGame.id;

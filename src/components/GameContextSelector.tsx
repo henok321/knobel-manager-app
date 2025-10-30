@@ -77,7 +77,7 @@ const GameContextSelector = ({
   const handleSwitchGame = useCallback(
     (gameId: number) => {
       activateGame(gameId);
-      navigate('/');
+      navigate(`/games/${gameId}`);
       if (isMobile && onClose) {
         onClose();
       }

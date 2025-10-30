@@ -5,7 +5,7 @@
 import { http, HttpResponse } from 'msw';
 
 import { fetchAll } from './actions';
-import { selectAllGames, selectActiveGame } from './games/slice';
+import { selectAllGames } from './games/slice';
 import { selectAllPlayers } from './players/slice';
 import { createTeamAction } from './teams/actions';
 import { selectAllTeams } from './teams/slice';
@@ -63,19 +63,6 @@ describe('Cross-Slice Integration Tests', () => {
       expect(players[2]?.id).toBe(3);
       expect(players[2]?.name).toBe('Player 3');
       expect(players[2]?.teamID).toBe(2);
-    });
-
-    it('should set activeGameID in games slice', async () => {
-      const store = createTestStore();
-
-      await store.dispatch(fetchAll());
-
-      const state = store.getState();
-      const activeGame = selectActiveGame(state);
-
-      expect(activeGame).toBeDefined();
-      expect(activeGame?.id).toBe(1);
-      expect(activeGame?.name).toBe('Test Game 1');
     });
 
     it('should handle API error and set status to failed', async () => {

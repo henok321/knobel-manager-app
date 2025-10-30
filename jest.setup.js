@@ -17,6 +17,24 @@ class BroadcastChannelMock {
 }
 global.BroadcastChannel = BroadcastChannelMock;
 
+const localStorageMock = (() => {
+  let store = new Map();
+  return {
+    getItem: (key) => (store.has(key) ? store.get(key) : null),
+    setItem: (key, value) => {
+      store.set(key, value.toString());
+    },
+    removeItem: (key) => {
+      store.delete(key);
+    },
+    clear: () => {
+      store.clear();
+    },
+  };
+})();
+
+global.localStorage = localStorageMock;
+
 global.importMeta = {
   env: {
     PROD: false,
@@ -38,5 +56,8 @@ jest.mock('./src/auth/firebaseConfig', () => ({
 const { server } = require('./src/test/setup/msw');
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }));
-afterEach(() => server.resetHandlers());
+afterEach(() => {
+  server.resetHandlers();
+  localStorage.clear();
+});
 afterAll(() => server.close());

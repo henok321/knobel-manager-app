@@ -14,6 +14,8 @@ import React, {
 } from 'react';
 
 import { auth as firebaseAuth } from './firebaseConfig.ts';
+import { resetStore } from '../slices/actions.ts';
+import store from '../store/store.ts';
 
 type LoginData = {
   email: string;
@@ -69,7 +71,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     [],
   );
 
-  const logOut = useCallback(() => void signOut(firebaseAuth), []);
+  const logOut = useCallback(() => {
+    localStorage.clear();
+    store.dispatch(resetStore());
+    void signOut(firebaseAuth);
+  }, []);
 
   const contextValue = useMemo<AuthContextValue>(
     () => ({

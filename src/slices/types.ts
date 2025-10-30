@@ -46,7 +46,6 @@ type Score = {
 };
 
 export interface NormalizedData {
-  activeGameID?: number;
   games: Record<number, Game>;
   teams: Record<number, Team>;
   players: Record<number, Player>;

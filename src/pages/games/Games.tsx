@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import GameListItem from './components/GameListItem';
 import GameForm, { GameFormData } from './GameForm';
+import Breadcrumbs from '../../components/Breadcrumbs';
 import { GameStatusEnum } from '../../generated';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
@@ -107,10 +108,16 @@ const Games = () => {
   const hasGames =
     activeAndInProgressGames.length > 0 || completedGames.length > 0;
 
+  const breadcrumbItems = [
+    { label: t('header.nav.home', { ns: 'gameDetail' }), path: '/' },
+    { label: t('heading') },
+  ];
+
   return (
     <Layout navbarActive onOpenGameForm={() => setGameModalActive(true)}>
       <Container py="xl" size="xl">
         <Stack gap="xl">
+          <Breadcrumbs items={breadcrumbItems} />
           {/* Header */}
           <Group align="center" justify="space-between">
             <div>

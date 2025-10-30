@@ -7,7 +7,6 @@ const BASE_URL = 'http://localhost/api';
 export const gamesHandlers = [
   http.get(`${BASE_URL}/games`, () => {
     const response: GamesResponse = {
-      activeGameID: 1,
       games: [
         {
           id: 1,
@@ -128,11 +127,6 @@ export const gamesHandlers = [
   http.delete(
     `${BASE_URL}/games/:id`,
     () => new HttpResponse(null, { status: 204 }),
-  ),
-
-  http.post(
-    `${BASE_URL}/games/:id/activate`,
-    () => new HttpResponse(null, { status: 200 }),
   ),
 
   http.post(
