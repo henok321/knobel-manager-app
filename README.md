@@ -58,8 +58,9 @@ npm run knip  # Check for unused files/dependencies
 ## Maintenance
 
 ```bash
-npx npm-check-updates -i  # Update dependencies interactively
-npm run clean             # Remove node_modules and dist
+npx npm-check-updates -u -i  # Update dependencies interactively
+npx npm-check-updates -u -i -t minor  # Update dependencies to latest minor version
+npm ci             # Remove node_modules and dist
 ```
 
 ## License
