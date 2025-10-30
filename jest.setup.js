@@ -18,17 +18,17 @@ class BroadcastChannelMock {
 global.BroadcastChannel = BroadcastChannelMock;
 
 const localStorageMock = (() => {
-  let store = {};
+  let store = new Map();
   return {
-    getItem: (key) => store[key] || null,
+    getItem: (key) => store.has(key) ? store.get(key) : null,
     setItem: (key, value) => {
-      store[key] = value.toString();
+      store.set(key, value.toString());
     },
     removeItem: (key) => {
-      delete store[key];
+      store.delete(key);
     },
     clear: () => {
-      store = {};
+      store.clear();
     },
   };
 })();
