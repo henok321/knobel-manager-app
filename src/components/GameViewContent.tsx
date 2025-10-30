@@ -49,7 +49,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const getPersistedTab = () => {
     try {
-      const stored = localStorage.getItem(`gameTab_${game.id}`);
+      const stored = localStorage.getItem(`selected_tab_for_game_${game.id}`);
       return stored || getDefaultTab();
     } catch {
       return getDefaultTab();
@@ -60,7 +60,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   useEffect(() => {
     if (activeTab) {
-      localStorage.setItem(`gameTab_${game.id}`, activeTab);
+      localStorage.setItem(`selected_tab_for_game_${game.id}`, activeTab);
     }
   }, [activeTab, game.id]);
 

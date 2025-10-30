@@ -42,7 +42,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     fetchAllTables,
     updateScores,
   } = useTables();
-  const [selectedRound, setSelectedRound] = useState<string>('1');
+
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
   const [setupError, setSetupError] = useState<string | null>(null);
@@ -61,6 +61,18 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       })),
     [game.numberOfRounds, t],
   );
+
+  const getPersistedRound = () => {
+    const stored = localStorage.getItem(`selected_round_for_game_${game.id}`);
+    return stored || '1';
+  };
+
+  const [selectedRound, setSelectedRound] =
+    useState<string>(getPersistedRound());
+
+  useEffect(() => {
+    localStorage.setItem(`selected_round_for_game_${game.id}`, selectedRound);
+  }, [selectedRound, game.id]);
 
   const filteredAndSortedTables = useSelector((state: RootState) =>
     selectTablesForRoundWithSearch(state, Number(selectedRound), searchQuery),
