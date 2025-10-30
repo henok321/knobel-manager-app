@@ -2,7 +2,6 @@ import { Container, Stack, Text, Button, Group } from '@mantine/core';
 import { IconPrinter, IconArrowLeft } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
 import RankingsView from './print-views/RankingsView';
@@ -11,10 +10,9 @@ import TablePlanView from './print-views/TablePlanView';
 import TeamHandoutsView from './print-views/TeamHandoutsView';
 import CenterLoader from '../../shared/CenterLoader';
 import useGames from '../../slices/games/hooks';
+import usePlayers from '../../slices/players/hooks';
 import useTables from '../../slices/tables/hooks';
-import { selectAllTables } from '../../slices/tables/slice';
-import { Team } from '../../slices/types';
-import { RootState } from '../../store/store';
+import useTeams from '../../slices/teams/hooks';
 import './print-views/print.css';
 
 const PrintView = () => {
@@ -23,12 +21,13 @@ const PrintView = () => {
   const { t } = useTranslation(['gameDetail', 'common']);
   const navigate = useNavigate();
   const { allGames, fetchGames, status } = useGames();
-  const { fetchAllTables, status: tablesStatus } = useTables();
-  const teamsEntities = useSelector((state: RootState) => state.teams.entities);
-  const playersEntities = useSelector(
-    (state: RootState) => state.players.entities,
-  );
-  const allTables = useSelector(selectAllTables);
+  const { allTeams } = useTeams();
+  const { allPlayers } = usePlayers();
+  const {
+    tables: allTables,
+    fetchAllTables,
+    status: tablesStatus,
+  } = useTables();
 
   const viewType = searchParams.get('type') || 'tablePlan';
   const roundNumber = searchParams.get('round');
@@ -76,38 +75,38 @@ const PrintView = () => {
         return (
           <TablePlanView
             game={game}
-            playersEntities={playersEntities}
+            players={allPlayers}
             tables={allTables}
-            teamsEntities={teamsEntities as Record<number, Team | undefined>}
+            teams={allTeams}
           />
         );
       case 'scoreSheets':
         return (
           <ScoreSheetsView
             game={game}
-            playersEntities={playersEntities}
+            players={allPlayers}
             tables={allTables}
-            teamsEntities={teamsEntities as Record<number, Team | undefined>}
+            teams={allTeams}
           />
         );
       case 'teamHandouts':
         return (
           <TeamHandoutsView
             game={game}
-            playersEntities={playersEntities}
+            players={allPlayers}
             tables={allTables}
             teamId={teamId ? Number(teamId) : undefined}
-            teamsEntities={teamsEntities as Record<number, Team | undefined>}
+            teams={allTeams}
           />
         );
       case 'rankings':
         return (
           <RankingsView
             game={game}
-            playersEntities={playersEntities}
+            players={allPlayers}
             roundNumber={roundNumber ? Number(roundNumber) : undefined}
             tables={allTables}
-            teamsEntities={teamsEntities as Record<number, Team | undefined>}
+            teams={allTeams}
           />
         );
       default:

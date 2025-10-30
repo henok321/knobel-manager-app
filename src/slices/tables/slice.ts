@@ -1,12 +1,12 @@
 import {
   createEntityAdapter,
-  createSlice,
   createSelector,
+  createSlice,
 } from '@reduxjs/toolkit';
 
 import {
-  fetchTablesForRound,
   fetchAllTablesForGame,
+  fetchTablesForRound,
   updateScoresForTable,
 } from './actions';
 import { Table } from '../../generated';
@@ -61,13 +61,13 @@ const tablesSlice = createSlice({
   },
 });
 
-export const tablesSelectors = tablesAdapter.getSelectors<RootState>(
+const tablesSelectors = tablesAdapter.getSelectors<RootState>(
   (state) => state.tables,
 );
 
-export const selectAllTables = tablesSelectors.selectAll;
+const selectAllTables = tablesSelectors.selectAll;
 
-export const selectTablesByRoundNumber = createSelector(
+const selectTablesByRoundNumber = createSelector(
   [
     selectAllTables,
     (_state: RootState, roundNumber: number | null) => roundNumber,
@@ -83,7 +83,7 @@ export const selectTablesByRoundNumber = createSelector(
   },
 );
 
-export const selectTablesForRoundWithSearch = createSelector(
+const selectTablesForRoundWithSearch = createSelector(
   [
     selectAllTables,
     (_state: RootState, roundNumber: number) => roundNumber,
@@ -91,7 +91,6 @@ export const selectTablesForRoundWithSearch = createSelector(
       searchQuery,
   ],
   (tables, roundNumber, searchQuery) => {
-    // Filter by round and ensure players exist
     let filtered = tables.filter(
       (table) =>
         (table as Table & { roundNumber?: number }).roundNumber ===
@@ -100,7 +99,6 @@ export const selectTablesForRoundWithSearch = createSelector(
         table.players.length > 0,
     );
 
-    // Filter by search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter((table) =>
@@ -110,9 +108,14 @@ export const selectTablesForRoundWithSearch = createSelector(
       );
     }
 
-    // Sort by table number
     return filtered.sort((a, b) => a.tableNumber - b.tableNumber);
   },
 );
+
+export {
+  selectTablesByRoundNumber,
+  selectAllTables,
+  selectTablesForRoundWithSearch,
+};
 
 export default tablesSlice.reducer;

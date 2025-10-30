@@ -2,16 +2,21 @@ import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  fetchTablesForRound,
   fetchAllTablesForGame,
+  fetchTablesForRound,
   updateScoresForTable,
 } from './actions';
-import { tablesSelectors } from './slice';
+import { selectAllTables, selectTablesByRoundNumber } from './slice';
 import { AppDispatch, RootState } from '../../store/store';
+
+export const useTablesByRound = (roundNumber: number | null) =>
+  useSelector((state: RootState) =>
+    selectTablesByRoundNumber(state, roundNumber),
+  );
 
 const useTables = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const tables = useSelector(tablesSelectors.selectAll);
+  const tables = useSelector(selectAllTables);
   const status = useSelector((state: RootState) => state.tables.status);
   const error = useSelector((state: RootState) => state.tables.error);
 

@@ -8,15 +8,15 @@ import { Game, Team } from '../../../slices/types';
 interface TablePlanViewProps {
   game: Game;
   tables: (TableType & { roundNumber?: number })[];
-  playersEntities: Record<number, Player | undefined>;
-  teamsEntities: Record<number, Team | undefined>;
+  players: Player[];
+  teams: Team[];
 }
 
 const TablePlanView = ({
   game,
   tables,
-  playersEntities: _playersEntities,
-  teamsEntities,
+  players: _players,
+  teams,
 }: TablePlanViewProps) => {
   const { t } = useTranslation(['pdf', 'common']);
 
@@ -85,7 +85,9 @@ const TablePlanView = ({
                               </Table.Thead>
                               <Table.Tbody>
                                 {tablePlayers.map((player) => {
-                                  const team = teamsEntities[player.teamID];
+                                  const team = teams.find(
+                                    (t) => t.id === player.teamID,
+                                  );
                                   return (
                                     <Table.Tr key={player.id}>
                                       <Table.Td>{player.name}</Table.Td>

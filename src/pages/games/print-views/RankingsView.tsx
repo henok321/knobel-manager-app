@@ -16,8 +16,8 @@ import { Game, Team } from '../../../slices/types';
 interface RankingsViewProps {
   game: Game;
   tables: (TableType & { roundNumber?: number })[];
-  playersEntities: Record<number, Player | undefined>;
-  teamsEntities: Record<number, Team | undefined>;
+  players: Player[];
+  teams: Team[];
   roundNumber?: number;
 }
 
@@ -38,16 +38,14 @@ interface TeamRanking {
 const RankingsView = ({
   game,
   tables,
-  playersEntities,
-  teamsEntities,
+  players,
+  teams,
   roundNumber,
 }: RankingsViewProps) => {
   const { t } = useTranslation(['pdf', 'common']);
 
   // Filter teams for this game
-  const gameTeams = Object.values(teamsEntities).filter(
-    (team): team is Team => team !== undefined && team.gameID === game.id,
-  );
+  const gameTeams = teams.filter((team) => team.gameID === game.id);
 
   // Filter tables based on roundNumber if provided
   const relevantTables = roundNumber
@@ -67,7 +65,7 @@ const RankingsView = ({
   const playerRankings: PlayerRanking[] = [];
   gameTeams.forEach((team) => {
     team.players.forEach((playerId: number) => {
-      const player = playersEntities[playerId];
+      const player = players.find((p) => p.id === playerId);
       if (!player) return;
 
       playerRankings.push({
@@ -94,7 +92,7 @@ const RankingsView = ({
   const teamRankings: TeamRanking[] = Object.entries(teamScoresMap).map(
     ([teamIdStr, totalScore]) => {
       const teamId = Number(teamIdStr);
-      const team = teamsEntities[teamId];
+      const team = teams.find((t) => t.id === teamId);
       return {
         teamId,
         teamName: team?.name || 'Unknown',

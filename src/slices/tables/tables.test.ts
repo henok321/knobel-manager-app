@@ -5,8 +5,8 @@
 import { http, HttpResponse } from 'msw';
 
 import {
-  fetchTablesForRound,
   fetchAllTablesForGame,
+  fetchTablesForRound,
   updateScoresForTable,
 } from './actions';
 import { selectAllTables } from './slice';
@@ -27,7 +27,6 @@ describe('Tables Actions + Slice', () => {
 
       const state = store.getState();
       const tables = selectAllTables(state);
-
       expect(tables).toHaveLength(2);
       expect(tables[0]?.roundID).toBe(1);
       expect(tables[0]?.tableNumber).toBe(1);

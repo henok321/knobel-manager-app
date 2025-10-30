@@ -19,7 +19,7 @@ export interface TeamRanking {
  */
 export const mapPlayersToRankings = (
   teams: Team[],
-  playersState: Record<number, Player | undefined>,
+  players: Player[],
   scoresByPlayer: Record<number, number>,
 ): PlayerRanking[] => {
   const rankings: PlayerRanking[] = [];
@@ -28,7 +28,7 @@ export const mapPlayersToRankings = (
     if (!team) return;
 
     team.players.forEach((playerId) => {
-      const player = playersState[playerId];
+      const player = players.find((p) => p.id === playerId);
       if (!player) return;
 
       rankings.push({

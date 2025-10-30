@@ -3,12 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import {
   createTeamAction,
-  updateTeamAction,
   deleteTeamAction,
+  updateTeamAction,
 } from './actions.ts';
-import { selectAllTeams } from './slice.ts';
+import { selectAllTeams, selectTeamsByIds } from './slice.ts';
 import { TeamsRequest } from '../../generated';
 import { AppDispatch, RootState } from '../../store/store.ts';
+
+export const useTeamsByIds = (teamIds: number[]) =>
+  useSelector((state: RootState) => selectTeamsByIds(state, teamIds));
 
 const useTeams = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +40,14 @@ const useTeams = () => {
     [dispatch],
   );
 
-  return { allTeams, createTeam, updateTeam, deleteTeam, status, error };
+  return {
+    allTeams,
+    createTeam,
+    updateTeam,
+    deleteTeam,
+    status,
+    error,
+  };
 };
 
 export default useTeams;
