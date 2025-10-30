@@ -26,7 +26,9 @@
     {
       "groupName": "TypeScript Definitions",
       "addLabels": ["typescript"],
-      "matchPackageNames": ["/^@types//"]
+      "matchPackageNames": ["/^@types//"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     },
     {
       "matchUpdateTypes": ["minor", "patch", "digest", "pin", "major"],
