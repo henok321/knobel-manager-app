@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { updatePlayerAction, deletePlayerAction } from './actions';
+import { deletePlayerAction, updatePlayerAction } from './actions';
 import { selectAllPlayers } from './slice';
 import { AppDispatch, RootState } from '../../store/store';
 
@@ -25,7 +25,13 @@ const usePlayers = () => {
     [dispatch],
   );
 
-  return { allPlayers, updatePlayer, deletePlayer, status, error };
+  return {
+    allPlayers,
+    updatePlayer,
+    deletePlayer,
+    status,
+    error,
+  };
 };
 
 export default usePlayers;

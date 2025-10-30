@@ -13,16 +13,13 @@ import { modals } from '@mantine/modals';
 import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 
 import EditTeamDialog from '../../../components/EditTeamDialog';
 import { GameStatusEnum } from '../../../generated';
 import usePlayers from '../../../slices/players/hooks';
 import useTables from '../../../slices/tables/hooks';
-import { tablesSelectors } from '../../../slices/tables/slice';
 import useTeams from '../../../slices/teams/hooks';
 import { Game } from '../../../slices/types';
-import { RootState } from '../../../store/store';
 import TeamForm, { TeamFormData } from '../../home/TeamForm';
 
 interface TeamsPanelProps {
@@ -31,24 +28,12 @@ interface TeamsPanelProps {
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
-  const { createTeam, updateTeam, deleteTeam } = useTeams();
-  const { updatePlayer } = usePlayers();
-  const { fetchAllTables, status } = useTables();
+  const { allTeams, createTeam, updateTeam, deleteTeam } = useTeams();
+  const { allPlayers, updatePlayer } = usePlayers();
+  const { tables: allTables, fetchAllTables, status } = useTables();
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
-
-  const teamsEntities = useSelector((state: RootState) => state.teams.entities);
-  const allPlayers = useSelector((state: RootState) => state.players.entities);
-  const allTables = useSelector(tablesSelectors.selectAll);
-
-  const teams = useMemo(
-    () =>
-      game.teams
-        .map((teamId) => teamsEntities[teamId])
-        .filter((team) => team !== undefined),
-    [game.teams, teamsEntities],
-  );
 
   const canAddDelete = game.status === GameStatusEnum.Setup;
   const canEdit =
@@ -95,10 +80,10 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   }, [allTables]);
 
   const getPlayersForTeam = (teamId: number) => {
-    const team = teams.find((t) => t?.id === teamId);
+    const team = allTeams.find((t) => t?.id === teamId);
     if (!team) return [];
     return team.players
-      .map((playerId) => allPlayers[playerId])
+      .map((playerId) => allPlayers.find((p) => p.id === playerId))
       .filter(
         (player): player is NonNullable<typeof player> => player !== undefined,
       );
@@ -172,14 +157,14 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         </Tooltip>
       )}
 
-      {canAddDelete && teams.length === 0 && (
+      {canAddDelete && allTeams.length === 0 && (
         <Text c="dimmed" ta="center">
           {t('teams.noTeams')}
         </Text>
       )}
 
       <Stack gap="md">
-        {teams.map((team) => {
+        {allTeams.map((team) => {
           if (!team) return null;
           const players = getPlayersForTeam(team.id);
 
@@ -272,7 +257,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         <EditTeamDialog
           isOpen={editTeamDialogOpen}
           players={getPlayersForTeam(editingTeamId)}
-          teamName={teams.find((t) => t?.id === editingTeamId)?.name || ''}
+          teamName={allTeams.find((t) => t?.id === editingTeamId)?.name || ''}
           onClose={() => {
             setEditTeamDialogOpen(false);
             setEditingTeamId(null);

@@ -20,10 +20,8 @@ import type { Table } from '../../../generated';
 import { GameStatusEnum } from '../../../generated';
 import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
-import {
-  selectTablesForRoundWithSearch,
-  selectAllTables,
-} from '../../../slices/tables/slice';
+import { selectTablesForRoundWithSearch } from '../../../slices/tables/slice';
+import useTeams from '../../../slices/teams/hooks';
 import { Game } from '../../../slices/types';
 import { RootState } from '../../../store/store';
 import { PlayerScoreRow } from '../components/PlayerScoreRow';
@@ -36,21 +34,20 @@ interface RoundsPanelProps {
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
   const { setupGame, status: gamesStatus } = useGames();
+  const { allTeams } = useTeams();
   const {
+    tables: allTables,
     status: tablesStatus,
     error: tablesError,
     fetchAllTables,
     updateScores,
   } = useTables();
-  const teamsEntities = useSelector((state: RootState) => state.teams.entities);
-  const allTables = useSelector(selectAllTables);
   const [selectedRound, setSelectedRound] = useState<string>('1');
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
   const [setupError, setSetupError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Derived state - no need for useState
   const canEditScores = game.status === GameStatusEnum.InProgress;
   const canSetupMatchmaking = game.status === GameStatusEnum.Setup;
   const hasRounds = (game.rounds?.length || 0) > 0;
@@ -303,7 +300,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                         (s) => s.playerID === player.id,
                       );
                       const team = player.teamID
-                        ? teamsEntities[player.teamID]
+                        ? allTeams.find((t) => t.id === player.teamID)
                         : undefined;
                       return (
                         <PlayerScoreRow

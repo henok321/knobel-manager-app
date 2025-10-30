@@ -16,32 +16,29 @@ import { Game, Team } from '../../../slices/types';
 interface TeamHandoutsViewProps {
   game: Game;
   tables: (TableType & { roundNumber?: number })[];
-  playersEntities: Record<number, Player | undefined>;
-  teamsEntities: Record<number, Team | undefined>;
+  players: Player[];
+  teams: Team[];
   teamId?: number;
 }
 
 const TeamHandoutsView = ({
   game,
   tables,
-  playersEntities,
-  teamsEntities,
+  players,
+  teams: allTeams,
   teamId,
 }: TeamHandoutsViewProps) => {
   const { t } = useTranslation(['pdf', 'common']);
 
   // Filter teams to display
-  const teams = Object.values(teamsEntities).filter(
-    (team): team is Team =>
-      team !== undefined &&
-      team.gameID === game.id &&
-      (!teamId || team.id === teamId),
+  const teams = allTeams.filter(
+    (team) => team.gameID === game.id && (!teamId || team.id === teamId),
   );
 
   const renderTeamHandout = (team: Team) => {
     // Get team players
     const teamPlayers = team.players
-      .map((playerId: number) => playersEntities[playerId])
+      .map((playerId: number) => players.find((p) => p.id === playerId))
       .filter((player): player is Player => player !== undefined);
 
     // Build player assignments per round

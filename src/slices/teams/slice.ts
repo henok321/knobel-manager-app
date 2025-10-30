@@ -98,7 +98,11 @@ createDraftSafeSelector(
   [selectAllTeams, (_: RootState, gameID: number) => gameID],
   (teams, gameID) => teams.filter((team) => team.gameID === gameID),
 );
+const selectTeamsByIds = createDraftSafeSelector(
+  [selectAllTeams, (_: RootState, teamIds: number[]) => teamIds],
+  (teams, teamIds) => teams.filter((team) => teamIds.includes(team.id)),
+);
 
-export { selectAllTeams };
+export { selectAllTeams, selectTeamsByIds };
 
 export default teamsSlice.reducer;

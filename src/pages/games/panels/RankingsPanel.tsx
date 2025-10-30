@@ -1,12 +1,11 @@
 import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
 import { useMemo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 
-import useTables from '../../../slices/tables/hooks.ts';
-import { selectTablesByRoundNumber } from '../../../slices/tables/slice';
+import usePlayers from '../../../slices/players/hooks.ts';
+import useTables, { useTablesByRound } from '../../../slices/tables/hooks.ts';
+import useTeams, { useTeamsByIds } from '../../../slices/teams/hooks.ts';
 import { Game } from '../../../slices/types';
-import { RootState } from '../../../store/store';
 import {
   mapPlayersToRankings,
   mapTeamsToRankings,
@@ -22,11 +21,11 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
   const [selectedRound, setSelectedRound] = useState<string>('total');
 
-  const teamsState = useSelector((state: RootState) => state.teams.entities);
-  const playersState = useSelector(
-    (state: RootState) => state.players.entities,
-  );
+  useTeams();
+  const { allPlayers } = usePlayers();
   const { fetchAllTables, status } = useTables();
+
+  const gameTeams = useTeamsByIds(game.teams);
 
   const roundOptions = useMemo(
     () => [
@@ -50,11 +49,8 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     }
   }, [roundsCount, status, fetchAllTables, game.id, game.numberOfRounds]);
 
-  const filteredTables = useSelector((state: RootState) =>
-    selectTablesByRoundNumber(
-      state,
-      selectedRound === 'total' ? null : Number(selectedRound),
-    ),
+  const filteredTables = useTablesByRound(
+    selectedRound === 'total' ? null : Number(selectedRound),
   );
 
   const allScores = useMemo(
@@ -67,17 +63,9 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     [allScores],
   );
 
-  const gameTeams = useMemo(
-    () =>
-      game.teams
-        .map((teamId) => teamsState[teamId])
-        .filter((team) => team !== undefined),
-    [game.teams, teamsState],
-  );
-
   const playerRankings = useMemo(
-    () => mapPlayersToRankings(gameTeams, playersState, allScores),
-    [gameTeams, playersState, allScores],
+    () => mapPlayersToRankings(gameTeams, allPlayers, allScores),
+    [gameTeams, allPlayers, allScores],
   );
 
   const teamRankings = useMemo(
