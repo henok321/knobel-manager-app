@@ -81,12 +81,8 @@ const GameListItem = ({
   };
 
   const handleOpen = () => {
-    navigate(`/games/${game.id}`);
-  };
-
-  const handleActivate = (e: React.MouseEvent) => {
-    e.stopPropagation();
     onActivate(game.id);
+    navigate(`/games/${game.id}`);
   };
 
   return (
@@ -132,11 +128,6 @@ const GameListItem = ({
 
           {/* Right: Actions */}
           <Group gap="xs" wrap="nowrap">
-            {!isActive && (
-              <Button size="sm" variant="light" onClick={handleActivate}>
-                {t('card.activateButton')}
-              </Button>
-            )}
             <Button size="sm" onClick={handleOpen}>
               {t('card.viewDetails')}
             </Button>
