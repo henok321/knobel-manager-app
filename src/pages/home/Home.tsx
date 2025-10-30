@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import GameViewContent from '../../components/GameViewContent';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
@@ -24,51 +23,45 @@ const Home = () => {
     return <CenterLoader />;
   }
 
-  if (!activeGame) {
-    return (
-      <Layout navbarActive onOpenGameForm={() => navigate('/games')}>
-        <Container py="xl" size="xl">
-          <Stack align="center" gap="xl" py="xl">
-            <Stack align="center" gap="md">
-              <Text size="80px">🎲</Text>
-              <Title order={1} ta="center">
-                {t('noActiveGame')}
-              </Title>
-              <Text c="dimmed" size="lg" ta="center">
-                {allGames.length === 0
-                  ? t('picker.noGames')
-                  : t('dashboard.noActiveGameDescription')}
-              </Text>
-            </Stack>
-
-            <Group gap="md">
-              <Button
-                leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
-                size="lg"
-                onClick={() => navigate('/games')}
-              >
-                {t('picker.createGame')}
-              </Button>
-              {allGames.length > 0 && (
-                <Button
-                  size="lg"
-                  variant="light"
-                  onClick={() => navigate('/games')}
-                >
-                  {t('dashboard.viewAllGames')}
-                </Button>
-              )}
-            </Group>
-          </Stack>
-        </Container>
-      </Layout>
-    );
+  if (activeGame) {
+    navigate(`/games/${activeGame.id}`, { replace: true });
   }
 
   return (
     <Layout navbarActive onOpenGameForm={() => navigate('/games')}>
-      <Container py="md" size="xl">
-        <GameViewContent game={activeGame} />
+      <Container py="xl" size="xl">
+        <Stack align="center" gap="xl" py="xl">
+          <Stack align="center" gap="md">
+            <Text size="80px">🎲</Text>
+            <Title order={1} ta="center">
+              {t('noActiveGame')}
+            </Title>
+            <Text c="dimmed" size="lg" ta="center">
+              {allGames.length === 0
+                ? t('picker.noGames')
+                : t('dashboard.noActiveGameDescription')}
+            </Text>
+          </Stack>
+
+          <Group gap="md">
+            <Button
+              leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
+              size="lg"
+              onClick={() => navigate('/games')}
+            >
+              {t('picker.createGame')}
+            </Button>
+            {allGames.length > 0 && (
+              <Button
+                size="lg"
+                variant="light"
+                onClick={() => navigate('/games')}
+              >
+                {t('dashboard.viewAllGames')}
+              </Button>
+            )}
+          </Group>
+        </Stack>
       </Container>
     </Layout>
   );
