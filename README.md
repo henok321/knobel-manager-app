@@ -16,6 +16,15 @@ graph LR
     C -->|Games, Teams,<br/>Players, Scores| A
 ```
 
+## Software Stack
+
+- **React 19**: UI framework with modern hooks and concurrent features
+- **TypeScript**: Type-safe JavaScript with strict mode enabled
+- **Redux + Redux Toolkit**: State management with normalized entity adapters
+- **Mantine UI v8**: Component library with built-in theming
+- **Firebase v12**: Hosting and authentication with JWT tokens
+- **Vite**: Build tool and dev server
+
 ## Setup
 
 ```bash
