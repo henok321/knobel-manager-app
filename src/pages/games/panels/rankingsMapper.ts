@@ -1,6 +1,7 @@
-import { Player, Team } from '../slices/types';
+import { Score, Table as TableModel } from '../../../generated/models';
+import { Player, Team } from '../../../slices/types.ts';
 
-export interface PlayerRanking {
+interface PlayerRanking {
   playerId: number;
   playerName: string;
   teamId: number;
@@ -8,16 +9,13 @@ export interface PlayerRanking {
   totalScore: number;
 }
 
-export interface TeamRanking {
+interface TeamRanking {
   teamId: number;
   teamName: string;
   totalScore: number;
 }
 
-/**
- * Maps players and their scores to PlayerRanking objects
- */
-export const mapPlayersToRankings = (
+const mapPlayersToRankings = (
   teams: Team[],
   players: Player[],
   scoresByPlayer: Record<number, number>,
@@ -44,23 +42,18 @@ export const mapPlayersToRankings = (
   return rankings.sort((a, b) => b.totalScore - a.totalScore);
 };
 
-/**
- * Maps teams and aggregated player scores to TeamRanking objects
- */
-export const mapTeamsToRankings = (
+const mapTeamsToRankings = (
   teams: Team[],
   playerRankings: PlayerRanking[],
 ): TeamRanking[] => {
   const teamScores: Record<number, number> = {};
 
-  // Initialize all teams with 0 score
   teams.forEach((team) => {
     if (team) {
       teamScores[team.id] = 0;
     }
   });
 
-  // Add up player scores for each team
   playerRankings.forEach((playerRank) => {
     teamScores[playerRank.teamId] =
       (teamScores[playerRank.teamId] || 0) + playerRank.totalScore;
@@ -80,3 +73,23 @@ export const mapTeamsToRankings = (
 
   return rankings.sort((a, b) => b.totalScore - a.totalScore);
 };
+
+const aggregateScoresFromTables = (
+  tables: TableModel[],
+): Record<number, number> => {
+  const allScores: Record<number, number> = {};
+
+  tables.forEach((table) => {
+    if (table.scores && Array.isArray(table.scores)) {
+      table.scores.forEach((score: Score) => {
+        const playerId = score.playerID;
+        const scoreValue = score.score || 0;
+        allScores[playerId] = (allScores[playerId] || 0) + scoreValue;
+      });
+    }
+  });
+
+  return allScores;
+};
+export type { PlayerRanking, TeamRanking };
+export { mapPlayersToRankings, mapTeamsToRankings, aggregateScoresFromTables };
