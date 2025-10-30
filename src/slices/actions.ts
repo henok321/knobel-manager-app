@@ -13,7 +13,6 @@ export const fetchAll = createAsyncThunk<NormalizedData>(
 );
 const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
   const normalizedData: NormalizedData = {
-    activeGameID: undefined,
     games: {},
     teams: {},
     players: {},
@@ -21,8 +20,6 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
     tables: {},
     scores: {},
   };
-
-  normalizedData.activeGameID = apiData.activeGameID;
 
   apiData.games.forEach((apiGame) => {
     const gameId = apiGame.id;
