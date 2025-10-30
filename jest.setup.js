@@ -20,7 +20,7 @@ global.BroadcastChannel = BroadcastChannelMock;
 const localStorageMock = (() => {
   let store = new Map();
   return {
-    getItem: (key) => store.has(key) ? store.get(key) : null,
+    getItem: (key) => (store.has(key) ? store.get(key) : null),
     setItem: (key, value) => {
       store.set(key, value.toString());
     },
