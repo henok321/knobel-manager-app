@@ -11,7 +11,7 @@ Tournament manager for the dice game "Knobeln" (aka "Schocken"). React 19 + Type
 ```mermaid
 ---
 config:
-    theme: neutral
+    theme: forest
 ---
 graph LR
     Web-App[Web App<br/>React + Redux] -->|JWT Token| Auth[Firebase Auth]
