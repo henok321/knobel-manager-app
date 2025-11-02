@@ -14,9 +14,9 @@ config:
     theme: forest
 ---
 graph LR
-    Web-App[Web App<br/>React + Redux] -->|JWT Token| Auth[Firebase Auth]
+    Web-App[Web App<br/>React + Redux] -->|Credentials| Auth[Firebase Auth]
+    Auth -->|JWT| Web-App
     Web-App -->|API Requests<br/>+ JWT Header| Backend[Knobel Manager Service]
-    Auth -->|Token| Web-App
     Backend -->|Games, Teams,<br/>Players, Scores| Web-App
 ```
 
