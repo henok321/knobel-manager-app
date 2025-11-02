@@ -9,10 +9,6 @@ Tournament manager for the dice game "Knobeln" (aka "Schocken"). React 19 + Type
 ## Architecture
 
 ```mermaid
----
-config:
-    theme: neutral
----
 graph TD
     Web-App[Web App<br/>React + Redux] -->|Credentials| Auth[Firebase Auth]
     Auth -->|JWT| Web-App
