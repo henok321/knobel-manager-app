@@ -13,7 +13,7 @@ Tournament manager for the dice game "Knobeln" (aka "Schocken"). React 19 + Type
 config:
     theme: forest
 ---
-graph LR
+graph TD
     Web-App[Web App<br/>React + Redux] -->|Credentials| Auth[Firebase Auth]
     Auth -->|JWT| Web-App
     Web-App -->|API Requests<br/>+ JWT Header| Backend[Knobel Manager Service]
