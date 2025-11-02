@@ -10,10 +10,13 @@ Tournament manager for the dice game "Knobeln" (aka "Schocken"). React 19 + Type
 
 ```mermaid
 graph LR
-    A[Web App<br/>React + Redux] -->|JWT Token| B[Firebase Auth]
-    A -->|API Requests<br/>+ JWT Header| C[Knobel Manager Service]
-    B -->|Token| A
-    C -->|Games, Teams,<br/>Players, Scores| A
+    Web-App[Web App<br/>React + Redux] -->|JWT Token| Auth[Firebase Auth]
+    Web-App -->|API Requests<br/>+ JWT Header| Backend[Knobel Manager Service]
+    Auth -->|Token| Web-App
+    Backend -->|Games, Teams,<br/>Players, Scores| Web-App
+    style Web-App fill: crimson
+    style Auth fill: darkcyan
+    style Backend fill: green
 ```
 
 ## Software Stack
