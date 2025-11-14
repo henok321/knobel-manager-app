@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import { api } from '../api/rtkQueryApi.ts';
-import gamesReducer from '../slices/games/slice.ts';
 
 const rootReducer = {
   [api.reducerPath]: api.reducer,
-  games: gamesReducer,
 };
 
 const store = configureStore({

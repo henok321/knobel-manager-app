@@ -15,7 +15,6 @@ import React, {
 
 import { auth as firebaseAuth } from './firebaseConfig.ts';
 import { api } from '../api/rtkQueryApi.ts';
-import { resetGamesState } from '../slices/games/slice.ts';
 import store from '../store/store.ts';
 
 type LoginData = {
@@ -73,8 +72,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const logOut = useCallback(() => {
+    // Clear all localStorage (includes active_game_id from Context)
     localStorage.clear();
-    store.dispatch(resetGamesState());
+    // Reset RTK Query cache
     store.dispatch(api.util.resetApiState());
     void signOut(firebaseAuth);
   }, []);

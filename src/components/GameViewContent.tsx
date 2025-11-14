@@ -17,11 +17,11 @@ import { useTranslation } from 'react-i18next';
 
 import { useGetAllTablesForGameQuery } from '../api/rtkQueryApi';
 import { GameStatusEnum, GameUpdateRequest } from '../generated';
+import useGames from '../hooks/useGames';
 import RankingsPanel from '../pages/games/panels/RankingsPanel';
 import RoundsPanel from '../pages/games/panels/RoundsPanel';
 import TeamsPanel from '../pages/games/panels/TeamsPanel';
-import useGames from '../slices/games/hooks';
-import { Game } from '../slices/types';
+import { Game } from '../types';
 
 const PrintMenu = lazy(() => import('./PrintMenu'));
 

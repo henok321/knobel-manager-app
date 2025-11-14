@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Player } from '../../../generated';
 import { Table as TableType } from '../../../generated';
-import { Game, Team } from '../../../slices/types';
+import { Game, Team } from '../../../types';
 
 interface TablePlanViewProps {
   game: Game;

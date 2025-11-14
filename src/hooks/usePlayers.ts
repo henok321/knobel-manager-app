@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
-import { selectAllPlayersNormalized } from '../../../api/normalizedSelectors';
+import { selectAllPlayersNormalized } from '../api/normalizedSelectors';
 import {
   useUpdatePlayerMutation,
   useDeletePlayerMutation,
-} from '../../../api/rtkQueryApi';
-import type { RootState } from '../../../store/store';
+} from '../api/rtkQueryApi';
+import type { RootState } from '../store/store';
 
 const usePlayers = () => {
   const allPlayers = useSelector((state: RootState) =>
@@ -18,16 +18,12 @@ const usePlayers = () => {
 
   const updatePlayer = useCallback(
     async (gameID: number, teamID: number, playerID: number, name: string) => {
-      try {
-        await updatePlayerMutation({
-          gameId: gameID,
-          teamId: teamID,
-          playerId: playerID,
-          name,
-        }).unwrap();
-      } catch {
-        // Error handled by RTK Query
-      }
+      await updatePlayerMutation({
+        gameId: gameID,
+        teamId: teamID,
+        playerId: playerID,
+        name,
+      }).unwrap();
     },
     [updatePlayerMutation],
   );

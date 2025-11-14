@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { GameStatusEnum } from '../../../generated';
-import { Game } from '../../../slices/types';
+import { Game } from '../../../types';
 
 interface GameListItemProps {
   game: Game;

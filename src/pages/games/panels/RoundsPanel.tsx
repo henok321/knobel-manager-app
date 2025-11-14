@@ -18,9 +18,9 @@ import { useTranslation } from 'react-i18next';
 import { useGetAllTablesForGameQuery } from '../../../api/rtkQueryApi';
 import type { Table } from '../../../generated';
 import { GameStatusEnum } from '../../../generated';
-import useGames from '../../../slices/games/hooks';
-import useTeams from '../../../slices/teams/hooks';
-import { Game } from '../../../slices/types';
+import useGames from '../../../hooks/useGames';
+import useTeams from '../../../hooks/useTeams';
+import { Game } from '../../../types';
 import { PlayerScoreRow } from '../components/PlayerScoreRow';
 import ScoreEntryModal from '../components/ScoreEntryModal';
 

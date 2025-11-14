@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 
 import { api } from './rtkQueryApi';
 import type { Game as ApiGame } from '../generated';
-import type { Game, Team, Player } from '../slices/types';
+import type { Game, Team, Player } from '../types';
 
 const selectNormalizedGamesData = createSelector(
   [(state) => api.endpoints.getGames.select()(state)],

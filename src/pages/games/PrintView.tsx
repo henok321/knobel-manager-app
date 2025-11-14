@@ -8,10 +8,10 @@ import ScoreSheetsView from './print-views/ScoreSheetsView';
 import TablePlanView from './print-views/TablePlanView';
 import TeamHandoutsView from './print-views/TeamHandoutsView';
 import { useGetAllTablesForGameQuery } from '../../api/rtkQueryApi';
+import useGames from '../../hooks/useGames';
+import usePlayers from '../../hooks/usePlayers';
+import useTeams from '../../hooks/useTeams';
 import CenterLoader from '../../shared/CenterLoader';
-import useGames from '../../slices/games/hooks';
-import usePlayers from '../../slices/players/hooks';
-import useTeams from '../../slices/teams/hooks';
 import './print-views/print.css';
 
 const PrintView = () => {

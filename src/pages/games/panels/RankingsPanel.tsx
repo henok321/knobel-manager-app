@@ -8,9 +8,9 @@ import {
   mapTeamsToRankings,
 } from './rankingsMapper.ts';
 import { useGetAllTablesForGameQuery } from '../../../api/rtkQueryApi.ts';
-import usePlayers from '../../../slices/players/hooks.ts';
-import useTeams, { useTeamsByIds } from '../../../slices/teams/hooks.ts';
-import { Game } from '../../../slices/types';
+import usePlayers from '../../../hooks/usePlayers';
+import useTeams, { useTeamsByIds } from '../../../hooks/useTeams';
+import { Game } from '../../../types';
 import { PlayerRankingRow, TeamRankingRow } from '../components/RankingRow';
 
 interface RankingsPanelProps {

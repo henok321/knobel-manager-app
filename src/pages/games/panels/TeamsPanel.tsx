@@ -23,9 +23,9 @@ import {
 } from '../../../api/rtkQueryApi';
 import EditTeamDialog from '../../../components/EditTeamDialog';
 import { GameStatusEnum } from '../../../generated';
-import usePlayers from '../../../slices/players/hooks';
-import useTeams from '../../../slices/teams/hooks';
-import { Game } from '../../../slices/types';
+import usePlayers from '../../../hooks/usePlayers';
+import useTeams from '../../../hooks/useTeams';
+import { Game } from '../../../types';
 import TeamForm, { TeamFormData } from '../../home/TeamForm';
 
 interface TeamsPanelProps {

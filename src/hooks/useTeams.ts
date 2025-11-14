@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
-import { selectAllTeamsNormalized } from '../../../api/normalizedSelectors';
+import { selectAllTeamsNormalized } from '../api/normalizedSelectors';
 import {
   useCreateTeamMutation,
   useUpdateTeamMutation,
   useDeleteTeamMutation,
-} from '../../../api/rtkQueryApi';
-import type { TeamsRequest } from '../../../generated';
-import type { RootState } from '../../../store/store';
+} from '../api/rtkQueryApi';
+import type { TeamsRequest } from '../generated';
+import type { RootState } from '../store/store';
 
 const useTeams = () => {
   const allTeams = useSelector((state: RootState) =>
@@ -21,37 +21,25 @@ const useTeams = () => {
 
   const createTeam = useCallback(
     async (gameID: number, teamRequest: TeamsRequest) => {
-      try {
-        await createTeamMutation({ gameId: gameID, teamRequest }).unwrap();
-      } catch {
-        // Error handled by RTK Query
-      }
+      await createTeamMutation({ gameId: gameID, teamRequest }).unwrap();
     },
     [createTeamMutation],
   );
 
   const updateTeam = useCallback(
     async (gameID: number, teamID: number, name: string) => {
-      try {
-        await updateTeamMutation({
-          gameId: gameID,
-          teamId: teamID,
-          name,
-        }).unwrap();
-      } catch {
-        // Error handled by RTK Query
-      }
+      await updateTeamMutation({
+        gameId: gameID,
+        teamId: teamID,
+        name,
+      }).unwrap();
     },
     [updateTeamMutation],
   );
 
   const deleteTeam = useCallback(
     async (gameID: number, teamID: number) => {
-      try {
-        await deleteTeamMutation({ gameId: gameID, teamId: teamID }).unwrap();
-      } catch {
-        // Error handled by RTK Query
-      }
+      await deleteTeamMutation({ gameId: gameID, teamId: teamID }).unwrap();
     },
     [deleteTeamMutation],
   );

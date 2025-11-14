@@ -5,9 +5,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 import GameViewContent from '../../components/GameViewContent';
+import useGames from '../../hooks/useGames';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
-import useGames from '../../slices/games/hooks';
 
 const GameDetail = () => {
   const { gameId } = useParams<{ gameId: string }>();

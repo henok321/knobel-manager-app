@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './auth/AuthContext.tsx';
 import ProtectedRoute from './auth/ProtectedRoute.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
+import { ActiveGameProvider } from './contexts/ActiveGameContext.tsx';
 import CenterLoader from './shared/CenterLoader.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
@@ -20,24 +21,29 @@ const PrintView = lazy(() => import('./pages/games/PrintView.tsx'));
 const App = () => (
   <ErrorBoundary>
     <AuthProvider>
-      <MantineProvider>
-        <ModalsProvider>
-          <Notifications position="top-right" />
-          <BrowserRouter>
-            <Suspense fallback={<CenterLoader />}>
-              <Routes>
-                <Route element={<Login />} path="/login" />
-                <Route element={<ProtectedRoute />}>
-                  <Route element={<Home />} path="/" />
-                  <Route element={<Games />} path="/games" />
-                  <Route element={<GameDetail />} path="/games/:gameId" />
-                  <Route element={<PrintView />} path="/games/:gameId/print" />
-                </Route>
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
-        </ModalsProvider>
-      </MantineProvider>
+      <ActiveGameProvider>
+        <MantineProvider>
+          <ModalsProvider>
+            <Notifications position="top-right" />
+            <BrowserRouter>
+              <Suspense fallback={<CenterLoader />}>
+                <Routes>
+                  <Route element={<Login />} path="/login" />
+                  <Route element={<ProtectedRoute />}>
+                    <Route element={<Home />} path="/" />
+                    <Route element={<Games />} path="/games" />
+                    <Route element={<GameDetail />} path="/games/:gameId" />
+                    <Route
+                      element={<PrintView />}
+                      path="/games/:gameId/print"
+                    />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
+          </ModalsProvider>
+        </MantineProvider>
+      </ActiveGameProvider>
     </AuthProvider>
   </ErrorBoundary>
 );
