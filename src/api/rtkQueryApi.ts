@@ -1,9 +1,19 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { axiosBaseQuery } from './axiosBaseQuery';
-import type { Table, ScoresRequest } from '../generated';
+import type {
+  Table,
+  ScoresRequest,
+  TeamsRequest,
+  TeamResponse,
+  Team,
+  Player,
+  GamesResponse,
+  GameResponse,
+  GameCreateRequest,
+  GameUpdateRequest,
+} from '../generated';
 
-// Augmented Table type with roundNumber
 export type TableWithRound = Table & { roundNumber: number };
 
 export const api = createApi({
@@ -93,7 +103,6 @@ export const api = createApi({
         method: 'PUT',
         data: { scores } as ScoresRequest,
       }),
-      // Optimistic update
       async onQueryStarted(
         { gameId, roundNumber, tableNumber, scores },
         { dispatch, queryFulfilled },
@@ -124,17 +133,14 @@ export const api = createApi({
         try {
           await queryFulfilled;
         } catch {
-          // Rollback on error
           patchResult.undo();
         }
       },
-      // After successful update, refetch to get server state
       async onCacheEntryAdded(
         { gameId, roundNumber },
         { dispatch, cacheDataLoaded },
       ) {
         await cacheDataLoaded;
-        // Invalidate to trigger refetch with server data
         dispatch(
           api.util.invalidateTags([
             { type: 'Table', id: `ROUND-${gameId}-${roundNumber}` },
@@ -143,11 +149,164 @@ export const api = createApi({
         );
       },
     }),
+
+    createTeam: builder.mutation<
+      TeamResponse,
+      { gameId: number; teamRequest: TeamsRequest }
+    >({
+      query: ({ gameId, teamRequest }) => ({
+        url: `/games/${gameId}/teams`,
+        method: 'POST',
+        data: teamRequest,
+      }),
+      invalidatesTags: (_result, _error, { gameId }) => [
+        { type: 'Game', id: gameId },
+        { type: 'Team', id: 'LIST' },
+        { type: 'Player', id: 'LIST' },
+      ],
+    }),
+
+    updateTeam: builder.mutation<
+      Team,
+      { gameId: number; teamId: number; name: string }
+    >({
+      query: ({ gameId, teamId, name }) => ({
+        url: `/games/${gameId}/teams/${teamId}`,
+        method: 'PUT',
+        data: { name },
+      }),
+      transformResponse: (response: TeamResponse) => response.team,
+      invalidatesTags: (_result, _error, { teamId }) => [
+        { type: 'Team', id: teamId },
+      ],
+    }),
+
+    deleteTeam: builder.mutation<void, { gameId: number; teamId: number }>({
+      query: ({ gameId, teamId }) => ({
+        url: `/games/${gameId}/teams/${teamId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, { gameId, teamId }) => [
+        { type: 'Game', id: gameId },
+        { type: 'Team', id: teamId },
+        { type: 'Team', id: 'LIST' },
+      ],
+    }),
+
+    updatePlayer: builder.mutation<
+      Player,
+      { gameId: number; teamId: number; playerId: number; name: string }
+    >({
+      query: ({ gameId, teamId, playerId, name }) => ({
+        url: `/games/${gameId}/teams/${teamId}/players/${playerId}`,
+        method: 'PUT',
+        data: { name },
+      }),
+      transformResponse: (response: { player: Player }) => response.player,
+      invalidatesTags: (_result, _error, { playerId }) => [
+        { type: 'Player', id: playerId },
+      ],
+    }),
+
+    deletePlayer: builder.mutation<
+      void,
+      { gameId: number; teamId: number; playerId: number }
+    >({
+      query: ({ gameId, teamId, playerId }) => ({
+        url: `/games/${gameId}/teams/${teamId}/players/${playerId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, { playerId, teamId }) => [
+        { type: 'Player', id: playerId },
+        { type: 'Team', id: teamId },
+      ],
+    }),
+
+    getGames: builder.query<GamesResponse, void>({
+      query: () => ({ url: '/games', method: 'GET' }),
+      providesTags: (result) =>
+        result?.games
+          ? [
+              ...result.games.map(({ id }) => ({ type: 'Game' as const, id })),
+              { type: 'Game', id: 'LIST' },
+            ]
+          : [{ type: 'Game', id: 'LIST' }],
+    }),
+
+    getGame: builder.query<GameResponse, number>({
+      query: (gameId) => ({ url: `/games/${gameId}`, method: 'GET' }),
+      providesTags: (_result, _error, id) => [{ type: 'Game', id }],
+    }),
+
+    createGame: builder.mutation<GameResponse, GameCreateRequest>({
+      query: (gameRequest) => ({
+        url: '/games',
+        method: 'POST',
+        data: gameRequest,
+      }),
+      invalidatesTags: [{ type: 'Game', id: 'LIST' }],
+    }),
+
+    updateGame: builder.mutation<
+      GameResponse,
+      { gameId: number; gameRequest: GameUpdateRequest }
+    >({
+      query: ({ gameId, gameRequest }) => ({
+        url: `/games/${gameId}`,
+        method: 'PUT',
+        data: gameRequest,
+      }),
+      invalidatesTags: (_result, _error, { gameId }) => [
+        { type: 'Game', id: gameId },
+        { type: 'Game', id: 'LIST' },
+      ],
+    }),
+
+    deleteGame: builder.mutation<void, number>({
+      query: (gameId) => ({
+        url: `/games/${gameId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, gameId) => [
+        { type: 'Game', id: gameId },
+        { type: 'Game', id: 'LIST' },
+      ],
+    }),
+
+    setupGame: builder.mutation<GameResponse, number>({
+      query: (gameId) => ({
+        url: `/games/${gameId}/setup`,
+        method: 'POST',
+      }),
+      async onQueryStarted(gameId, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(
+          api.endpoints.getGame.initiate(gameId, { forceRefetch: true }),
+        );
+        dispatch(
+          api.endpoints.getGames.initiate(undefined, { forceRefetch: true }),
+        );
+      },
+      invalidatesTags: (_result, _error, gameId) => [
+        { type: 'Game', id: gameId },
+        { type: 'Game', id: 'LIST' },
+        { type: 'Table', id: 'LIST' },
+      ],
+    }),
   }),
 });
 
 export const {
-  useGetTablesForRoundQuery,
   useGetAllTablesForGameQuery,
   useUpdateScoresMutation,
+  useCreateTeamMutation,
+  useUpdateTeamMutation,
+  useDeleteTeamMutation,
+  useUpdatePlayerMutation,
+  useDeletePlayerMutation,
+  useGetGamesQuery,
+  useCreateGameMutation,
+  useUpdateGameMutation,
+  useDeleteGameMutation,
+  useSetupGameMutation,
 } = api;

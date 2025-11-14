@@ -1,47 +1,73 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { setActiveGame } from './slice';
 import {
-  createGameAction,
-  deleteGameAction,
-  setupGameAction,
-  updateGameAction,
-} from './actions';
+  selectAllGamesNormalized,
+  selectGameByIdNormalized,
+} from '../../api/normalizedSelectors';
 import {
-  selectActiveGame,
-  selectAllGames,
-  selectGamesError,
-  selectGamesStatus,
-  setActiveGame,
-} from './slice';
-import { GameCreateRequest, GameUpdateRequest } from '../../generated';
-import { AppDispatch } from '../../store/store';
-import { fetchAll } from '../actions';
+  useGetGamesQuery,
+  useCreateGameMutation,
+  useUpdateGameMutation,
+  useDeleteGameMutation,
+  useSetupGameMutation,
+} from '../../api/rtkQueryApi';
+import type { GameCreateRequest, GameUpdateRequest } from '../../generated';
+import type { RootState } from '../../store/store';
 
 const useGames = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
 
-  const allGames = useSelector(selectAllGames);
-  const activeGame = useSelector(selectActiveGame);
-  const status = useSelector(selectGamesStatus);
-  const error = useSelector(selectGamesError);
+  // RTK Query for fetching games
+  const { isLoading, error: queryError } = useGetGamesQuery();
 
+  // Normalized selectors
+  const allGames = useSelector((state: RootState) =>
+    selectAllGamesNormalized(state),
+  );
+  const activeGameId = useSelector(
+    (state: RootState) => state.games.activeGameID,
+  );
+  const activeGame = useSelector((state: RootState) =>
+    selectGameByIdNormalized(activeGameId)(state),
+  );
+
+  // RTK Query mutations
+  const [createGameMutation] = useCreateGameMutation();
+  const [updateGameMutation] = useUpdateGameMutation();
+  const [deleteGameMutation] = useDeleteGameMutation();
+  const [setupGameMutation] = useSetupGameMutation();
+
+  // Convert loading state to status string for backward compatibility
+  const status = isLoading ? 'pending' : queryError ? 'failed' : 'succeeded';
+  const error = queryError ? new Error(String(queryError)) : null;
+
+  // No-op for fetchGames since RTK Query auto-fetches
   const fetchGames = useCallback(() => {
-    dispatch(fetchAll());
-  }, [dispatch]);
+    // RTK Query handles fetching automatically
+  }, []);
 
   const createGame = useCallback(
-    (gameRequest: GameCreateRequest) => {
-      dispatch(createGameAction(gameRequest));
+    async (gameRequest: GameCreateRequest) => {
+      try {
+        await createGameMutation(gameRequest).unwrap();
+      } catch {
+        // Error handled by RTK Query
+      }
     },
-    [dispatch],
+    [createGameMutation],
   );
 
   const deleteGame = useCallback(
-    (gameID: number) => {
-      dispatch(deleteGameAction(gameID));
+    async (gameID: number) => {
+      try {
+        await deleteGameMutation(gameID).unwrap();
+      } catch {
+        // Error handled by RTK Query
+      }
     },
-    [dispatch],
+    [deleteGameMutation],
   );
 
   const activateGame = useCallback(
@@ -52,15 +78,25 @@ const useGames = () => {
   );
 
   const updateGame = useCallback(
-    (gameID: number, gameRequest: GameUpdateRequest) => {
-      dispatch(updateGameAction({ gameID, gameRequest }));
+    async (gameID: number, gameRequest: GameUpdateRequest) => {
+      try {
+        await updateGameMutation({ gameId: gameID, gameRequest }).unwrap();
+      } catch {
+        // Error handled by RTK Query
+      }
     },
-    [dispatch],
+    [updateGameMutation],
   );
 
   const setupGame = useCallback(
-    (gameID: number) => dispatch(setupGameAction(gameID)),
-    [dispatch],
+    async (gameID: number) => {
+      try {
+        await setupGameMutation(gameID).unwrap();
+      } catch {
+        // Error handled by RTK Query
+      }
+    },
+    [setupGameMutation],
   );
 
   return {

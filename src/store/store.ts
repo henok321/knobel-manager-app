@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
+import { rtkQueryBridgeMiddleware } from './rtkQueryBridgeMiddleware.ts';
 import { api } from '../api/rtkQueryApi.ts';
 import { resetStore } from '../slices/actions.ts';
 import gamesReducer from '../slices/games/slice.ts';
@@ -25,7 +26,9 @@ const rootReducer: typeof appReducer = (state, action) => {
 const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
+    getDefaultMiddleware()
+      .concat(api.middleware)
+      .concat(rtkQueryBridgeMiddleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

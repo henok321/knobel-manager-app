@@ -26,7 +26,7 @@ const loadActiveGameIDFromLocalStorage = (): number | null => {
   return stored ? Number(stored) : null;
 };
 
-const gamesAdapter = createEntityAdapter<Game>();
+export const gamesAdapter = createEntityAdapter<Game>();
 
 const state = gamesAdapter.getInitialState<AdditionalGamesState>({
   status: 'idle',

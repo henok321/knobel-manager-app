@@ -1,36 +1,66 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { deletePlayerAction, updatePlayerAction } from './actions';
-import { selectAllPlayers } from './slice';
-import { AppDispatch, RootState } from '../../store/store';
+import {
+  selectAllPlayersNormalized,
+  selectAllTeamsNormalized,
+} from '../../api/normalizedSelectors';
+import {
+  useUpdatePlayerMutation,
+  useDeletePlayerMutation,
+} from '../../api/rtkQueryApi';
+import type { RootState } from '../../store/store';
 
 const usePlayers = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const allPlayers = useSelector(selectAllPlayers);
-  const status = useSelector((state: RootState) => state.players.status);
-  const error = useSelector((state: RootState) => state.players.error);
+  const allPlayers = useSelector((state: RootState) =>
+    selectAllPlayersNormalized(state),
+  );
+  const allTeams = useSelector((state: RootState) =>
+    selectAllTeamsNormalized(state),
+  );
+
+  const [updatePlayerMutation] = useUpdatePlayerMutation();
+  const [deletePlayerMutation] = useDeletePlayerMutation();
 
   const updatePlayer = useCallback(
-    (playerID: number, name: string) => {
-      dispatch(updatePlayerAction({ playerID, name }));
+    async (playerID: number, name: string) => {
+      const player = allPlayers.find((p) => p.id === playerID);
+      if (!player) return;
+
+      const team = allTeams.find((t) => t.id === player.teamID);
+      if (!team) return;
+
+      await updatePlayerMutation({
+        gameId: team.gameID,
+        teamId: team.id,
+        playerId: playerID,
+        name,
+      }).unwrap();
     },
-    [dispatch],
+    [updatePlayerMutation, allPlayers, allTeams],
   );
 
   const deletePlayer = useCallback(
-    (playerID: number) => {
-      dispatch(deletePlayerAction(playerID));
+    async (playerID: number) => {
+      const player = allPlayers.find((p) => p.id === playerID);
+      if (!player) return;
+
+      const team = allTeams.find((t) => t.id === player.teamID);
+      if (!team) return;
+
+      await deletePlayerMutation({
+        gameId: team.gameID,
+        teamId: team.id,
+        playerId: playerID,
+      }).unwrap();
     },
-    [dispatch],
+    [deletePlayerMutation, allPlayers, allTeams],
   );
 
   return {
     allPlayers,
     updatePlayer,
     deletePlayer,
-    status,
-    error,
   };
 };
 

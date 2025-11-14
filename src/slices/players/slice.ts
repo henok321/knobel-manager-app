@@ -1,3 +1,10 @@
+/**
+ * @deprecated This slice is deprecated and will be removed in Phase 4 of RTK Query migration.
+ * Use RTK Query hooks from src/api/rtkQueryApi.ts instead:
+ * - useUpdatePlayerMutation
+ * - useDeletePlayerMutation
+ */
+
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store/store.ts';
