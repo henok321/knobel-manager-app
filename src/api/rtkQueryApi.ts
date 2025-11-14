@@ -21,7 +21,6 @@ export const api = createApi({
   baseQuery: axiosBaseQuery(),
   tagTypes: ['Game', 'Team', 'Player', 'Table', 'Score'],
   endpoints: (builder) => ({
-    // Tables endpoints
     getTablesForRound: builder.query<
       TableWithRound[],
       { gameId: number; roundNumber: number }
@@ -107,7 +106,6 @@ export const api = createApi({
         { gameId, roundNumber, tableNumber, scores },
         { dispatch, queryFulfilled },
       ) {
-        // Optimistically update the cache
         const patchResult = dispatch(
           api.util.updateQueryData(
             'getTablesForRound',
