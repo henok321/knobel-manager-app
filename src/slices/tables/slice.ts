@@ -1,3 +1,11 @@
+/**
+ * @deprecated This slice is deprecated and will be removed in Phase 4 of RTK Query migration.
+ * Use RTK Query hooks from src/api/rtkQueryApi.ts instead:
+ * - useGetTablesForRoundQuery
+ * - useGetAllTablesForGameQuery
+ * - useUpdateScoresMutation
+ */
+
 import {
   createEntityAdapter,
   createSelector,

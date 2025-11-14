@@ -20,7 +20,7 @@ const getBaseURL = () => {
   return '/api';
 };
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: getBaseURL(),
 });
 

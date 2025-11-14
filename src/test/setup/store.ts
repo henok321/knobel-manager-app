@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import { api } from '../../api/rtkQueryApi';
 import gamesReducer from '../../slices/games/slice';
 import playersReducer from '../../slices/players/slice';
 import tablesReducer from '../../slices/tables/slice';
@@ -9,6 +10,7 @@ import { RootState } from '../../store/store';
 export const createTestStore = (preloadedState?: Partial<RootState>) =>
   configureStore({
     reducer: {
+      [api.reducerPath]: api.reducer,
       games: gamesReducer,
       teams: teamsReducer,
       players: playersReducer,
@@ -18,5 +20,5 @@ export const createTestStore = (preloadedState?: Partial<RootState>) =>
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: false,
-      }),
+      }).concat(api.middleware),
   });
