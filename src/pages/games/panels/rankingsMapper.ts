@@ -1,5 +1,5 @@
 import { Score, Table as TableModel } from '../../../generated/models';
-import { Player, Team } from '../../../slices/types.ts';
+import { Player, Team } from '../../../types';
 
 interface PlayerRanking {
   playerId: number;
@@ -25,7 +25,7 @@ const mapPlayersToRankings = (
   teams.forEach((team) => {
     if (!team) return;
 
-    team.players.forEach((playerId) => {
+    team.players.forEach((playerId: number) => {
       const player = players.find((p) => p.id === playerId);
       if (!player) return;
 

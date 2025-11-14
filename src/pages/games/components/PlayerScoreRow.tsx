@@ -1,7 +1,7 @@
 import { Table as MantineTable } from '@mantine/core';
 
 import { Player, Score } from '../../../generated';
-import { Team } from '../../../slices/types';
+import { Team } from '../../../types';
 
 interface PlayerScoreRowProps {
   player: Player;

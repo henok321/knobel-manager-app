@@ -21,8 +21,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { GameStatusEnum } from '../generated';
-import useGames from '../slices/games/hooks';
-import { Game } from '../slices/types';
+import useGames from '../hooks/useGames';
+import { Game } from '../types';
 
 const getStatusColor = (status: GameStatusEnum) => {
   switch (status) {

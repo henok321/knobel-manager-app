@@ -3,25 +3,27 @@ import { notifications } from '@mantine/notifications';
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useUpdateScoresMutation } from '../../../api/rtkQueryApi';
 import type { Player, Table } from '../../../generated';
 
 interface ScoreEntryModalProps {
   isOpen: boolean;
   table: Table | null;
   roundNumber: number;
+  gameId: number;
   onClose: () => void;
-  onSubmit: (scores: { playerID: number; score: number }[]) => void;
 }
 
 const ScoreEntryModal = ({
   isOpen,
   table,
   roundNumber,
+  gameId,
   onClose,
-  onSubmit,
 }: ScoreEntryModalProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
   const [scores, setScores] = useState<Record<number, number>>({});
+  const [updateScores, { isLoading: isSaving }] = useUpdateScoresMutation();
 
   const players = useMemo(() => table?.players || [], [table?.players]);
 
@@ -38,20 +40,36 @@ const ScoreEntryModal = ({
 
   if (!table) return null;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const scoresArray = players.map((player: Player) => ({
       playerID: player.id,
       score: scores[player.id] ?? initialScores[player.id] ?? 0,
     }));
-    onSubmit(scoresArray);
-    notifications.show({
-      title: t('actions.success'),
-      message: t('rounds.scoresSaved', {
-        table: table.tableNumber,
-      }),
-      color: 'green',
-    });
-    onClose();
+
+    try {
+      await updateScores({
+        gameId,
+        roundNumber,
+        tableNumber: table.tableNumber,
+        scores: scoresArray,
+      }).unwrap();
+
+      notifications.show({
+        title: t('actions.success'),
+        message: t('rounds.scoresSaved', {
+          table: table.tableNumber,
+        }),
+        color: 'green',
+      });
+      onClose();
+    } catch (error) {
+      notifications.show({
+        title: t('actions.error'),
+        message:
+          error instanceof Error ? error.message : t('actions.errorOccurred'),
+        color: 'red',
+      });
+    }
   };
 
   return (
@@ -88,10 +106,17 @@ const ScoreEntryModal = ({
         ))}
 
         <Group justify="flex-end" mt="md">
-          <Button color="gray" variant="subtle" onClick={onClose}>
+          <Button
+            color="gray"
+            disabled={isSaving}
+            variant="subtle"
+            onClick={onClose}
+          >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={handleSubmit}>{t('rounds.saveScores')}</Button>
+          <Button loading={isSaving} onClick={handleSubmit}>
+            {t('rounds.saveScores')}
+          </Button>
         </Group>
       </Stack>
     </Modal>

@@ -11,15 +11,21 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import {
+  useCreateTeamMutation,
+  useDeleteTeamMutation,
+  useUpdateTeamMutation,
+  useUpdatePlayerMutation,
+  useGetAllTablesForGameQuery,
+} from '../../../api/rtkQueryApi';
 import EditTeamDialog from '../../../components/EditTeamDialog';
 import { GameStatusEnum } from '../../../generated';
-import usePlayers from '../../../slices/players/hooks';
-import useTables from '../../../slices/tables/hooks';
-import useTeams from '../../../slices/teams/hooks';
-import { Game } from '../../../slices/types';
+import usePlayers from '../../../hooks/usePlayers';
+import useTeams from '../../../hooks/useTeams';
+import { Game } from '../../../types';
 import TeamForm, { TeamFormData } from '../../home/TeamForm';
 
 interface TeamsPanelProps {
@@ -28,9 +34,21 @@ interface TeamsPanelProps {
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
-  const { allTeams, createTeam, updateTeam, deleteTeam } = useTeams();
-  const { allPlayers, updatePlayer } = usePlayers();
-  const { tables: allTables, fetchAllTables, status } = useTables();
+  const { allTeams } = useTeams(); // Still use for selectors
+  const { allPlayers } = usePlayers(); // Still use for selectors
+
+  // RTK Query mutations
+  const [createTeamMutation] = useCreateTeamMutation();
+  const [updateTeamMutation] = useUpdateTeamMutation();
+  const [deleteTeamMutation] = useDeleteTeamMutation();
+  const [updatePlayerMutation] = useUpdatePlayerMutation();
+
+  // RTK Query for tables
+  const { data: allTables = [] } = useGetAllTablesForGameQuery(
+    { gameId: game.id, numberOfRounds: game.numberOfRounds },
+    { skip: !game.rounds || game.rounds.length === 0 },
+  );
+
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
@@ -40,17 +58,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     game.status === GameStatusEnum.Setup ||
     game.status === GameStatusEnum.InProgress;
   const isCompleted = game.status === GameStatusEnum.Completed;
-
-  const roundsCount = useMemo(
-    () => game.rounds?.length || 0,
-    [game.rounds?.length],
-  );
-
-  useEffect(() => {
-    if (roundsCount > 0 && status === 'idle') {
-      fetchAllTables(game.id, game.numberOfRounds);
-    }
-  }, [game.id, game.numberOfRounds, roundsCount, fetchAllTables, status]);
 
   const showTableAssignments = allTables.length > 0;
 
@@ -89,13 +96,20 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       );
   };
 
-  const handleCreateTeam = (teamData: TeamFormData) => {
+  const handleCreateTeam = async (teamData: TeamFormData) => {
     const teamsRequest = {
       name: teamData.name,
       players: teamData.members.map((name) => ({ name })),
     };
-    createTeam(game.id, teamsRequest);
-    setIsTeamFormOpen(false);
+    try {
+      await createTeamMutation({
+        gameId: game.id,
+        teamRequest: teamsRequest,
+      }).unwrap();
+      setIsTeamFormOpen(false);
+    } catch {
+      // Error is handled by RTK Query
+    }
   };
 
   const handleStartEditTeam = (teamId: number) => {
@@ -103,21 +117,40 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     setEditTeamDialogOpen(true);
   };
 
-  const handleSaveTeam = (
+  const handleSaveTeam = async (
     teamName: string,
     players: { id: number; name: string }[],
   ) => {
     if (editingTeamId) {
-      // Update team name
-      updateTeam(editingTeamId, teamName);
+      const team = allTeams.find((t) => t.id === editingTeamId);
+      if (!team) return;
 
-      // Update all player names
-      players.forEach((player) => {
-        updatePlayer(player.id, player.name);
-      });
+      try {
+        // Update team name
+        await updateTeamMutation({
+          gameId: game.id,
+          teamId: editingTeamId,
+          name: teamName,
+        }).unwrap();
+
+        // Update all player names
+        await Promise.all(
+          players.map((player) =>
+            updatePlayerMutation({
+              gameId: game.id,
+              teamId: team.id,
+              playerId: player.id,
+              name: player.name,
+            }).unwrap(),
+          ),
+        );
+
+        setEditTeamDialogOpen(false);
+        setEditingTeamId(null);
+      } catch {
+        // Error is handled by RTK Query
+      }
     }
-    setEditTeamDialogOpen(false);
-    setEditingTeamId(null);
   };
 
   const handleDeleteTeam = (teamId: number) => {
@@ -129,8 +162,15 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         cancel: t('actions.cancel'),
       },
       confirmProps: { color: 'red' },
-      onConfirm: () => {
-        deleteTeam(teamId);
+      onConfirm: async () => {
+        try {
+          await deleteTeamMutation({
+            gameId: game.id,
+            teamId,
+          }).unwrap();
+        } catch {
+          // Error is handled by RTK Query
+        }
       },
     });
   };

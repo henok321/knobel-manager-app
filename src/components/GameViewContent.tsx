@@ -15,13 +15,13 @@ import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useGetAllTablesForGameQuery } from '../api/rtkQueryApi';
 import { GameStatusEnum, GameUpdateRequest } from '../generated';
+import useGames from '../hooks/useGames';
 import RankingsPanel from '../pages/games/panels/RankingsPanel';
 import RoundsPanel from '../pages/games/panels/RoundsPanel';
 import TeamsPanel from '../pages/games/panels/TeamsPanel';
-import useGames from '../slices/games/hooks';
-import useTables from '../slices/tables/hooks';
-import { Game } from '../slices/types';
+import { Game } from '../types';
 
 const PrintMenu = lazy(() => import('./PrintMenu'));
 
@@ -32,7 +32,12 @@ interface GameViewContentProps {
 const GameViewContent = ({ game }: GameViewContentProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
   const { updateGame } = useGames();
-  const { tables: allTables } = useTables();
+
+  const hasRounds = game.rounds && game.rounds.length > 0;
+  const { data: allTables = [] } = useGetAllTablesForGameQuery(
+    { gameId: game.id, numberOfRounds: game.numberOfRounds },
+    { skip: !hasRounds },
+  );
 
   const getDefaultTab = () => {
     switch (game.status) {

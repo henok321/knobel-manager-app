@@ -1,6 +1,5 @@
 import { Container, Stack, Text, Button, Group } from '@mantine/core';
 import { IconPrinter, IconArrowLeft } from '@tabler/icons-react';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
@@ -8,11 +7,11 @@ import RankingsView from './print-views/RankingsView';
 import ScoreSheetsView from './print-views/ScoreSheetsView';
 import TablePlanView from './print-views/TablePlanView';
 import TeamHandoutsView from './print-views/TeamHandoutsView';
+import { useGetAllTablesForGameQuery } from '../../api/rtkQueryApi';
+import useGames from '../../hooks/useGames';
+import usePlayers from '../../hooks/usePlayers';
+import useTeams from '../../hooks/useTeams';
 import CenterLoader from '../../shared/CenterLoader';
-import useGames from '../../slices/games/hooks';
-import usePlayers from '../../slices/players/hooks';
-import useTables from '../../slices/tables/hooks';
-import useTeams from '../../slices/teams/hooks';
 import './print-views/print.css';
 
 const PrintView = () => {
@@ -20,34 +19,27 @@ const PrintView = () => {
   const [searchParams] = useSearchParams();
   const { t } = useTranslation(['gameDetail', 'common']);
   const navigate = useNavigate();
-  const { allGames, fetchGames, status } = useGames();
+  const { allGames, status } = useGames();
   const { allTeams } = useTeams();
   const { allPlayers } = usePlayers();
-  const {
-    tables: allTables,
-    fetchAllTables,
-    status: tablesStatus,
-  } = useTables();
 
   const viewType = searchParams.get('type') || 'tablePlan';
   const roundNumber = searchParams.get('round');
   const teamId = searchParams.get('teamId');
 
-  useEffect(() => {
-    if (status === 'idle') {
-      fetchGames();
-    }
-  }, [status, fetchGames]);
-
   const game = allGames.find((g) => g.id === Number(gameId));
 
-  useEffect(() => {
-    if (game && tablesStatus === 'idle') {
-      fetchAllTables(game.id, game.numberOfRounds);
-    }
-  }, [game, tablesStatus, fetchAllTables]);
+  const hasRounds = game && game.rounds && game.rounds.length > 0;
+  const { data: allTables = [], isLoading: tablesLoading } =
+    useGetAllTablesForGameQuery(
+      {
+        gameId: game?.id ?? 0,
+        numberOfRounds: game?.numberOfRounds ?? 0,
+      },
+      { skip: !hasRounds },
+    );
 
-  if (status === 'pending' || status === 'idle') {
+  if (status === 'pending' || status === 'idle' || tablesLoading) {
     return <CenterLoader />;
   }
 

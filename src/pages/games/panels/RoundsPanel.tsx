@@ -14,16 +14,13 @@ import {
 import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 
+import { useGetAllTablesForGameQuery } from '../../../api/rtkQueryApi';
 import type { Table } from '../../../generated';
 import { GameStatusEnum } from '../../../generated';
-import useGames from '../../../slices/games/hooks';
-import useTables from '../../../slices/tables/hooks';
-import { selectTablesForRoundWithSearch } from '../../../slices/tables/slice';
-import useTeams from '../../../slices/teams/hooks';
-import { Game } from '../../../slices/types';
-import { RootState } from '../../../store/store';
+import useGames from '../../../hooks/useGames';
+import useTeams from '../../../hooks/useTeams';
+import { Game } from '../../../types';
 import { PlayerScoreRow } from '../components/PlayerScoreRow';
 import ScoreEntryModal from '../components/ScoreEntryModal';
 
@@ -35,13 +32,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
   const { setupGame, status: gamesStatus } = useGames();
   const { allTeams } = useTeams();
-  const {
-    tables: allTables,
-    status: tablesStatus,
-    error: tablesError,
-    fetchAllTables,
-    updateScores,
-  } = useTables();
 
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
@@ -51,7 +41,23 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const canEditScores = game.status === GameStatusEnum.InProgress;
   const canSetupMatchmaking = game.status === GameStatusEnum.Setup;
   const hasRounds = (game.rounds?.length || 0) > 0;
+
+  // Fetch all tables for the game using RTK Query
+  const {
+    data: allTables = [],
+    isLoading: tablesLoading,
+    error: tablesError,
+  } = useGetAllTablesForGameQuery(
+    { gameId: game.id, numberOfRounds: game.numberOfRounds },
+    { skip: !hasRounds },
+  );
+
   const isSetupMode = !hasRounds || allTables.length === 0;
+  const tablesStatus = tablesLoading
+    ? 'pending'
+    : tablesError
+      ? 'failed'
+      : 'succeeded';
 
   const roundOptions = useMemo(
     () =>
@@ -74,22 +80,33 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     localStorage.setItem(`selected_round_for_game_${game.id}`, selectedRound);
   }, [selectedRound, game.id]);
 
-  const filteredAndSortedTables = useSelector((state: RootState) =>
-    selectTablesForRoundWithSearch(state, Number(selectedRound), searchQuery),
-  );
+  // Filter and sort tables locally
+  const filteredAndSortedTables = useMemo(() => {
+    let filtered = allTables.filter(
+      (table) =>
+        table.roundNumber === Number(selectedRound) &&
+        table.players &&
+        table.players.length > 0,
+    );
 
-  useEffect(() => {
-    if (!game.id || !hasRounds || tablesStatus !== 'idle') return;
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((table) =>
+        table.players?.some((player) =>
+          player.name?.toLowerCase().includes(query),
+        ),
+      );
+    }
 
-    fetchAllTables(game.id, game.numberOfRounds);
-  }, [game.id, hasRounds, tablesStatus, fetchAllTables, game.numberOfRounds]);
+    return filtered.sort((a, b) => a.tableNumber - b.tableNumber);
+  }, [allTables, selectedRound, searchQuery]);
 
   const handleSetupGame = async () => {
     setSetupError(null);
 
     try {
       await setupGame(game.id);
-      fetchAllTables(game.id, game.numberOfRounds);
+      // RTK Query will automatically refetch tables after setup
     } catch (err) {
       const errorMessage =
         (
@@ -109,34 +126,27 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     setScoreModalOpen(true);
   };
 
-  const handleSubmitScores = async (
-    scores: { playerID: number; score: number }[],
-  ) => {
-    if (!selectedTable) return;
-
-    try {
-      updateScores(
-        game.id,
-        Number(selectedRound),
-        selectedTable.tableNumber,
-        scores,
-      );
-      setScoreModalOpen(false);
-    } catch (err) {
-      setSetupError(
-        err instanceof Error ? err.message : t('actions.errorOccurred'),
-      );
-    }
-  };
-
   const hasScores = (table: Table) => table.scores && table.scores.length > 0;
 
   const settingUp = gamesStatus === 'pending';
   const loading = tablesStatus === 'pending';
+
+  // Handle RTK Query errors
+  const tablesErrorMessage = tablesError
+    ? typeof tablesError === 'object' &&
+      true &&
+      'status' in tablesError &&
+      'data' in tablesError
+      ? typeof tablesError.data === 'string'
+        ? tablesError.data
+        : JSON.stringify(tablesError.data)
+      : String(tablesError)
+    : null;
+
   const displayError =
     setupError ||
-    (tablesStatus === 'failed' && !tablesError?.includes('404')
-      ? tablesError
+    (tablesStatus === 'failed' && !tablesErrorMessage?.includes('404')
+      ? tablesErrorMessage
       : null);
 
   return (
@@ -332,11 +342,11 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       )}
 
       <ScoreEntryModal
+        gameId={game.id}
         isOpen={scoreModalOpen}
         roundNumber={Number(selectedRound)}
         table={selectedTable}
         onClose={() => setScoreModalOpen(false)}
-        onSubmit={handleSubmitScores}
       />
     </Stack>
   );
