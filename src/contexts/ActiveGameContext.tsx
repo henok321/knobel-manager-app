@@ -14,12 +14,6 @@ const ActiveGameContext = createContext<ActiveGameContextType | undefined>(
   undefined,
 );
 
-/**
- * Provides active game state with localStorage persistence.
- *
- * This replaces the Redux games slice for UI state management.
- * Use this for client-side state that needs to persist across refreshes.
- */
 export const ActiveGameProvider = ({ children }: { children: ReactNode }) => {
   const [activeGameId, setActiveGameIdState] = useState<number | null>(
     loadActiveGameIdFromStorage,
@@ -37,15 +31,6 @@ export const ActiveGameProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-/**
- * Hook to access and update the active game ID.
- *
- * @throws {Error} If used outside of ActiveGameProvider
- *
- * @example
- * const { activeGameId, setActiveGameId } = useActiveGame();
- * setActiveGameId(123);
- */
 // eslint-disable-next-line react-refresh/only-export-components
 export const useActiveGame = () => {
   const context = useContext(ActiveGameContext);

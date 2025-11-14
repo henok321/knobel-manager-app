@@ -1,9 +1,5 @@
 const STORAGE_KEY = 'active_game_id';
 
-/**
- * Loads the active game ID from localStorage on initialization.
- * Handles parse errors and invalid data gracefully.
- */
 export const loadActiveGameIdFromStorage = (): number | null => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -17,10 +13,6 @@ export const loadActiveGameIdFromStorage = (): number | null => {
   }
 };
 
-/**
- * Saves the active game ID to localStorage.
- * Handles quota exceeded and private browsing mode gracefully.
- */
 export const saveActiveGameIdToStorage = (id: number | null): void => {
   try {
     if (id === null) {
