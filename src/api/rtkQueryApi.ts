@@ -1,22 +1,15 @@
 import {
   enhancedApi,
   type Table,
-  type GameCreateRequest,
-  type GameResponse,
-  type GetGamesApiResponse,
-  type UpdateGameApiArg,
-  type CreateTeamApiArg,
-  type UpdateTeamApiArg,
-  type UpdatePlayerApiArg,
   type UpdateScoresApiArg,
+  type GameResponse,
+  type GameCreateRequest,
 } from '../generated/api';
 
 export type TableWithRound = Table & { roundNumber: number };
 
-// Enhance the generated API with custom logic
 export const api = enhancedApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Custom endpoint: Fetch all tables for all rounds in a game
     getAllTablesForGame: builder.query<
       TableWithRound[],
       { gameId: number; numberOfRounds: number }
@@ -49,16 +42,12 @@ export const api = enhancedApi.injectEndpoints({
 
         return { data: allTables };
       },
-      providesTags: (result, _error, { gameId }) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Tables' as const, id })),
-              { type: 'Tables', id: `GAME-${gameId}` },
-            ]
-          : [{ type: 'Tables', id: `GAME-${gameId}` }],
+      providesTags: (_result, _error, { gameId }) => [
+        { type: 'Tables', id: `GAME-${gameId}` },
+      ],
     }),
 
-    // Override getTables to add roundNumber to response and improve tag granularity
+    // Override getTables to add roundNumber to response
     getTables: builder.query<
       TableWithRound[],
       { gameId: number; roundNumber: number }
@@ -76,16 +65,11 @@ export const api = enhancedApi.injectEndpoints({
           ...table,
           roundNumber: arg.roundNumber,
         })),
-      providesTags: (result, _error, { gameId, roundNumber }) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Tables' as const, id })),
-              { type: 'Tables', id: `ROUND-${gameId}-${roundNumber}` },
-            ]
-          : [{ type: 'Tables', id: `ROUND-${gameId}-${roundNumber}` }],
+      providesTags: (_result, _error, { gameId, roundNumber }) => [
+        { type: 'Tables', id: `ROUND-${gameId}-${roundNumber}` },
+      ],
     }),
 
-    // Override updateScores to add optimistic updates
     updateScores: builder.mutation<GameResponse, UpdateScoresApiArg>({
       query: ({ gameId, roundNumber, tableNumber, scoresRequest }) => ({
         url: `/games/${gameId}/rounds/${roundNumber}/tables/${tableNumber}/scores`,
@@ -96,22 +80,31 @@ export const api = enhancedApi.injectEndpoints({
         { gameId, roundNumber, tableNumber, scoresRequest },
         { dispatch, queryFulfilled },
       ) {
-        const patchResult = dispatch(
+        const patchGetTables = dispatch(
           api.util.updateQueryData(
             'getTables',
             { gameId, roundNumber },
             (draft) => {
               const table = draft.find((t) => t.tableNumber === tableNumber);
-              if (table && table.players) {
-                // Update scores optimistically
-                table.players = table.players.map((player) => {
-                  const scoreUpdate = scoresRequest.scores.find(
-                    (s) => s.playerID === player.id,
+              if (table) {
+                if (!table.scores) {
+                  table.scores = [];
+                }
+                scoresRequest.scores.forEach((scoreUpdate) => {
+                  const existingScore = table.scores?.find(
+                    (s) => s.playerID === scoreUpdate.playerID,
                   );
-                  if (scoreUpdate) {
-                    return { ...player, score: scoreUpdate.score };
+                  if (existingScore) {
+                    existingScore.score = scoreUpdate.score;
+                  } else {
+                    // Add new score entry with placeholder id and tableID
+                    table.scores?.push({
+                      id: 0,
+                      tableID: table.id,
+                      playerID: scoreUpdate.playerID,
+                      score: scoreUpdate.score,
+                    });
                   }
-                  return player;
                 });
               }
             },
@@ -121,90 +114,25 @@ export const api = enhancedApi.injectEndpoints({
         try {
           await queryFulfilled;
         } catch {
-          patchResult.undo();
+          patchGetTables.undo();
         }
       },
-      async onCacheEntryAdded(
-        { gameId, roundNumber },
-        { dispatch, cacheDataLoaded },
-      ) {
-        await cacheDataLoaded;
-        dispatch(
-          api.util.invalidateTags([
-            { type: 'Tables', id: `ROUND-${gameId}-${roundNumber}` },
-            { type: 'Scores' },
-          ]),
-        );
-      },
-    }),
-
-    // Override setupGame to trigger refetches
-    setupGame: builder.mutation<unknown, number>({
-      query: (gameId) => ({
-        url: `/games/${gameId}/setup`,
-        method: 'POST',
-      }),
-      async onQueryStarted(gameId, { dispatch, queryFulfilled }) {
-        await queryFulfilled;
-        dispatch(
-          api.endpoints.getGame.initiate(gameId, { forceRefetch: true }),
-        );
-        dispatch(
-          api.endpoints.getGames.initiate(undefined, { forceRefetch: true }),
-        );
-      },
-      invalidatesTags: (_result, _error, gameId) => [
-        { type: 'Games', id: gameId },
-        { type: 'Games', id: 'LIST' },
-        { type: 'Tables', id: 'LIST' },
+      invalidatesTags: (_result, _error, { gameId, roundNumber }) => [
+        { type: 'Tables', id: `ROUND-${gameId}-${roundNumber}` },
+        { type: 'Tables', id: `GAME-${gameId}` },
+        { type: 'Scores' },
       ],
     }),
 
-    // Override getGames to improve tag granularity
-    getGames: builder.query<GetGamesApiResponse, void>({
-      query: () => ({ url: '/games', method: 'GET' }),
-      providesTags: (result) =>
-        result?.games
-          ? [
-              ...result.games.map((game) => ({
-                type: 'Games' as const,
-                id: game.id,
-              })),
-              { type: 'Games', id: 'LIST' },
-            ]
-          : [{ type: 'Games', id: 'LIST' }],
-    }),
-
-    // Override getGame to add id-based tag
-    getGame: builder.query<GameResponse, number>({
-      query: (gameId) => ({ url: `/games/${gameId}`, method: 'GET' }),
-      providesTags: (_result, _error, id) => [{ type: 'Games', id }],
-    }),
-
-    // Override createGame to invalidate LIST tag
     createGame: builder.mutation<GameResponse, GameCreateRequest>({
-      query: (gameRequest) => ({
+      query: (gameCreateRequest) => ({
         url: '/games',
         method: 'POST',
-        body: gameRequest,
+        body: gameCreateRequest,
       }),
       invalidatesTags: [{ type: 'Games', id: 'LIST' }],
     }),
 
-    // Override updateGame to invalidate both specific game and LIST
-    updateGame: builder.mutation<GameResponse, UpdateGameApiArg>({
-      query: ({ gameId, gameUpdateRequest }) => ({
-        url: `/games/${gameId}`,
-        method: 'PUT',
-        body: gameUpdateRequest,
-      }),
-      invalidatesTags: (_result, _error, { gameId }) => [
-        { type: 'Games', id: gameId },
-        { type: 'Games', id: 'LIST' },
-      ],
-    }),
-
-    // Override deleteGame to invalidate both specific game and LIST
     deleteGame: builder.mutation<void, number>({
       query: (gameId) => ({
         url: `/games/${gameId}`,
@@ -216,69 +144,14 @@ export const api = enhancedApi.injectEndpoints({
       ],
     }),
 
-    // Override createTeam to invalidate Game and add LIST tags
-    createTeam: builder.mutation<GameResponse, CreateTeamApiArg>({
-      query: ({ gameId, teamsRequest }) => ({
-        url: `/games/${gameId}/teams`,
+    setupGame: builder.mutation<unknown, number>({
+      query: (gameId) => ({
+        url: `/games/${gameId}/setup`,
         method: 'POST',
-        body: teamsRequest,
       }),
-      invalidatesTags: (_result, _error, { gameId }) => [
+      invalidatesTags: (_result, _error, gameId) => [
         { type: 'Games', id: gameId },
-        { type: 'Teams', id: 'LIST' },
-        { type: 'Players', id: 'LIST' },
-      ],
-    }),
-
-    // Override updateTeam to use id-based tag
-    updateTeam: builder.mutation<GameResponse, UpdateTeamApiArg>({
-      query: ({ gameId, teamId, teamsRequest }) => ({
-        url: `/games/${gameId}/teams/${teamId}`,
-        method: 'PUT',
-        body: teamsRequest,
-      }),
-      invalidatesTags: (_result, _error, { teamId }) => [
-        { type: 'Teams', id: teamId },
-      ],
-    }),
-
-    // Override deleteTeam to invalidate Game and team-specific tags
-    deleteTeam: builder.mutation<void, { gameId: number; teamId: number }>({
-      query: ({ gameId, teamId }) => ({
-        url: `/games/${gameId}/teams/${teamId}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: (_result, _error, { gameId, teamId }) => [
-        { type: 'Games', id: gameId },
-        { type: 'Teams', id: teamId },
-        { type: 'Teams', id: 'LIST' },
-      ],
-    }),
-
-    // Override updatePlayer to use id-based tag
-    updatePlayer: builder.mutation<GameResponse, UpdatePlayerApiArg>({
-      query: ({ gameId, teamId, playerId, playersRequest }) => ({
-        url: `/games/${gameId}/teams/${teamId}/players/${playerId}`,
-        method: 'PUT',
-        body: playersRequest,
-      }),
-      invalidatesTags: (_result, _error, { playerId }) => [
-        { type: 'Players', id: playerId },
-      ],
-    }),
-
-    // Override deletePlayer to invalidate both player and team
-    deletePlayer: builder.mutation<
-      void,
-      { gameId: number; teamId: number; playerId: number }
-    >({
-      query: ({ gameId, teamId, playerId }) => ({
-        url: `/games/${gameId}/teams/${teamId}/players/${playerId}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: (_result, _error, { playerId, teamId }) => [
-        { type: 'Players', id: playerId },
-        { type: 'Teams', id: teamId },
+        { type: 'Tables', id: `GAME-${gameId}` },
       ],
     }),
   }),
@@ -288,14 +161,17 @@ export const api = enhancedApi.injectEndpoints({
 export const {
   useGetAllTablesForGameQuery,
   useUpdateScoresMutation,
+  useCreateGameMutation,
+  useDeleteGameMutation,
+  useSetupGameMutation,
+} = api;
+
+export {
+  useGetGamesQuery,
+  useUpdateGameMutation,
   useCreateTeamMutation,
   useUpdateTeamMutation,
   useDeleteTeamMutation,
   useUpdatePlayerMutation,
   useDeletePlayerMutation,
-  useGetGamesQuery,
-  useCreateGameMutation,
-  useUpdateGameMutation,
-  useDeleteGameMutation,
-  useSetupGameMutation,
-} = api;
+} from '../generated/api';

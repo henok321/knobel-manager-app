@@ -20,7 +20,6 @@ const TablePlanView = ({
 }: TablePlanViewProps) => {
   const { t } = useTranslation(['pdf', 'common']);
 
-  // Group tables by round
   const tablesByRound: Record<number, typeof tables> = {};
   tables.forEach((table) => {
     if (table.roundNumber) {

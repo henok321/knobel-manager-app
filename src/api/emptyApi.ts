@@ -23,10 +23,9 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-// Exported for use by generated API code (src/generated/api.ts)
 export const api = createApi({
   reducerPath: 'api',
   baseQuery,
-  tagTypes: ['Game', 'Team', 'Player', 'Table', 'Score'],
+  tagTypes: [],
   endpoints: () => ({}),
 });
