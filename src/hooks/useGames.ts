@@ -1,10 +1,6 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
-import type {
-  GameCreateRequest,
-  GameUpdateRequest,
-} from '../api/generatedEndpoints';
 import {
   selectAllGamesNormalized,
   selectGameByIdNormalized,
@@ -17,6 +13,7 @@ import {
   useSetupGameMutation,
 } from '../api/rtkQueryApi';
 import { useActiveGame } from '../contexts/ActiveGameContext';
+import type { GameCreateRequest, GameUpdateRequest } from '../generated/api';
 import type { RootState } from '../store/store';
 
 const useGames = () => {

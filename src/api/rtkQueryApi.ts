@@ -9,7 +9,7 @@ import {
   type UpdateTeamApiArg,
   type UpdatePlayerApiArg,
   type UpdateScoresApiArg,
-} from './generatedEndpoints';
+} from '../generated/api';
 
 export type TableWithRound = Table & { roundNumber: number };
 

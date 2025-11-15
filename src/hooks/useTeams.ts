@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
-import type { TeamsRequest } from '../api/generatedEndpoints';
 import { selectAllTeamsNormalized } from '../api/normalizedSelectors';
 import {
   useCreateTeamMutation,
   useUpdateTeamMutation,
   useDeleteTeamMutation,
 } from '../api/rtkQueryApi';
+import type { TeamsRequest } from '../generated/api';
 import type { RootState } from '../store/store';
 
 const useTeams = () => {

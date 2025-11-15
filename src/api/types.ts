@@ -15,7 +15,7 @@ export type {
   TablesResponse,
   Score,
   ScoresRequest,
-} from './generatedEndpoints';
+} from '../generated/api';
 
 // Game status type and enum for compatibility
 export type GameStatus = 'setup' | 'in_progress' | 'completed';

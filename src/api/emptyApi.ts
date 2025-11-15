@@ -23,6 +23,7 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+// Exported for use by generated API code (src/generated/api.ts)
 export const api = createApi({
   reducerPath: 'api',
   baseQuery,
