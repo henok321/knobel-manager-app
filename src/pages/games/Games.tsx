@@ -17,11 +17,11 @@ import { useTranslation } from 'react-i18next';
 
 import GameListItem from './components/GameListItem';
 import GameForm, { GameFormData } from './GameForm';
+import { GameStatusEnum } from '../../api/types';
 import Breadcrumbs from '../../components/Breadcrumbs';
-import { GameStatusEnum } from '../../generated';
+import useGames from '../../hooks/useGames';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
-import useGames from '../../slices/games/hooks';
 
 const Games = () => {
   const {

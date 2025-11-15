@@ -1,5 +1,5 @@
 import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -7,10 +7,13 @@ import {
   mapPlayersToRankings,
   mapTeamsToRankings,
 } from './rankingsMapper.ts';
-import usePlayers from '../../../slices/players/hooks.ts';
-import useTables, { useTablesByRound } from '../../../slices/tables/hooks.ts';
-import useTeams, { useTeamsByIds } from '../../../slices/teams/hooks.ts';
-import { Game } from '../../../slices/types';
+import {
+  useGetGameQuery,
+  type TableWithRound,
+} from '../../../api/rtkQueryApi.ts';
+import usePlayers from '../../../hooks/usePlayers';
+import useTeams, { useTeamsByIds } from '../../../hooks/useTeams';
+import { Game } from '../../../types';
 import { PlayerRankingRow, TeamRankingRow } from '../components/RankingRow';
 
 interface RankingsPanelProps {
@@ -23,7 +26,18 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
 
   useTeams();
   const { allPlayers } = usePlayers();
-  const { fetchAllTables, status } = useTables();
+
+  const { data: gameData, isLoading } = useGetGameQuery({ gameId: game.id });
+
+  const allTables = useMemo<TableWithRound[]>(() => {
+    if (!gameData?.rounds) return [];
+    return gameData.rounds.flatMap((round) =>
+      (round.tables || []).map((table) => ({
+        ...table,
+        roundNumber: round.roundNumber,
+      })),
+    );
+  }, [gameData]);
 
   const gameTeams = useTeamsByIds(game.teams);
 
@@ -38,20 +52,14 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     [game.numberOfRounds, t],
   );
 
-  const roundsCount = useMemo(
-    () => game.rounds?.length || 0,
-    [game.rounds?.length],
-  );
-
-  useEffect(() => {
-    if (roundsCount > 0 && status === 'idle') {
-      fetchAllTables(game.id, game.numberOfRounds);
+  const filteredTables = useMemo(() => {
+    if (selectedRound === 'total') {
+      return allTables;
     }
-  }, [roundsCount, status, fetchAllTables, game.id, game.numberOfRounds]);
-
-  const filteredTables = useTablesByRound(
-    selectedRound === 'total' ? null : Number(selectedRound),
-  );
+    return allTables.filter(
+      (table) => table.roundNumber === Number(selectedRound),
+    );
+  }, [allTables, selectedRound]);
 
   const allScores = useMemo(
     () => aggregateScoresFromTables(filteredTables),
@@ -73,9 +81,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     [gameTeams, playerRankings],
   );
 
-  const loading = status === 'pending';
-
-  if (loading) {
+  if (isLoading) {
     return (
       <Text c="dimmed" ta="center">
         {t('actions.loading')}

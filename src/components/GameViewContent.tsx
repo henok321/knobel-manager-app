@@ -15,13 +15,17 @@ import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GameStatusEnum, GameUpdateRequest } from '../generated';
+import { useGetGameQuery, type TableWithRound } from '../api/rtkQueryApi';
+import {
+  GameStatusEnum,
+  GameUpdateRequest,
+  type GameStatus,
+} from '../api/types';
+import useGames from '../hooks/useGames';
 import RankingsPanel from '../pages/games/panels/RankingsPanel';
 import RoundsPanel from '../pages/games/panels/RoundsPanel';
 import TeamsPanel from '../pages/games/panels/TeamsPanel';
-import useGames from '../slices/games/hooks';
-import useTables from '../slices/tables/hooks';
-import { Game } from '../slices/types';
+import { Game } from '../types';
 
 const PrintMenu = lazy(() => import('./PrintMenu'));
 
@@ -32,7 +36,18 @@ interface GameViewContentProps {
 const GameViewContent = ({ game }: GameViewContentProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
   const { updateGame } = useGames();
-  const { tables: allTables } = useTables();
+
+  const { data: gameData } = useGetGameQuery({ gameId: game.id });
+
+  const allTables = useMemo<TableWithRound[]>(() => {
+    if (!gameData?.rounds) return [];
+    return gameData.rounds.flatMap((round) =>
+      (round.tables || []).map((table) => ({
+        ...table,
+        roundNumber: round.roundNumber,
+      })),
+    );
+  }, [gameData]);
 
   const getDefaultTab = () => {
     switch (game.status) {
@@ -92,7 +107,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const canComplete = scoreProgress.canComplete;
 
-  const handleStatusTransition = (newStatus: GameStatusEnum) => {
+  const handleStatusTransition = (newStatus: GameStatus) => {
     const gameRequest: GameUpdateRequest = {
       name: game.name,
       numberOfRounds: game.numberOfRounds,

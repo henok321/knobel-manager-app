@@ -5,8 +5,15 @@
     "dist/**",
     "build/**",
     "src/generated/**",
-    "src/test/**"
+    "src/test/**",
+    "openapi-config.js",
+    "src/api/emptyApi.ts"
   ],
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true
+  },
+  "ignoreDependencies": ["@rtk-query/codegen-openapi"],
   "jest": {
     "config": ["jest.config.js"],
     "entry": ["jest.setup.js"]

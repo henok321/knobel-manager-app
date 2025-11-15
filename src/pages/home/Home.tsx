@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import useGames from '../../hooks/useGames';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
-import useGames from '../../slices/games/hooks';
 
 const Home = () => {
   const { t } = useTranslation(['home', 'common']);
