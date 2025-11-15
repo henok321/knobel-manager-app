@@ -4,7 +4,7 @@ import { api } from './rtkQueryApi';
 import type { Game, Team, Player } from '../types';
 
 const selectNormalizedGamesData = createSelector(
-  [(state) => api.endpoints.getGames.select()(state)],
+  [(state) => api.endpoints.getGames.select(undefined)(state)],
   (gamesResult) => {
     if (!gamesResult.data) {
       return {
