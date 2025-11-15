@@ -25,6 +25,3 @@ export const GameStatusEnum = {
   InProgress: 'in_progress' as const,
   Completed: 'completed' as const,
 };
-
-export type GameStatusEnumType =
-  (typeof GameStatusEnum)[keyof typeof GameStatusEnum];

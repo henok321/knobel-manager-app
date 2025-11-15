@@ -1,4 +1,3 @@
-import type { BaseQueryFn, FetchArgs } from '@reduxjs/toolkit/query';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { auth as firebaseAuth } from '../auth/firebaseConfig';
@@ -24,18 +23,9 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-export const baseQueryWithReauth: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  unknown
-> = async (args, api, extraOptions) => {
-  const result = await baseQuery(args, api, extraOptions);
-  return result;
-};
-
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: baseQueryWithReauth,
+  baseQuery,
   tagTypes: ['Game', 'Team', 'Player', 'Table', 'Score'],
   endpoints: () => ({}),
 });

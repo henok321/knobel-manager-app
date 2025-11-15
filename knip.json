@@ -5,8 +5,14 @@
     "dist/**",
     "build/**",
     "src/generated/**",
-    "src/test/**"
+    "src/api/generatedEndpoints.ts",
+    "src/test/**",
+    "openapi-config.js"
   ],
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true
+  },
   "jest": {
     "config": ["jest.config.js"],
     "entry": ["jest.setup.js"]

@@ -287,7 +287,6 @@ export const api = enhancedApi.injectEndpoints({
 
 export const {
   useGetAllTablesForGameQuery,
-  useGetTablesQuery,
   useUpdateScoresMutation,
   useCreateTeamMutation,
   useUpdateTeamMutation,
@@ -295,7 +294,6 @@ export const {
   useUpdatePlayerMutation,
   useDeletePlayerMutation,
   useGetGamesQuery,
-  useGetGameQuery,
   useCreateGameMutation,
   useUpdateGameMutation,
   useDeleteGameMutation,
