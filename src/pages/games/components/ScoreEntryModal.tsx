@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useUpdateScoresMutation } from '../../../api/rtkQueryApi';
-import type { Player, Table } from '../../../generated';
+import type { Player, Table } from '../../../api/types';
 
 interface ScoreEntryModalProps {
   isOpen: boolean;
@@ -51,7 +51,7 @@ const ScoreEntryModal = ({
         gameId,
         roundNumber,
         tableNumber: table.tableNumber,
-        scores: scoresArray,
+        scoresRequest: { scores: scoresArray },
       }).unwrap();
 
       notifications.show({

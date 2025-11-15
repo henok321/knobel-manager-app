@@ -1,6 +1,10 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
+import type {
+  GameCreateRequest,
+  GameUpdateRequest,
+} from '../api/generatedEndpoints';
 import {
   selectAllGamesNormalized,
   selectGameByIdNormalized,
@@ -13,7 +17,6 @@ import {
   useSetupGameMutation,
 } from '../api/rtkQueryApi';
 import { useActiveGame } from '../contexts/ActiveGameContext';
-import type { GameCreateRequest, GameUpdateRequest } from '../generated';
 import type { RootState } from '../store/store';
 
 const useGames = () => {
@@ -61,7 +64,10 @@ const useGames = () => {
 
   const updateGame = useCallback(
     async (gameID: number, gameRequest: GameUpdateRequest) => {
-      await updateGameMutation({ gameId: gameID, gameRequest }).unwrap();
+      await updateGameMutation({
+        gameId: gameID,
+        gameUpdateRequest: gameRequest,
+      }).unwrap();
     },
     [updateGameMutation],
   );

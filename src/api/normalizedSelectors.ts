@@ -1,7 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import { api } from './rtkQueryApi';
-import type { Game as ApiGame } from '../generated';
 import type { Game, Team, Player } from '../types';
 
 const selectNormalizedGamesData = createSelector(
@@ -19,7 +18,7 @@ const selectNormalizedGamesData = createSelector(
     const teams: Record<number, Team> = {};
     const players: Record<number, Player> = {};
 
-    gamesResult.data.games.forEach((apiGame: ApiGame) => {
+    gamesResult.data.games.forEach((apiGame) => {
       games[apiGame.id] = {
         id: apiGame.id,
         name: apiGame.name,

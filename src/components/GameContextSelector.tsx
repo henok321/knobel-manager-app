@@ -20,11 +20,11 @@ import { CSSProperties, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { GameStatusEnum } from '../generated';
+import { GameStatusEnum, type GameStatus } from '../api/types';
 import useGames from '../hooks/useGames';
 import { Game } from '../types';
 
-const getStatusColor = (status: GameStatusEnum) => {
+const getStatusColor = (status: GameStatus) => {
   switch (status) {
     case GameStatusEnum.Setup:
       return 'gray';

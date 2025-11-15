@@ -1,4 +1,4 @@
-import { Score, Table as TableModel } from '../../../generated/models';
+import { Score, Table as TableModel } from '../../../api/types';
 import { Player, Team } from '../../../types';
 
 interface PlayerRanking {

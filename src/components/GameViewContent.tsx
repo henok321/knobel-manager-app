@@ -16,7 +16,11 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetAllTablesForGameQuery } from '../api/rtkQueryApi';
-import { GameStatusEnum, GameUpdateRequest } from '../generated';
+import {
+  GameStatusEnum,
+  GameUpdateRequest,
+  type GameStatus,
+} from '../api/types';
 import useGames from '../hooks/useGames';
 import RankingsPanel from '../pages/games/panels/RankingsPanel';
 import RoundsPanel from '../pages/games/panels/RoundsPanel';
@@ -97,7 +101,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const canComplete = scoreProgress.canComplete;
 
-  const handleStatusTransition = (newStatus: GameStatusEnum) => {
+  const handleStatusTransition = (newStatus: GameStatus) => {
     const gameRequest: GameUpdateRequest = {
       name: game.name,
       numberOfRounds: game.numberOfRounds,

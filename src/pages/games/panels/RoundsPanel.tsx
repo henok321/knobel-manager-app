@@ -16,8 +16,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetAllTablesForGameQuery } from '../../../api/rtkQueryApi';
-import type { Table } from '../../../generated';
-import { GameStatusEnum } from '../../../generated';
+import type { Table } from '../../../api/types';
+import { GameStatusEnum } from '../../../api/types';
 import useGames from '../../../hooks/useGames';
 import useTeams from '../../../hooks/useTeams';
 import { Game } from '../../../types';

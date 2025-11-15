@@ -21,8 +21,8 @@ import {
   useUpdatePlayerMutation,
   useGetAllTablesForGameQuery,
 } from '../../../api/rtkQueryApi';
+import { GameStatusEnum } from '../../../api/types';
 import EditTeamDialog from '../../../components/EditTeamDialog';
-import { GameStatusEnum } from '../../../generated';
 import usePlayers from '../../../hooks/usePlayers';
 import useTeams from '../../../hooks/useTeams';
 import { Game } from '../../../types';
@@ -104,7 +104,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     try {
       await createTeamMutation({
         gameId: game.id,
-        teamRequest: teamsRequest,
+        teamsRequest: teamsRequest,
       }).unwrap();
       setIsTeamFormOpen(false);
     } catch {
@@ -130,7 +130,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         await updateTeamMutation({
           gameId: game.id,
           teamId: editingTeamId,
-          name: teamName,
+          teamsRequest: { name: teamName },
         }).unwrap();
 
         // Update all player names
@@ -140,7 +140,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
               gameId: game.id,
               teamId: team.id,
               playerId: player.id,
-              name: player.name,
+              playersRequest: { name: player.name },
             }).unwrap(),
           ),
         );
