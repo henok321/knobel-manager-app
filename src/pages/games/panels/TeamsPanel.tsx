@@ -19,7 +19,8 @@ import {
   useDeleteTeamMutation,
   useUpdateTeamMutation,
   useUpdatePlayerMutation,
-  useGetAllTablesForGameQuery,
+  useGetGameQuery,
+  type TableWithRound,
 } from '../../../api/rtkQueryApi';
 import { GameStatusEnum } from '../../../api/types';
 import EditTeamDialog from '../../../components/EditTeamDialog';
@@ -43,11 +44,18 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const [deleteTeamMutation] = useDeleteTeamMutation();
   const [updatePlayerMutation] = useUpdatePlayerMutation();
 
-  // RTK Query for tables
-  const { data: allTables = [] } = useGetAllTablesForGameQuery(
-    { gameId: game.id, numberOfRounds: game.numberOfRounds },
-    { skip: !game.rounds || game.rounds.length === 0 },
-  );
+  // RTK Query for game data
+  const { data: gameData } = useGetGameQuery({ gameId: game.id });
+
+  const allTables = useMemo<TableWithRound[]>(() => {
+    if (!gameData?.rounds) return [];
+    return gameData.rounds.flatMap((round) =>
+      (round.tables || []).map((table) => ({
+        ...table,
+        roundNumber: round.roundNumber,
+      })),
+    );
+  }, [gameData]);
 
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);

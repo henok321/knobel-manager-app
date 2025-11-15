@@ -15,7 +15,7 @@ import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetAllTablesForGameQuery } from '../api/rtkQueryApi';
+import { useGetGameQuery, type TableWithRound } from '../api/rtkQueryApi';
 import {
   GameStatusEnum,
   GameUpdateRequest,
@@ -37,11 +37,17 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
   const { updateGame } = useGames();
 
-  const hasRounds = game.rounds && game.rounds.length > 0;
-  const { data: allTables = [] } = useGetAllTablesForGameQuery(
-    { gameId: game.id, numberOfRounds: game.numberOfRounds },
-    { skip: !hasRounds },
-  );
+  const { data: gameData } = useGetGameQuery({ gameId: game.id });
+
+  const allTables = useMemo<TableWithRound[]>(() => {
+    if (!gameData?.rounds) return [];
+    return gameData.rounds.flatMap((round) =>
+      (round.tables || []).map((table) => ({
+        ...table,
+        roundNumber: round.roundNumber,
+      })),
+    );
+  }, [gameData]);
 
   const getDefaultTab = () => {
     switch (game.status) {

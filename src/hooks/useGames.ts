@@ -40,14 +40,14 @@ const useGames = () => {
 
   const createGame = useCallback(
     async (gameRequest: GameCreateRequest) => {
-      await createGameMutation(gameRequest).unwrap();
+      await createGameMutation({ gameCreateRequest: gameRequest }).unwrap();
     },
     [createGameMutation],
   );
 
   const deleteGame = useCallback(
     async (gameID: number) => {
-      await deleteGameMutation(gameID).unwrap();
+      await deleteGameMutation({ gameId: gameID }).unwrap();
     },
     [deleteGameMutation],
   );
@@ -71,7 +71,7 @@ const useGames = () => {
 
   const setupGame = useCallback(
     async (gameID: number) => {
-      await setupGameMutation(gameID).unwrap();
+      await setupGameMutation({ gameId: gameID }).unwrap();
     },
     [setupGameMutation],
   );
