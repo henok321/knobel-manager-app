@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import { TablesResponse } from '../../generated';
+import { TablesResponse } from '../../api/types';
 
 const BASE_URL = 'http://localhost/api';
 

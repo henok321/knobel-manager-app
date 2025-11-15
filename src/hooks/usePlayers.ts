@@ -22,7 +22,7 @@ const usePlayers = () => {
         gameId: gameID,
         teamId: teamID,
         playerId: playerID,
-        name,
+        playersRequest: { name },
       }).unwrap();
     },
     [updatePlayerMutation],

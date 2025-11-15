@@ -1,11 +1,10 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import { api } from './rtkQueryApi';
-import type { Game as ApiGame } from '../generated';
 import type { Game, Team, Player } from '../types';
 
 const selectNormalizedGamesData = createSelector(
-  [(state) => api.endpoints.getGames.select()(state)],
+  [(state) => api.endpoints.getGames.select(undefined)(state)],
   (gamesResult) => {
     if (!gamesResult.data) {
       return {
@@ -19,7 +18,7 @@ const selectNormalizedGamesData = createSelector(
     const teams: Record<number, Team> = {};
     const players: Record<number, Player> = {};
 
-    gamesResult.data.games.forEach((apiGame: ApiGame) => {
+    gamesResult.data.games.forEach((apiGame) => {
       games[apiGame.id] = {
         id: apiGame.id,
         name: apiGame.name,
@@ -61,7 +60,7 @@ export const selectAllGamesNormalized = createSelector(
 
 export const selectGameByIdNormalized = (gameId: number | null) =>
   createSelector([selectNormalizedGamesData], (normalized) =>
-    gameId ? normalized.games[gameId] : undefined,
+    gameId !== null ? normalized.games[gameId] : undefined,
   );
 
 export const selectAllTeamsNormalized = createSelector(

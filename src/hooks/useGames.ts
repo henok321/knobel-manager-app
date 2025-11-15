@@ -13,7 +13,7 @@ import {
   useSetupGameMutation,
 } from '../api/rtkQueryApi';
 import { useActiveGame } from '../contexts/ActiveGameContext';
-import type { GameCreateRequest, GameUpdateRequest } from '../generated';
+import type { GameCreateRequest, GameUpdateRequest } from '../generated/api';
 import type { RootState } from '../store/store';
 
 const useGames = () => {
@@ -40,14 +40,14 @@ const useGames = () => {
 
   const createGame = useCallback(
     async (gameRequest: GameCreateRequest) => {
-      await createGameMutation(gameRequest).unwrap();
+      await createGameMutation({ gameCreateRequest: gameRequest }).unwrap();
     },
     [createGameMutation],
   );
 
   const deleteGame = useCallback(
     async (gameID: number) => {
-      await deleteGameMutation(gameID).unwrap();
+      await deleteGameMutation({ gameId: gameID }).unwrap();
     },
     [deleteGameMutation],
   );
@@ -61,14 +61,17 @@ const useGames = () => {
 
   const updateGame = useCallback(
     async (gameID: number, gameRequest: GameUpdateRequest) => {
-      await updateGameMutation({ gameId: gameID, gameRequest }).unwrap();
+      await updateGameMutation({
+        gameId: gameID,
+        gameUpdateRequest: gameRequest,
+      }).unwrap();
     },
     [updateGameMutation],
   );
 
   const setupGame = useCallback(
     async (gameID: number) => {
-      await setupGameMutation(gameID).unwrap();
+      await setupGameMutation({ gameId: gameID }).unwrap();
     },
     [setupGameMutation],
   );

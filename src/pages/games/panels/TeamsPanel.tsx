@@ -19,10 +19,11 @@ import {
   useDeleteTeamMutation,
   useUpdateTeamMutation,
   useUpdatePlayerMutation,
-  useGetAllTablesForGameQuery,
+  useGetGameQuery,
+  type TableWithRound,
 } from '../../../api/rtkQueryApi';
+import { GameStatusEnum } from '../../../api/types';
 import EditTeamDialog from '../../../components/EditTeamDialog';
-import { GameStatusEnum } from '../../../generated';
 import usePlayers from '../../../hooks/usePlayers';
 import useTeams from '../../../hooks/useTeams';
 import { Game } from '../../../types';
@@ -43,11 +44,18 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const [deleteTeamMutation] = useDeleteTeamMutation();
   const [updatePlayerMutation] = useUpdatePlayerMutation();
 
-  // RTK Query for tables
-  const { data: allTables = [] } = useGetAllTablesForGameQuery(
-    { gameId: game.id, numberOfRounds: game.numberOfRounds },
-    { skip: !game.rounds || game.rounds.length === 0 },
-  );
+  // RTK Query for game data
+  const { data: gameData } = useGetGameQuery({ gameId: game.id });
+
+  const allTables = useMemo<TableWithRound[]>(() => {
+    if (!gameData?.rounds) return [];
+    return gameData.rounds.flatMap((round) =>
+      (round.tables || []).map((table) => ({
+        ...table,
+        roundNumber: round.roundNumber,
+      })),
+    );
+  }, [gameData]);
 
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
@@ -104,7 +112,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     try {
       await createTeamMutation({
         gameId: game.id,
-        teamRequest: teamsRequest,
+        teamsRequest: teamsRequest,
       }).unwrap();
       setIsTeamFormOpen(false);
     } catch {
@@ -130,7 +138,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         await updateTeamMutation({
           gameId: game.id,
           teamId: editingTeamId,
-          name: teamName,
+          teamsRequest: { name: teamName },
         }).unwrap();
 
         // Update all player names
@@ -140,7 +148,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
               gameId: game.id,
               teamId: team.id,
               playerId: player.id,
-              name: player.name,
+              playersRequest: { name: player.name },
             }).unwrap(),
           ),
         );

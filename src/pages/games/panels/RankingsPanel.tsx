@@ -7,7 +7,10 @@ import {
   mapPlayersToRankings,
   mapTeamsToRankings,
 } from './rankingsMapper.ts';
-import { useGetAllTablesForGameQuery } from '../../../api/rtkQueryApi.ts';
+import {
+  useGetGameQuery,
+  type TableWithRound,
+} from '../../../api/rtkQueryApi.ts';
 import usePlayers from '../../../hooks/usePlayers';
 import useTeams, { useTeamsByIds } from '../../../hooks/useTeams';
 import { Game } from '../../../types';
@@ -24,11 +27,17 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   useTeams();
   const { allPlayers } = usePlayers();
 
-  const hasRounds = game.rounds && game.rounds.length > 0;
-  const { data: allTables = [], isLoading } = useGetAllTablesForGameQuery(
-    { gameId: game.id, numberOfRounds: game.numberOfRounds },
-    { skip: !hasRounds },
-  );
+  const { data: gameData, isLoading } = useGetGameQuery({ gameId: game.id });
+
+  const allTables = useMemo<TableWithRound[]>(() => {
+    if (!gameData?.rounds) return [];
+    return gameData.rounds.flatMap((round) =>
+      (round.tables || []).map((table) => ({
+        ...table,
+        roundNumber: round.roundNumber,
+      })),
+    );
+  }, [gameData]);
 
   const gameTeams = useTeamsByIds(game.teams);
 

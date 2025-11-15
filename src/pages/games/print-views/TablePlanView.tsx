@@ -1,8 +1,8 @@
 import { Title, Text, Paper, Table, Stack } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { Player } from '../../../generated';
-import { Table as TableType } from '../../../generated';
+import { Player } from '../../../api/types';
+import { Table as TableType } from '../../../api/types';
 import { Game, Team } from '../../../types';
 
 interface TablePlanViewProps {
@@ -20,7 +20,6 @@ const TablePlanView = ({
 }: TablePlanViewProps) => {
   const { t } = useTranslation(['pdf', 'common']);
 
-  // Group tables by round
   const tablesByRound: Record<number, typeof tables> = {};
   tables.forEach((table) => {
     if (table.roundNumber) {

@@ -15,9 +15,9 @@ import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetAllTablesForGameQuery } from '../../../api/rtkQueryApi';
-import type { Table } from '../../../generated';
-import { GameStatusEnum } from '../../../generated';
+import { useGetGameQuery, type TableWithRound } from '../../../api/rtkQueryApi';
+import type { Table } from '../../../api/types';
+import { GameStatusEnum } from '../../../api/types';
 import useGames from '../../../hooks/useGames';
 import useTeams from '../../../hooks/useTeams';
 import { Game } from '../../../types';
@@ -42,15 +42,22 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const canSetupMatchmaking = game.status === GameStatusEnum.Setup;
   const hasRounds = (game.rounds?.length || 0) > 0;
 
-  // Fetch all tables for the game using RTK Query
+  // Fetch game data using RTK Query
   const {
-    data: allTables = [],
+    data: gameData,
     isLoading: tablesLoading,
     error: tablesError,
-  } = useGetAllTablesForGameQuery(
-    { gameId: game.id, numberOfRounds: game.numberOfRounds },
-    { skip: !hasRounds },
-  );
+  } = useGetGameQuery({ gameId: game.id });
+
+  const allTables = useMemo<TableWithRound[]>(() => {
+    if (!gameData?.rounds) return [];
+    return gameData.rounds.flatMap((round) =>
+      (round.tables || []).map((table) => ({
+        ...table,
+        roundNumber: round.roundNumber,
+      })),
+    );
+  }, [gameData]);
 
   const isSetupMode = !hasRounds || allTables.length === 0;
   const tablesStatus = tablesLoading

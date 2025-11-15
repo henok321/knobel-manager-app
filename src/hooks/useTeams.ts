@@ -7,7 +7,7 @@ import {
   useUpdateTeamMutation,
   useDeleteTeamMutation,
 } from '../api/rtkQueryApi';
-import type { TeamsRequest } from '../generated';
+import type { TeamsRequest } from '../generated/api';
 import type { RootState } from '../store/store';
 
 const useTeams = () => {
@@ -21,7 +21,10 @@ const useTeams = () => {
 
   const createTeam = useCallback(
     async (gameID: number, teamRequest: TeamsRequest) => {
-      await createTeamMutation({ gameId: gameID, teamRequest }).unwrap();
+      await createTeamMutation({
+        gameId: gameID,
+        teamsRequest: teamRequest,
+      }).unwrap();
     },
     [createTeamMutation],
   );
@@ -31,7 +34,7 @@ const useTeams = () => {
       await updateTeamMutation({
         gameId: gameID,
         teamId: teamID,
-        name,
+        teamsRequest: { name },
       }).unwrap();
     },
     [updateTeamMutation],
