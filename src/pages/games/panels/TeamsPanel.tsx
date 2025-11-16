@@ -35,16 +35,14 @@ interface TeamsPanelProps {
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
-  const { allTeams } = useTeams(); // Still use for selectors
-  const { allPlayers } = usePlayers(); // Still use for selectors
+  const { allTeams } = useTeams();
+  const { allPlayers } = usePlayers();
 
-  // RTK Query mutations
   const [createTeamMutation] = useCreateTeamMutation();
   const [updateTeamMutation] = useUpdateTeamMutation();
   const [deleteTeamMutation] = useDeleteTeamMutation();
   const [updatePlayerMutation] = useUpdatePlayerMutation();
 
-  // RTK Query for game data
   const { data: gameData } = useGetGameQuery({ gameId: game.id });
 
   const allTables = useMemo<TableWithRound[]>(() => {

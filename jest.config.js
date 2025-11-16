@@ -15,7 +15,4 @@ export default {
   transform: {
     '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest',
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(msw|@mswjs|@bundled-es-modules|until-async)/)',
-  ],
 };
