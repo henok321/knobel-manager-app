@@ -2,7 +2,8 @@
 applyTo:
   - 'src/pages/**/*.tsx'
   - 'src/components/**/*.tsx'
-excludeAgent: ['coding']
+excludeAgent:
+  - coding
 ---
 
 # UI/UX Patterns Review Rules

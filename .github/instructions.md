@@ -184,7 +184,7 @@ Current:
 
 Every PR must pass:
 
-```
+```text
 [ ] No hardcoded UI text (i18n)
 [ ] No `any` types
 [ ] RTK Query used (not direct API calls)

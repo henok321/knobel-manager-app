@@ -2,7 +2,8 @@
 applyTo:
   - 'src/**/*.ts'
   - 'src/**/*.tsx'
-excludeAgent: ['coding']
+excludeAgent:
+  - coding
 ---
 
 # TypeScript Review Rules

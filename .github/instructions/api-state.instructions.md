@@ -3,7 +3,8 @@ applyTo:
   - 'src/api/**/*.ts'
   - 'src/store/**/*.ts'
   - 'src/hooks/**/*.ts'
-excludeAgent: ['coding']
+excludeAgent:
+  - coding
 ---
 
 # API & State Management Review Rules

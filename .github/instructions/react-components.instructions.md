@@ -2,7 +2,8 @@
 applyTo:
   - 'src/**/*.tsx'
   - 'src/**/*.jsx'
-excludeAgent: ['coding']
+excludeAgent:
+  - coding
 ---
 
 # React Component Review Rules
