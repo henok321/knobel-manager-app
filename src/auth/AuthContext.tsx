@@ -72,8 +72,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const logOut = useCallback(() => {
-    // Clear all localStorage (includes active_game_id from Context)
-    localStorage.clear();
+    // Remove active_game_id from localStorage (from Context)
+    localStorage.removeItem('active_game_id');
     // Reset RTK Query cache
     store.dispatch(api.util.resetApiState());
     void signOut(firebaseAuth);
