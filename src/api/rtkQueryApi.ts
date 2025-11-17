@@ -160,5 +160,4 @@ export {
   useUpdateTeamMutation,
   useDeleteTeamMutation,
   useUpdatePlayerMutation,
-  useDeletePlayerMutation,
 } from '../generated/api';
