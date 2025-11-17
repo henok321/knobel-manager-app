@@ -10,6 +10,7 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
 import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -112,9 +113,19 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         gameId: game.id,
         teamsRequest: teamsRequest,
       }).unwrap();
+      notifications.show({
+        title: t('actions.success'),
+        message: t('teams.teamCreated'),
+        color: 'green',
+      });
       setIsTeamFormOpen(false);
-    } catch {
-      // Error is handled by RTK Query
+    } catch (error) {
+      notifications.show({
+        title: t('actions.error'),
+        message:
+          error instanceof Error ? error.message : t('teams.teamCreateError'),
+        color: 'red',
+      });
     }
   };
 
@@ -151,10 +162,21 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
           ),
         );
 
+        notifications.show({
+          title: t('actions.success'),
+          message: t('teams.teamUpdated'),
+          color: 'green',
+        });
+
         setEditTeamDialogOpen(false);
         setEditingTeamId(null);
-      } catch {
-        // Error is handled by RTK Query
+      } catch (error) {
+        notifications.show({
+          title: t('actions.error'),
+          message:
+            error instanceof Error ? error.message : t('teams.teamUpdateError'),
+          color: 'red',
+        });
       }
     }
   };
@@ -174,8 +196,20 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
             gameId: game.id,
             teamId,
           }).unwrap();
-        } catch {
-          // Error is handled by RTK Query
+          notifications.show({
+            title: t('actions.success'),
+            message: t('teams.teamDeleted'),
+            color: 'green',
+          });
+        } catch (error) {
+          notifications.show({
+            title: t('actions.error'),
+            message:
+              error instanceof Error
+                ? error.message
+                : t('teams.teamDeleteError'),
+            color: 'red',
+          });
         }
       },
     });

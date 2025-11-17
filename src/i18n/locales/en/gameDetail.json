@@ -61,7 +61,13 @@
     "playerName": "Player Name",
     "playerNamePlaceholder": "Enter player name",
     "roundShort": "R",
-    "tableShort": "T"
+    "tableShort": "T",
+    "teamCreated": "Team created successfully",
+    "teamUpdated": "Team updated successfully",
+    "teamDeleted": "Team deleted successfully",
+    "teamCreateError": "Failed to create team",
+    "teamUpdateError": "Failed to update team",
+    "teamDeleteError": "Failed to delete team"
   },
   "rounds": {
     "selectRound": "Select Round",
