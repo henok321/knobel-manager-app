@@ -10,6 +10,7 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
 import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -113,8 +114,13 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         teamsRequest: teamsRequest,
       }).unwrap();
       setIsTeamFormOpen(false);
-    } catch {
-      // Error is handled by RTK Query
+    } catch (error) {
+      notifications.show({
+        title: t('actions.error'),
+        message:
+          error instanceof Error ? error.message : t('actions.errorOccurred'),
+        color: 'red',
+      });
     }
   };
 
@@ -153,8 +159,13 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
         setEditTeamDialogOpen(false);
         setEditingTeamId(null);
-      } catch {
-        // Error is handled by RTK Query
+      } catch (error) {
+        notifications.show({
+          title: t('actions.error'),
+          message:
+            error instanceof Error ? error.message : t('actions.errorOccurred'),
+          color: 'red',
+        });
       }
     }
   };
@@ -174,8 +185,15 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
             gameId: game.id,
             teamId,
           }).unwrap();
-        } catch {
-          // Error is handled by RTK Query
+        } catch (error) {
+          notifications.show({
+            title: t('actions.error'),
+            message:
+              error instanceof Error
+                ? error.message
+                : t('actions.errorOccurred'),
+            color: 'red',
+          });
         }
       },
     });
