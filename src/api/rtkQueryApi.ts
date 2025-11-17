@@ -110,9 +110,12 @@ export const api = enhancedApi
                     if (existingScore) {
                       existingScore.score = scoreUpdate.score;
                     } else {
-                      // Add new score entry with placeholder id and tableID
+                      // Add new score entry with temporary unique ID for optimistic update
+                      // Using negative playerID ensures uniqueness and avoids conflicts with real IDs
+                      // The real ID from the server will replace this when the mutation succeeds
+                      // Note: UI components use playerID for lookups, not score.id, so this is safe
                       table.scores?.push({
-                        id: 0,
+                        id: -scoreUpdate.playerID,
                         tableID: table.id,
                         playerID: scoreUpdate.playerID,
                         score: scoreUpdate.score,
