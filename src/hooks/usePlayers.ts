@@ -45,8 +45,6 @@ const usePlayers = () => {
 
   return {
     allPlayers,
-    updatePlayer,
-    deletePlayer,
   };
 };
 
