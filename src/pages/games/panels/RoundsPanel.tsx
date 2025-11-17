@@ -141,7 +141,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   // Handle RTK Query errors
   const tablesErrorMessage = tablesError
     ? typeof tablesError === 'object' &&
-      true &&
       'status' in tablesError &&
       'data' in tablesError
       ? typeof tablesError.data === 'string'
