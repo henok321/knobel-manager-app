@@ -19,39 +19,36 @@ const useTeams = () => {
   const [updateTeamMutation] = useUpdateTeamMutation();
   const [deleteTeamMutation] = useDeleteTeamMutation();
 
-  const createTeam = useCallback(
-    async (gameID: number, teamRequest: TeamsRequest) => {
-      await createTeamMutation({
-        gameId: gameID,
-        teamsRequest: teamRequest,
-      }).unwrap();
-    },
-    [createTeamMutation],
-  );
 
-  const updateTeam = useCallback(
-    async (gameID: number, teamID: number, name: string) => {
-      await updateTeamMutation({
-        gameId: gameID,
-        teamId: teamID,
-        teamsRequest: { name },
-      }).unwrap();
-    },
-    [updateTeamMutation],
-  );
 
-  const deleteTeam = useCallback(
-    async (gameID: number, teamID: number) => {
-      await deleteTeamMutation({ gameId: gameID, teamId: teamID }).unwrap();
-    },
-    [deleteTeamMutation],
-  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return {
     allTeams,
-    createTeam,
-    updateTeam,
-    deleteTeam,
   };
 };
 
