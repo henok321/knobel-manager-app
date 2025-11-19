@@ -18,12 +18,6 @@ import { createTeamAction, deleteTeamAction } from '../teams/actions.ts';
 type AdditionalGamesState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
   error?: Error | null;
-  activeGameID: number | null;
-};
-
-const loadActiveGameIDFromLocalStorage = (): number | null => {
-  const stored = localStorage.getItem('active_game_id');
-  return stored ? Number(stored) : null;
 };
 
 const gamesAdapter = createEntityAdapter<Game>();
@@ -31,18 +25,12 @@ const gamesAdapter = createEntityAdapter<Game>();
 const state = gamesAdapter.getInitialState<AdditionalGamesState>({
   status: 'idle',
   error: null,
-  activeGameID: loadActiveGameIDFromLocalStorage(),
 });
 
 const gamesSlice = createSlice({
   name: 'games',
   initialState: state,
-  reducers: {
-    setActiveGame(state, action: { payload: number }) {
-      state.activeGameID = action.payload;
-      localStorage.setItem('active_game_id', String(action.payload));
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     // fetch games
     builder
@@ -51,15 +39,6 @@ const gamesSlice = createSlice({
       })
       .addCase(fetchAll.fulfilled, (state, action) => {
         gamesAdapter.setAll(state, action.payload.games);
-
-        if (state.activeGameID) {
-          const gameExists = action.payload.games[state.activeGameID];
-          if (!gameExists) {
-            state.activeGameID = null;
-            localStorage.removeItem('active_game_id');
-          }
-        }
-
         state.status = 'succeeded';
       })
       .addCase(fetchAll.rejected, (state, action) => {
@@ -104,10 +83,6 @@ const gamesSlice = createSlice({
         const gameID = action.meta.arg;
         if (gameID) {
           gamesAdapter.removeOne(state, gameID);
-          if (state.activeGameID === gameID) {
-            state.activeGameID = null;
-            localStorage.removeItem('active_game_id');
-          }
         }
         state.status = 'succeeded';
       });
@@ -206,19 +181,19 @@ const gamesSlice = createSlice({
 const { selectAll: selectAllGames, selectEntities: selectGameEntities } =
   gamesAdapter.getSelectors<RootState>((state) => state.games);
 
-const selectActiveGameID = (state: RootState) => state.games.activeGameID;
 const selectGamesStatus = (state: RootState) => state.games.status;
 const selectGamesError = (state: RootState) => state.games.error;
 
 const selectActiveGame = createSelector(
-  [selectGameEntities, selectActiveGameID],
+  [
+    selectGameEntities,
+    (_state: RootState, activeGameID: number | null) => activeGameID,
+  ],
   (entities, activeGameID) => {
     if (!activeGameID) return undefined;
     return entities[activeGameID];
   },
 );
-
-export const { setActiveGame } = gamesSlice.actions;
 
 export {
   selectAllGames,
