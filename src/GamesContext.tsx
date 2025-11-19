@@ -46,12 +46,10 @@ const GamesProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const setActiveGameID = useCallback((gameID: number) => {
     setActiveGameIDState(gameID);
-    setStoredGameID(gameID);
   }, []);
 
   const clearActiveGameID = useCallback(() => {
     setActiveGameIDState(null);
-    clearStoredGameID();
   }, []);
 
   const value = useMemo<GamesContextValue>(
