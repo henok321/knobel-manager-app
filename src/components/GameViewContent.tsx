@@ -15,13 +15,11 @@ import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GameStatusEnum, GameUpdateRequest } from '../generated';
+import { Game, GameStatusEnum, GameUpdateRequest } from '../generated';
 import RankingsPanel from '../pages/games/panels/RankingsPanel';
 import RoundsPanel from '../pages/games/panels/RoundsPanel';
 import TeamsPanel from '../pages/games/panels/TeamsPanel';
 import useGames from '../slices/games/hooks';
-import useTables from '../slices/tables/hooks';
-import { Game } from '../slices/types';
 
 const PrintMenu = lazy(() => import('./PrintMenu'));
 
@@ -32,7 +30,6 @@ interface GameViewContentProps {
 const GameViewContent = ({ game }: GameViewContentProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
   const { updateGame } = useGames();
-  const { tables: allTables } = useTables();
 
   const getDefaultTab = () => {
     switch (game.status) {
@@ -69,6 +66,9 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       return { canComplete: false, completed: 0, total: 0 };
     }
 
+    // Get all tables from all rounds
+    const rounds = game.rounds || [];
+    const allTables = rounds.flatMap((round) => round.tables || []);
     const totalTables = allTables.length;
 
     const completedTables = allTables.reduce((acc, table) => {
@@ -88,7 +88,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       completed: completedTables,
       total: totalTables,
     };
-  }, [game, allTables]);
+  }, [game]);
 
   const canComplete = scoreProgress.canComplete;
 

@@ -10,9 +10,6 @@ import TablePlanView from './print-views/TablePlanView';
 import TeamHandoutsView from './print-views/TeamHandoutsView';
 import CenterLoader from '../../shared/CenterLoader';
 import useGames from '../../slices/games/hooks';
-import usePlayers from '../../slices/players/hooks';
-import useTables from '../../slices/tables/hooks';
-import useTeams from '../../slices/teams/hooks';
 import './print-views/print.css';
 
 const PrintView = () => {
@@ -20,14 +17,7 @@ const PrintView = () => {
   const [searchParams] = useSearchParams();
   const { t } = useTranslation(['gameDetail', 'common']);
   const navigate = useNavigate();
-  const { allGames, fetchGames, status } = useGames();
-  const { allTeams } = useTeams();
-  const { allPlayers } = usePlayers();
-  const {
-    tables: allTables,
-    fetchAllTables,
-    status: tablesStatus,
-  } = useTables();
+  const { allGames, fetchGames, fetchAllTables, status } = useGames();
 
   const viewType = searchParams.get('type') || 'tablePlan';
   const roundNumber = searchParams.get('round');
@@ -42,10 +32,10 @@ const PrintView = () => {
   const game = allGames.find((g) => g.id === Number(gameId));
 
   useEffect(() => {
-    if (game && tablesStatus === 'idle') {
+    if (game) {
       fetchAllTables(game.id, game.numberOfRounds);
     }
-  }, [game, tablesStatus, fetchAllTables]);
+  }, [game, fetchAllTables]);
 
   if (status === 'pending' || status === 'idle') {
     return <CenterLoader />;
@@ -72,41 +62,21 @@ const PrintView = () => {
   const renderView = () => {
     switch (viewType) {
       case 'tablePlan':
-        return (
-          <TablePlanView
-            game={game}
-            players={allPlayers}
-            tables={allTables}
-            teams={allTeams}
-          />
-        );
+        return <TablePlanView game={game} />;
       case 'scoreSheets':
-        return (
-          <ScoreSheetsView
-            game={game}
-            players={allPlayers}
-            tables={allTables}
-            teams={allTeams}
-          />
-        );
+        return <ScoreSheetsView game={game} />;
       case 'teamHandouts':
         return (
           <TeamHandoutsView
             game={game}
-            players={allPlayers}
-            tables={allTables}
             teamId={teamId ? Number(teamId) : undefined}
-            teams={allTeams}
           />
         );
       case 'rankings':
         return (
           <RankingsView
             game={game}
-            players={allPlayers}
             roundNumber={roundNumber ? Number(roundNumber) : undefined}
-            tables={allTables}
-            teams={allTeams}
           />
         );
       default:

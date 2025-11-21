@@ -7,10 +7,8 @@ import {
   mapPlayersToRankings,
   mapTeamsToRankings,
 } from './rankingsMapper.ts';
-import usePlayers from '../../../slices/players/hooks.ts';
-import useTables, { useTablesByRound } from '../../../slices/tables/hooks.ts';
-import useTeams, { useTeamsByIds } from '../../../slices/teams/hooks.ts';
-import { Game } from '../../../slices/types';
+import { Game } from '../../../generated';
+import useGames from '../../../slices/games/hooks.ts';
 import { PlayerRankingRow, TeamRankingRow } from '../components/RankingRow';
 
 interface RankingsPanelProps {
@@ -20,12 +18,11 @@ interface RankingsPanelProps {
 const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
   const [selectedRound, setSelectedRound] = useState<string>('total');
+  const { fetchAllTables } = useGames();
 
-  useTeams();
-  const { allPlayers } = usePlayers();
-  const { fetchAllTables, status } = useTables();
-
-  const gameTeams = useTeamsByIds(game.teams);
+  const teams = useMemo(() => game.teams || [], [game.teams]);
+  const rounds = useMemo(() => game.rounds || [], [game.rounds]);
+  const roundsCount = rounds.length;
 
   const roundOptions = useMemo(
     () => [
@@ -38,20 +35,21 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     [game.numberOfRounds, t],
   );
 
-  const roundsCount = useMemo(
-    () => game.rounds?.length || 0,
-    [game.rounds?.length],
-  );
-
   useEffect(() => {
-    if (roundsCount > 0 && status === 'idle') {
+    if (roundsCount > 0) {
       fetchAllTables(game.id, game.numberOfRounds);
     }
-  }, [roundsCount, status, fetchAllTables, game.id, game.numberOfRounds]);
+  }, [roundsCount, fetchAllTables, game.id, game.numberOfRounds]);
 
-  const filteredTables = useTablesByRound(
-    selectedRound === 'total' ? null : Number(selectedRound),
-  );
+  // Get filtered tables based on selected round
+  const filteredTables = useMemo(() => {
+    if (selectedRound === 'total') {
+      return rounds.flatMap((round) => round.tables || []);
+    }
+    const selectedRoundNum = Number(selectedRound);
+    const round = rounds.find((r) => r.roundNumber === selectedRoundNum);
+    return round?.tables || [];
+  }, [rounds, selectedRound]);
 
   const allScores = useMemo(
     () => aggregateScoresFromTables(filteredTables),
@@ -64,24 +62,14 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   );
 
   const playerRankings = useMemo(
-    () => mapPlayersToRankings(gameTeams, allPlayers, allScores),
-    [gameTeams, allPlayers, allScores],
+    () => mapPlayersToRankings(teams, allScores),
+    [teams, allScores],
   );
 
   const teamRankings = useMemo(
-    () => mapTeamsToRankings(gameTeams, playerRankings),
-    [gameTeams, playerRankings],
+    () => mapTeamsToRankings(teams, playerRankings),
+    [teams, playerRankings],
   );
-
-  const loading = status === 'pending';
-
-  if (loading) {
-    return (
-      <Text c="dimmed" ta="center">
-        {t('actions.loading')}
-      </Text>
-    );
-  }
 
   if (hasNoScores && teamRankings.length === 0) {
     return (

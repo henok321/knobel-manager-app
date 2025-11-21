@@ -20,9 +20,8 @@ import { CSSProperties, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { GameStatusEnum } from '../generated';
+import { Game, GameStatusEnum } from '../generated';
 import useGames from '../slices/games/hooks';
-import { Game } from '../slices/types';
 
 const getStatusColor = (status: GameStatusEnum) => {
   switch (status) {
@@ -41,7 +40,7 @@ const getGameSummary = (
   game: Game,
   t: ReturnType<typeof useTranslation>['t'],
 ) => {
-  const teamsCount = game.teams.length;
+  const teamsCount = game.teams?.length || 0;
   return `${t(`status.${game.status}`, { ns: 'gameDetail' })} • ${t('picker.teams')}: ${teamsCount}  • ${t('numberOfRounds', { ns: 'gameDetail' })}: ${game.numberOfRounds}`;
 };
 
@@ -179,7 +178,7 @@ const GameContextSelector = ({
               {activeGame.name}
             </Text>
             <Text c="dimmed" size="xs">
-              {t('picker.teams')}: {activeGame.teams.length} •{' '}
+              {t('picker.teams')}: {activeGame.teams?.length || 0} •{' '}
               {t('numberOfRounds', { ns: 'gameDetail' })} :{' '}
               {activeGame.numberOfRounds}
             </Text>
