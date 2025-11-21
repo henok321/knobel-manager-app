@@ -14,16 +14,10 @@ import {
 import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 
-import type { Table } from '../../../generated';
+import type { Game, Table } from '../../../generated';
 import { GameStatusEnum } from '../../../generated';
 import useGames from '../../../slices/games/hooks';
-import useTables from '../../../slices/tables/hooks';
-import { selectTablesForRoundWithSearch } from '../../../slices/tables/slice';
-import useTeams from '../../../slices/teams/hooks';
-import { Game } from '../../../slices/types';
-import { RootState } from '../../../store/store';
 import { PlayerScoreRow } from '../components/PlayerScoreRow';
 import ScoreEntryModal from '../components/ScoreEntryModal';
 
@@ -33,15 +27,12 @@ interface RoundsPanelProps {
 
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
-  const { setupGame, status: gamesStatus } = useGames();
-  const { allTeams } = useTeams();
   const {
-    tables: allTables,
-    status: tablesStatus,
-    error: tablesError,
+    setupGame,
     fetchAllTables,
     updateScores,
-  } = useTables();
+    status: gamesStatus,
+  } = useGames();
 
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
@@ -50,7 +41,22 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   const canEditScores = game.status === GameStatusEnum.InProgress;
   const canSetupMatchmaking = game.status === GameStatusEnum.Setup;
-  const hasRounds = (game.rounds?.length || 0) > 0;
+
+  const rounds = useMemo(() => game.rounds || [], [game.rounds]);
+  const hasRounds = rounds.length > 0;
+
+  // Get all tables from all rounds
+  const allTables = useMemo(
+    () =>
+      rounds.flatMap((round) =>
+        (round.tables || []).map((table) => ({
+          ...table,
+          roundNumber: round.roundNumber,
+        })),
+      ),
+    [rounds],
+  );
+
   const isSetupMode = !hasRounds || allTables.length === 0;
 
   const roundOptions = useMemo(
@@ -74,15 +80,33 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     localStorage.setItem(`selected_round_for_game_${game.id}`, selectedRound);
   }, [selectedRound, game.id]);
 
-  const filteredAndSortedTables = useSelector((state: RootState) =>
-    selectTablesForRoundWithSearch(state, Number(selectedRound), searchQuery),
-  );
+  // Filter and sort tables for selected round
+  const filteredAndSortedTables = useMemo(() => {
+    const selectedRoundNum = Number(selectedRound);
+    const tablesForRound = allTables.filter(
+      (table) => table.roundNumber === selectedRoundNum,
+    );
+
+    if (!searchQuery.trim()) {
+      return tablesForRound.sort((a, b) => a.tableNumber - b.tableNumber);
+    }
+
+    // Filter by player names
+    const query = searchQuery.toLowerCase();
+    return tablesForRound
+      .filter((table) =>
+        table.players?.some((player) =>
+          player.name?.toLowerCase().includes(query),
+        ),
+      )
+      .sort((a, b) => a.tableNumber - b.tableNumber);
+  }, [allTables, selectedRound, searchQuery]);
 
   useEffect(() => {
-    if (!game.id || !hasRounds || tablesStatus !== 'idle') return;
-
-    fetchAllTables(game.id, game.numberOfRounds);
-  }, [game.id, hasRounds, tablesStatus, fetchAllTables, game.numberOfRounds]);
+    if (game.id && hasRounds) {
+      fetchAllTables(game.id, game.numberOfRounds);
+    }
+  }, [game.id, hasRounds, fetchAllTables, game.numberOfRounds]);
 
   const handleSetupGame = async () => {
     setSetupError(null);
@@ -132,12 +156,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const hasScores = (table: Table) => table.scores && table.scores.length > 0;
 
   const settingUp = gamesStatus === 'pending';
-  const loading = tablesStatus === 'pending';
-  const displayError =
-    setupError ||
-    (tablesStatus === 'failed' && !tablesError?.includes('404')
-      ? tablesError
-      : null);
+  const loading = gamesStatus === 'pending';
+  const displayError = setupError;
 
   return (
     <Stack gap="md">
@@ -241,93 +261,98 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
       {!loading && !settingUp && filteredAndSortedTables.length > 0 && (
         <Stack gap="md">
-          {filteredAndSortedTables.map((table) => (
-            <Card
-              key={table.id}
-              withBorder
-              padding="lg"
-              radius="md"
-              shadow="sm"
-            >
-              <Stack gap="md">
-                <Group align="center" justify="space-between">
-                  <Group gap="xs">
-                    <Title order={4}>
-                      {`${t('rounds.table')} ${table.tableNumber}`}
-                    </Title>
-                    {hasScores(table) ? (
-                      <Badge
-                        color="green"
-                        leftSection={
-                          <IconCheck style={{ width: 14, height: 14 }} />
-                        }
+          {filteredAndSortedTables.map((table) => {
+            // Find team for each player directly from game.teams
+            const teams = game.teams || [];
+
+            return (
+              <Card
+                key={table.id}
+                withBorder
+                padding="lg"
+                radius="md"
+                shadow="sm"
+              >
+                <Stack gap="md">
+                  <Group align="center" justify="space-between">
+                    <Group gap="xs">
+                      <Title order={4}>
+                        {`${t('rounds.table')} ${table.tableNumber}`}
+                      </Title>
+                      {hasScores(table) ? (
+                        <Badge
+                          color="green"
+                          leftSection={
+                            <IconCheck style={{ width: 14, height: 14 }} />
+                          }
+                          variant="light"
+                        >
+                          {t('rounds.scoresEntered')}
+                        </Badge>
+                      ) : (
+                        <Badge
+                          color="gray"
+                          leftSection={
+                            <IconClock style={{ width: 14, height: 14 }} />
+                          }
+                          variant="light"
+                        >
+                          {t('rounds.scoresPending')}
+                        </Badge>
+                      )}
+                    </Group>
+                    {canEditScores && (
+                      <Button
+                        size="sm"
                         variant="light"
+                        onClick={() => handleOpenScoreEntry(table)}
                       >
-                        {t('rounds.scoresEntered')}
-                      </Badge>
-                    ) : (
-                      <Badge
-                        color="gray"
-                        leftSection={
-                          <IconClock style={{ width: 14, height: 14 }} />
-                        }
-                        variant="light"
-                      >
-                        {t('rounds.scoresPending')}
-                      </Badge>
+                        {hasScores(table)
+                          ? t('rounds.editScores')
+                          : t('rounds.enterScores')}
+                      </Button>
                     )}
                   </Group>
-                  {canEditScores && (
-                    <Button
-                      size="sm"
-                      variant="light"
-                      onClick={() => handleOpenScoreEntry(table)}
-                    >
-                      {hasScores(table)
-                        ? t('rounds.editScores')
-                        : t('rounds.enterScores')}
-                    </Button>
-                  )}
-                </Group>
 
-                <MantineTable
-                  className="rounds-table"
-                  style={{ tableLayout: 'fixed', width: '100%' }}
-                >
-                  <colgroup>
-                    <col style={{ width: '50%' }} />
-                    <col style={{ width: '30%' }} />
-                    <col style={{ width: '20%' }} />
-                  </colgroup>
-                  <MantineTable.Thead>
-                    <MantineTable.Tr>
-                      <MantineTable.Th>{t('rounds.player')}</MantineTable.Th>
-                      <MantineTable.Th>{t('rounds.team')}</MantineTable.Th>
-                      <MantineTable.Th>{t('rounds.score')}</MantineTable.Th>
-                    </MantineTable.Tr>
-                  </MantineTable.Thead>
-                  <MantineTable.Tbody>
-                    {table.players?.map((player) => {
-                      const playerScore = table.scores?.find(
-                        (s) => s.playerID === player.id,
-                      );
-                      const team = player.teamID
-                        ? allTeams.find((t) => t.id === player.teamID)
-                        : undefined;
-                      return (
-                        <PlayerScoreRow
-                          key={player.id}
-                          player={player}
-                          score={playerScore}
-                          team={team}
-                        />
-                      );
-                    })}
-                  </MantineTable.Tbody>
-                </MantineTable>
-              </Stack>
-            </Card>
-          ))}
+                  <MantineTable
+                    className="rounds-table"
+                    style={{ tableLayout: 'fixed', width: '100%' }}
+                  >
+                    <colgroup>
+                      <col style={{ width: '50%' }} />
+                      <col style={{ width: '30%' }} />
+                      <col style={{ width: '20%' }} />
+                    </colgroup>
+                    <MantineTable.Thead>
+                      <MantineTable.Tr>
+                        <MantineTable.Th>{t('rounds.player')}</MantineTable.Th>
+                        <MantineTable.Th>{t('rounds.team')}</MantineTable.Th>
+                        <MantineTable.Th>{t('rounds.score')}</MantineTable.Th>
+                      </MantineTable.Tr>
+                    </MantineTable.Thead>
+                    <MantineTable.Tbody>
+                      {table.players?.map((player) => {
+                        const playerScore = table.scores?.find(
+                          (s) => s.playerID === player.id,
+                        );
+                        const team = player.teamID
+                          ? teams.find((t) => t.id === player.teamID)
+                          : undefined;
+                        return (
+                          <PlayerScoreRow
+                            key={player.id}
+                            player={player}
+                            score={playerScore}
+                            team={team}
+                          />
+                        );
+                      })}
+                    </MantineTable.Tbody>
+                  </MantineTable>
+                </Stack>
+              </Card>
+            );
+          })}
         </Stack>
       )}
 

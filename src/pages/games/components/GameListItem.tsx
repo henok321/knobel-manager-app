@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { GameStatusEnum } from '../../../generated';
-import { Game } from '../../../slices/types';
+import { Game } from '../../../generated';
 
 interface GameListItemProps {
   game: Game;
@@ -117,7 +117,7 @@ const GameListItem = ({
                   {t(`status.${game.status}`, { ns: 'gameDetail' })}
                 </Badge>
                 <Text c="dimmed" size="xs">
-                  {game.teams.length}{' '}
+                  {game.teams?.length || 0}{' '}
                   {t('picker.teams', { ns: 'home' }).toLowerCase()} •{' '}
                   {game.numberOfRounds}{' '}
                   {t('rounds.round', { ns: 'gameDetail' }).toLowerCase()}
@@ -174,7 +174,7 @@ const GameListItem = ({
               {t('card.details.teams')}
             </Text>
             <Text fw={600} size="sm">
-              {game.teams.length}
+              {game.teams?.length || 0}
             </Text>
           </div>
         </Group>

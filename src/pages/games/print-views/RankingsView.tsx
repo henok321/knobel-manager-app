@@ -9,15 +9,10 @@ import {
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { Player } from '../../../generated';
-import { Table as TableType } from '../../../generated';
-import { Game, Team } from '../../../slices/types';
+import { Game } from '../../../generated';
 
 interface RankingsViewProps {
   game: Game;
-  tables: (TableType & { roundNumber?: number })[];
-  players: Player[];
-  teams: Team[];
   roundNumber?: number;
 }
 
@@ -35,22 +30,21 @@ interface TeamRanking {
   totalScore: number;
 }
 
-const RankingsView = ({
-  game,
-  tables,
-  players,
-  teams,
-  roundNumber,
-}: RankingsViewProps) => {
+const RankingsView = ({ game, roundNumber }: RankingsViewProps) => {
   const { t } = useTranslation(['pdf', 'common']);
 
-  // Filter teams for this game
-  const gameTeams = teams.filter((team) => team.gameID === game.id);
+  const teams = game.teams || [];
+  const allTables = (game.rounds || []).flatMap((round) =>
+    (round.tables || []).map((table) => ({
+      ...table,
+      roundNumber: round.roundNumber,
+    })),
+  );
 
   // Filter tables based on roundNumber if provided
   const relevantTables = roundNumber
-    ? tables.filter((table) => table.roundNumber === roundNumber)
-    : tables;
+    ? allTables.filter((table) => table.roundNumber === roundNumber)
+    : allTables;
 
   // Aggregate scores by player from table scores
   const scoresByPlayer: Record<number, number> = {};
@@ -63,11 +57,8 @@ const RankingsView = ({
 
   // Calculate player rankings
   const playerRankings: PlayerRanking[] = [];
-  gameTeams.forEach((team) => {
-    team.players.forEach((playerId: number) => {
-      const player = players.find((p) => p.id === playerId);
-      if (!player) return;
-
+  teams.forEach((team) => {
+    (team.players || []).forEach((player) => {
       playerRankings.push({
         playerId: player.id,
         playerName: player.name,
@@ -81,7 +72,7 @@ const RankingsView = ({
 
   // Calculate team rankings
   const teamScoresMap: Record<number, number> = {};
-  gameTeams.forEach((team) => {
+  teams.forEach((team) => {
     teamScoresMap[team.id] = 0;
   });
   playerRankings.forEach((playerRank) => {

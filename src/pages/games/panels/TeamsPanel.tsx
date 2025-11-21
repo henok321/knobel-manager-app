@@ -15,11 +15,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EditTeamDialog from '../../../components/EditTeamDialog';
-import { GameStatusEnum } from '../../../generated';
-import usePlayers from '../../../slices/players/hooks';
-import useTables from '../../../slices/tables/hooks';
-import useTeams from '../../../slices/teams/hooks';
-import { Game } from '../../../slices/types';
+import { Game, GameStatusEnum, Player } from '../../../generated';
+import useGames from '../../../slices/games/hooks';
 import TeamForm, { TeamFormData } from '../../home/TeamForm';
 
 interface TeamsPanelProps {
@@ -28,9 +25,8 @@ interface TeamsPanelProps {
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation(['gameDetail', 'common']);
-  const { allTeams, createTeam, updateTeam, deleteTeam } = useTeams();
-  const { allPlayers, updatePlayer } = usePlayers();
-  const { tables: allTables, fetchAllTables, status } = useTables();
+  const { createTeam, updateTeam, deleteTeam, updatePlayer, fetchAllTables } =
+    useGames();
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
@@ -41,16 +37,23 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     game.status === GameStatusEnum.InProgress;
   const isCompleted = game.status === GameStatusEnum.Completed;
 
-  const roundsCount = useMemo(
-    () => game.rounds?.length || 0,
-    [game.rounds?.length],
-  );
+  const teams = game.teams || [];
+  const rounds = useMemo(() => game.rounds || [], [game.rounds]);
+  const roundsCount = rounds.length;
 
   useEffect(() => {
-    if (roundsCount > 0 && status === 'idle') {
+    if (roundsCount > 0) {
       fetchAllTables(game.id, game.numberOfRounds);
     }
-  }, [game.id, game.numberOfRounds, roundsCount, fetchAllTables, status]);
+  }, [game.id, game.numberOfRounds, roundsCount, fetchAllTables]);
+
+  const allTables = useMemo(
+    () =>
+      rounds
+        .flatMap((round) => round.tables || [])
+        .filter((table) => table !== undefined),
+    [rounds],
+  );
 
   const showTableAssignments = allTables.length > 0;
 
@@ -60,34 +63,24 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       { roundNumber: number; tableNumber: number }[]
     > = {};
 
-    for (const table of allTables) {
-      const players = table.players;
-      if (!players) continue;
-      const tableRoundNumber =
-        (table as typeof table & { roundNumber?: number }).roundNumber ||
-        table.roundID;
-      for (const playerId of players) {
-        const id = playerId.id;
-        assignments[id] ??= [];
-        assignments[id].push({
-          roundNumber: tableRoundNumber,
-          tableNumber: table.tableNumber,
-        });
+    for (const round of rounds) {
+      if (!round.tables) continue;
+      for (const table of round.tables) {
+        const players = table.players;
+        if (!players) continue;
+        for (const player of players) {
+          const id = player.id;
+          assignments[id] ??= [];
+          assignments[id].push({
+            roundNumber: round.roundNumber,
+            tableNumber: table.tableNumber,
+          });
+        }
       }
     }
 
     return assignments;
-  }, [allTables]);
-
-  const getPlayersForTeam = (teamId: number) => {
-    const team = allTeams.find((t) => t?.id === teamId);
-    if (!team) return [];
-    return team.players
-      .map((playerId) => allPlayers.find((p) => p.id === playerId))
-      .filter(
-        (player): player is NonNullable<typeof player> => player !== undefined,
-      );
-  };
+  }, [rounds]);
 
   const handleCreateTeam = (teamData: TeamFormData) => {
     const teamsRequest = {
@@ -109,12 +102,15 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   ) => {
     if (editingTeamId) {
       // Update team name
-      updateTeam(editingTeamId, teamName);
+      updateTeam(game.id, editingTeamId, teamName);
 
       // Update all player names
-      players.forEach((player) => {
-        updatePlayer(player.id, player.name);
-      });
+      const team = teams.find((t) => t.id === editingTeamId);
+      if (team) {
+        players.forEach((player) => {
+          updatePlayer(game.id, team.id, player.id, player.name);
+        });
+      }
     }
     setEditTeamDialogOpen(false);
     setEditingTeamId(null);
@@ -130,7 +126,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        deleteTeam(teamId);
+        deleteTeam(game.id, teamId);
       },
     });
   };
@@ -157,16 +153,15 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         </Tooltip>
       )}
 
-      {canAddDelete && allTeams.length === 0 && (
+      {canAddDelete && teams.length === 0 && (
         <Text c="dimmed" ta="center">
           {t('teams.noTeams')}
         </Text>
       )}
 
       <Stack gap="md">
-        {allTeams.map((team) => {
-          if (!team) return null;
-          const players = getPlayersForTeam(team.id);
+        {teams.map((team) => {
+          const players = team.players || [];
 
           return (
             <Card key={team.id} withBorder padding="lg" radius="md" shadow="sm">
@@ -201,44 +196,41 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                   <Text fw={500} size="sm">
                     {t('teams.players')}:
                   </Text>
-                  {players.map((player) => {
-                    if (!player) return null;
-                    return (
-                      <Group
-                        key={player.id}
-                        align="flex-start"
-                        gap="xs"
-                        justify="space-between"
-                        wrap="wrap"
-                      >
-                        <Stack gap="4px" style={{ flex: 1 }}>
-                          <Text size="sm">{player.name}</Text>
-                          {showTableAssignments &&
-                            (playerTableAssignments[player.id]?.length ?? 0) >
-                              0 && (
-                              <Group gap="4px" wrap="wrap">
-                                {(playerTableAssignments[player.id] ?? [])
-                                  .slice()
-                                  .sort((a, b) => a.roundNumber - b.roundNumber)
-                                  .map((assignment) => (
-                                    <Badge
-                                      key={`${assignment.roundNumber}-${assignment.tableNumber}`}
-                                      color="blue"
-                                      size="sm"
-                                      variant="light"
-                                    >
-                                      {t('teams.roundShort')}
-                                      {assignment.roundNumber}:
-                                      {t('teams.tableShort')}
-                                      {assignment.tableNumber}
-                                    </Badge>
-                                  ))}
-                              </Group>
-                            )}
-                        </Stack>
-                      </Group>
-                    );
-                  })}
+                  {players.map((player) => (
+                    <Group
+                      key={player.id}
+                      align="flex-start"
+                      gap="xs"
+                      justify="space-between"
+                      wrap="wrap"
+                    >
+                      <Stack gap="4px" style={{ flex: 1 }}>
+                        <Text size="sm">{player.name}</Text>
+                        {showTableAssignments &&
+                          (playerTableAssignments[player.id]?.length ?? 0) >
+                            0 && (
+                            <Group gap="4px" wrap="wrap">
+                              {(playerTableAssignments[player.id] ?? [])
+                                .slice()
+                                .sort((a, b) => a.roundNumber - b.roundNumber)
+                                .map((assignment) => (
+                                  <Badge
+                                    key={`${assignment.roundNumber}-${assignment.tableNumber}`}
+                                    color="blue"
+                                    size="sm"
+                                    variant="light"
+                                  >
+                                    {t('teams.roundShort')}
+                                    {assignment.roundNumber}:
+                                    {t('teams.tableShort')}
+                                    {assignment.tableNumber}
+                                  </Badge>
+                                ))}
+                            </Group>
+                          )}
+                      </Stack>
+                    </Group>
+                  ))}
                 </Stack>
               </Stack>
             </Card>
@@ -256,8 +248,11 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       {editingTeamId && (
         <EditTeamDialog
           isOpen={editTeamDialogOpen}
-          players={getPlayersForTeam(editingTeamId)}
-          teamName={allTeams.find((t) => t?.id === editingTeamId)?.name || ''}
+          players={
+            (teams.find((t) => t.id === editingTeamId)?.players ||
+              []) as Player[]
+          }
+          teamName={teams.find((t) => t.id === editingTeamId)?.name || ''}
           onClose={() => {
             setEditTeamDialogOpen(false);
             setEditingTeamId(null);

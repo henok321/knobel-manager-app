@@ -1,32 +1,32 @@
 import { Title, Text, Paper, Table, Stack, Divider } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { Player } from '../../../generated';
-import { Table as TableType } from '../../../generated';
-import { Game, Team } from '../../../slices/types';
+import { Game } from '../../../generated';
 
 interface ScoreSheetsViewProps {
   game: Game;
-  tables: (TableType & { roundNumber?: number })[];
-  players: Player[];
-  teams: Team[];
 }
 
-const ScoreSheetsView = ({
-  game,
-  tables,
-  players: _players,
-  teams,
-}: ScoreSheetsViewProps) => {
+const ScoreSheetsView = ({ game }: ScoreSheetsViewProps) => {
   const { t } = useTranslation(['pdf', 'common']);
 
+  // Get all tables from rounds with roundNumber
+  const allTables = (game.rounds || []).flatMap((round) =>
+    (round.tables || []).map((table) => ({
+      ...table,
+      roundNumber: round.roundNumber,
+    })),
+  );
+
   // Sort tables by round and table number
-  const sortedTables = [...tables].sort((a, b) => {
+  const sortedTables = [...allTables].sort((a, b) => {
     if (a.roundNumber && b.roundNumber && a.roundNumber !== b.roundNumber) {
       return a.roundNumber - b.roundNumber;
     }
     return a.tableNumber - b.tableNumber;
   });
+
+  const teams = game.teams || [];
 
   return (
     <Stack gap="xl">

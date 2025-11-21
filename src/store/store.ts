@@ -1,16 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { resetStore } from '../slices/actions.ts';
+import { resetStore } from '../slices/games/slice.ts';
 import gamesReducer from '../slices/games/slice.ts';
-import playersReducer from '../slices/players/slice.ts';
-import tablesReducer from '../slices/tables/slice.ts';
-import teamsReducer from '../slices/teams/slice.ts';
 
 const appReducer = combineReducers({
   games: gamesReducer,
-  teams: teamsReducer,
-  players: playersReducer,
-  tables: tablesReducer,
 });
 
 const rootReducer: typeof appReducer = (state, action) => {

@@ -9,37 +9,33 @@ import {
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { Player } from '../../../generated';
-import { Table as TableType } from '../../../generated';
-import { Game, Team } from '../../../slices/types';
+import { Game, Team } from '../../../generated';
 
 interface TeamHandoutsViewProps {
   game: Game;
-  tables: (TableType & { roundNumber?: number })[];
-  players: Player[];
-  teams: Team[];
   teamId?: number;
 }
 
-const TeamHandoutsView = ({
-  game,
-  tables,
-  players,
-  teams: allTeams,
-  teamId,
-}: TeamHandoutsViewProps) => {
+const TeamHandoutsView = ({ game, teamId }: TeamHandoutsViewProps) => {
   const { t } = useTranslation(['pdf', 'common']);
 
+  // Get all tables from rounds with roundNumber
+  const allTables = (game.rounds || []).flatMap((round) =>
+    (round.tables || []).map((table) => ({
+      ...table,
+      roundNumber: round.roundNumber,
+    })),
+  );
+
   // Filter teams to display
-  const teams = allTeams.filter(
-    (team) => team.gameID === game.id && (!teamId || team.id === teamId),
+  const teams = (game.teams || []).filter(
+    (team) => !teamId || team.id === teamId,
   );
 
   const renderTeamHandout = (team: Team) => {
     // Get team players
-    const teamPlayers = team.players
-      .map((playerId: number) => players.find((p) => p.id === playerId))
-      .filter((player): player is Player => player !== undefined);
+    const teamPlayers = team.players || [];
+    const teamPlayerIds = teamPlayers.map((p) => p.id);
 
     // Build player assignments per round
     const playerAssignments: Record<
@@ -47,11 +43,11 @@ const TeamHandoutsView = ({
       Record<number, { tableNumber: number; roundNumber: number }>
     > = {};
 
-    tables.forEach((table) => {
+    allTables.forEach((table) => {
       if (!table.roundNumber) return;
 
       (table.players || []).forEach((player) => {
-        if (team.players.includes(player.id)) {
+        if (teamPlayerIds.includes(player.id)) {
           playerAssignments[player.id] ??= {};
           playerAssignments[player.id]![table.roundNumber!] = {
             tableNumber: table.tableNumber,
