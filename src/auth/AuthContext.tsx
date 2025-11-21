@@ -14,7 +14,7 @@ import React, {
 } from 'react';
 
 import { auth as firebaseAuth } from './firebaseConfig.ts';
-import { resetStore } from '../slices/actions.ts';
+import { resetStore } from '../slices/games/slice.ts';
 import store from '../store/store.ts';
 
 type LoginData = {

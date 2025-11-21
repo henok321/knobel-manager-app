@@ -76,7 +76,7 @@ const Games = () => {
           <Text c="red" size="xl">
             {t('actions.errorOccurred')}
           </Text>
-          <Text c="red">{error?.message}</Text>
+          <Text c="red">{error}</Text>
         </Stack>
       </Center>
     );

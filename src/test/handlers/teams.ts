@@ -17,11 +17,12 @@ export const teamsHandlers = [
         id: 1,
         name: body.name,
         gameID,
-        players: body.players?.map((player, index) => ({
-          id: index + 1,
-          name: player.name,
-          teamID: 1,
-        })),
+        players:
+          body.players?.map((player, index) => ({
+            id: index + 1,
+            name: player.name,
+            teamID: 1,
+          })) || [],
       },
     };
 

@@ -3,10 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import {
   createGameAction,
+  createTeamAction,
   deleteGameAction,
+  deletePlayerAction,
+  deleteTeamAction,
+  fetchAll,
+  fetchAllTablesForGame,
+  fetchTablesForRound,
   setupGameAction,
   updateGameAction,
-} from './actions';
+  updatePlayerAction,
+  updateScoresForTable,
+  updateTeamAction,
+} from './slice';
 import {
   selectActiveGame,
   selectAllGames,
@@ -14,9 +23,12 @@ import {
   selectGamesStatus,
 } from './slice';
 import { GamesContext } from '../../GamesContext.tsx';
-import { GameCreateRequest, GameUpdateRequest } from '../../generated';
+import {
+  GameCreateRequest,
+  GameUpdateRequest,
+  TeamsRequest,
+} from '../../generated';
 import { AppDispatch, RootState } from '../../store/store';
-import { fetchAll } from '../actions';
 
 const useGames = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -74,6 +86,76 @@ const useGames = () => {
     [dispatch],
   );
 
+  const createTeam = useCallback(
+    (gameID: number, teamRequest: TeamsRequest) => {
+      dispatch(createTeamAction({ gameID, teamRequest }));
+    },
+    [dispatch],
+  );
+
+  const updateTeam = useCallback(
+    (gameID: number, teamID: number, name: string) => {
+      dispatch(updateTeamAction({ gameID, teamID, teamRequest: { name } }));
+    },
+    [dispatch],
+  );
+
+  const deleteTeam = useCallback(
+    (gameID: number, teamID: number) => {
+      dispatch(deleteTeamAction({ gameID, teamID }));
+    },
+    [dispatch],
+  );
+
+  const updatePlayer = useCallback(
+    (gameID: number, teamID: number, playerID: number, name: string) => {
+      dispatch(
+        updatePlayerAction({
+          gameID,
+          teamID,
+          playerID,
+          playerRequest: { name },
+        }),
+      );
+    },
+    [dispatch],
+  );
+
+  const deletePlayer = useCallback(
+    (gameID: number, teamID: number, playerID: number) => {
+      dispatch(deletePlayerAction({ gameID, teamID, playerID }));
+    },
+    [dispatch],
+  );
+
+  const fetchTables = useCallback(
+    (gameID: number, roundNumber: number) => {
+      dispatch(fetchTablesForRound({ gameID, roundNumber }));
+    },
+    [dispatch],
+  );
+
+  const fetchAllTables = useCallback(
+    (gameID: number, numberOfRounds: number) => {
+      dispatch(fetchAllTablesForGame({ gameID, numberOfRounds }));
+    },
+    [dispatch],
+  );
+
+  const updateScores = useCallback(
+    (
+      gameID: number,
+      roundNumber: number,
+      tableNumber: number,
+      scores: { playerID: number; score: number }[],
+    ) => {
+      dispatch(
+        updateScoresForTable({ gameID, roundNumber, tableNumber, scores }),
+      );
+    },
+    [dispatch],
+  );
+
   return {
     allGames,
     activeGame,
@@ -87,6 +169,17 @@ const useGames = () => {
     updateGame,
     setupGame,
     clearActiveGameID,
+
+    createTeam,
+    updateTeam,
+    deleteTeam,
+
+    updatePlayer,
+    deletePlayer,
+
+    fetchTables,
+    fetchAllTables,
+    updateScores,
   };
 };
 

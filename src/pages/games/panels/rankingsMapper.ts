@@ -1,5 +1,4 @@
-import { Score, Table as TableModel } from '../../../generated/models';
-import { Player, Team } from '../../../slices/types.ts';
+import { Score, Table as TableModel, Team } from '../../../generated/models';
 
 interface PlayerRanking {
   playerId: number;
@@ -17,24 +16,19 @@ interface TeamRanking {
 
 const mapPlayersToRankings = (
   teams: Team[],
-  players: Player[],
   scoresByPlayer: Record<number, number>,
 ): PlayerRanking[] => {
   const rankings: PlayerRanking[] = [];
 
   teams.forEach((team) => {
-    if (!team) return;
-
-    team.players.forEach((playerId) => {
-      const player = players.find((p) => p.id === playerId);
-      if (!player) return;
-
+    const players = team.players || [];
+    players.forEach((player) => {
       rankings.push({
-        playerId,
+        playerId: player.id,
         playerName: player.name,
         teamId: team.id,
         teamName: team.name,
-        totalScore: scoresByPlayer[playerId] || 0,
+        totalScore: scoresByPlayer[player.id] || 0,
       });
     });
   });
@@ -49,9 +43,7 @@ const mapTeamsToRankings = (
   const teamScores: Record<number, number> = {};
 
   teams.forEach((team) => {
-    if (team) {
-      teamScores[team.id] = 0;
-    }
+    teamScores[team.id] = 0;
   });
 
   playerRankings.forEach((playerRank) => {
@@ -62,7 +54,7 @@ const mapTeamsToRankings = (
   const rankings: TeamRanking[] = Object.entries(teamScores).map(
     ([teamIdStr, totalScore]) => {
       const teamId = Number(teamIdStr);
-      const team = teams.find((t) => t?.id === teamId);
+      const team = teams.find((t) => t.id === teamId);
       return {
         teamId,
         teamName: team?.name || 'Unknown',
