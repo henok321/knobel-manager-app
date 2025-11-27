@@ -10,7 +10,7 @@
   "scripts": {
     "prod": "vite --mode production",
     "local": "vite --mode development",
-    "api:gen": "openapi-generator-cli generate -i https://knobel-manager-service.henok.eu/openapi.yaml -g typescript-axios -o src/generated --additional-properties=withSeparateModelsAndApi=true,modelPropertyNaming=original,supportsES6=true,apiPackage=apis,modelPackage=models",
+    "api:gen": "openapi-generator-cli generate -i https://api.knobel-manager.de/openapi.yaml -g typescript-axios -o src/generated --additional-properties=withSeparateModelsAndApi=true,modelPropertyNaming=original,supportsES6=true,apiPackage=apis,modelPackage=models",
     "build": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
