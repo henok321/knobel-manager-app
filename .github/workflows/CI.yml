@@ -1,4 +1,4 @@
-name: CI/CD for Firebase Hosting
+name: CI
 
 on:
   push:
@@ -105,54 +105,3 @@ jobs:
 
       - name: Run tests
         run: npm test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [lint, test, audit]
-
-    concurrency:
-      group: 'deploy-${{ github.ref }}'
-      cancel-in-progress: true
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Cache npm dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Generate api client from OpenAPI spec
-        run: npm run api:gen
-
-      - name: Build
-        run: npm run build
-
-      - name: Deploy to Firebase (Production)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KNOBEL_MANAGER_WEBAPP }}
-          channelId: live
-          projectId: knobel-manager-webapp
-
-      - name: Deploy Preview to Firebase (Pull Request)
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KNOBEL_MANAGER_WEBAPP }}
-          projectId: knobel-manager-webapp
