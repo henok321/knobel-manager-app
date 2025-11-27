@@ -5,8 +5,6 @@ on:
     workflows: ['CI']
     types:
       - completed
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -50,12 +48,20 @@ jobs:
         run: npm run build
 
       - name: Deploy to Firebase (Production)
-        if: github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main'
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'push'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KNOBEL_MANAGER_WEBAPP }}
           channelId: live
+          projectId: knobel-manager-webapp
+
+      - name: Deploy Preview to Firebase (Pull Request)
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.event == 'pull_request'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KNOBEL_MANAGER_WEBAPP }}
           projectId: knobel-manager-webapp
 
       - name: Deploy to Firebase (Manual Trigger)
