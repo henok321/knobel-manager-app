@@ -1,6 +1,6 @@
 # Knobel Manager App
 
-[![Deploy](https://github.com/henok321/knobel-manager-app/actions/workflows/deploy.yml/badge.svg)](https://github.com/henok321/knobel-manager-app/actions/workflows/deploy.yml)
+[![Pipeline](https://github.com/henok321/knobel-manager-app/actions/workflows/pipeline.yml/badge.svg)](https://github.com/henok321/knobel-manager-app/actions/workflows/pipeline.yml)
 
 Tournament manager for the dice game "Knobeln" (aka "Schocken"). React 19 + TypeScript + Redux Toolkit + Mantine UI
 

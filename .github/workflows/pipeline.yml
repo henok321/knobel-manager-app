@@ -1,4 +1,4 @@
-name: CI/CD for Firebase Hosting
+name: CI/CD Pipeline
 
 on:
   push:
@@ -22,6 +22,7 @@ permissions:
 
 jobs:
   audit:
+    name: Audit dependencies
     runs-on: ubuntu-latest
 
     steps:
@@ -46,6 +47,7 @@ jobs:
         run: npm audit --audit-level=high
 
   lint:
+    name: Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -78,6 +80,7 @@ jobs:
         run: npm run knip
 
   test:
+    name: Test
     runs-on: ubuntu-latest
 
     steps:
@@ -107,8 +110,11 @@ jobs:
         run: npm test
 
   deploy:
-    runs-on: ubuntu-latest
+    name: Deploy
     needs: [lint, test, audit]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
 
     concurrency:
       group: 'deploy-${{ github.ref }}'
