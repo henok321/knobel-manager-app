@@ -12,11 +12,11 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import GameListItem from './components/GameListItem';
-import GameForm, { GameFormData } from './GameForm';
+import GameForm from './GameForm';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import { GameStatusEnum } from '../../generated';
 import CenterLoader from '../../shared/CenterLoader';
@@ -62,6 +62,24 @@ const Games = () => {
     };
   }, [allGames, searchQuery]);
 
+  const handleDeleteGame = useCallback(
+    (gameID: number) => {
+      modals.openConfirmModal({
+        title: t('deleteGame'),
+        children: <Text size="sm">{t('confirmDelete')}</Text>,
+        labels: {
+          confirm: t('actions.delete'),
+          cancel: t('actions.cancel'),
+        },
+        confirmProps: { color: 'red' },
+        onConfirm: () => {
+          deleteGame(gameID);
+        },
+      });
+    },
+    [t, deleteGame],
+  );
+
   const isLoading = status === 'idle' || status === 'pending';
   const hasError = status === 'failed' && error;
 
@@ -81,29 +99,6 @@ const Games = () => {
       </Center>
     );
   }
-
-  const handleCreateGame = (formData: GameFormData) => {
-    createGame(formData);
-  };
-
-  const handleActivateGame = (gameID: number) => {
-    activateGame(gameID);
-  };
-
-  const handleDeleteGame = (gameID: number) => {
-    modals.openConfirmModal({
-      title: t('deleteGame'),
-      children: <Text size="sm">{t('confirmDelete')}</Text>,
-      labels: {
-        confirm: t('actions.delete'),
-        cancel: t('actions.cancel'),
-      },
-      confirmProps: { color: 'red' },
-      onConfirm: () => {
-        deleteGame(gameID);
-      },
-    });
-  };
 
   const hasGames =
     activeAndInProgressGames.length > 0 || completedGames.length > 0;
@@ -137,16 +132,13 @@ const Games = () => {
             </Button>
           </Group>
 
-          {hasGames && (
-            <TextInput
-              placeholder={t('search')}
-              size="md"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.currentTarget.value)}
-            />
-          )}
+          <TextInput
+            placeholder={t('search')}
+            size="md"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.currentTarget.value)}
+          />
 
-          {/* Empty State */}
           {!hasGames && (
             <Card withBorder p="xl" radius="md">
               <Stack align="center" gap="md">
@@ -172,7 +164,7 @@ const Games = () => {
                   key={game.id}
                   game={game}
                   isActive={game.id === activeGame?.id}
-                  onActivate={handleActivateGame}
+                  onActivate={activateGame}
                   onDelete={handleDeleteGame}
                 />
               ))}
@@ -190,7 +182,7 @@ const Games = () => {
                   key={game.id}
                   game={game}
                   isActive={game.id === activeGame?.id}
-                  onActivate={handleActivateGame}
+                  onActivate={activateGame}
                   onDelete={handleDeleteGame}
                 />
               ))}
@@ -200,7 +192,7 @@ const Games = () => {
       </Container>
 
       <GameForm
-        createGame={handleCreateGame}
+        createGame={createGame}
         isOpen={gameModalActive}
         onClose={() => setGameModalActive(false)}
       />
