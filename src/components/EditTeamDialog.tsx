@@ -1,5 +1,5 @@
 import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
-import { useState, type KeyboardEvent } from 'react';
+import { useState, type KeyboardEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Player {
@@ -22,10 +22,14 @@ const EditTeamDialogContent = ({
   onSave,
 }: Omit<EditTeamDialogProps, 'isOpen'>) => {
   const { t } = useTranslation(['gameDetail', 'common']);
-  const initialPlayerNames: Record<number, string> = {};
-  players.forEach((p) => {
-    initialPlayerNames[p.id] = p.name;
-  });
+
+  const initialPlayerNames: Record<number, string> = useMemo(() => {
+    const names: Record<number, string> = {};
+    players.forEach((p) => {
+      names[p.id] = p.name;
+    });
+    return names;
+  }, [players]);
 
   const [name, setName] = useState(teamName);
   const [playerNames, setPlayerNames] =

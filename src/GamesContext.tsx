@@ -14,8 +14,8 @@ const STORAGE_KEY = 'activeGameID';
 
 const parseGameID = (stored: string | null): number | null => {
   if (!stored) return null;
-  const parsed = parseInt(stored, 10);
-  return isNaN(parsed) ? null : parsed;
+  const parsed = Number.parseInt(stored, 10);
+  return Number.isNaN(parsed) ? null : parsed;
 };
 
 const getStoredGameID = (): number | null =>
@@ -50,7 +50,7 @@ const GamesProvider: React.FC<{ children: React.ReactNode }> = ({
       setActiveGameID,
       clearActiveGameID: () => setActiveGameID(null),
     }),
-    [activeGameID, setActiveGameID],
+    [activeGameID],
   );
 
   return (

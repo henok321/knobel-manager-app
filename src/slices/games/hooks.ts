@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -34,9 +34,9 @@ const useGames = () => {
   const status = useSelector(selectGamesStatus);
   const error = useSelector(selectGamesError);
 
-  const fetchGames = () => {
+  const fetchGames = useCallback(() => {
     dispatch(fetchAll());
-  };
+  }, [dispatch]);
 
   const createGame = (gameRequest: GameCreateRequest) => {
     dispatch(createGameAction(gameRequest));
