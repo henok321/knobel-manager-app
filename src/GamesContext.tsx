@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
 type GamesContextValue = {
   activeGameID: number | null;
@@ -14,8 +14,8 @@ const STORAGE_KEY = 'activeGameID';
 
 const parseGameID = (stored: string | null): number | null => {
   if (!stored) return null;
-  const parsed = parseInt(stored, 10);
-  return isNaN(parsed) ? null : parsed;
+  const parsed = Number.parseInt(stored, 10);
+  return Number.isNaN(parsed) ? null : parsed;
 };
 
 const getStoredGameID = (): number | null =>
@@ -32,7 +32,7 @@ const clearStoredGameID = (): void => {
 const GamesProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [activeGameID, setActiveGameIDState] = useState<number | null>(
+  const [activeGameID, setActiveGameID] = useState<number | null>(
     getStoredGameID,
   );
 
@@ -44,17 +44,13 @@ const GamesProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [activeGameID]);
 
-  const setActiveGameID = useCallback((gameID: number) => {
-    setActiveGameIDState(gameID);
-  }, []);
-
-  const clearActiveGameID = useCallback(() => {
-    setActiveGameIDState(null);
-  }, []);
-
   const value = useMemo<GamesContextValue>(
-    () => ({ activeGameID, setActiveGameID, clearActiveGameID }),
-    [activeGameID, setActiveGameID, clearActiveGameID],
+    () => ({
+      activeGameID,
+      setActiveGameID,
+      clearActiveGameID: () => setActiveGameID(null),
+    }),
+    [activeGameID],
   );
 
   return (

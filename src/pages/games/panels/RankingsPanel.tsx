@@ -38,10 +38,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     [game.numberOfRounds, t],
   );
 
-  const roundsCount = useMemo(
-    () => game.rounds?.length || 0,
-    [game.rounds?.length],
-  );
+  const roundsCount = game.rounds?.length || 0;
 
   useEffect(() => {
     if (roundsCount > 0 && status === 'idle') {
@@ -58,10 +55,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     [filteredTables],
   );
 
-  const hasNoScores = useMemo(
-    () => Object.keys(allScores).length === 0,
-    [allScores],
-  );
+  const hasNoScores = Object.keys(allScores).length === 0;
 
   const playerRankings = useMemo(
     () => mapPlayersToRankings(gameTeams, allPlayers, allScores),

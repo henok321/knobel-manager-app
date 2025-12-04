@@ -16,7 +16,7 @@ import {
   IconListDetails,
   IconPlus,
 } from '@tabler/icons-react';
-import { CSSProperties, useCallback, useMemo } from 'react';
+import { CSSProperties, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -74,25 +74,22 @@ const GameContextSelector = ({
     [allGames, activeGame?.id],
   );
 
-  const handleSwitchGame = useCallback(
-    (gameId: number) => {
-      activateGame(gameId);
-      navigate(`/games/${gameId}`);
-      if (isMobile && onClose) {
-        onClose();
-      }
-    },
-    [activateGame, navigate, isMobile, onClose],
-  );
+  const handleSwitchGame = (gameId: number) => {
+    activateGame(gameId);
+    navigate(`/games/${gameId}`);
+    if (isMobile && onClose) {
+      onClose();
+    }
+  };
 
-  const handleNavigateToGames = useCallback(() => {
+  const handleNavigateToGames = () => {
     navigate('/games');
     if (isMobile && onClose) {
       onClose();
     }
-  }, [navigate, isMobile, onClose]);
+  };
 
-  const handleCreateGame = useCallback(() => {
+  const handleCreateGame = () => {
     if (onOpenGameForm) {
       onOpenGameForm();
     } else {
@@ -101,7 +98,7 @@ const GameContextSelector = ({
     if (isMobile && onClose) {
       onClose();
     }
-  }, [onOpenGameForm, navigate, isMobile, onClose]);
+  };
 
   if (!activeGame) {
     return (

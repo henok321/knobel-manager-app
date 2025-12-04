@@ -23,7 +23,7 @@ const ScoreEntryModal = ({
   const { t } = useTranslation(['gameDetail', 'common']);
   const [scores, setScores] = useState<Record<number, number>>({});
 
-  const players = useMemo(() => table?.players || [], [table?.players]);
+  const players = useMemo(() => table?.players || [], [table]);
 
   const initialScores = useMemo(() => {
     const scoreMap: Record<number, number> = {};

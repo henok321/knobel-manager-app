@@ -174,7 +174,6 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   return (
     <Stack gap="md">
-      {/* Game Header */}
       <Group align="center" justify="space-between">
         <div>
           <Title order={1}>{game.name}</Title>
@@ -234,7 +233,6 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         </Group>
       </Group>
 
-      {/* Tabs - Order changes based on game status */}
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tabs.List>
           {game.status === GameStatusEnum.Setup && (

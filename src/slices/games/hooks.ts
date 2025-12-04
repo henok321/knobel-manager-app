@@ -38,41 +38,26 @@ const useGames = () => {
     dispatch(fetchAll());
   }, [dispatch]);
 
-  const createGame = useCallback(
-    (gameRequest: GameCreateRequest) => {
-      dispatch(createGameAction(gameRequest));
-    },
-    [dispatch],
-  );
+  const createGame = (gameRequest: GameCreateRequest) => {
+    dispatch(createGameAction(gameRequest));
+  };
 
-  const deleteGame = useCallback(
-    (gameID: number) => {
-      if (activeGameID === gameID) {
-        clearActiveGameID();
-      }
-      dispatch(deleteGameAction(gameID));
-    },
-    [dispatch, activeGameID, clearActiveGameID],
-  );
+  const deleteGame = (gameID: number) => {
+    if (activeGameID === gameID) {
+      clearActiveGameID();
+    }
+    dispatch(deleteGameAction(gameID));
+  };
 
-  const activateGame = useCallback(
-    (gameID: number) => {
-      setActiveGameID(gameID);
-    },
-    [setActiveGameID],
-  );
+  const activateGame = (gameID: number) => {
+    setActiveGameID(gameID);
+  };
 
-  const updateGame = useCallback(
-    (gameID: number, gameRequest: GameUpdateRequest) => {
-      dispatch(updateGameAction({ gameID, gameRequest }));
-    },
-    [dispatch],
-  );
+  const updateGame = (gameID: number, gameRequest: GameUpdateRequest) => {
+    dispatch(updateGameAction({ gameID, gameRequest }));
+  };
 
-  const setupGame = useCallback(
-    (gameID: number) => dispatch(setupGameAction(gameID)),
-    [dispatch],
-  );
+  const setupGame = (gameID: number) => dispatch(setupGameAction(gameID));
 
   return {
     allGames,
