@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -23,9 +24,12 @@ const useTables = () => {
     dispatch(fetchTablesForRound({ gameId, roundNumber }));
   };
 
-  const fetchAllTables = (gameId: number, numberOfRounds: number) => {
-    dispatch(fetchAllTablesForGame({ gameId, numberOfRounds }));
-  };
+  const fetchAllTables = useCallback(
+    (gameId: number, numberOfRounds: number) => {
+      dispatch(fetchAllTablesForGame({ gameId, numberOfRounds }));
+    },
+    [dispatch],
+  );
 
   const updateScores = (
     gameId: number,
