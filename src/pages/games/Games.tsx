@@ -12,7 +12,7 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import GameListItem from './components/GameListItem';
@@ -62,23 +62,20 @@ const Games = () => {
     };
   }, [allGames, searchQuery]);
 
-  const handleDeleteGame = useCallback(
-    (gameID: number) => {
-      modals.openConfirmModal({
-        title: t('deleteGame'),
-        children: <Text size="sm">{t('confirmDelete')}</Text>,
-        labels: {
-          confirm: t('actions.delete'),
-          cancel: t('actions.cancel'),
-        },
-        confirmProps: { color: 'red' },
-        onConfirm: () => {
-          deleteGame(gameID);
-        },
-      });
-    },
-    [t, deleteGame],
-  );
+  const handleDeleteGame = (gameID: number) => {
+    modals.openConfirmModal({
+      title: t('deleteGame'),
+      children: <Text size="sm">{t('confirmDelete')}</Text>,
+      labels: {
+        confirm: t('actions.delete'),
+        cancel: t('actions.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm: () => {
+        deleteGame(gameID);
+      },
+    });
+  };
 
   const isLoading = status === 'idle' || status === 'pending';
   const hasError = status === 'failed' && error;

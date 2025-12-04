@@ -41,10 +41,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     game.status === GameStatusEnum.InProgress;
   const isCompleted = game.status === GameStatusEnum.Completed;
 
-  const roundsCount = useMemo(
-    () => game.rounds?.length || 0,
-    [game.rounds?.length],
-  );
+  const roundsCount = game.rounds?.length || 0;
 
   useEffect(() => {
     if (roundsCount > 0 && status === 'idle') {

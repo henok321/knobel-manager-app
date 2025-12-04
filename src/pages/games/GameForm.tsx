@@ -11,7 +11,7 @@ import { notifications } from '@mantine/notifications';
 import { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export interface GameFormData {
+interface GameFormData {
   name: string;
   teamSize: number;
   tableSize: number;

@@ -23,7 +23,7 @@ const ScoreEntryModal = ({
   const { t } = useTranslation(['gameDetail', 'common']);
   const [scores, setScores] = useState<Record<number, number>>({});
 
-  const players = useMemo(() => table?.players || [], [table?.players]);
+  const players = table?.players || [];
 
   const initialScores = useMemo(() => {
     const scoreMap: Record<number, number> = {};
@@ -34,7 +34,8 @@ const ScoreEntryModal = ({
       scoreMap[player.id] = existingScore?.score || 0;
     }
     return scoreMap;
-  }, [players, table?.scores]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [table]);
 
   if (!table) return null;
 
