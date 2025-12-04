@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import GameListItem from './components/GameListItem';
 import GameForm from './GameForm';
 import Breadcrumbs from '../../components/Breadcrumbs';
-import { GameStatusEnum } from '../../generated';
+import { GameStatus } from '../../generated';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
@@ -53,11 +53,11 @@ const Games = () => {
     return {
       activeAndInProgressGames: filtered.filter(
         (game) =>
-          game.status === GameStatusEnum.Setup ||
-          game.status === GameStatusEnum.InProgress,
+          game.status === GameStatus.Setup ||
+          game.status === GameStatus.InProgress,
       ),
       completedGames: filtered.filter(
-        (game) => game.status === GameStatusEnum.Completed,
+        (game) => game.status === GameStatus.Completed,
       ),
     };
   }, [allGames, searchQuery]);

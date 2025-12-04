@@ -20,17 +20,17 @@ import { CSSProperties, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { GameStatusEnum } from '../generated';
+import { GameStatus } from '../generated';
 import useGames from '../slices/games/hooks';
 import { Game } from '../slices/types';
 
-const getStatusColor = (status: GameStatusEnum) => {
+const getStatusColor = (status: GameStatus) => {
   switch (status) {
-    case GameStatusEnum.Setup:
+    case GameStatus.Setup:
       return 'gray';
-    case GameStatusEnum.InProgress:
+    case GameStatus.InProgress:
       return 'blue';
-    case GameStatusEnum.Completed:
+    case GameStatus.Completed:
       return 'green';
     default:
       return 'gray';
@@ -67,8 +67,8 @@ const GameContextSelector = ({
         .filter((game) => game.id !== activeGame?.id)
         .filter(
           (game) =>
-            game.status === GameStatusEnum.Setup ||
-            game.status === GameStatusEnum.InProgress,
+            game.status === GameStatus.Setup ||
+            game.status === GameStatus.InProgress,
         )
         .slice(0, 3),
     [allGames, activeGame?.id],

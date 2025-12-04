@@ -15,7 +15,7 @@ import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GameStatusEnum, GameUpdateRequest } from '../generated';
+import { GameStatus, GameUpdateRequest } from '../generated';
 import RankingsPanel from '../pages/games/panels/RankingsPanel';
 import RoundsPanel from '../pages/games/panels/RoundsPanel';
 import TeamsPanel from '../pages/games/panels/TeamsPanel';
@@ -36,11 +36,11 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const getDefaultTab = () => {
     switch (game.status) {
-      case GameStatusEnum.Setup:
+      case GameStatus.Setup:
         return 'teams';
-      case GameStatusEnum.InProgress:
+      case GameStatus.InProgress:
         return 'rounds';
-      case GameStatusEnum.Completed:
+      case GameStatus.Completed:
         return 'rankings';
       default:
         return 'teams';
@@ -65,7 +65,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   }, [activeTab, game.id]);
 
   const scoreProgress = useMemo(() => {
-    if (!game || game.status !== GameStatusEnum.InProgress) {
+    if (!game || game.status !== GameStatus.InProgress) {
       return { canComplete: false, completed: 0, total: 0 };
     }
 
@@ -92,7 +92,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const canComplete = scoreProgress.canComplete;
 
-  const handleStatusTransition = (newStatus: GameStatusEnum) => {
+  const handleStatusTransition = (newStatus: GameStatus) => {
     const gameRequest: GameUpdateRequest = {
       name: game.name,
       numberOfRounds: game.numberOfRounds,
@@ -122,7 +122,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       },
       confirmProps: { color: 'blue' },
       onConfirm: () => {
-        handleStatusTransition(GameStatusEnum.InProgress);
+        handleStatusTransition(GameStatus.InProgress);
         setActiveTab('rounds');
         notifications.show({
           title: t('actions.gameStartedNotification'),
@@ -142,7 +142,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         cancel: t('actions.cancel'),
       },
       confirmProps: { color: 'green' },
-      onConfirm: () => handleStatusTransition(GameStatusEnum.Completed),
+      onConfirm: () => handleStatusTransition(GameStatus.Completed),
     });
   };
 
@@ -200,12 +200,12 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           >
             {t(`status.${game.status}`)}
           </Badge>
-          {game.status === GameStatusEnum.Setup && (
+          {game.status === GameStatus.Setup && (
             <Button color="blue" size="sm" onClick={confirmStartGame}>
               {t('actions.startGame')}
             </Button>
           )}
-          {game.status === GameStatusEnum.InProgress && (
+          {game.status === GameStatus.InProgress && (
             <Tooltip
               disabled={canComplete}
               label={
@@ -235,21 +235,21 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tabs.List>
-          {game.status === GameStatusEnum.Setup && (
+          {game.status === GameStatus.Setup && (
             <>
               <Tabs.Tab value="teams">{t('tabs.teams')}</Tabs.Tab>
               <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>
               <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
             </>
           )}
-          {game.status === GameStatusEnum.InProgress && (
+          {game.status === GameStatus.InProgress && (
             <>
               <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>
               <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
               <Tabs.Tab value="teams">{t('tabs.teams')}</Tabs.Tab>
             </>
           )}
-          {game.status === GameStatusEnum.Completed && (
+          {game.status === GameStatus.Completed && (
             <>
               <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
               <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>

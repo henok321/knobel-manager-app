@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import type { Table } from '../../../generated';
-import { GameStatusEnum } from '../../../generated';
+import { GameStatus } from '../../../generated';
 import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
 import { selectTablesForRoundWithSearch } from '../../../slices/tables/slice';
@@ -48,8 +48,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [setupError, setSetupError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const canEditScores = game.status === GameStatusEnum.InProgress;
-  const canSetupMatchmaking = game.status === GameStatusEnum.Setup;
+  const canEditScores = game.status === GameStatus.InProgress;
+  const canSetupMatchmaking = game.status === GameStatus.Setup;
   const hasRounds = (game.rounds?.length || 0) > 0;
   const isSetupMode = !hasRounds || allTables.length === 0;
 
@@ -147,7 +147,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         .rounds-table tbody tr > td:nth-child(3),
         .rounds-table thead tr > th:nth-child(3) { text-align: right; }
       `}</style>
-      {(!isSetupMode || game.status === GameStatusEnum.InProgress) && (
+      {(!isSetupMode || game.status === GameStatus.InProgress) && (
         <Group align="flex-end" justify="space-between" wrap="wrap">
           <Select
             data={roundOptions}

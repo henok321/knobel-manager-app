@@ -19,7 +19,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { GameStatusEnum } from '../../../generated';
+import { GameStatus } from '../../../generated';
 import { Game } from '../../../slices/types';
 
 interface GameListItemProps {
@@ -29,26 +29,26 @@ interface GameListItemProps {
   onDelete: (gameId: number) => void;
 }
 
-const getStatusIcon = (status: GameStatusEnum) => {
+const getStatusIcon = (status: GameStatus) => {
   switch (status) {
-    case GameStatusEnum.Setup:
+    case GameStatus.Setup:
       return <IconSettings style={{ width: 14, height: 14 }} />;
-    case GameStatusEnum.InProgress:
+    case GameStatus.InProgress:
       return <IconPlayerPlay style={{ width: 14, height: 14 }} />;
-    case GameStatusEnum.Completed:
+    case GameStatus.Completed:
       return <IconCheck style={{ width: 14, height: 14 }} />;
     default:
       return null;
   }
 };
 
-const getStatusColor = (status: GameStatusEnum) => {
+const getStatusColor = (status: GameStatus) => {
   switch (status) {
-    case GameStatusEnum.Setup:
+    case GameStatus.Setup:
       return 'gray';
-    case GameStatusEnum.InProgress:
+    case GameStatus.InProgress:
       return 'blue';
-    case GameStatusEnum.Completed:
+    case GameStatus.Completed:
       return 'green';
     default:
       return 'gray';
