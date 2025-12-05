@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deletePlayerAction, updatePlayerAction } from './actions';
@@ -10,13 +11,19 @@ const usePlayers = () => {
   const status = useSelector((state: RootState) => state.players.status);
   const error = useSelector((state: RootState) => state.players.error);
 
-  const updatePlayer = (playerID: number, name: string) => {
-    dispatch(updatePlayerAction({ playerID, name }));
-  };
+  const updatePlayer = useCallback(
+    (playerID: number, name: string) => {
+      dispatch(updatePlayerAction({ playerID, name }));
+    },
+    [dispatch],
+  );
 
-  const deletePlayer = (playerID: number) => {
-    dispatch(deletePlayerAction(playerID));
-  };
+  const deletePlayer = useCallback(
+    (playerID: number) => {
+      dispatch(deletePlayerAction(playerID));
+    },
+    [dispatch],
+  );
 
   return {
     allPlayers,

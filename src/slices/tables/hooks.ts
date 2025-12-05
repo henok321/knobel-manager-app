@@ -20,9 +20,12 @@ const useTables = () => {
   const status = useSelector((state: RootState) => state.tables.status);
   const error = useSelector((state: RootState) => state.tables.error);
 
-  const fetchTables = (gameId: number, roundNumber: number) => {
-    dispatch(fetchTablesForRound({ gameId, roundNumber }));
-  };
+  const fetchTables = useCallback(
+    (gameId: number, roundNumber: number) => {
+      dispatch(fetchTablesForRound({ gameId, roundNumber }));
+    },
+    [dispatch],
+  );
 
   const fetchAllTables = useCallback(
     (gameId: number, numberOfRounds: number) => {
@@ -31,16 +34,19 @@ const useTables = () => {
     [dispatch],
   );
 
-  const updateScores = (
-    gameId: number,
-    roundNumber: number,
-    tableNumber: number,
-    scores: { playerID: number; score: number }[],
-  ) => {
-    dispatch(
-      updateScoresForTable({ gameId, roundNumber, tableNumber, scores }),
-    );
-  };
+  const updateScores = useCallback(
+    (
+      gameId: number,
+      roundNumber: number,
+      tableNumber: number,
+      scores: { playerID: number; score: number }[],
+    ) => {
+      dispatch(
+        updateScoresForTable({ gameId, roundNumber, tableNumber, scores }),
+      );
+    },
+    [dispatch],
+  );
 
   return {
     tables,

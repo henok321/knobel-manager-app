@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -18,17 +19,26 @@ const useTeams = () => {
   const status = useSelector((state: RootState) => state.teams.status);
   const error = useSelector((state: RootState) => state.teams.error);
 
-  const createTeam = (gameID: number, teamRequest: TeamsRequest) => {
-    dispatch(createTeamAction({ gameID, teamRequest }));
-  };
+  const createTeam = useCallback(
+    (gameID: number, teamRequest: TeamsRequest) => {
+      dispatch(createTeamAction({ gameID, teamRequest }));
+    },
+    [dispatch],
+  );
 
-  const updateTeam = (teamID: number, name: string) => {
-    dispatch(updateTeamAction({ teamID, name }));
-  };
+  const updateTeam = useCallback(
+    (teamID: number, name: string) => {
+      dispatch(updateTeamAction({ teamID, name }));
+    },
+    [dispatch],
+  );
 
-  const deleteTeam = (teamID: number) => {
-    dispatch(deleteTeamAction(teamID));
-  };
+  const deleteTeam = useCallback(
+    (teamID: number) => {
+      dispatch(deleteTeamAction(teamID));
+    },
+    [dispatch],
+  );
 
   return {
     allTeams,
