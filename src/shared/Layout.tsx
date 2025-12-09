@@ -1,7 +1,7 @@
 import { AppShell } from '@mantine/core';
 import React, { ReactNode } from 'react';
 
-import Header from './Header';
+import Header from '../header/Header.tsx';
 
 interface LayoutProps {
   navbarActive?: boolean;

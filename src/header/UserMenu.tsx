@@ -11,7 +11,7 @@ import { IconChevronDown, IconLogout } from '@tabler/icons-react';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAuth } from '../auth/useAuth';
+import { useAuth } from '../auth/useAuth.ts';
 
 interface UserMenuProps {
   onLogout: () => void;

@@ -14,7 +14,7 @@ import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import EditTeamDialog from '../../../components/EditTeamDialog';
+import EditTeamDialog from './EditTeamDialog.tsx';
 import { GameStatus } from '../../../generated';
 import usePlayers from '../../../slices/players/hooks';
 import useTables from '../../../slices/tables/hooks';

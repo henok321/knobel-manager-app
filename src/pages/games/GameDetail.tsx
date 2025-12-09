@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Breadcrumbs from '../../components/Breadcrumbs';
-import GameViewContent from '../../components/GameViewContent';
+import GameViewContent from './components/GameViewContent.tsx';
+import Breadcrumbs from '../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';

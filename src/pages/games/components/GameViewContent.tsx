@@ -15,15 +15,15 @@ import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GameStatus, GameUpdateRequest } from '../generated';
-import RankingsPanel from '../pages/games/panels/RankingsPanel';
-import RoundsPanel from '../pages/games/panels/RoundsPanel';
-import TeamsPanel from '../pages/games/panels/TeamsPanel';
-import useGames from '../slices/games/hooks';
-import useTables from '../slices/tables/hooks';
-import { Game } from '../slices/types';
+import { GameStatus, GameUpdateRequest } from '../../../generated';
+import useGames from '../../../slices/games/hooks.ts';
+import useTables from '../../../slices/tables/hooks.ts';
+import { Game } from '../../../slices/types.ts';
+import RankingsPanel from '../panels/RankingsPanel.tsx';
+import RoundsPanel from '../panels/RoundsPanel.tsx';
+import TeamsPanel from '../panels/TeamsPanel.tsx';
 
-const PrintMenu = lazy(() => import('./PrintMenu'));
+const PrintMenu = lazy(() => import('../../../header/PrintMenu.tsx'));
 
 interface GameViewContentProps {
   game: Game;

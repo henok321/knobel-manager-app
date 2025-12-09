@@ -6,9 +6,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { AuthProvider } from './auth/AuthContext.tsx';
 import ProtectedRoute from './auth/ProtectedRoute.tsx';
-import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import GamesProvider from './GamesContext.tsx';
 import CenterLoader from './shared/CenterLoader.tsx';
+import { ErrorBoundary } from './shared/ErrorBoundary.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 

@@ -16,10 +16,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import LanguagePicker from './LanguagePicker';
-import { useAuth } from '../auth/useAuth';
-import GameContextSelector from '../components/GameContextSelector';
-import UserMenu from '../components/UserMenu';
+import GameContextSelector from './GameContextSelector.tsx';
+import UserMenu from './UserMenu.tsx';
+import { useAuth } from '../auth/useAuth.ts';
+import LanguagePicker from '../shared/LanguagePicker.tsx';
 
 interface HeaderProps {
   navbarActive?: boolean;
