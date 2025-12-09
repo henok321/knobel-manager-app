@@ -3,8 +3,8 @@ import { IconPrinter } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { GameStatus } from '../generated';
-import { Game } from '../slices/types.ts';
+import { GameStatus } from '../../generated';
+import { Game } from '../../slices/types.ts';
 
 interface PrintMenuProps {
   game: Game;
