@@ -108,7 +108,6 @@ const RankingsView = ({
 
   return (
     <Stack gap="xl">
-      {/* Header */}
       <div className="print-header">
         <Title order={1}>{game.name}</Title>
         <Title c="dimmed" fw={400} order={2}>
@@ -119,7 +118,6 @@ const RankingsView = ({
         </Badge>
       </div>
 
-      {/* Team Rankings */}
       <Paper withBorder p="lg">
         <Stack gap="md">
           <Title order={3}>{t('rankings.teamRankings')}</Title>
@@ -172,7 +170,6 @@ const RankingsView = ({
         </Stack>
       </Paper>
 
-      {/* Player Rankings */}
       <Paper withBorder p="lg">
         <Stack gap="md">
           <Title order={3}>{t('rankings.playerRankings')}</Title>

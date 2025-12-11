@@ -63,7 +63,6 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
             </Title>
           </Group>
 
-          {/* Center: Game Context Selector (Desktop) */}
           {navbarActive && (
             <Box
               style={{

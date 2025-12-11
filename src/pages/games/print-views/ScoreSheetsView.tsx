@@ -30,7 +30,6 @@ const ScoreSheetsView = ({
 
   return (
     <Stack gap="xl">
-      {/* Header */}
       <div className="print-header">
         <Title order={1}>{game.name}</Title>
         <Title c="dimmed" fw={400} order={2}>
@@ -41,7 +40,6 @@ const ScoreSheetsView = ({
         </Text>
       </div>
 
-      {/* One page per table */}
       {sortedTables.map((table) => {
         const tablePlayers = table.players || [];
 
@@ -49,7 +47,6 @@ const ScoreSheetsView = ({
           <div key={table.id} className="print-page-break">
             <Paper withBorder p="lg">
               <Stack gap="md">
-                {/* Sheet header */}
                 <div>
                   <Title order={3}>
                     {t('scoreSheets.round')} {table.roundNumber} -{' '}
@@ -62,12 +59,10 @@ const ScoreSheetsView = ({
 
                 <Divider />
 
-                {/* Instructions */}
                 <Text fw={500} size="sm">
                   {t('scoreSheets.instructions')}
                 </Text>
 
-                {/* Score table */}
                 <Table striped withColumnBorders withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
@@ -94,7 +89,6 @@ const ScoreSheetsView = ({
 
                 <Divider />
 
-                {/* Notes section */}
                 <div>
                   <Text fw={500} mb="xs">
                     {t('scoreSheets.notes')}

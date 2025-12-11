@@ -31,7 +31,6 @@ const TablePlanView = ({
 
   return (
     <Stack gap="xl">
-      {/* Header */}
       <div className="print-header">
         <Title order={1}>{game.name}</Title>
         <Title c="dimmed" fw={400} order={2}>
@@ -42,7 +41,6 @@ const TablePlanView = ({
         </Text>
       </div>
 
-      {/* Round by round */}
       {Array.from({ length: game.numberOfRounds }, (_, i) => i + 1).map(
         (roundNumber) => {
           const roundTables = (tablesByRound[roundNumber] || []).sort(

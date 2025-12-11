@@ -110,7 +110,7 @@ const Games = () => {
       <Container py="xl" size="xl">
         <Stack gap="xl">
           <Breadcrumbs items={breadcrumbItems} />
-          {/* Header */}
+
           <Group align="center" justify="space-between">
             <div>
               <Title mb="xs" order={1}>

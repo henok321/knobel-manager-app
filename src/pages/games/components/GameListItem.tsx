@@ -88,9 +88,7 @@ const GameListItem = ({
   return (
     <Card withBorder padding="md" radius="md" shadow="sm">
       <Stack gap="sm">
-        {/* Header Row */}
         <Group align="center" justify="space-between" wrap="nowrap">
-          {/* Left: Active indicator + Name + Status */}
           <Group gap="sm" style={{ flex: 1, minWidth: 0 }}>
             {isActive && (
               <div
@@ -126,7 +124,6 @@ const GameListItem = ({
             </Stack>
           </Group>
 
-          {/* Right: Actions */}
           <Group gap="xs" wrap="nowrap">
             <Button size="sm" onClick={handleOpen}>
               {t('card.viewDetails')}
@@ -142,7 +139,6 @@ const GameListItem = ({
           </Group>
         </Group>
 
-        {/* Always Visible Details */}
         <Divider />
         <Group gap="md">
           <div>

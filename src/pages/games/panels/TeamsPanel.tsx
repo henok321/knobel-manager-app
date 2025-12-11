@@ -167,7 +167,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
           return (
             <Card key={team.id} withBorder padding="lg" radius="md" shadow="sm">
               <Stack gap="md">
-                {/* Team Name with Edit/Delete Actions */}
                 <Group align="center" justify="space-between">
                   <Title order={3}>{team.name}</Title>
                   {!isCompleted && (

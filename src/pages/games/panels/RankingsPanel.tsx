@@ -95,7 +95,6 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
 
   return (
     <Stack gap="xl">
-      {/* Round Filter */}
       <Select
         data={roundOptions}
         label={t('rankings.filterByRound')}
@@ -104,7 +103,6 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
         onChange={(value) => setSelectedRound(value || 'total')}
       />
 
-      {/* Team Rankings */}
       <Card withBorder padding="lg" radius="md" shadow="sm">
         <Stack gap="md">
           <Title order={3}>{t('rankings.teamRankings')}</Title>
@@ -140,7 +138,6 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
         </Stack>
       </Card>
 
-      {/* Player Rankings */}
       <Card withBorder padding="lg" radius="md" shadow="sm">
         <Stack gap="md">
           <Title order={3}>{t('rankings.playerRankings')}</Title>

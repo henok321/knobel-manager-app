@@ -65,7 +65,6 @@ const TeamHandoutsView = ({
       <div key={team.id} className="print-page-break">
         <Paper withBorder p="lg">
           <Stack gap="md">
-            {/* Team header */}
             <div>
               <Title order={3}>{team.name}</Title>
               <Text c="dimmed" size="sm">
@@ -75,7 +74,6 @@ const TeamHandoutsView = ({
 
             <Divider />
 
-            {/* Player assignments */}
             <div>
               <Text fw={500} mb="sm">
                 {t('teamHandout.assignments')}
@@ -130,7 +128,6 @@ const TeamHandoutsView = ({
               })}
             </div>
 
-            {/* Summary */}
             <Divider />
             <div>
               <Text c="dimmed" size="sm">
@@ -148,7 +145,6 @@ const TeamHandoutsView = ({
 
   return (
     <Stack gap="xl">
-      {/* Header */}
       <div className="print-header">
         <Title order={1}>{game.name}</Title>
         <Title c="dimmed" fw={400} order={2}>
@@ -159,7 +155,6 @@ const TeamHandoutsView = ({
         </Text>
       </div>
 
-      {/* Team handouts */}
       {teams.map(renderTeamHandout)}
     </Stack>
   );
