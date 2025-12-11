@@ -15,7 +15,9 @@ import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GameStatus, GameUpdateRequest } from '../../../generated';
+import { GameStatus } from '../../../api/apiClient';
+import { type GameUpdateRequest } from '../../../generated';
+import type { GameStatus as GameStatusType } from '../../../generated';
 import useGames from '../../../slices/games/hooks.ts';
 import useTables from '../../../slices/tables/hooks.ts';
 import { Game } from '../../../slices/types.ts';
@@ -94,7 +96,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const canComplete = scoreProgress.canComplete;
 
-  const handleStatusTransition = (newStatus: GameStatus) => {
+  const handleStatusTransition = (newStatus: GameStatusType) => {
     const gameRequest: GameUpdateRequest = {
       name: game.name,
       numberOfRounds: game.numberOfRounds,

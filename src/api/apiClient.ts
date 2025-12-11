@@ -1,20 +1,13 @@
 import axios from 'axios';
 
 import { auth as firebaseAuth } from '../auth/firebaseConfig';
-import {
-  Configuration,
-  GamesApi,
-  PlayersApi,
-  ScoresApi,
-  TablesApi,
-  TeamsApi,
-} from '../generated';
+import { createClient } from '../generated/client';
 
 const getBaseURL = () => {
   if (import.meta.env.PROD) {
     return import.meta.env.VITE_API_URL;
   }
-  if (typeof window === 'undefined') {
+  if (typeof globalThis.window === 'undefined') {
     return 'http://localhost/api';
   }
   return '/api';
@@ -34,30 +27,19 @@ axiosInstance.interceptors.request.use(
     Promise.reject(error instanceof Error ? error : new Error(String(error))),
 );
 
-const apiConfiguration = new Configuration();
+export const client = createClient({
+  axios: axiosInstance,
+  baseURL: getBaseURL(),
+});
 
-export const gamesApi = new GamesApi(
-  apiConfiguration,
-  undefined,
-  axiosInstance,
-);
-export const teamsApi = new TeamsApi(
-  apiConfiguration,
-  undefined,
-  axiosInstance,
-);
-export const playersApi = new PlayersApi(
-  apiConfiguration,
-  undefined,
-  axiosInstance,
-);
-export const tablesApi = new TablesApi(
-  apiConfiguration,
-  undefined,
-  axiosInstance,
-);
-export const scoresApi = new ScoresApi(
-  apiConfiguration,
-  undefined,
-  axiosInstance,
-);
+export const GameStatus = {
+  Setup: 'setup',
+  InProgress: 'in_progress',
+  Completed: 'completed',
+} as const;
+
+export const RoundStatus = {
+  Setup: 'setup',
+  InProgress: 'in_progress',
+  Completed: 'completed',
+} as const;

@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import GameListItem from './components/GameListItem';
 import GameForm from './GameForm';
-import { GameStatus } from '../../generated';
+import { GameStatus } from '../../api/apiClient';
 import Breadcrumbs from '../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';

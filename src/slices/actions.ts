@@ -1,18 +1,19 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { NormalizedData } from './types.ts';
-import { gamesApi } from '../api/apiClient.ts';
-import { GamesResponse } from '../generated';
+import { client } from '../api/apiClient';
+import { getGames, type GamesResponse } from '../generated';
+import { NormalizedData } from './types';
 
 export const resetStore = createAction('store/reset');
 
 export const fetchAll = createAsyncThunk<NormalizedData>(
   'state/fetchAll',
   async () => {
-    const response = await gamesApi.getGames();
-    return normalizeGameData(response.data);
+    const response = await getGames({ client });
+    return normalizeGameData(response.data!);
   },
 );
+
 const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
   const normalizedData: NormalizedData = {
     games: {},

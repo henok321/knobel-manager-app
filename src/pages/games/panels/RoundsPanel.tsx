@@ -16,8 +16,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import { GameStatus } from '../../../api/apiClient';
 import type { Table } from '../../../generated';
-import { GameStatus } from '../../../generated';
 import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
 import { selectTablesForRoundWithSearch } from '../../../slices/tables/slice';

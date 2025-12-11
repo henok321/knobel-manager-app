@@ -20,11 +20,12 @@ import { CSSProperties, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { GameStatus } from '../../generated';
+import { GameStatus } from '../../api/apiClient';
+import type { GameStatus as GameStatusType } from '../../generated';
 import useGames from '../../slices/games/hooks.ts';
 import { Game } from '../../slices/types.ts';
 
-const getStatusColor = (status: GameStatus) => {
+const getStatusColor = (status: GameStatusType) => {
   switch (status) {
     case GameStatus.Setup:
       return 'gray';

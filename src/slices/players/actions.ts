@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { playersApi } from '../../api/apiClient.ts';
-import { Player } from '../../generated';
-import { RootState } from '../../store/store.ts';
+import { client } from '../../api/apiClient';
+import { deletePlayer, updatePlayer, type Player } from '../../generated';
+import { RootState } from '../../store/store';
 
 export const updatePlayerAction = createAsyncThunk<
   Player,
@@ -18,13 +18,12 @@ export const updatePlayerAction = createAsyncThunk<
   if (!team) {
     throw new Error(`Team with ID ${player.teamID} not found`);
   }
-  const response = await playersApi.updatePlayer(
-    team.gameID,
-    player.teamID,
-    playerID,
-    { name },
-  );
-  return response.data.player;
+  const response = await updatePlayer({
+    path: { gameID: team.gameID, teamID: player.teamID, playerID },
+    body: { name },
+    client,
+  });
+  return response.data!.player;
 });
 
 export const deletePlayerAction = createAsyncThunk<
@@ -41,6 +40,9 @@ export const deletePlayerAction = createAsyncThunk<
   if (!team) {
     throw new Error(`Team with ID ${player.teamID} not found`);
   }
-  await playersApi.deletePlayer(team.gameID, player.teamID, playerID);
+  await deletePlayer({
+    path: { gameID: team.gameID, teamID: player.teamID, playerID },
+    client,
+  });
   return playerID;
 });
