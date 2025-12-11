@@ -30,6 +30,7 @@ axiosInstance.interceptors.request.use(
 export const client = createClient({
   axios: axiosInstance,
   baseURL: getBaseURL(),
+  throwOnError: true, // Ensure errors are thrown for proper async thunk handling
 });
 
 export const GameStatus = {

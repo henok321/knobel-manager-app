@@ -1,10 +1,12 @@
+export type GameStatus = 'in_progress' | 'setup' | 'completed';
+
 export type Game = {
   id: number;
   name: string;
   teamSize: number;
   tableSize: number;
   numberOfRounds: number;
-  status: 'in_progress' | 'setup' | 'completed';
+  status: GameStatus;
   teams: number[];
   rounds: number[];
   owners: string[];
