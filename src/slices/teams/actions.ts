@@ -5,18 +5,24 @@ import {
   createTeam,
   deleteTeam,
   updateTeam,
-  type Team,
+  type Player,
   type TeamsRequest,
-  type TeamResponse,
 } from '../../generated';
 import { RootState } from '../../store/store';
+import { normalizeTeamResponse } from '../normalize';
+import type { Team } from '../types';
 
 type CreateTeam = {
   gameID: number;
   teamRequest: TeamsRequest;
 };
 
-export const createTeamAction = createAsyncThunk<TeamResponse, CreateTeam>(
+type CreateTeamPayload = {
+  team: Team;
+  players: Player[];
+};
+
+export const createTeamAction = createAsyncThunk<CreateTeamPayload, CreateTeam>(
   'teams/createTeam',
   async (t) => {
     const response = await createTeam({
@@ -24,7 +30,10 @@ export const createTeamAction = createAsyncThunk<TeamResponse, CreateTeam>(
       body: t.teamRequest,
       client,
     });
-    return response.data!;
+    return {
+      team: normalizeTeamResponse(response.data!),
+      players: response.data!.team.players || [],
+    };
   },
 );
 
@@ -43,7 +52,7 @@ export const updateTeamAction = createAsyncThunk<
     body: { name },
     client,
   });
-  return response.data!.team;
+  return normalizeTeamResponse(response.data!);
 });
 
 export const deleteTeamAction = createAsyncThunk<

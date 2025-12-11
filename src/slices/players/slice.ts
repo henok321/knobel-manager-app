@@ -45,13 +45,7 @@ const playersSlice = createSlice({
       })
       .addCase(createTeamAction.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        const players: Player[] =
-          action.payload.team.players?.map((p) => ({
-            id: p.id,
-            name: p.name,
-            teamID: p.teamID,
-          })) || [];
-        playersAdapter.addMany(state, players);
+        playersAdapter.addMany(state, action.payload.players);
       })
       .addCase(updatePlayerAction.pending, (state) => {
         state.status = 'pending';

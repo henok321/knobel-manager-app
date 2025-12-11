@@ -8,20 +8,21 @@ import {
   setupGame,
   updateGame,
   type GameCreateRequest,
-  type GameResponse,
   type GameUpdateRequest,
 } from '../../generated';
+import { normalizeGame, normalizeGameResponse } from '../normalize';
+import type { Game } from '../types';
 
-export const createGameAction = createAsyncThunk<
-  GameResponse,
-  GameCreateRequest
->('games/createGame', async (gameRequest) => {
-  const response = await createGame({ body: gameRequest, client });
-  return response.data!;
-});
+export const createGameAction = createAsyncThunk<Game, GameCreateRequest>(
+  'games/createGame',
+  async (gameRequest) => {
+    const response = await createGame({ body: gameRequest, client });
+    return normalizeGameResponse(response.data!);
+  },
+);
 
 export const updateGameAction = createAsyncThunk<
-  GameResponse,
+  Game,
   { gameID: number; gameRequest: GameUpdateRequest }
 >('games/updateGame', async ({ gameID, gameRequest }) => {
   const response = await updateGame({
@@ -29,7 +30,7 @@ export const updateGameAction = createAsyncThunk<
     body: gameRequest,
     client,
   });
-  return response.data!;
+  return normalizeGameResponse(response.data!);
 });
 
 export const deleteGameAction = createAsyncThunk<void, number>(
@@ -39,11 +40,11 @@ export const deleteGameAction = createAsyncThunk<void, number>(
   },
 );
 
-export const setupGameAction = createAsyncThunk<GameResponse, number>(
+export const setupGameAction = createAsyncThunk<Game, number>(
   'games/setupGame',
   async (gameID) => {
     await setupGame({ path: { gameID }, client });
     const response = await getGame({ path: { gameID }, client });
-    return { game: response.data! };
+    return normalizeGame(response.data!);
   },
 );

@@ -55,19 +55,7 @@ const gamesSlice = createSlice({
         state.error = new Error(action.error.message);
       })
       .addCase(createGameAction.fulfilled, (state, action) => {
-        const game: Game = {
-          id: action.payload.game.id,
-          name: action.payload.game.name,
-          teamSize: action.payload.game.teamSize,
-          teams: action.payload.game.teams?.map((team) => team.id) || [],
-          tableSize: action.payload.game.tableSize,
-          numberOfRounds: action.payload.game.numberOfRounds,
-          status: action.payload.game.status,
-          rounds: action.payload.game.rounds?.map((round) => round.id) || [],
-          owners: action.payload.game.owners.map((owner) => owner.ownerSub),
-        };
-
-        gamesAdapter.addOne(state, game);
+        gamesAdapter.addOne(state, action.payload);
         state.status = 'succeeded';
       });
 
@@ -96,21 +84,9 @@ const gamesSlice = createSlice({
         state.error = new Error(action.error.message);
       })
       .addCase(updateGameAction.fulfilled, (state, action) => {
-        const game: Game = {
-          id: action.payload.game.id,
-          name: action.payload.game.name,
-          teamSize: action.payload.game.teamSize,
-          teams: action.payload.game.teams?.map((team) => team.id) || [],
-          tableSize: action.payload.game.tableSize,
-          numberOfRounds: action.payload.game.numberOfRounds,
-          status: action.payload.game.status,
-          rounds: action.payload.game.rounds?.map((round) => round.id) || [],
-          owners: action.payload.game.owners.map((owner) => owner.ownerSub),
-        };
-
         gamesAdapter.updateOne(state, {
-          id: game.id,
-          changes: game,
+          id: action.payload.id,
+          changes: action.payload,
         });
         state.status = 'succeeded';
       });
@@ -125,21 +101,9 @@ const gamesSlice = createSlice({
         state.error = new Error(action.error.message);
       })
       .addCase(setupGameAction.fulfilled, (state, action) => {
-        const game: Game = {
-          id: action.payload.game.id,
-          name: action.payload.game.name,
-          teamSize: action.payload.game.teamSize,
-          teams: action.payload.game.teams?.map((team) => team.id) || [],
-          tableSize: action.payload.game.tableSize,
-          numberOfRounds: action.payload.game.numberOfRounds,
-          status: action.payload.game.status,
-          rounds: action.payload.game.rounds?.map((round) => round.id) || [],
-          owners: action.payload.game.owners.map((owner) => owner.ownerSub),
-        };
-
         gamesAdapter.updateOne(state, {
-          id: game.id,
-          changes: game,
+          id: action.payload.id,
+          changes: action.payload,
         });
         state.status = 'succeeded';
       });
