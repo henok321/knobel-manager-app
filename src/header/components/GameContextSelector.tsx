@@ -20,23 +20,9 @@ import { CSSProperties, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { GameStatus } from '../../api/apiClient';
-import type { GameStatus as GameStatusType } from '../../generated';
 import useGames from '../../slices/games/hooks.ts';
 import { Game } from '../../slices/types.ts';
-
-const getStatusColor = (status: GameStatusType) => {
-  switch (status) {
-    case GameStatus.Setup:
-      return 'gray';
-    case GameStatus.InProgress:
-      return 'blue';
-    case GameStatus.Completed:
-      return 'green';
-    default:
-      return 'gray';
-  }
-};
+import { getStatusColor } from '../../utils/gameStatusHelpers';
 
 const getGameSummary = (
   game: Game,
@@ -67,9 +53,7 @@ const GameContextSelector = ({
       allGames
         .filter((game) => game.id !== activeGame?.id)
         .filter(
-          (game) =>
-            game.status === GameStatus.Setup ||
-            game.status === GameStatus.InProgress,
+          (game) => game.status === 'setup' || game.status === 'in_progress',
         )
         .slice(0, 3),
     [allGames, activeGame?.id],

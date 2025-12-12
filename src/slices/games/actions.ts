@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { client } from '../../api/apiClient';
+import { extractResponseData } from '../../api/responseUtils';
 import {
   createGame,
   deleteGame,
@@ -17,7 +18,7 @@ export const createGameAction = createAsyncThunk<Game, GameCreateRequest>(
   'games/createGame',
   async (gameRequest) => {
     const response = await createGame({ body: gameRequest, client });
-    return normalizeGameResponse(response.data!);
+    return normalizeGameResponse(extractResponseData(response));
   },
 );
 
@@ -30,7 +31,7 @@ export const updateGameAction = createAsyncThunk<
     body: gameRequest,
     client,
   });
-  return normalizeGameResponse(response.data!);
+  return normalizeGameResponse(extractResponseData(response));
 });
 
 export const deleteGameAction = createAsyncThunk<void, number>(
@@ -45,6 +46,6 @@ export const setupGameAction = createAsyncThunk<Game, number>(
   async (gameID) => {
     await setupGame({ path: { gameID }, client });
     const response = await getGame({ path: { gameID }, client });
-    return normalizeGame(response.data!);
+    return normalizeGame(extractResponseData(response));
   },
 );

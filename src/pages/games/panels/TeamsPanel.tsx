@@ -15,7 +15,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EditTeamDialog from './EditTeamDialog.tsx';
-import { GameStatus } from '../../../api/apiClient';
 import usePlayers from '../../../slices/players/hooks';
 import useTables from '../../../slices/tables/hooks';
 import useTeams from '../../../slices/teams/hooks';
@@ -35,10 +34,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
 
-  const canAddDelete = game.status === GameStatus.Setup;
-  const canEdit =
-    game.status === GameStatus.Setup || game.status === GameStatus.InProgress;
-  const isCompleted = game.status === GameStatus.Completed;
+  const canAddDelete = game.status === 'setup';
+  const canEdit = game.status === 'setup' || game.status === 'in_progress';
+  const isCompleted = game.status === 'completed';
 
   const roundsCount = game.rounds?.length || 0;
 

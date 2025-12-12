@@ -16,7 +16,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { GameStatus } from '../../../api/apiClient';
 import type { Table } from '../../../generated';
 import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
@@ -48,8 +47,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [setupError, setSetupError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const canEditScores = game.status === GameStatus.InProgress;
-  const canSetupMatchmaking = game.status === GameStatus.Setup;
+  const canEditScores = game.status === 'in_progress';
+  const canSetupMatchmaking = game.status === 'setup';
   const hasRounds = (game.rounds?.length || 0) > 0;
   const isSetupMode = !hasRounds || allTables.length === 0;
 
@@ -147,7 +146,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         .rounds-table tbody tr > td:nth-child(3),
         .rounds-table thead tr > th:nth-child(3) { text-align: right; }
       `}</style>
-      {(!isSetupMode || game.status === GameStatus.InProgress) && (
+      {(!isSetupMode || game.status === 'in_progress') && (
         <Group align="flex-end" justify="space-between" wrap="wrap">
           <Select
             data={roundOptions}

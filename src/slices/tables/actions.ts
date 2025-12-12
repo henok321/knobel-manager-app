@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { client } from '../../api/apiClient';
+import { extractResponseData } from '../../api/responseUtils';
 import { getTables, updateScores, type Table } from '../../generated';
 
 export const fetchTablesForRound = createAsyncThunk<
@@ -11,7 +12,7 @@ export const fetchTablesForRound = createAsyncThunk<
     path: { gameID: gameId, roundNumber },
     client,
   });
-  return response.data!.tables.map((table) => ({
+  return extractResponseData(response).tables.map((table) => ({
     ...table,
     roundNumber,
   }));
@@ -28,10 +29,12 @@ export const fetchAllTablesForGame = createAsyncThunk<
       path: { gameID: gameId, roundNumber: roundNum },
       client,
     });
-    const tablesWithRoundNumber = response.data!.tables.map((table) => ({
-      ...table,
-      roundNumber: roundNum,
-    }));
+    const tablesWithRoundNumber = extractResponseData(response).tables.map(
+      (table) => ({
+        ...table,
+        roundNumber: roundNum,
+      }),
+    );
     allTables.push(...tablesWithRoundNumber);
   }
 
@@ -59,7 +62,7 @@ export const updateScoresForTable = createAsyncThunk<
       path: { gameID: gameId, roundNumber },
       client,
     });
-    return response.data!.tables.map((table) => ({
+    return extractResponseData(response).tables.map((table) => ({
       ...table,
       roundNumber,
     }));

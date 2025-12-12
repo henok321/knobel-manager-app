@@ -1,6 +1,7 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { client } from '../api/apiClient';
+import { extractResponseData } from '../api/responseUtils';
 import { getGames, type GamesResponse } from '../generated';
 import { NormalizedData } from './types';
 
@@ -10,7 +11,7 @@ export const fetchAll = createAsyncThunk<NormalizedData>(
   'state/fetchAll',
   async () => {
     const response = await getGames({ client });
-    return normalizeGameData(response.data!);
+    return normalizeGameData(extractResponseData(response));
   },
 );
 

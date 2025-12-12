@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { client } from '../../api/apiClient';
+import { extractResponseData } from '../../api/responseUtils';
 import { deletePlayer, updatePlayer, type Player } from '../../generated';
 import { RootState } from '../../store/store';
 
@@ -23,7 +24,7 @@ export const updatePlayerAction = createAsyncThunk<
     body: { name },
     client,
   });
-  return response.data!.player;
+  return extractResponseData(response).player;
 });
 
 export const deletePlayerAction = createAsyncThunk<

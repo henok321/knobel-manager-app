@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { client } from '../../api/apiClient';
+import { extractResponseData } from '../../api/responseUtils';
 import {
   createTeam,
   deleteTeam,
@@ -30,9 +31,10 @@ export const createTeamAction = createAsyncThunk<CreateTeamPayload, CreateTeam>(
       body: t.teamRequest,
       client,
     });
+    const data = extractResponseData(response);
     return {
-      team: normalizeTeamResponse(response.data!),
-      players: response.data!.team.players || [],
+      team: normalizeTeamResponse(data),
+      players: data.team.players || [],
     };
   },
 );
@@ -52,7 +54,7 @@ export const updateTeamAction = createAsyncThunk<
     body: { name },
     client,
   });
-  return normalizeTeamResponse(response.data!);
+  return normalizeTeamResponse(extractResponseData(response));
 });
 
 export const deleteTeamAction = createAsyncThunk<

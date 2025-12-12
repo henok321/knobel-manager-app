@@ -31,9 +31,3 @@ export const client = createClient({
   axios: axiosInstance,
   throwOnError: true, // Ensure errors are thrown for proper async thunk handling
 });
-
-export const GameStatus = {
-  Setup: 'setup',
-  InProgress: 'in_progress',
-  Completed: 'completed',
-} as const;

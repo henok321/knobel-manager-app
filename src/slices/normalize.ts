@@ -21,7 +21,7 @@ export const normalizeGame = (apiGame: ApiGame): Game => ({
 export const normalizeGameResponse = (response: GameResponse): Game =>
   normalizeGame(response.game);
 
-export const normalizeTeam = (apiTeam: ApiTeam): Team => ({
+const normalizeTeam = (apiTeam: ApiTeam): Team => ({
   id: apiTeam.id,
   name: apiTeam.name,
   gameID: apiTeam.gameID,
