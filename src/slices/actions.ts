@@ -1,7 +1,6 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { client } from '../api/apiClient';
-import { extractResponseData } from '../api/responseUtils';
+import { client, extractResponseData } from '../api/apiClient';
 import { getGames, type GamesResponse } from '../generated';
 import { NormalizedData } from './types';
 import i18n from '../i18n/i18nConfig';

@@ -1,3 +1,4 @@
+import type { AxiosError, AxiosResponse } from 'axios';
 import axios from 'axios';
 
 import { auth as firebaseAuth } from '../auth/firebaseConfig';
@@ -31,3 +32,31 @@ export const client = createClient({
   axios: axiosInstance,
   throwOnError: true, // Ensure errors are thrown for proper async thunk handling
 });
+
+export const extractResponseData = <T>(
+  response:
+    | (AxiosResponse<T> & { error?: undefined })
+    | (AxiosError & { data?: undefined; error: unknown }),
+): T => {
+  if ('error' in response && response.error !== undefined) {
+    throw new Error(
+      `API request failed: ${response.error instanceof Error ? response.error.message : String(response.error)}`,
+    );
+  }
+
+  const data = response.data;
+
+  if (
+    data === null ||
+    data === undefined ||
+    (typeof data === 'object' &&
+      !Array.isArray(data) &&
+      Object.keys(data).length === 0)
+  ) {
+    throw new Error(
+      'Response data is empty. This should not happen with throwOnError: true.',
+    );
+  }
+
+  return data;
+};

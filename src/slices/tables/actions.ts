@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { client } from '../../api/apiClient';
-import { extractResponseData } from '../../api/responseUtils';
+import { client, extractResponseData } from '../../api/apiClient';
 import { getTables, updateScores, type Table } from '../../generated';
 import i18n from '../../i18n/i18nConfig';
 
