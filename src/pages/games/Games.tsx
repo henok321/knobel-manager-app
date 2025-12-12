@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 
 import GameListItem from './components/GameListItem';
 import GameForm from './GameForm';
-import { GameStatus } from '../../generated';
 import Breadcrumbs from '../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
@@ -52,13 +51,9 @@ const Games = () => {
 
     return {
       activeAndInProgressGames: filtered.filter(
-        (game) =>
-          game.status === GameStatus.Setup ||
-          game.status === GameStatus.InProgress,
+        (game) => game.status === 'setup' || game.status === 'in_progress',
       ),
-      completedGames: filtered.filter(
-        (game) => game.status === GameStatus.Completed,
-      ),
+      completedGames: filtered.filter((game) => game.status === 'completed'),
     };
   }, [allGames, searchQuery]);
 
@@ -91,7 +86,7 @@ const Games = () => {
           <Text c="red" size="xl">
             {t('actions.errorOccurred')}
           </Text>
-          <Text c="red">{error?.message}</Text>
+          <Text c="red">{error}</Text>
         </Stack>
       </Center>
     );

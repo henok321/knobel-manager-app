@@ -1,19 +1,42 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { teamsApi } from '../../api/apiClient.ts';
-import { TeamsRequest, TeamResponse, Team } from '../../generated';
-import { RootState } from '../../store/store.ts';
+import { client } from '../../api/apiClient';
+import {
+  createTeam,
+  deleteTeam,
+  updateTeam,
+  type Player,
+  type TeamsRequest,
+} from '../../generated';
+import { RootState } from '../../store/store';
+import { normalizeTeamResponse } from '../normalize';
+import type { Team } from '../types';
 
 type CreateTeam = {
   gameID: number;
   teamRequest: TeamsRequest;
 };
 
-export const createTeamAction = createAsyncThunk<TeamResponse, CreateTeam>(
+type CreateTeamPayload = {
+  team: Team;
+  players: Player[];
+};
+
+export const createTeamAction = createAsyncThunk<CreateTeamPayload, CreateTeam>(
   'teams/createTeam',
   async (t) => {
-    const response = await teamsApi.createTeam(t.gameID, t.teamRequest);
-    return response.data;
+    const response = await createTeam({
+      path: { gameID: t.gameID },
+      body: t.teamRequest,
+      client,
+    });
+    if (!response.data) {
+      throw new Error('API returned empty response data');
+    }
+    return {
+      team: normalizeTeamResponse(response.data),
+      players: response.data.team.players || [],
+    };
   },
 );
 
@@ -27,8 +50,15 @@ export const updateTeamAction = createAsyncThunk<
   if (!team) {
     throw new Error(`Team with ID ${teamID} not found`);
   }
-  const response = await teamsApi.updateTeam(team.gameID, teamID, { name });
-  return response.data.team;
+  const response = await updateTeam({
+    path: { gameID: team.gameID, teamID },
+    body: { name },
+    client,
+  });
+  if (!response.data) {
+    throw new Error('API returned empty response data');
+  }
+  return normalizeTeamResponse(response.data);
 });
 
 export const deleteTeamAction = createAsyncThunk<
@@ -41,6 +71,9 @@ export const deleteTeamAction = createAsyncThunk<
   if (!team) {
     throw new Error(`Team with ID ${teamID} not found`);
   }
-  await teamsApi.deleteTeam(team.gameID, teamID);
+  await deleteTeam({
+    path: { gameID: team.gameID, teamID },
+    client,
+  });
   return teamID;
 });

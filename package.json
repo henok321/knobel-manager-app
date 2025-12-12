@@ -10,7 +10,7 @@
   "scripts": {
     "prod": "vite --mode production",
     "local": "vite --mode development",
-    "api:gen": "openapi-generator-cli generate -i https://api.knobel-manager.de/openapi.yaml -g typescript-axios -o src/generated --additional-properties=withSeparateModelsAndApi=true,modelPropertyNaming=original,supportsES6=true,apiPackage=apis,modelPackage=models",
+    "api:gen": "openapi-ts",
     "build": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -58,7 +58,7 @@
     "@babel/preset-typescript": "^7.28.5",
     "@eslint/js": "^9.39.1",
     "@eslint/markdown": "^7.5.1",
-    "@openapitools/openapi-generator-cli": "^2.25.2",
+    "@hey-api/openapi-ts": "^0.89.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.19.2",

@@ -3,7 +3,6 @@ import { IconPrinter } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { GameStatus } from '../../generated';
 import { Game } from '../../slices/types.ts';
 
 interface PrintMenuProps {
@@ -20,7 +19,7 @@ const PrintMenu = ({
   const { t } = useTranslation(['gameDetail', 'common']);
   const navigate = useNavigate();
 
-  if (game.status === GameStatus.Setup) {
+  if (game.status === 'setup') {
     return null;
   }
 

@@ -8,6 +8,32 @@
     "delete": "Löschen",
     "save": "Speichern"
   },
+  "apiError": {
+    "unknown": "Ein unbekannter Fehler ist aufgetreten",
+    "fetchAll": "Daten konnten nicht geladen werden",
+    "game": {
+      "create": "Spiel konnte nicht erstellt werden",
+      "update": "Spiel konnte nicht aktualisiert werden",
+      "delete": "Spiel konnte nicht gelöscht werden",
+      "fetch": "Spiel konnte nicht geladen werden",
+      "activate": "Spiel konnte nicht aktiviert werden",
+      "complete": "Spiel konnte nicht abgeschlossen werden",
+      "setup": "Spiel konnte nicht eingerichtet werden"
+    },
+    "team": {
+      "create": "Team konnte nicht erstellt werden",
+      "update": "Team konnte nicht aktualisiert werden",
+      "delete": "Team konnte nicht gelöscht werden"
+    },
+    "player": {
+      "update": "Spieler konnte nicht aktualisiert werden",
+      "delete": "Spieler konnte nicht gelöscht werden"
+    },
+    "table": {
+      "fetch": "Tische konnten nicht geladen werden",
+      "update": "Punktzahl konnte nicht aktualisiert werden"
+    }
+  },
   "errorBoundary": {
     "title": "Etwas ist schiefgelaufen",
     "errorDetails": "Fehlerdetails",

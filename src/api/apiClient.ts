@@ -1,14 +1,7 @@
 import axios from 'axios';
 
 import { auth as firebaseAuth } from '../auth/firebaseConfig';
-import {
-  Configuration,
-  GamesApi,
-  PlayersApi,
-  ScoresApi,
-  TablesApi,
-  TeamsApi,
-} from '../generated';
+import { createClient } from '../generated/client';
 
 const getBaseURL = () => {
   if (import.meta.env.PROD) {
@@ -34,30 +27,7 @@ axiosInstance.interceptors.request.use(
     Promise.reject(error instanceof Error ? error : new Error(String(error))),
 );
 
-const apiConfiguration = new Configuration();
-
-export const gamesApi = new GamesApi(
-  apiConfiguration,
-  undefined,
-  axiosInstance,
-);
-export const teamsApi = new TeamsApi(
-  apiConfiguration,
-  undefined,
-  axiosInstance,
-);
-export const playersApi = new PlayersApi(
-  apiConfiguration,
-  undefined,
-  axiosInstance,
-);
-export const tablesApi = new TablesApi(
-  apiConfiguration,
-  undefined,
-  axiosInstance,
-);
-export const scoresApi = new ScoresApi(
-  apiConfiguration,
-  undefined,
-  axiosInstance,
-);
+export const client = createClient({
+  axios: axiosInstance,
+  throwOnError: true,
+});

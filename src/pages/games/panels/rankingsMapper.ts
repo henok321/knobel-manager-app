@@ -1,4 +1,4 @@
-import { Score, Table as TableModel } from '../../../generated/models';
+import { Score, Table as TableModel } from '../../../generated';
 import { Player, Team } from '../../../slices/types.ts';
 
 interface PlayerRanking {

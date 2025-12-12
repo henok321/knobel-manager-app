@@ -9,18 +9,16 @@ import {
   Text,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import {
-  IconCheck,
-  IconPlayerPlay,
-  IconSettings,
-  IconTrash,
-} from '@tabler/icons-react';
+import { IconTrash } from '@tabler/icons-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { GameStatus } from '../../../generated';
 import { Game } from '../../../slices/types';
+import {
+  getStatusColor,
+  getStatusIcon,
+} from '../../../utils/gameStatusHelpers';
 
 interface GameListItemProps {
   game: Game;
@@ -28,32 +26,6 @@ interface GameListItemProps {
   onActivate: (gameId: number) => void;
   onDelete: (gameId: number) => void;
 }
-
-const getStatusIcon = (status: GameStatus) => {
-  switch (status) {
-    case GameStatus.Setup:
-      return <IconSettings style={{ width: 14, height: 14 }} />;
-    case GameStatus.InProgress:
-      return <IconPlayerPlay style={{ width: 14, height: 14 }} />;
-    case GameStatus.Completed:
-      return <IconCheck style={{ width: 14, height: 14 }} />;
-    default:
-      return null;
-  }
-};
-
-const getStatusColor = (status: GameStatus) => {
-  switch (status) {
-    case GameStatus.Setup:
-      return 'gray';
-    case GameStatus.InProgress:
-      return 'blue';
-    case GameStatus.Completed:
-      return 'green';
-    default:
-      return 'gray';
-  }
-};
 
 const GameListItem = ({
   game,
@@ -108,7 +80,7 @@ const GameListItem = ({
               <Group gap="xs">
                 <Badge
                   color={getStatusColor(game.status)}
-                  leftSection={getStatusIcon(game.status)}
+                  leftSection={getStatusIcon(game.status, 14)}
                   size="sm"
                   variant="light"
                 >

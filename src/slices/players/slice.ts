@@ -8,7 +8,7 @@ import { Player } from '../types.ts';
 
 type AdditionalPlayerState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error?: Error | null;
+  error?: string | null;
 };
 const playersAdapter = createEntityAdapter<Player>();
 
@@ -32,7 +32,7 @@ const playersSlice = createSlice({
       })
       .addCase(fetchAll.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
       });
 
     builder
@@ -41,17 +41,11 @@ const playersSlice = createSlice({
       })
       .addCase(createTeamAction.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
       })
       .addCase(createTeamAction.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        const players: Player[] =
-          action.payload.team.players?.map((p) => ({
-            id: p.id,
-            name: p.name,
-            teamID: p.teamID,
-          })) || [];
-        playersAdapter.addMany(state, players);
+        playersAdapter.addMany(state, action.payload.players);
       })
       .addCase(updatePlayerAction.pending, (state) => {
         state.status = 'pending';
@@ -64,7 +58,7 @@ const playersSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(updatePlayerAction.rejected, (state, action) => {
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
         state.status = 'failed';
       })
       .addCase(deletePlayerAction.pending, (state) => {
@@ -75,7 +69,7 @@ const playersSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(deletePlayerAction.rejected, (state, action) => {
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
         state.status = 'failed';
       });
   },
