@@ -17,7 +17,7 @@ import { createTeamAction, deleteTeamAction } from '../teams/actions.ts';
 
 type AdditionalGamesState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error?: Error | null;
+  error?: string | null;
 };
 
 const gamesAdapter = createEntityAdapter<Game>();
@@ -43,7 +43,7 @@ const gamesSlice = createSlice({
       })
       .addCase(fetchAll.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
       });
 
     builder
@@ -52,7 +52,7 @@ const gamesSlice = createSlice({
       })
       .addCase(createGameAction.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
       })
       .addCase(createGameAction.fulfilled, (state, action) => {
         gamesAdapter.addOne(state, action.payload);
@@ -65,7 +65,7 @@ const gamesSlice = createSlice({
       })
       .addCase(deleteGameAction.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
       })
       .addCase(deleteGameAction.fulfilled, (state, action) => {
         const gameID = action.meta.arg;
@@ -81,7 +81,7 @@ const gamesSlice = createSlice({
       })
       .addCase(updateGameAction.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
       })
       .addCase(updateGameAction.fulfilled, (state, action) => {
         gamesAdapter.updateOne(state, {
@@ -98,7 +98,7 @@ const gamesSlice = createSlice({
       })
       .addCase(setupGameAction.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
       })
       .addCase(setupGameAction.fulfilled, (state, action) => {
         gamesAdapter.updateOne(state, {

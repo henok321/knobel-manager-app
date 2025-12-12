@@ -15,7 +15,7 @@ import {
 
 type AdditionalTeamState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error?: Error | null;
+  error?: string | null;
 };
 
 const teamsAdapter = createEntityAdapter<Team>();
@@ -40,7 +40,7 @@ const teamsSlice = createSlice({
       })
       .addCase(fetchAll.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
       });
 
     // create team
@@ -49,7 +49,7 @@ const teamsSlice = createSlice({
         state.status = 'pending';
       })
       .addCase(createTeamAction.rejected, (state, action) => {
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
         state.status = 'failed';
       })
       .addCase(createTeamAction.fulfilled, (state, action) => {
@@ -67,7 +67,7 @@ const teamsSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(updateTeamAction.rejected, (state, action) => {
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
         state.status = 'failed';
       })
       .addCase(deleteTeamAction.pending, (state) => {
@@ -78,7 +78,7 @@ const teamsSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(deleteTeamAction.rejected, (state, action) => {
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
         state.status = 'failed';
       });
   },
