@@ -1,23 +1,19 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { client, extractResponseData } from '../api/apiClient';
+import { client } from '../api/apiClient';
 import { getGames, type GamesResponse } from '../generated';
 import { NormalizedData } from './types';
-import i18n from '../i18n/i18nConfig';
 
 export const resetStore = createAction('store/reset');
 
 export const fetchAll = createAsyncThunk<NormalizedData>(
   'state/fetchAll',
   async () => {
-    try {
-      const response = await getGames({ client });
-      return normalizeGameData(extractResponseData(response));
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : i18n.t('apiError.fetchAll');
-      throw new Error(message);
+    const response = await getGames({ client });
+    if (!response.data) {
+      throw new Error('API returned empty response data');
     }
+    return normalizeGameData(response.data);
   },
 );
 

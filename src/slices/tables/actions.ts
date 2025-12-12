@@ -1,56 +1,47 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { client, extractResponseData } from '../../api/apiClient';
+import { client } from '../../api/apiClient';
 import { getTables, updateScores, type Table } from '../../generated';
-import i18n from '../../i18n/i18nConfig';
 
 export const fetchTablesForRound = createAsyncThunk<
   (Table & { roundNumber: number })[],
   { gameId: number; roundNumber: number }
 >('tables/fetchForRound', async ({ gameId, roundNumber }) => {
-  try {
-    const response = await getTables({
-      path: { gameID: gameId, roundNumber },
-      client,
-    });
-    return extractResponseData(response).tables.map((table) => ({
-      ...table,
-      roundNumber,
-    }));
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : i18n.t('apiError.table.fetch');
-    throw new Error(message);
+  const response = await getTables({
+    path: { gameID: gameId, roundNumber },
+    client,
+  });
+  if (!response.data) {
+    throw new Error('API returned empty response data');
   }
+  return response.data.tables.map((table) => ({
+    ...table,
+    roundNumber,
+  }));
 });
 
 export const fetchAllTablesForGame = createAsyncThunk<
   (Table & { roundNumber: number })[],
   { gameId: number; numberOfRounds: number }
 >('tables/fetchAllForGame', async ({ gameId, numberOfRounds }) => {
-  try {
-    const allTables: (Table & { roundNumber: number })[] = [];
+  const allTables: (Table & { roundNumber: number })[] = [];
 
-    for (let roundNum = 1; roundNum <= numberOfRounds; roundNum++) {
-      const response = await getTables({
-        path: { gameID: gameId, roundNumber: roundNum },
-        client,
-      });
-      const tablesWithRoundNumber = extractResponseData(response).tables.map(
-        (table) => ({
-          ...table,
-          roundNumber: roundNum,
-        }),
-      );
-      allTables.push(...tablesWithRoundNumber);
+  for (let roundNum = 1; roundNum <= numberOfRounds; roundNum++) {
+    const response = await getTables({
+      path: { gameID: gameId, roundNumber: roundNum },
+      client,
+    });
+    if (!response.data) {
+      throw new Error('API returned empty response data');
     }
-
-    return allTables;
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : i18n.t('apiError.table.fetch');
-    throw new Error(message);
+    const tablesWithRoundNumber = response.data.tables.map((table) => ({
+      ...table,
+      roundNumber: roundNum,
+    }));
+    allTables.push(...tablesWithRoundNumber);
   }
+
+  return allTables;
 });
 
 export const updateScoresForTable = createAsyncThunk<
@@ -64,27 +55,22 @@ export const updateScoresForTable = createAsyncThunk<
 >(
   'tables/updateScores',
   async ({ gameId, roundNumber, tableNumber, scores }) => {
-    try {
-      await updateScores({
-        path: { gameID: gameId, roundNumber, tableNumber },
-        body: { scores },
-        client,
-      });
+    await updateScores({
+      path: { gameID: gameId, roundNumber, tableNumber },
+      body: { scores },
+      client,
+    });
 
-      const response = await getTables({
-        path: { gameID: gameId, roundNumber },
-        client,
-      });
-      return extractResponseData(response).tables.map((table) => ({
-        ...table,
-        roundNumber,
-      }));
-    } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : i18n.t('apiError.table.update');
-      throw new Error(message);
+    const response = await getTables({
+      path: { gameID: gameId, roundNumber },
+      client,
+    });
+    if (!response.data) {
+      throw new Error('API returned empty response data');
     }
+    return response.data.tables.map((table) => ({
+      ...table,
+      roundNumber,
+    }));
   },
 );
