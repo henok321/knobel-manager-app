@@ -162,6 +162,7 @@ export const gamesHandlers = [
       ],
     };
 
+    // getGame returns Game directly (not wrapped in GameResponse)
     return HttpResponse.json(game);
   }),
 ];

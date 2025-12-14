@@ -15,7 +15,7 @@ import {
 
 type AdditionalTeamState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error?: Error | null;
+  error?: string | null;
 };
 
 const teamsAdapter = createEntityAdapter<Team>();
@@ -40,7 +40,7 @@ const teamsSlice = createSlice({
       })
       .addCase(fetchAll.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
       });
 
     // create team
@@ -49,18 +49,11 @@ const teamsSlice = createSlice({
         state.status = 'pending';
       })
       .addCase(createTeamAction.rejected, (state, action) => {
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
         state.status = 'failed';
       })
       .addCase(createTeamAction.fulfilled, (state, action) => {
-        const team: Team = {
-          id: action.payload.team.id,
-          gameID: action.payload.team.gameID,
-          name: action.payload.team.name,
-          players:
-            action.payload.team.players?.map((player) => player.id) || [],
-        };
-        teamsAdapter.addOne(state, team);
+        teamsAdapter.addOne(state, action.payload.team);
         state.status = 'succeeded';
       })
       .addCase(updateTeamAction.pending, (state) => {
@@ -69,12 +62,12 @@ const teamsSlice = createSlice({
       .addCase(updateTeamAction.fulfilled, (state, action) => {
         teamsAdapter.updateOne(state, {
           id: action.payload.id,
-          changes: { name: action.payload.name },
+          changes: action.payload,
         });
         state.status = 'succeeded';
       })
       .addCase(updateTeamAction.rejected, (state, action) => {
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
         state.status = 'failed';
       })
       .addCase(deleteTeamAction.pending, (state) => {
@@ -85,7 +78,7 @@ const teamsSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(deleteTeamAction.rejected, (state, action) => {
-        state.error = new Error(action.error.message);
+        state.error = action.error.message || 'Unknown error';
         state.status = 'failed';
       });
   },

@@ -11,14 +11,17 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GameStatus, GameUpdateRequest } from '../../../generated';
+import { type GameUpdateRequest } from '../../../generated';
 import useGames from '../../../slices/games/hooks.ts';
 import useTables from '../../../slices/tables/hooks.ts';
-import { Game } from '../../../slices/types.ts';
+import { Game, GameStatus as GameStatusType } from '../../../slices/types.ts';
+import {
+  getStatusColor,
+  getStatusIcon,
+} from '../../../utils/gameStatusHelpers';
 import RankingsPanel from '../panels/RankingsPanel.tsx';
 import RoundsPanel from '../panels/RoundsPanel.tsx';
 import TeamsPanel from '../panels/TeamsPanel.tsx';
@@ -38,11 +41,11 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const getDefaultTab = () => {
     switch (game.status) {
-      case GameStatus.Setup:
+      case 'setup':
         return 'teams';
-      case GameStatus.InProgress:
+      case 'in_progress':
         return 'rounds';
-      case GameStatus.Completed:
+      case 'completed':
         return 'rankings';
       default:
         return 'teams';
@@ -67,7 +70,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   }, [activeTab, game.id]);
 
   const scoreProgress = useMemo(() => {
-    if (!game || game.status !== GameStatus.InProgress) {
+    if (!game || game.status !== 'in_progress') {
       return { canComplete: false, completed: 0, total: 0 };
     }
 
@@ -94,7 +97,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const canComplete = scoreProgress.canComplete;
 
-  const handleStatusTransition = (newStatus: GameStatus) => {
+  const handleStatusTransition = (newStatus: GameStatusType) => {
     const gameRequest: GameUpdateRequest = {
       name: game.name,
       numberOfRounds: game.numberOfRounds,
@@ -124,7 +127,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       },
       confirmProps: { color: 'blue' },
       onConfirm: () => {
-        handleStatusTransition(GameStatus.InProgress);
+        handleStatusTransition('in_progress');
         setActiveTab('rounds');
         notifications.show({
           title: t('actions.gameStartedNotification'),
@@ -144,34 +147,8 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         cancel: t('actions.cancel'),
       },
       confirmProps: { color: 'green' },
-      onConfirm: () => handleStatusTransition(GameStatus.Completed),
+      onConfirm: () => handleStatusTransition('completed'),
     });
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'setup':
-        return 'gray';
-      case 'in_progress':
-        return 'blue';
-      case 'completed':
-        return 'green';
-      default:
-        return 'gray';
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'setup':
-        return <IconSettings style={{ width: 16, height: 16 }} />;
-      case 'in_progress':
-        return <IconPlayerPlay style={{ width: 16, height: 16 }} />;
-      case 'completed':
-        return <IconCheck style={{ width: 16, height: 16 }} />;
-      default:
-        return null;
-    }
   };
 
   return (
@@ -202,12 +179,12 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           >
             {t(`status.${game.status}`)}
           </Badge>
-          {game.status === GameStatus.Setup && (
+          {game.status === 'setup' && (
             <Button color="blue" size="sm" onClick={confirmStartGame}>
               {t('actions.startGame')}
             </Button>
           )}
-          {game.status === GameStatus.InProgress && (
+          {game.status === 'in_progress' && (
             <Tooltip
               disabled={canComplete}
               label={
@@ -237,21 +214,21 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tabs.List>
-          {game.status === GameStatus.Setup && (
+          {game.status === 'setup' && (
             <>
               <Tabs.Tab value="teams">{t('tabs.teams')}</Tabs.Tab>
               <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>
               <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
             </>
           )}
-          {game.status === GameStatus.InProgress && (
+          {game.status === 'in_progress' && (
             <>
               <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>
               <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
               <Tabs.Tab value="teams">{t('tabs.teams')}</Tabs.Tab>
             </>
           )}
-          {game.status === GameStatus.Completed && (
+          {game.status === 'completed' && (
             <>
               <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
               <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>

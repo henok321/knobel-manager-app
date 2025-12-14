@@ -1,18 +1,22 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { NormalizedData } from './types.ts';
-import { gamesApi } from '../api/apiClient.ts';
-import { GamesResponse } from '../generated';
+import { client } from '../api/apiClient';
+import { getGames, type GamesResponse } from '../generated';
+import { NormalizedData } from './types';
 
 export const resetStore = createAction('store/reset');
 
 export const fetchAll = createAsyncThunk<NormalizedData>(
   'state/fetchAll',
   async () => {
-    const response = await gamesApi.getGames();
+    const response = await getGames({ client });
+    if (!response.data) {
+      throw new Error('API returned empty response data');
+    }
     return normalizeGameData(response.data);
   },
 );
+
 const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
   const normalizedData: NormalizedData = {
     games: {},
@@ -63,7 +67,7 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
         const tableId = table.id;
         normalizedData.tables[tableId] = {
           ...table,
-          players: table.players?.map((player) => player.id) || [],
+          roundNumber: round.roundNumber,
         };
         table.scores?.forEach((score) => {
           normalizedData.scores[score.id] = score;

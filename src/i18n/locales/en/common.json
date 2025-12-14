@@ -8,6 +8,32 @@
     "delete": "Delete",
     "save": "Save"
   },
+  "apiError": {
+    "unknown": "An unknown error occurred",
+    "fetchAll": "Failed to load data",
+    "game": {
+      "create": "Failed to create game",
+      "update": "Failed to update game",
+      "delete": "Failed to delete game",
+      "fetch": "Failed to load game",
+      "activate": "Failed to activate game",
+      "complete": "Failed to complete game",
+      "setup": "Failed to setup game"
+    },
+    "team": {
+      "create": "Failed to create team",
+      "update": "Failed to update team",
+      "delete": "Failed to delete team"
+    },
+    "player": {
+      "update": "Failed to update player",
+      "delete": "Failed to delete player"
+    },
+    "table": {
+      "fetch": "Failed to load tables",
+      "update": "Failed to update scores"
+    }
+  },
   "errorBoundary": {
     "title": "Something went wrong",
     "errorDetails": "Error Details",

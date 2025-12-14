@@ -3,7 +3,7 @@ import { notifications } from '@mantine/notifications';
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { Player, Table } from '../../../generated';
+import type { Player, Table } from '../../../slices/types';
 
 interface ScoreEntryModalProps {
   isOpen: boolean;

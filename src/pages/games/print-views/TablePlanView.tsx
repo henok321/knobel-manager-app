@@ -1,9 +1,7 @@
 import { Title, Text, Paper, Table, Stack } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { Player } from '../../../generated';
-import { Table as TableType } from '../../../generated';
-import { Game, Team } from '../../../slices/types';
+import { Game, Team, Player, Table as TableType } from '../../../slices/types';
 
 interface TablePlanViewProps {
   game: Game;
