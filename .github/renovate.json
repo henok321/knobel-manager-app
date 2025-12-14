@@ -8,12 +8,6 @@
   "prCreation": "immediate",
   "stabilityDays": 7,
 
-  "automergeType": "pr",
-  "automergeStrategy": "squash",
-  "requiredStatusChecks": ["audit", "lint", "test"],
-  "prConcurrentLimit": 3,
-  "branchConcurrentLimit": 3,
-
   "vulnerabilityAlerts": {
     "stabilityDays": 0,
     "automerge": false,
@@ -28,16 +22,6 @@
   },
 
   "packageRules": [
-    {
-      "description": "Critical vulnerabilities need immediate attention but manual approval",
-      "matchUpdateTypes": ["patch", "minor"],
-      "vulnerabilitySeverity": ["critical"],
-      "prPriority": 10,
-      "stabilityDays": 0,
-      "automerge": false,
-      "dependencyDashboardApproval": true,
-      "addLabels": ["security", "critical", "urgent"]
-    },
     {
       "description": "Automerge non-major updates (AFTER stability days pass)",
       "matchUpdateTypes": ["minor", "patch", "digest", "pin"],
