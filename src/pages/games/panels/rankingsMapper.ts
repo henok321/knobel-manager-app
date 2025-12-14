@@ -1,5 +1,9 @@
-import { Score, Table as TableModel } from '../../../generated';
-import { Player, Team } from '../../../slices/types.ts';
+import {
+  Player,
+  Team,
+  Score,
+  Table as TableModel,
+} from '../../../slices/types';
 
 interface PlayerRanking {
   playerId: number;

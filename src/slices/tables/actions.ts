@@ -1,10 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { client } from '../../api/apiClient';
-import { getTables, updateScores, type Table } from '../../generated';
+import { getTables, updateScores } from '../../generated';
+import type { Table } from '../types';
 
 export const fetchTablesForRound = createAsyncThunk<
-  (Table & { roundNumber: number })[],
+  Table[],
   { gameId: number; roundNumber: number }
 >('tables/fetchForRound', async ({ gameId, roundNumber }) => {
   const response = await getTables({
@@ -21,10 +22,10 @@ export const fetchTablesForRound = createAsyncThunk<
 });
 
 export const fetchAllTablesForGame = createAsyncThunk<
-  (Table & { roundNumber: number })[],
+  Table[],
   { gameId: number; numberOfRounds: number }
 >('tables/fetchAllForGame', async ({ gameId, numberOfRounds }) => {
-  const allTables: (Table & { roundNumber: number })[] = [];
+  const allTables: Table[] = [];
 
   for (let roundNum = 1; roundNum <= numberOfRounds; roundNum++) {
     const response = await getTables({
@@ -45,7 +46,7 @@ export const fetchAllTablesForGame = createAsyncThunk<
 });
 
 export const updateScoresForTable = createAsyncThunk<
-  (Table & { roundNumber: number })[],
+  Table[],
   {
     gameId: number;
     roundNumber: number;

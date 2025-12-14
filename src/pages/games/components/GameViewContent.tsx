@@ -15,10 +15,9 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { type GameUpdateRequest } from '../../../generated';
-import type { GameStatus as GameStatusType } from '../../../generated';
 import useGames from '../../../slices/games/hooks.ts';
 import useTables from '../../../slices/tables/hooks.ts';
-import { Game } from '../../../slices/types.ts';
+import { Game, GameStatus as GameStatusType } from '../../../slices/types.ts';
 import {
   getStatusColor,
   getStatusIcon,

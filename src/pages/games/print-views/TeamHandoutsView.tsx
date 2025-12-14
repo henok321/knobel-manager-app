@@ -9,9 +9,7 @@ import {
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { Player } from '../../../generated';
-import { Table as TableType } from '../../../generated';
-import { Game, Team } from '../../../slices/types';
+import { Table as TableType, Player, Game, Team } from '../../../slices/types';
 
 interface TeamHandoutsViewProps {
   game: Game;

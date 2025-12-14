@@ -16,12 +16,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import type { Table } from '../../../generated';
 import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
 import { selectTablesForRoundWithSearch } from '../../../slices/tables/slice';
 import useTeams from '../../../slices/teams/hooks';
-import { Game } from '../../../slices/types';
+import { Game, Table } from '../../../slices/types';
 import { RootState } from '../../../store/store';
 import { PlayerScoreRow } from '../components/PlayerScoreRow';
 import ScoreEntryModal from '../components/ScoreEntryModal';

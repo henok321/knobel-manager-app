@@ -9,8 +9,8 @@ import {
   fetchTablesForRound,
   updateScoresForTable,
 } from './actions';
-import { Table } from '../../generated';
 import { RootState } from '../../store/store';
+import type { Table } from '../types';
 
 const tablesAdapter = createEntityAdapter<Table>();
 
@@ -76,10 +76,7 @@ const selectTablesByRoundNumber = createSelector(
     if (roundNumber === null) {
       return tables;
     }
-    return tables.filter(
-      (table) =>
-        (table as Table & { roundNumber?: number }).roundNumber === roundNumber,
-    );
+    return tables.filter((table) => table.roundNumber === roundNumber);
   },
 );
 
@@ -93,8 +90,7 @@ const selectTablesForRoundWithSearch = createSelector(
   (tables, roundNumber, searchQuery) => {
     let filtered = tables.filter(
       (table) =>
-        (table as Table & { roundNumber?: number }).roundNumber ===
-          roundNumber &&
+        table.roundNumber === roundNumber &&
         table.players &&
         table.players.length > 0,
     );

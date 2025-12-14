@@ -67,7 +67,7 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
         const tableId = table.id;
         normalizedData.tables[tableId] = {
           ...table,
-          players: table.players?.map((player) => player.id) || [],
+          roundNumber: round.roundNumber,
         };
         table.scores?.forEach((score) => {
           normalizedData.scores[score.id] = score;
