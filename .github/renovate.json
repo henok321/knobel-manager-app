@@ -1,38 +1,50 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "automerge": true,
+  "extends": ["config:recommended", ":prHourlyLimit2"],
   "enabledManagers": ["npm", "github-actions"],
-  "prCreation": "immediate",
   "labels": ["dependencies"],
-  "schedule": ["at any time"],
   "dependencyDashboard": true,
-  "npm": {
-    "minimumReleaseAge": "3d",
-    "enabled": true,
-    "ignoreUnstable": true
+
+  "prCreation": "immediate",
+  "stabilityDays": 7,
+
+  "vulnerabilityAlerts": {
+    "stabilityDays": 0,
+    "automerge": false,
+    "labels": ["security", "critical"]
   },
+
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["before 6am on wednesday"],
-    "automerge": true
+    "automerge": false,
+    "dependencyDashboardApproval": true
   },
+
   "packageRules": [
     {
+      "description": "Automerge non-major updates (AFTER stability days pass)",
+      "matchUpdateTypes": ["minor", "patch", "digest", "pin"],
+      "automerge": true
+    },
+    {
+      "description": "DevDependencies are lower risk, safe to automerge",
       "matchDepTypes": ["devDependencies"],
       "automerge": true,
       "addLabels": ["dev-dependencies"]
     },
     {
+      "description": "Group specific patterns to reduce noise",
       "groupName": "TypeScript Definitions",
       "addLabels": ["typescript"],
-      "matchPackageNames": ["/^@types//"],
+      "matchPackageNames": ["/^@types\\//"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },
     {
-      "matchUpdateTypes": ["minor", "patch", "digest", "pin", "major"],
-      "automerge": true
+      "description": "NPM Specific: Ensure lockfile integrity",
+      "matchManagers": ["npm"],
+      "postUpdateOptions": ["npmDedupe"]
     }
   ]
 }
