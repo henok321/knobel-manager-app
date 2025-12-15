@@ -9,12 +9,14 @@
   "stabilityDays": 7,
 
   "vulnerabilityAlerts": {
+    "description": "Security updates for npm dependencies",
     "stabilityDays": 0,
     "automerge": false,
     "labels": ["security", "critical"]
   },
 
   "lockFileMaintenance": {
+    "description": "Weekly lock file maintenance",
     "enabled": true,
     "schedule": ["before 6am on wednesday"],
     "automerge": false,
@@ -23,23 +25,9 @@
 
   "packageRules": [
     {
-      "description": "Automerge non-major updates (AFTER stability days pass)",
+      "description": "Automerge non-major updates",
       "matchUpdateTypes": ["minor", "patch", "digest", "pin"],
       "automerge": true
-    },
-    {
-      "description": "DevDependencies are lower risk, safe to automerge",
-      "matchDepTypes": ["devDependencies"],
-      "automerge": true,
-      "addLabels": ["dev-dependencies"]
-    },
-    {
-      "description": "Group specific patterns to reduce noise",
-      "groupName": "TypeScript Definitions",
-      "addLabels": ["typescript"],
-      "matchPackageNames": ["/^@types\\//"],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
     },
     {
       "description": "NPM Specific: Ensure lockfile integrity",
