@@ -29,7 +29,7 @@ coverage
 *.sw?
 
 # claude config
-CLAUDE.md
+!CLAUDE.md
 /.claude
 
 # generated files
