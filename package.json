@@ -61,7 +61,7 @@
     "@hey-api/openapi-ts": "^0.89.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.19.3",
+    "@types/node": "^24.0.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/react-redux": "^7.1.34",
