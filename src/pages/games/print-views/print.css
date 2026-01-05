@@ -1,37 +1,29 @@
-/* Print styles for print view pages */
-
 @media print {
-  /* Hide print controls when printing */
   .print-controls {
     display: none !important;
   }
 
-  /* Ensure page breaks work correctly */
   .print-page-break {
     page-break-after: always;
     break-after: page;
   }
 
-  /* Prevent page breaks inside elements */
   table,
   .mantine-Paper-root {
     page-break-inside: avoid;
     break-inside: avoid;
   }
 
-  /* Remove shadows but keep borders for cleaner print */
   .mantine-Paper-root {
     box-shadow: none !important;
     background: white !important;
     border: 1px solid #dee2e6 !important;
   }
 
-  /* Ensure tables print properly */
   table {
     border-collapse: collapse;
   }
 
-  /* Maintain grid layout for print */
   .tables-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -46,15 +38,14 @@
     break-inside: avoid;
   }
 
-  /* Optimize text for print */
   body {
     color: black;
     background: white;
   }
 
-  /* Remove unnecessary spacing */
   .print-header {
     margin-bottom: 2rem;
+    page-break-after: avoid;
   }
 
   /* Ensure badges print well */
@@ -62,38 +53,28 @@
     border: 1px solid currentColor;
   }
 
-  /* Handle links for print */
   a {
     text-decoration: underline;
     color: black;
   }
 
-  /* Page margins */
   @page {
     margin: 1cm 1.5cm;
     size: A4 portrait;
   }
 
-  /* Container adjustments for print */
   .mantine-Container-root {
     max-width: 100% !important;
     padding-left: 0.5rem !important;
     padding-right: 0.5rem !important;
   }
 
-  /* Header stays at top of first page only */
-  .print-header {
-    page-break-after: avoid;
-  }
-
-  /* Ensure round titles stay with their content */
   h3 {
     page-break-after: avoid;
     break-after: avoid;
   }
 }
 
-/* Screen styles for print view (not when printing) */
 @media screen {
   .print-controls {
     position: sticky;
@@ -115,7 +96,6 @@
     padding-bottom: 2rem;
   }
 
-  /* Add visual separator between "pages" on screen */
   .print-page-break:not(:last-child) {
     border-bottom: 2px dashed #dee2e6;
   }
