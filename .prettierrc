@@ -6,7 +6,7 @@
   "bracketSameLine": false,
   "arrowParens": "always",
   "tabWidth": 2,
-  "endOfLine": "lf",
+  "endOfLine": "auto",
   "plugins": [],
   "bracketSpacing": true
 }
