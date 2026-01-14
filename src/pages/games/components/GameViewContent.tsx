@@ -1,5 +1,4 @@
 import {
-  Badge,
   Button,
   Group,
   Skeleton,
@@ -14,14 +13,11 @@ import { notifications } from '@mantine/notifications';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import StatusBadge from '../../../components/StatusBadge';
 import { type GameUpdateRequest } from '../../../generated';
 import useGames from '../../../slices/games/hooks.ts';
 import useTables from '../../../slices/tables/hooks.ts';
 import { Game, GameStatus as GameStatusType } from '../../../slices/types.ts';
-import {
-  getStatusColor,
-  getStatusIcon,
-} from '../../../utils/gameStatusHelpers';
 import RankingsPanel from '../panels/RankingsPanel.tsx';
 import RoundsPanel from '../panels/RoundsPanel.tsx';
 import TeamsPanel from '../panels/TeamsPanel.tsx';
@@ -171,14 +167,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           </Group>
         </div>
         <Group gap="sm">
-          <Badge
-            color={getStatusColor(game.status)}
-            leftSection={getStatusIcon(game.status)}
-            size="lg"
-            variant="filled"
-          >
-            {t(`status.${game.status}`)}
-          </Badge>
+          <StatusBadge size="lg" status={game.status} variant="filled" />
           {game.status === 'setup' && (
             <Button color="blue" size="sm" onClick={confirmStartGame}>
               {t('actions.startGame')}

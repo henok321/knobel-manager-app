@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Button,
   Divider,
@@ -20,9 +19,9 @@ import { CSSProperties, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import StatusBadge from '../../components/StatusBadge';
 import useGames from '../../slices/games/hooks.ts';
 import { Game } from '../../slices/types.ts';
-import { getStatusColor } from '../../utils/gameStatusHelpers';
 
 const getGameSummary = (
   game: Game,
@@ -141,13 +140,7 @@ const GameContextSelector = ({
         <Menu.Label>{t('dashboard.activeGame.description')}</Menu.Label>
         <Menu.Item
           leftSection={
-            <Badge
-              color={getStatusColor(activeGame.status)}
-              size="sm"
-              variant="dot"
-            >
-              {t(`status.${activeGame.status}`, { ns: 'gameDetail' })}
-            </Badge>
+            <StatusBadge size="sm" status={activeGame.status} variant="dot" />
           }
           onClick={() => {
             navigate(`/games/${activeGame.id}`);
@@ -176,13 +169,7 @@ const GameContextSelector = ({
               <Menu.Item
                 key={game.id}
                 leftSection={
-                  <Badge
-                    color={getStatusColor(game.status)}
-                    size="sm"
-                    variant="dot"
-                  >
-                    {t(`status.${game.status}`, { ns: 'gameDetail' })}
-                  </Badge>
+                  <StatusBadge size="sm" status={game.status} variant="dot" />
                 }
                 onClick={() => handleSwitchGame(game.id)}
               >
