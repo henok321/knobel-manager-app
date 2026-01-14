@@ -6,7 +6,11 @@
   "status": {
     "setup": "Setup",
     "in_progress": "In Progress",
-    "completed": "Completed"
+    "completed": "Completed",
+    "setup.aria": "Game status: Setup phase",
+    "in_progress.aria": "Game status: In progress",
+    "completed.aria": "Game status: Completed",
+    "unknown.aria": "Game status: Unknown"
   },
   "actions": {
     "startGame": "Start Game",
