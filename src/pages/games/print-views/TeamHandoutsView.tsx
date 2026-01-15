@@ -28,18 +28,15 @@ const TeamHandoutsView = ({
 }: TeamHandoutsViewProps) => {
   const { t } = useTranslation(['pdf', 'common']);
 
-  // Filter teams to display
   const teams = allTeams.filter(
     (team) => team.gameID === game.id && (!teamId || team.id === teamId),
   );
 
   const renderTeamHandout = (team: Team) => {
-    // Get team players
     const teamPlayers = team.players
       .map((playerId: number) => players.find((p) => p.id === playerId))
       .filter((player): player is Player => player !== undefined);
 
-    // Build player assignments per round
     const playerAssignments: Record<
       number,
       Record<number, { tableNumber: number; roundNumber: number }>

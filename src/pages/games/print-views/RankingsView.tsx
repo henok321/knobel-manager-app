@@ -42,15 +42,12 @@ const RankingsView = ({
 }: RankingsViewProps) => {
   const { t } = useTranslation(['pdf', 'common']);
 
-  // Filter teams for this game
   const gameTeams = teams.filter((team) => team.gameID === game.id);
 
-  // Filter tables based on roundNumber if provided
   const relevantTables = roundNumber
     ? tables.filter((table) => table.roundNumber === roundNumber)
     : tables;
 
-  // Aggregate scores by player from table scores
   const scoresByPlayer: Record<number, number> = {};
   relevantTables.forEach((table) => {
     (table.scores || []).forEach((score) => {
@@ -59,7 +56,6 @@ const RankingsView = ({
     });
   });
 
-  // Calculate player rankings
   const playerRankings: PlayerRanking[] = [];
   gameTeams.forEach((team) => {
     team.players.forEach((playerId: number) => {

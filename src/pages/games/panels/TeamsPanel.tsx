@@ -40,6 +40,11 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const roundsCount = game.rounds?.length || 0;
 
+  const gameTeams = useMemo(
+    () => allTeams.filter((team) => team && game.teams.includes(team.id)),
+    [allTeams, game.teams],
+  );
+
   useEffect(() => {
     if (roundsCount > 0 && status === 'idle') {
       fetchAllTables(game.id, game.numberOfRounds);
@@ -151,14 +156,14 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         </Tooltip>
       )}
 
-      {canAddDelete && allTeams.length === 0 && (
+      {canAddDelete && gameTeams.length === 0 && (
         <Text c="dimmed" ta="center">
           {t('teams.noTeams')}
         </Text>
       )}
 
       <Stack gap="md">
-        {allTeams.map((team) => {
+        {gameTeams.map((team) => {
           if (!team) return null;
           const players = getPlayersForTeam(team.id);
 
