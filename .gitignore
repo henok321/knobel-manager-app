@@ -31,9 +31,15 @@ coverage
 # claude config
 !CLAUDE.md
 /.claude
+.playwright-mcp
 
 # generated files
 src/generated
 
 # vite local cert
 .cert
+
+# playwright
+/playwright-report/
+/playwright/.cache/
+/test-results/

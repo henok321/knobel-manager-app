@@ -6,7 +6,8 @@
     "build/**",
     "src/generated/**",
     "src/test/**",
-    "openapi-ts.config.ts"
+    "openapi-ts.config.ts",
+    "playwright.config.ts"
   ],
   "jest": {
     "config": ["jest.config.js"],
