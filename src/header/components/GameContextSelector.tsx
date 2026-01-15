@@ -95,8 +95,9 @@ const GameContextSelector = ({
     padding: '8px 12px',
     borderRadius: theme.radius.sm,
     border: `1px solid var(--mantine-color-gray-3)`,
-    backgroundColor: 'var(--mantine-color-body)',
-    transition: 'background-color 150ms ease',
+    backgroundColor: 'white',
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+    transition: 'all 150ms ease',
     width: '100%',
     maxWidth: isMobile ? '100%' : '400px',
   };
@@ -133,9 +134,6 @@ const GameContextSelector = ({
       <Menu.Dropdown>
         <Menu.Label>{t('dashboard.activeGame.description')}</Menu.Label>
         <Menu.Item
-          leftSection={
-            <StatusBadge size="sm" status={activeGame.status} variant="dot" />
-          }
           onClick={() => {
             navigate(`/games/${activeGame.id}`);
             if (isMobile && onClose) {
@@ -147,6 +145,7 @@ const GameContextSelector = ({
             <Text fw={600} size="sm">
               {activeGame.name}
             </Text>
+            <StatusBadge size="sm" status={activeGame.status} variant="dot" />
             <Text c="dimmed" size="xs">
               {t('picker.teams')}: {activeGame.teams.length} •{' '}
               {t('numberOfRounds', { ns: 'gameDetail' })} :{' '}
@@ -162,13 +161,11 @@ const GameContextSelector = ({
             {recentGames.map((game) => (
               <Menu.Item
                 key={game.id}
-                leftSection={
-                  <StatusBadge size="sm" status={game.status} variant="dot" />
-                }
                 onClick={() => handleSwitchGame(game.id)}
               >
                 <Stack gap={0}>
                   <Text size="sm">{game.name}</Text>
+                  <StatusBadge size="sm" status={game.status} variant="dot" />
                   <Text c="dimmed" size="xs">
                     {getGameSummary(game, t)}
                   </Text>

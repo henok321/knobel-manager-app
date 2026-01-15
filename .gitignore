@@ -31,6 +31,7 @@ coverage
 # claude config
 !CLAUDE.md
 /.claude
+.playwright-mcp
 
 # generated files
 src/generated
