@@ -37,3 +37,8 @@ src/generated
 
 # vite local cert
 .cert
+
+# playwright
+/playwright-report/
+/playwright/.cache/
+/test-results/

@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Divider,
   Group,
   Menu,
   Text,
@@ -11,20 +12,29 @@ import { IconChevronDown, IconLogout } from '@tabler/icons-react';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import LanguageMenuItem from './LanguageMenuItem.tsx';
 import { useAuth } from '../../auth/useAuth.ts';
 
 interface UserMenuProps {
-  onLogout: () => void;
+  onLogout?: () => void;
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, logOut } = useAuth();
   const theme = useMantineTheme();
 
   const userInitial = user?.email?.charAt(0).toUpperCase() || 'U';
   const userDisplayName =
     user?.displayName || user?.email?.split('@')[0] || 'User';
+
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+    } else {
+      logOut();
+    }
+  };
 
   const buttonStyle: CSSProperties = {
     padding: '8px 12px',
@@ -50,14 +60,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
             <Avatar color="blue" radius="xl" size="sm">
               {userInitial}
             </Avatar>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <Text fw={500} size="sm" truncate="end">
-                {userDisplayName}
-              </Text>
-              <Text c="dimmed" size="xs">
-                {t('header.nav.settings')}
-              </Text>
-            </div>
+            <Text fw={500} size="sm" truncate="end">
+              {userDisplayName}
+            </Text>
             <IconChevronDown
               style={{ width: rem(16), height: rem(16), opacity: 0.6 }}
             />
@@ -66,14 +71,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>{t('header.nav.settings')}</Menu.Label>
+        <LanguageMenuItem />
+
+        <Divider />
 
         <Menu.Item
           color="red"
           leftSection={
             <IconLogout style={{ width: rem(16), height: rem(16) }} />
           }
-          onClick={onLogout}
+          onClick={handleLogout}
         >
           {t('header.logout')}
         </Menu.Item>

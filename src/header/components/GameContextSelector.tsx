@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Divider,
   Group,
   Menu,
@@ -85,16 +84,11 @@ const GameContextSelector = ({
   };
 
   if (!activeGame) {
-    return (
-      <Button
-        color="gray"
-        size="sm"
-        variant="subtle"
-        onClick={() => navigate('/')}
-      >
-        {t('picker.selectGame')}
-      </Button>
-    );
+    return isMobile ? (
+      <Text c="dimmed" size="sm" ta="center">
+        {t('picker.noActiveGame')}
+      </Text>
+    ) : null;
   }
 
   const buttonStyle: CSSProperties = {
