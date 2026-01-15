@@ -7,7 +7,6 @@ import {
   Group,
   Stack,
   Text,
-  TextInput,
   Title,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
@@ -17,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 import GameListItem from './components/GameListItem';
 import GameForm from './GameForm';
+import SearchInput from '../../components/SearchInput';
 import Breadcrumbs from '../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
@@ -124,11 +124,10 @@ const Games = () => {
             </Button>
           </Group>
 
-          <TextInput
+          <SearchInput
             placeholder={t('search')}
             size="md"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.currentTarget.value)}
+            onSearch={setSearchQuery}
           />
 
           {!hasGames && (

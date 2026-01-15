@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Burger,
   Button,
@@ -11,7 +12,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconDice } from '@tabler/icons-react';
+import { IconDice, IconLogout } from '@tabler/icons-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -28,9 +29,9 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
   const [opened, { toggle }] = useDisclosure(false);
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common', 'home']);
   const navigate = useNavigate();
-  const { logOut } = useAuth();
+  const { user, logOut } = useAuth();
 
   return (
     <>
@@ -78,8 +79,7 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
 
           {navbarActive && (
             <Group gap="xs" visibleFrom="md">
-              <LanguagePicker />
-              <UserMenu onLogout={logOut} />
+              <UserMenu />
             </Group>
           )}
 
@@ -103,36 +103,53 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
         title={t('header.heading', 'Knobel Manager')}
         onClose={toggle}
       >
-        <Stack gap="md">
-          <GameContextSelector
-            isMobile
-            onClose={toggle}
-            onOpenGameForm={onOpenGameForm}
-          />
-
-          <Divider />
-
-          <Group justify="space-between">
-            <Text fw={500} size="sm">
-              {t('header.nav.language')}
+        <Stack gap="lg">
+          {/* Tournament Section */}
+          <Stack gap="xs">
+            <Text c="dimmed" fw={600} size="xs" tt="uppercase">
+              {t('picker.activeTournament', { ns: 'home' })}
             </Text>
-            <LanguagePicker />
-          </Group>
+            <GameContextSelector
+              isMobile
+              onClose={toggle}
+              onOpenGameForm={onOpenGameForm}
+            />
+          </Stack>
 
           <Divider />
 
-          <Button
-            fullWidth
-            color="red"
-            size="md"
-            variant="outline"
-            onClick={() => {
-              logOut();
-              toggle();
-            }}
-          >
-            {t('header.logout')}
-          </Button>
+          {/* Account Section */}
+          <Stack gap="sm">
+            <Text c="dimmed" fw={600} size="xs" tt="uppercase">
+              {t('header.account')}
+            </Text>
+            <Group gap="xs">
+              <Avatar color="blue" radius="xl" size="sm">
+                {user?.email?.charAt(0).toUpperCase() || 'U'}
+              </Avatar>
+              <Text fw={500} size="sm">
+                {user?.displayName || user?.email?.split('@')[0] || 'User'}
+              </Text>
+            </Group>
+
+            <Group justify="space-between">
+              <Text size="sm">{t('header.nav.language')}</Text>
+              <LanguagePicker />
+            </Group>
+
+            <Button
+              fullWidth
+              color="red"
+              leftSection={<IconLogout style={{ width: 16, height: 16 }} />}
+              variant="light"
+              onClick={() => {
+                logOut();
+                toggle();
+              }}
+            >
+              {t('header.logout')}
+            </Button>
+          </Stack>
         </Stack>
       </Drawer>
     </>

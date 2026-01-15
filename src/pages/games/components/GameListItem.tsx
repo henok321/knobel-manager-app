@@ -1,6 +1,5 @@
 import {
   ActionIcon,
-  Badge,
   Button,
   Card,
   Divider,
@@ -14,11 +13,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import StatusBadge from '../../../components/StatusBadge';
 import { Game } from '../../../slices/types';
-import {
-  getStatusColor,
-  getStatusIcon,
-} from '../../../utils/gameStatusHelpers';
 
 interface GameListItemProps {
   game: Game;
@@ -78,14 +74,7 @@ const GameListItem = ({
                 {game.name}
               </Text>
               <Group gap="xs">
-                <Badge
-                  color={getStatusColor(game.status)}
-                  leftSection={getStatusIcon(game.status, 14)}
-                  size="sm"
-                  variant="light"
-                >
-                  {t(`status.${game.status}`, { ns: 'gameDetail' })}
-                </Badge>
+                <StatusBadge size="sm" status={game.status} variant="light" />
                 <Text c="dimmed" size="xs">
                   {game.teams.length}{' '}
                   {t('picker.teams', { ns: 'home' }).toLowerCase()} •{' '}

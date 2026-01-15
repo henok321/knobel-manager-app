@@ -8,7 +8,6 @@ import {
   Stack,
   Table as MantineTable,
   Text,
-  TextInput,
   Title,
 } from '@mantine/core';
 import { IconCheck, IconClock } from '@tabler/icons-react';
@@ -16,6 +15,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import SearchInput from '../../../components/SearchInput';
 import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
 import { selectTablesForRoundWithSearch } from '../../../slices/tables/slice';
@@ -155,11 +155,10 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
             onChange={(value) => setSelectedRound(value || '1')}
           />
 
-          <TextInput
+          <SearchInput
             placeholder={t('rounds.searchPlayers')}
             style={{ width: 250 }}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.currentTarget.value)}
+            onSearch={setSearchQuery}
           />
 
           {canSetupMatchmaking && (

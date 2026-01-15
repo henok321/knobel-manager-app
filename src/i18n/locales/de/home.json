@@ -8,6 +8,8 @@
     "noGames": "Keine Spiele verfügbar. Erstelle dein erstes Spiel, um loszulegen!",
     "createGame": "Neues Spiel erstellen",
     "selectGame": "Dieses Spiel auswählen",
+    "noActiveGame": "Kein aktives Turnier",
+    "activeTournament": "Aktives Turnier",
     "teams": "Teams"
   },
   "dashboard": {

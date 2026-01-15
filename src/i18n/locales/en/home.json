@@ -8,6 +8,8 @@
     "noGames": "No games available. Create your first game to get started!",
     "createGame": "Create New Game",
     "selectGame": "Select This Game",
+    "noActiveGame": "No active tournament",
+    "activeTournament": "Active Tournament",
     "teams": "Teams"
   },
   "dashboard": {

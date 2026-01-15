@@ -1,7 +1,5 @@
 import {
-  Badge,
   Box,
-  Button,
   Divider,
   Group,
   Menu,
@@ -20,9 +18,9 @@ import { CSSProperties, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import StatusBadge from '../../components/StatusBadge';
 import useGames from '../../slices/games/hooks.ts';
 import { Game } from '../../slices/types.ts';
-import { getStatusColor } from '../../utils/gameStatusHelpers';
 
 const getGameSummary = (
   game: Game,
@@ -86,24 +84,20 @@ const GameContextSelector = ({
   };
 
   if (!activeGame) {
-    return (
-      <Button
-        color="gray"
-        size="sm"
-        variant="subtle"
-        onClick={() => navigate('/')}
-      >
-        {t('picker.selectGame')}
-      </Button>
-    );
+    return isMobile ? (
+      <Text c="dimmed" size="sm" ta="center">
+        {t('picker.noActiveGame')}
+      </Text>
+    ) : null;
   }
 
   const buttonStyle: CSSProperties = {
     padding: '8px 12px',
     borderRadius: theme.radius.sm,
     border: `1px solid var(--mantine-color-gray-3)`,
-    backgroundColor: 'var(--mantine-color-body)',
-    transition: 'background-color 150ms ease',
+    backgroundColor: 'white',
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+    transition: 'all 150ms ease',
     width: '100%',
     maxWidth: isMobile ? '100%' : '400px',
   };
@@ -140,15 +134,6 @@ const GameContextSelector = ({
       <Menu.Dropdown>
         <Menu.Label>{t('dashboard.activeGame.description')}</Menu.Label>
         <Menu.Item
-          leftSection={
-            <Badge
-              color={getStatusColor(activeGame.status)}
-              size="sm"
-              variant="dot"
-            >
-              {t(`status.${activeGame.status}`, { ns: 'gameDetail' })}
-            </Badge>
-          }
           onClick={() => {
             navigate(`/games/${activeGame.id}`);
             if (isMobile && onClose) {
@@ -160,6 +145,7 @@ const GameContextSelector = ({
             <Text fw={600} size="sm">
               {activeGame.name}
             </Text>
+            <StatusBadge size="sm" status={activeGame.status} variant="dot" />
             <Text c="dimmed" size="xs">
               {t('picker.teams')}: {activeGame.teams.length} •{' '}
               {t('numberOfRounds', { ns: 'gameDetail' })} :{' '}
@@ -175,19 +161,11 @@ const GameContextSelector = ({
             {recentGames.map((game) => (
               <Menu.Item
                 key={game.id}
-                leftSection={
-                  <Badge
-                    color={getStatusColor(game.status)}
-                    size="sm"
-                    variant="dot"
-                  >
-                    {t(`status.${game.status}`, { ns: 'gameDetail' })}
-                  </Badge>
-                }
                 onClick={() => handleSwitchGame(game.id)}
               >
                 <Stack gap={0}>
                   <Text size="sm">{game.name}</Text>
+                  <StatusBadge size="sm" status={game.status} variant="dot" />
                   <Text c="dimmed" size="xs">
                     {getGameSummary(game, t)}
                   </Text>

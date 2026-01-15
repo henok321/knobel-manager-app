@@ -9,6 +9,7 @@ import ProtectedRoute from './auth/ProtectedRoute.tsx';
 import GamesProvider from './GamesContext.tsx';
 import CenterLoader from './shared/CenterLoader.tsx';
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx';
+import { theme } from './theme/theme.ts';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 
@@ -22,7 +23,7 @@ const App = () => (
   <ErrorBoundary>
     <AuthProvider>
       <GamesProvider>
-        <MantineProvider>
+        <MantineProvider theme={theme}>
           <ModalsProvider>
             <Notifications position="top-right" />
             <BrowserRouter>
