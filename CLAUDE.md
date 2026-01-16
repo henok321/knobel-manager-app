@@ -395,3 +395,48 @@ Strict mode is enabled with comprehensive type checking:
 - `npm run local` requires the local backend started
 - `npm run prod` uses the deployed API
 - If the local API at `localhost:8080/health` is not available, try to use the prod API
+
+## Known UX Issues
+
+### Current Implementation Status (Last analyzed: 2026-01-15)
+
+**Home Page (`/`) - Partial Implementation:**
+- Currently only shows empty state with CTAs when no active game exists
+- **Missing**: Dashboard view with stats cards (total games, teams, active game count)
+- **Missing**: Active Game Card with configuration summary and quick actions
+- **Missing**: Recent Games grid when games exist
+
+**Navigation Warnings:**
+- React Router v7 throws console warnings: "You should call navigate() in React.useEffect()"
+- Occurs when clicking active game selector dropdown and navigating from multiple pages
+- Does not break functionality but indicates improper navigation hook usage
+
+**API Performance Issues:**
+- Multiple duplicate API requests observed (6+ identical calls to same endpoint)
+- No evidence of request deduplication or caching strategy
+- Should implement React Query or manual memoization for `/api/games/{id}/rounds/{round}/tables` endpoints
+
+**Game Detail Page:**
+- "Spiel abschließen" button remains disabled without visual feedback or tooltip explaining why
+- No loading states shown during API calls (should use skeletons or spinners)
+- Score entry modal number inputs work but could be more touch-friendly for mobile tournament use
+
+**Headers and Layout:**
+- Active game dropdown works but could benefit from loading indicator
+- Language selector present but not thoroughly tested
+
+### Performance Optimization Opportunities
+
+- Implement request deduplication for table data fetching
+- Add loading skeletons for initial page loads
+- Consider lazy loading for route components
+- Memoize expensive selector computations in Redux
+
+### Accessibility Reminders
+
+- Verify screen reader compatibility with status indicators (visual-only cues)
+- Test keyboard navigation through score entry modal
+- Ensure color contrast ratios meet WCAG AA standards
+- Add ARIA live regions for score updates and status changes
+
+See `ux-improvement.md` for detailed analysis and improvement recommendations.
