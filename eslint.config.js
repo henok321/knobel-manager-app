@@ -24,6 +24,7 @@ export default [
       '.claude',
       'src/generated',
       'playwright.config.ts',
+      '.playwright-mcp',
     ],
   },
 

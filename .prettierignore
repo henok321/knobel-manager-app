@@ -5,3 +5,4 @@ coverage/
 CLAUDE.md
 .claude/
 src/generated/
+'.playwright-mcp',
