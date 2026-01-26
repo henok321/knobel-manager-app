@@ -26,6 +26,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Setup project
         uses: ./.github/actions/setup-project
 
@@ -37,6 +40,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Setup project
         uses: ./.github/actions/setup-project
 
@@ -51,6 +57,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Setup project
         uses: ./.github/actions/setup-project
 
@@ -59,7 +68,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [ lint, test, audit ]
+    needs: [lint, test, audit]
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -69,6 +78,9 @@ jobs:
       cancel-in-progress: true
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Setup project
         uses: ./.github/actions/setup-project
 

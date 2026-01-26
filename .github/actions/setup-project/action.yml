@@ -4,9 +4,6 @@ description: 'Initialize project: checkout, setup Node.js with Yarn Berry, insta
 runs:
   using: 'composite'
   steps:
-    - name: Checkout repository
-      uses: actions/checkout@v6
-
     - name: Set up Node.js
       uses: actions/setup-node@v6
       with:
