@@ -31,38 +31,39 @@ graph TD
 
 ```bash
 nvm install && nvm use
-npm install
+corepack enable
+yarn install
 ```
 
 ## Development
 
 ```bash
-npm run local  # Dev server with local API (requires backend at localhost:8080)
-npm run prod   # Dev server with production API
+yarn local  # Dev server with local API (requires backend at localhost:8080)
+yarn prod   # Dev server with production API
 ```
 
 ## Build & Deploy
 
 ```bash
-npm run build   # Production build
-npm run deploy  # Build + Firebase deploy
+yarn build   # Production build
+yarn deploy  # Build + Firebase deploy
 ```
 
 ## Code Quality
 
 ```bash
-npm run fix   # Auto-fix linting and formatting (runs on pre-commit)
-npm run lint  # ESLint check
-npm test      # Run tests
-npm run knip  # Check for unused files/dependencies
+yarn fix   # Auto-fix linting and formatting (runs on pre-commit)
+yarn lint  # ESLint check
+yarn test  # Run tests
+yarn knip  # Check for unused files/dependencies
 ```
 
 ## Maintenance
 
 ```bash
-npx npm-check-updates -u -i  # Update dependencies interactively
-npx npm-check-updates -u -i -t minor  # Update dependencies to latest minor version
-npm ci             # Remove node_modules and dist
+yarn up -i                          # Update dependencies interactively
+yarn dlx npm-check-updates -u -i   # Alternative updater
+yarn clean                          # Remove node_modules and dist
 ```
 
 ## License
