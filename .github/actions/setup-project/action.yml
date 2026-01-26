@@ -1,0 +1,26 @@
+name: 'Setup Project'
+description: 'Initialize project: checkout, setup Node.js with Yarn Berry, install dependencies, and optionally generate API client'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: '.nvmrc'
+        cache: 'yarn'
+
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
+    - name: Install dependencies
+      shell: bash
+      run: yarn install --immutable
+
+    - name: Generate api client from OpenAPI spec
+      shell: bash
+      run: yarn api:gen

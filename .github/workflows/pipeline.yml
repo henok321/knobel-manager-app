@@ -26,20 +26,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install dependencies
-        run: yarn install --immutable
+      - name: Setup project
+        uses: ./.github/actions/setup-project
 
       - name: Yarn Audit
         run: yarn npm audit --environment=production --severity=high
@@ -49,23 +37,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install dependencies
-        run: yarn install --immutable
-
-      - name: Generate api client from OpenAPI spec
-        run: yarn api:gen
+      - name: Setup project
+        uses: ./.github/actions/setup-project
 
       - name: Run linting checks
         run: yarn lint
@@ -78,30 +51,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install dependencies
-        run: yarn install --immutable
-
-      - name: Generate api client from OpenAPI spec
-        run: yarn api:gen
+      - name: Setup project
+        uses: ./.github/actions/setup-project
 
       - name: Run tests
         run: yarn test
 
   deploy:
     name: Deploy
-    needs: [lint, test, audit]
+    needs: [ lint, test, audit ]
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -111,24 +69,8 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-
-      - name: Install dependencies
-        run: yarn install --immutable
-
-      - name: Generate api client from OpenAPI spec
-        run: yarn api:gen
+      - name: Setup project
+        uses: ./.github/actions/setup-project
 
       - name: Build
         run: yarn build
