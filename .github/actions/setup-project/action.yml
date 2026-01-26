@@ -1,5 +1,5 @@
 name: 'Setup Project'
-description: 'Initialize project: checkout, setup Node.js with Yarn Berry, install dependencies, and optionally generate API client'
+description: 'Initialize project: checkout, setup Node.js, install dependencies and generate client from OpenAPI spec'
 
 runs:
   using: 'composite'
