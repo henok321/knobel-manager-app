@@ -1,4 +1,4 @@
-npm audit --audit-level=high
-npm run knip
-npm run lint
-npm test
+yarn npm audit --environment=production --severity=high
+yarn knip
+yarn lint
+yarn test

@@ -50,7 +50,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'npm run prod',
+    command: 'yarn prod',
     url: 'https://localhost:5174',
     reuseExistingServer: !process.env.CI,
     ignoreHTTPSErrors: true,

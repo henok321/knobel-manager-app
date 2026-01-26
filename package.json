@@ -3,9 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "yarn@4.12.0",
   "engines": {
     "node": ">=24.0.0 <25.0.0",
-    "npm": ">=11.0.0"
+    "yarn": ">=4.0.0"
   },
   "scripts": {
     "prod": "vite --mode production",
@@ -15,14 +16,14 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write --ignore-unknown .",
-    "fix": "npm run format && npm run lint:fix",
+    "fix": "yarn format && yarn lint:fix",
     "test": "jest",
     "knip": "knip --strict",
     "knip:fix": "knip --strict --fix --format",
     "preview": "vite preview",
     "prepare": "husky",
     "clean": "rm -rf node_modules dist",
-    "deploy": "npm run build && firebase deploy --only hosting"
+    "deploy": "yarn build && firebase deploy --only hosting"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -45,8 +46,8 @@
     "firebase": "^12.8.0",
     "i18next": "^25.8.0",
     "i18next-browser-languagedetector": "^8.2.0",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-i18next": "^16.5.3",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.0",
@@ -59,14 +60,15 @@
     "@eslint/js": "^9.39.2",
     "@eslint/markdown": "^7.5.1",
     "@hey-api/openapi-ts": "^0.90.10",
+    "@playwright/test": "^1.58.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.9",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "@types/react-redux": "^7.1.34",
-    "@typescript-eslint/eslint-plugin": "^8.53.1",
-    "@typescript-eslint/parser": "^8.53.1",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "@vitejs/plugin-react": "^5.1.2",
     "babel-jest": "^30.2.0",
     "babel-plugin-transform-vite-meta-env": "^1.0.3",

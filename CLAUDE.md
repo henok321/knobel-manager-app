@@ -19,61 +19,62 @@ Web App ↔ Firebase Auth (JWT) ↔ Backend Service.
 # Install NodeJS version from .nvmrc
 nvm install && nvm use
 
-# Install dependencies
-npm install
+# Enable Corepack and install dependencies
+corepack enable
+yarn install
 ```
 
 ### Development Servers
 
 ```bash
 # Run with local API
-npm run local
+yarn local
 
 # Run with production API
-npm run prod
+yarn prod
 ```
 
 ### Build and Quality
 
 ```bash
 # Build for production
-npm run build
+yarn build
 
 # Run all linters and formatters (auto-fix)
-npm run fix
+yarn fix
 
 # Run linters separately
-npm run lint          # ESLint (check only)
-npm run lint:fix      # ESLint (auto-fix)
-npm run format        # Prettier
+yarn lint          # ESLint (check only)
+yarn lint:fix      # ESLint (auto-fix)
+yarn format        # Prettier
 
 # Run tests
-npm test              # Run all tests
-npm test <path>       # Run specific test file
-npm test --watch      # Run tests in watch mode
+yarn test              # Run all tests
+yarn test <path>       # Run specific test file
+yarn test --watch      # Run tests in watch mode
 ```
 
 ### Deployment
 
 ```bash
 # Build and deploy to Firebase
-npm run deploy
+yarn deploy
 ```
 
 ### Maintenance
 
 ```bash
 # Check for unused files/dependencies
-npm run knip          # Strict check
-npm run knip:fix      # Auto-remove unused files
+yarn knip          # Strict check
+yarn knip:fix      # Auto-remove unused files
 
 # Update dependencies interactively
-npx npm-check-updates -u -i
-npx npm-check-updates -u -i -t minor  # Update to latest minor versions only
+yarn up -i                          # Update dependencies interactively
+yarn dlx npm-check-updates -u -i   # Alternative updater
 
 # Clean build artifacts and dependencies
-npm run clean         # Remove node_modules and dist directories
-npm ci                # Clean install after removing node_modules
+yarn clean         # Remove node_modules and dist directories
+yarn install       # Clean install after removing node_modules
 ```
 
 ## Architecture
@@ -325,8 +326,8 @@ Strict mode is enabled with comprehensive type checking:
 
 ### API Connection Issues
 
-- If `npm run local` fails to connect: Check if backend is running at `http://localhost:8080/health`
-- If local backend is unavailable: Use `npm run prod` to connect to deployed API
+- If `yarn local` fails to connect: Check if backend is running at `http://localhost:8080/health`
+- If local backend is unavailable: Use `yarn prod` to connect to deployed API
 - 404 errors on `/api/*` routes: Vite proxy may not be running - restart dev server
 - Authentication errors: Check Firebase token is being attached in browser Network tab
 
@@ -392,8 +393,8 @@ Strict mode is enabled with comprehensive type checking:
 
 ### Environment Configuration
 
-- `npm run local` requires the local backend started
-- `npm run prod` uses the deployed API
+- `yarn local` requires the local backend started
+- `yarn prod` uses the deployed API
 - If the local API at `localhost:8080/health` is not available, try to use the prod API
 
 ## Known UX Issues
