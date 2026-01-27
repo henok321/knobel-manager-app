@@ -4,8 +4,7 @@ export default defineConfig({
   input: 'https://api.knobel-manager.de/openapi.yaml',
   output: {
     path: 'src/generated',
-    format: 'prettier',
-    lint: 'eslint',
+    postProcess: ['eslint', 'prettier'],
   },
   plugins: [
     ...defaultPlugins,
