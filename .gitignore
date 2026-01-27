@@ -8,8 +8,15 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Yarn Berry
+.pnp.*
 .yarn/*
-**/package-lock.json
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions*
+
+*/package-lock.json
 
 node_modules
 dist

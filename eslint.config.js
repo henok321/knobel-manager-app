@@ -25,6 +25,8 @@ export default [
       'src/generated',
       'playwright.config.ts',
       '.playwright-mcp',
+      '.pnp.*',
+      '.yarn',
     ],
   },
 
@@ -108,10 +110,17 @@ export default [
         },
       ],
     },
-    settings: { react: { version: 'detect' } },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+      },
+      react: { version: 'detect' },
+    },
   },
 
-  // JS/JSX: enable base rule, disable TS rule
   {
     files: ['**/*.{js,jsx}'],
     rules: {
@@ -129,7 +138,6 @@ export default [
     },
   },
 
-  // TS/TSX: disable base rule, enable TS-aware rule
   {
     files: ['**/*.{ts,tsx}'],
     rules: {

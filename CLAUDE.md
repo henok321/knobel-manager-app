@@ -16,11 +16,13 @@ Web App ↔ Firebase Auth (JWT) ↔ Backend Service.
 ### Environment Setup
 
 ```bash
-# Install NodeJS version from .nvmrc
+# Install NodeJS version from .nvmrc (Node 24)
 nvm install && nvm use
 
-# Enable Corepack and install dependencies
+# Enable Corepack (required for Yarn Berry)
 corepack enable
+
+# Install dependencies (uses Yarn Berry v4 with Plug'n'Play)
 yarn install
 ```
 
@@ -198,7 +200,7 @@ The project uses OpenAPI Generator to create TypeScript API clients from the bac
 
 ```bash
 # Regenerate API client from latest OpenAPI spec
-npm run api:gen
+yarn api:gen
 ```
 
 This command:
@@ -294,6 +296,18 @@ Create `.env.development` and `.env.production` files:
   - Development: `http://localhost:8080`
   - Production: `https://api.knobel-manager.de`
 
+## Package Management
+
+The project uses **Yarn Berry v4** with **Plug'n'Play (PnP)** mode:
+
+- **No `node_modules` directory**: Dependencies are stored in `.yarn/cache/` as zip files
+- **`.pnp.cjs`**: Node.js resolution hook that intercepts module imports
+- **Cache not committed**: The `.yarn/cache/` directory is gitignored - run `yarn install` after cloning
+- **Faster installs**: Dependencies are extracted on-demand at runtime
+- **IDE Support**: Requires proper IDE configuration (see `.vscode/extensions.json` if using VS Code)
+
+**Important**: Never run `npm install` - always use `yarn install`. Package scripts must use `yarn` not `npm`.
+
 ## Git Hooks
 
 Husky + lint-staged runs ESLint and Prettier on staged files before each commit.
@@ -307,6 +321,7 @@ Husky + lint-staged runs ESLint and Prettier on staged files before each commit.
 - **Axios** for HTTP requests
 - **i18next** for internationalization
 - **MSW** for API mocking in tests
+- **Yarn Berry** v4 with Plug'n'Play (no traditional `node_modules`)
 
 ## TypeScript Configuration
 
@@ -342,7 +357,8 @@ Strict mode is enabled with comprehensive type checking:
 
 - TypeScript errors with `undefined`: Check `noUncheckedIndexedAccess` - array/object access requires explicit checks
 - Jest import errors: Check `transformIgnorePatterns` in `jest.config.js` for ESM module handling
-- Vite build fails: Run `npm run clean` then `npm install` to clear build cache
+- Vite build fails: Run `yarn clean` then `yarn install` to clear build cache
+- Yarn PnP issues: The project uses Yarn Berry with Plug'n'Play (no `node_modules`). If you encounter module resolution issues, check `.pnp.cjs` and `.yarnrc.yml`
 
 ## Development Guidelines
 
@@ -390,12 +406,46 @@ Strict mode is enabled with comprehensive type checking:
 ### Localization
 
 - Never use inline translations - always use i18n JSON files and language keys
+- All strings must use `useTranslation()` with keys from `src/i18n/locales/{en,de}/*.json`
+- New translation keys must be added to both English and German files
+- Use namespaced keys: `page.section.label` pattern
 
 ### Environment Configuration
 
 - `yarn local` requires the local backend started
 - `yarn prod` uses the deployed API
 - If the local API at `localhost:8080/health` is not available, try to use the prod API
+
+## Code Review Guidelines
+
+When reviewing or writing code, apply these three lenses:
+
+### 1. Frontend-Developer Lens (Architecture & UX)
+- Component boundaries respect single responsibility principle
+- Composition over inheritance
+- Responsive layouts follow Mantine patterns (Grid, Card, breakpoints)
+- Empty states include clear CTAs; status badges consistent
+- Primary actions should be full-width on cards
+- API integration through `src/api/apiClient.ts` only
+- User-friendly error notifications with graceful 404 handling
+
+### 2. React-Pro Lens (React Patterns & Performance)
+- Prefer hooks, typed props, and composition
+- Avoid prop drilling - use context/Redux appropriately
+- Correct `useEffect` dependencies to avoid stale closures
+- Memoize expensive pure components with `React.memo`
+- Use `useCallback`/`useMemo` where re-render churn is evident
+- Accessibility: labeled inputs, ARIA attributes, keyboard navigation
+- Route params must be typed; use `<ProtectedRoute>` for protected routes
+
+### 3. TypeScript-Pro Lens (Type Safety)
+- **Zero tolerance for `any`** - use domain types or `unknown` with type guards
+- Always handle `undefined` from array/object access (`noUncheckedIndexedAccess` is enabled)
+- Prefer discriminated unions for variants
+- Use utility types: `Pick`, `Omit`, `Record`, `Partial`
+- Selectors must be typed and memoized
+- Event handlers must be correctly typed (`React.ChangeEvent`, `React.MouseEvent`, etc.)
+- Make invalid states unrepresentable in the type system
 
 ## Known UX Issues
 

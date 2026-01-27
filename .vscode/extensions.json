@@ -9,6 +9,7 @@
     "jjpatel361.reactstrap-snippets",
     "burkeholland.simple-react-snippets",
     "infeng.vscode-react-typescript",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "arcanis.vscode-zipfs"
   ]
 }

@@ -7,8 +7,15 @@
     "src/generated/**",
     "src/test/**",
     "openapi-ts.config.ts",
-    "playwright.config.ts"
+    "playwright.config.ts",
+    "vite.config.ts",
+    ".pnp.*",
+    ".yarn/**",
+    ".pnp.*"
   ],
+  "ignoreDependencies": ["redux"],
+  "vitest": false,
+  "vite": false,
   "jest": {
     "config": ["jest.config.js"],
     "entry": ["jest.setup.js"]
