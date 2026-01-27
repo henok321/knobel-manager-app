@@ -117,6 +117,7 @@ export default [
           project: './tsconfig.json',
         },
       },
+      'import/external-module-folders': ['.yarn'],
       react: { version: 'detect' },
     },
   },
