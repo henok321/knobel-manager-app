@@ -19,64 +19,64 @@ Web App ↔ Firebase Auth (JWT) ↔ Backend Service.
 # Install NodeJS version from .nvmrc (Node 24)
 nvm install && nvm use
 
-# Enable Corepack (required for Yarn Berry)
+# Enable Corepack (required for pnpm)
 corepack enable
 
-# Install dependencies (uses Yarn Berry v4 with Plug'n'Play)
-yarn install
+# Install dependencies (uses pnpm with standard node_modules)
+pnpm install
 ```
 
 ### Development Servers
 
 ```bash
 # Run with local API
-yarn local
+pnpm local
 
 # Run with production API
-yarn prod
+pnpm prod
 ```
 
 ### Build and Quality
 
 ```bash
 # Build for production
-yarn build
+pnpm build
 
 # Run all linters and formatters (auto-fix)
-yarn fix
+pnpm fix
 
 # Run linters separately
-yarn lint          # ESLint (check only)
-yarn lint:fix      # ESLint (auto-fix)
-yarn format        # Prettier
+pnpm lint          # ESLint (check only)
+pnpm lint:fix      # ESLint (auto-fix)
+pnpm format        # Prettier
 
 # Run tests
-yarn test              # Run all tests
-yarn test <path>       # Run specific test file
-yarn test --watch      # Run tests in watch mode
+pnpm test              # Run all tests
+pnpm test <path>       # Run specific test file
+pnpm test --watch      # Run tests in watch mode
 ```
 
 ### Deployment
 
 ```bash
 # Build and deploy to Firebase
-yarn deploy
+pnpm deploy
 ```
 
 ### Maintenance
 
 ```bash
 # Check for unused files/dependencies
-yarn knip          # Strict check
-yarn knip:fix      # Auto-remove unused files
+pnpm knip          # Strict check
+pnpm knip:fix      # Auto-remove unused files
 
 # Update dependencies interactively
-yarn up -i                          # Update dependencies interactively
-yarn dlx npm-check-updates -u -i   # Alternative updater
+pnpm up -i                          # Update dependencies interactively
+pnpm dlx npm-check-updates -u -i   # Alternative updater
 
 # Clean build artifacts and dependencies
-yarn clean         # Remove node_modules and dist directories
-yarn install       # Clean install after removing node_modules
+pnpm clean         # Remove node_modules and dist directories
+pnpm install       # Clean install after removing node_modules
 ```
 
 ## Architecture
@@ -200,7 +200,7 @@ The project uses OpenAPI Generator to create TypeScript API clients from the bac
 
 ```bash
 # Regenerate API client from latest OpenAPI spec
-yarn api:gen
+pnpm api:gen
 ```
 
 This command:
@@ -298,15 +298,14 @@ Create `.env.development` and `.env.production` files:
 
 ## Package Management
 
-The project uses **Yarn Berry v4** with **Plug'n'Play (PnP)** mode:
+The project uses **pnpm** as its package manager:
 
-- **No `node_modules` directory**: Dependencies are stored in `.yarn/cache/` as zip files
-- **`.pnp.cjs`**: Node.js resolution hook that intercepts module imports
-- **Cache not committed**: The `.yarn/cache/` directory is gitignored - run `yarn install` after cloning
-- **Faster installs**: Dependencies are extracted on-demand at runtime
-- **IDE Support**: Requires proper IDE configuration (see `.vscode/extensions.json` if using VS Code)
+- **Efficient disk usage**: Dependencies are stored in a global content-addressable store
+- **Fast installations**: Hard links from global store to node_modules
+- **Strict by default**: Prevents phantom dependencies (similar to Yarn PnP)
+- **Standard node_modules**: Compatible with all tooling without special configuration
 
-**Important**: Never run `npm install` - always use `yarn install`. Package scripts must use `yarn` not `npm`.
+**Important**: Always use `pnpm` commands, not `npm` or `yarn`. Package scripts must use `pnpm`.
 
 ## Git Hooks
 
@@ -321,7 +320,7 @@ Husky + lint-staged runs ESLint and Prettier on staged files before each commit.
 - **Axios** for HTTP requests
 - **i18next** for internationalization
 - **MSW** for API mocking in tests
-- **Yarn Berry** v4 with Plug'n'Play (no traditional `node_modules`)
+- **pnpm** for package management
 
 ## TypeScript Configuration
 
@@ -341,8 +340,8 @@ Strict mode is enabled with comprehensive type checking:
 
 ### API Connection Issues
 
-- If `yarn local` fails to connect: Check if backend is running at `http://localhost:8080/health`
-- If local backend is unavailable: Use `yarn prod` to connect to deployed API
+- If `pnpm local` fails to connect: Check if backend is running at `http://localhost:8080/health`
+- If local backend is unavailable: Use `pnpm prod` to connect to deployed API
 - 404 errors on `/api/*` routes: Vite proxy may not be running - restart dev server
 - Authentication errors: Check Firebase token is being attached in browser Network tab
 
@@ -357,8 +356,8 @@ Strict mode is enabled with comprehensive type checking:
 
 - TypeScript errors with `undefined`: Check `noUncheckedIndexedAccess` - array/object access requires explicit checks
 - Jest import errors: Check `transformIgnorePatterns` in `jest.config.js` for ESM module handling
-- Vite build fails: Run `yarn clean` then `yarn install` to clear build cache
-- Yarn PnP issues: The project uses Yarn Berry with Plug'n'Play (no `node_modules`). If you encounter module resolution issues, check `.pnp.cjs` and `.yarnrc.yml`
+- Vite build fails: Run `pnpm clean` then `pnpm install` to clear build cache
+- pnpm module resolution issues: Run `pnpm install` to refresh symlinks, or clear the pnpm store with `pnpm store prune`
 
 ## Development Guidelines
 
@@ -412,8 +411,8 @@ Strict mode is enabled with comprehensive type checking:
 
 ### Environment Configuration
 
-- `yarn local` requires the local backend started
-- `yarn prod` uses the deployed API
+- `pnpm local` requires the local backend started
+- `pnpm prod` uses the deployed API
 - If the local API at `localhost:8080/health` is not available, try to use the prod API
 
 ## Code Review Guidelines

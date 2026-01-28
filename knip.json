@@ -10,7 +10,6 @@
     "playwright.config.ts",
     "vite.config.ts",
     ".pnp.*",
-    ".yarn/**",
     ".pnp.*"
   ],
   "ignoreDependencies": ["redux"],

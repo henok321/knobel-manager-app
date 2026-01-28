@@ -1,2 +1,2 @@
-yarn dlx lint-staged
+pnpm dlx lint-staged
 

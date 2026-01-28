@@ -4,19 +4,19 @@ description: 'Initialize project: checkout, setup Node.js, install dependencies 
 runs:
   using: 'composite'
   steps:
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+
     - name: Set up Node.js
       uses: actions/setup-node@v6
       with:
         node-version-file: '.nvmrc'
-
-    - name: Enable Corepack
-      shell: bash
-      run: corepack enable
+        cache: 'pnpm'
 
     - name: Install dependencies
       shell: bash
-      run: yarn install --immutable
+      run: pnpm install --frozen-lockfile
 
     - name: Generate api client from OpenAPI spec
       shell: bash
-      run: yarn api:gen
+      run: pnpm api:gen
