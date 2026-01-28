@@ -32,8 +32,8 @@ jobs:
       - name: Setup project
         uses: ./.github/actions/setup-project
 
-      - name: Yarn Audit
-        run: yarn npm audit --environment=production --severity=high
+      - name: pnpm Audit
+        run: pnpm audit --prod --audit-level=high
 
   lint:
     name: Lint
@@ -47,10 +47,10 @@ jobs:
         uses: ./.github/actions/setup-project
 
       - name: Run linting checks
-        run: yarn lint
+        run: pnpm lint
 
       - name: Knip (production check)
-        run: yarn knip
+        run: pnpm knip
 
   test:
     name: Test
@@ -64,7 +64,7 @@ jobs:
         uses: ./.github/actions/setup-project
 
       - name: Run tests
-        run: yarn test
+        run: pnpm test
 
   deploy:
     name: Deploy
@@ -85,7 +85,7 @@ jobs:
         uses: ./.github/actions/setup-project
 
       - name: Build
-        run: yarn build
+        run: pnpm build
 
       - name: Deploy to Firebase (Production)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

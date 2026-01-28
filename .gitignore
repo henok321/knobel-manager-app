@@ -16,7 +16,9 @@ lerna-debug.log*
 !.yarn/sdks
 !.yarn/versions*
 
-*/package-lock.json
+# pnpm
+.pnpm-store/
+.pnpm-debug.log
 
 node_modules
 dist
