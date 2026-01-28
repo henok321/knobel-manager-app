@@ -26,7 +26,6 @@ export default [
       'playwright.config.ts',
       '.playwright-mcp',
       '.pnp.*',
-      '.yarn',
     ],
   },
 
