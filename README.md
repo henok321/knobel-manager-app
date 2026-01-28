@@ -14,8 +14,7 @@ Tournament manager for the dice game "Knobeln" (aka "Schocken"). React 19 + Type
 graph LR
     Web-App[Web App] -->|Credentials| Auth[Firebase Auth]
     Auth -->|JWT Token| Web-App
-    Web-App -->|Requests| Backend[Knobel Manager Service]
-    Backend -->|Responses| Web-App
+    Web-App -->|HTTP API| Backend[Knobel Manager Service]
     Backend -->|Validate token| Auth
 ```
 
