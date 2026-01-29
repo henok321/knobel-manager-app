@@ -1,0 +1,12 @@
+{
+  "copyright": "© {{year}} Hendrik Brinkmann",
+  "links": {
+    "github": "Quellcode",
+    "license": "MIT-Lizenz",
+    "imprint": "Impressum"
+  },
+  "disclaimer": {
+    "title": "Haftungsausschluss",
+    "text": "Diese Software wird ohne jegliche ausdrückliche oder stillschweigende Gewährleistung bereitgestellt. Der Autor übernimmt keine Haftung für Schäden oder Ansprüche, die aus der Nutzung dieser Software entstehen."
+  }
+}

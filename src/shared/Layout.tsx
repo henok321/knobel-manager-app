@@ -1,6 +1,7 @@
 import { AppShell } from '@mantine/core';
 import React, { ReactNode } from 'react';
 
+import Footer from './Footer.tsx';
 import Header from '../header/Header.tsx';
 
 interface LayoutProps {
@@ -14,11 +15,23 @@ const Layout: React.FC<LayoutProps> = ({
   children,
   onOpenGameForm,
 }) => (
-  <AppShell header={{ height: 60 }} padding={0}>
+  <AppShell
+    footer={{ height: 'auto' }}
+    header={{ height: 60 }}
+    padding={0}
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+    }}
+  >
     <AppShell.Header>
       <Header navbarActive={navbarActive} onOpenGameForm={onOpenGameForm} />
     </AppShell.Header>
-    <AppShell.Main>{children}</AppShell.Main>
+    <AppShell.Main style={{ flex: 1 }}>{children}</AppShell.Main>
+    <AppShell.Footer>
+      <Footer />
+    </AppShell.Footer>
   </AppShell>
 );
 
