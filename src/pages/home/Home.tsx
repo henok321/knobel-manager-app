@@ -43,7 +43,7 @@ const Home = () => {
             </Text>
           </Stack>
 
-          <Group gap="md">
+          <Group gap="md" justify="center">
             <Button
               leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
               size="lg"
