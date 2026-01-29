@@ -20,17 +20,7 @@
     "completeGameConfirmation": "Bist du sicher, dass du dieses Turnier abschließen möchtest? Dies wird alle Punkte und Ranglisten finalisieren.",
     "completeGameDisabledTooltip": "Alle Punkte müssen für jede Runde eingetragen werden, bevor das Spiel abgeschlossen werden kann",
     "scoreProgress": "Punkte-Fortschritt: {{completed}} von {{total}} Tischen abgeschlossen",
-    "exportPDF": "PDF exportieren",
     "printView": "Druckansicht"
-  },
-  "pdfMenu": {
-    "label": "Export-Optionen",
-    "tablePlan": "Tischplan (Alle Runden)",
-    "scoreSheets": "Punktebögen (Alle Tische)",
-    "teamHandouts": "Team-Handouts (Alle Teams)",
-    "rankingsLabel": "Ranglisten",
-    "rankingsAll": "Alle Runden (Gesamt)",
-    "rankingsRound": "Runde {{round}}"
   },
   "printMenu": {
     "label": "Druckoptionen",
@@ -66,7 +56,6 @@
   "rounds": {
     "selectRound": "Runde auswählen",
     "round": "Runde",
-    "startRound": "Runde starten",
     "table": "Tisch",
     "player": "Spieler",
     "team": "Team",
@@ -88,8 +77,7 @@
     "setupNotAvailable": "Spielpaarungen nicht verfügbar",
     "setupNotAvailableDescription": "Spielpaarungen können nur im Setup-Modus eingerichtet werden. Dieses Spiel wurde bereits gestartet oder abgeschlossen.",
     "generatingTables": "Generiere Tische und Spielpaarungen...",
-    "setupError": "Fehler beim Einrichten der Spielpaarungen. Bitte versuche es erneut.",
-    "matchmakingInfo": "Das Backend übernimmt die Spielpaarungen und erstellt automatisch Tische"
+    "setupError": "Fehler beim Einrichten der Spielpaarungen. Bitte versuche es erneut."
   },
   "rankings": {
     "teamRankings": "Team-Rangliste",

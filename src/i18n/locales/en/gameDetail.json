@@ -20,17 +20,7 @@
     "completeGameConfirmation": "Are you sure you want to complete this tournament? This will finalize all scores and rankings.",
     "completeGameDisabledTooltip": "All scores must be entered for every round before completing the game",
     "scoreProgress": "Score progress: {{completed}} of {{total}} tables completed",
-    "exportPDF": "Export PDF",
     "printView": "Print View"
-  },
-  "pdfMenu": {
-    "label": "Export Options",
-    "tablePlan": "Table Plan (All Rounds)",
-    "scoreSheets": "Score Sheets (All Tables)",
-    "teamHandouts": "Team Handouts (All Teams)",
-    "rankingsLabel": "Rankings",
-    "rankingsAll": "All Rounds (Total)",
-    "rankingsRound": "Round {{round}}"
   },
   "printMenu": {
     "label": "Print Options",
@@ -66,7 +56,6 @@
   "rounds": {
     "selectRound": "Select Round",
     "round": "Round",
-    "startRound": "Start Round",
     "table": "Table",
     "player": "Player",
     "team": "Team",
@@ -88,8 +77,7 @@
     "setupNotAvailable": "Matchmaking Not Available",
     "setupNotAvailableDescription": "Matchmaking can only be set up when the game is in setup mode. This game has already started or been completed.",
     "generatingTables": "Generating tables and matchmaking...",
-    "setupError": "Failed to setup matchmaking. Please try again.",
-    "matchmakingInfo": "Backend will handle matchmaking and create tables automatically"
+    "setupError": "Failed to setup matchmaking. Please try again."
   },
   "rankings": {
     "teamRankings": "Team Rankings",

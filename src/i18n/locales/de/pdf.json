@@ -3,18 +3,11 @@
     "title": "Team-Handout",
     "subtitle": "Vollständiger Turnierplan für alle Teams",
     "subtitleSingle": "Turnierplan für ausgewähltes Team",
-    "team": "Team",
     "round": "Runde",
     "table": "Tisch",
-    "tableAssignment": "Tischzuweisung",
     "assignments": "Spielerzuweisungen",
     "notAssigned": "Nicht zugewiesen",
-    "summary": "{{players}} Spieler über {{rounds}} Runden",
-    "player": "Spieler",
-    "filename": "Team_Handout",
-    "allTeamsTitle": "Alle Team-Handouts",
-    "allTeamsSubtitle": "Vollständiger Turnierplan für alle Teams",
-    "allTeamsFilename": "Alle_Team_Handouts"
+    "summary": "{{players}} Spieler über {{rounds}} Runden"
   },
   "tablePlan": {
     "title": "Tischplan",
@@ -23,9 +16,7 @@
     "table": "Tisch",
     "player": "Spieler",
     "team": "Team",
-    "players": "Spieler",
-    "noTables": "Keine Tische für diese Runde zugewiesen",
-    "filename": "Tischplan"
+    "noTables": "Keine Tische für diese Runde zugewiesen"
   },
   "scoreSheets": {
     "title": "Punktebögen",
@@ -37,13 +28,10 @@
     "team": "Team",
     "score": "Punktzahl",
     "notes": "Notizen",
-    "notesPlaceholder": "Zusätzliche Notizen oder Anmerkungen...",
-    "filename": "Punkteboegen"
+    "notesPlaceholder": "Zusätzliche Notizen oder Anmerkungen..."
   },
   "rankings": {
     "title": "Ranglisten",
-    "subtitle": "Aktuelle Platzierungen",
-    "round": "Runde",
     "total": "Gesamt (Alle Runden)",
     "teamRankings": "Team-Rangliste",
     "playerRankings": "Spieler-Rangliste",
@@ -51,7 +39,6 @@
     "team": "Team",
     "player": "Spieler",
     "totalScore": "Gesamtpunktzahl",
-    "noData": "Keine Ranglistendaten verfügbar",
-    "filename": "Ranglisten"
+    "noData": "Keine Ranglistendaten verfügbar"
   }
 }

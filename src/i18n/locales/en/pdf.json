@@ -3,18 +3,11 @@
     "title": "Team Handout",
     "subtitle": "Complete Tournament Schedule for All Teams",
     "subtitleSingle": "Tournament Schedule for Selected Team",
-    "team": "Team",
     "round": "Round",
     "table": "Table",
-    "tableAssignment": "Table Assignment",
     "assignments": "Player Assignments",
     "notAssigned": "Not Assigned",
-    "summary": "{{players}} players across {{rounds}} rounds",
-    "player": "Player",
-    "filename": "Team_Handout",
-    "allTeamsTitle": "All Team Handouts",
-    "allTeamsSubtitle": "Complete Tournament Schedule for All Teams",
-    "allTeamsFilename": "All_Team_Handouts"
+    "summary": "{{players}} players across {{rounds}} rounds"
   },
   "tablePlan": {
     "title": "Table Plan",
@@ -23,9 +16,7 @@
     "table": "Table",
     "player": "Player",
     "team": "Team",
-    "players": "Players",
-    "noTables": "No tables assigned for this round",
-    "filename": "Table_Plan"
+    "noTables": "No tables assigned for this round"
   },
   "scoreSheets": {
     "title": "Score Sheets",
@@ -37,13 +28,10 @@
     "team": "Team",
     "score": "Score",
     "notes": "Notes",
-    "notesPlaceholder": "Additional notes or remarks...",
-    "filename": "Score_Sheets"
+    "notesPlaceholder": "Additional notes or remarks..."
   },
   "rankings": {
     "title": "Rankings",
-    "subtitle": "Current Standings",
-    "round": "Round",
     "total": "Total (All Rounds)",
     "teamRankings": "Team Rankings",
     "playerRankings": "Player Rankings",
@@ -51,7 +39,6 @@
     "team": "Team",
     "player": "Player",
     "totalScore": "Total Score",
-    "noData": "No ranking data available",
-    "filename": "Rankings"
+    "noData": "No ranking data available"
   }
 }
