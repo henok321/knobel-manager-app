@@ -13,6 +13,28 @@
   "createFirstGame": "Erstelle dein erstes Spiel",
   "deleteGame": "Spiel löschen",
   "confirmDelete": "Bist du sicher, dass du dieses Spiel löschen möchtest?",
+  "picker": {
+    "teams": "Teams",
+    "selectGame": "Dieses Spiel auswählen"
+  },
+  "dashboard": {
+    "activeGame": {
+      "description": "Dein aktuell aktives Turnier"
+    },
+    "recentGames": "Letzte Spiele"
+  },
+  "team": {
+    "form": {
+      "heading": "Team erstellen",
+      "label": {
+        "name": "Teamname",
+        "players": "Teammitglieder"
+      },
+      "addPlayer": "Mitglied hinzufügen",
+      "removePlayer": "Mitglied entfernen",
+      "submit": "Erstellen"
+    }
+  },
   "card": {
     "details": {
       "teamSize": "Teamgröße",
@@ -22,9 +44,9 @@
       "status": "Status"
     },
     "activateButton": "Aktivieren",
-    "activateTooltip": "Als aktives Spiel festlegen für schnellen Zugriff von der Startseite",
+    "activateTooltip": "Als aktives Spiel festlegen für schnellen Zugriff",
     "activateTooltipDisabled": "Dieses Spiel ist bereits aktiv",
-    "activeGameTooltip": "Aktuell für schnellen Zugriff auf der Startseite ausgewählt",
+    "activeGameTooltip": "Aktuell für schnellen Zugriff ausgewählt",
     "deleteButton": "Löschen",
     "viewDetails": "Details anzeigen",
     "isActive": "Aktiv",

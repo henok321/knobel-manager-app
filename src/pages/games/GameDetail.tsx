@@ -40,7 +40,6 @@ const GameDetail = () => {
   }
 
   const breadcrumbItems = [
-    { label: t('header.nav.home'), path: '/' },
     { label: t('header.nav.games'), path: '/games' },
     { label: game.name },
   ];

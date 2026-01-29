@@ -43,7 +43,7 @@ const GameContextSelector = ({
   isMobile = false,
   onClose,
 }: GameContextSelectorProps) => {
-  const { t } = useTranslation(['home', 'gameDetail', 'games', 'common']);
+  const { t } = useTranslation(['games', 'gameDetail', 'common']);
   const navigate = useNavigate();
   const theme = useMantineTheme();
   const { activeGame, allGames, activateGame } = useGames();

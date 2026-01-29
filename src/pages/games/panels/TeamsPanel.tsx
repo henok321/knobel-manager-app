@@ -19,7 +19,7 @@ import usePlayers from '../../../slices/players/hooks';
 import useTables from '../../../slices/tables/hooks';
 import useTeams from '../../../slices/teams/hooks';
 import { Game } from '../../../slices/types';
-import TeamForm, { TeamFormData } from '../../home/TeamForm';
+import TeamForm, { TeamFormData } from '../components/TeamForm';
 
 interface TeamsPanelProps {
   game: Game;
