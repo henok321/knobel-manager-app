@@ -16,7 +16,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import GameContextSelector from './components/GameContextSelector.tsx';
 import LanguagePicker from './components/LanguagePicker.tsx';
 import UserMenu from './components/UserMenu.tsx';
 import { useAuth } from '../auth/useAuth.ts';
@@ -26,7 +25,7 @@ interface HeaderProps {
   onOpenGameForm?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
+const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
   const [opened, { toggle }] = useDisclosure(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -64,19 +63,6 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
           </Group>
 
           {navbarActive && (
-            <Box
-              style={{
-                flex: 1,
-                maxWidth: 400,
-                marginInline: 'auto',
-              }}
-              visibleFrom="md"
-            >
-              <GameContextSelector onOpenGameForm={onOpenGameForm} />
-            </Box>
-          )}
-
-          {navbarActive && (
             <Group gap="xs" visibleFrom="md">
               <LanguagePicker />
               <UserMenu onLogout={logOut} />
@@ -104,14 +90,6 @@ const Header: React.FC<HeaderProps> = ({ navbarActive, onOpenGameForm }) => {
         onClose={toggle}
       >
         <Stack gap="md">
-          <GameContextSelector
-            isMobile
-            onClose={toggle}
-            onOpenGameForm={onOpenGameForm}
-          />
-
-          <Divider />
-
           <Group justify="space-between">
             <Text fw={500} size="sm">
               {t('header.nav.language')}

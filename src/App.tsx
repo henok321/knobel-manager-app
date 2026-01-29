@@ -6,7 +6,6 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { AuthProvider } from './auth/AuthContext.tsx';
 import ProtectedRoute from './auth/ProtectedRoute.tsx';
-import GamesProvider from './GamesContext.tsx';
 import CenterLoader from './shared/CenterLoader.tsx';
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx';
 import '@mantine/core/styles.css';
@@ -20,32 +19,24 @@ const PrintView = lazy(() => import('./pages/games/PrintView.tsx'));
 const App = () => (
   <ErrorBoundary>
     <AuthProvider>
-      <GamesProvider>
-        <MantineProvider>
-          <ModalsProvider>
-            <Notifications position="top-right" />
-            <BrowserRouter>
-              <Suspense fallback={<CenterLoader />}>
-                <Routes>
-                  <Route element={<Login />} path="/login" />
-                  <Route element={<ProtectedRoute />}>
-                    <Route
-                      element={<Navigate replace to="/games" />}
-                      path="/"
-                    />
-                    <Route element={<Games />} path="/games" />
-                    <Route element={<GameDetail />} path="/games/:gameId" />
-                    <Route
-                      element={<PrintView />}
-                      path="/games/:gameId/print"
-                    />
-                  </Route>
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
-          </ModalsProvider>
-        </MantineProvider>{' '}
-      </GamesProvider>
+      <MantineProvider>
+        <ModalsProvider>
+          <Notifications position="top-right" />
+          <BrowserRouter>
+            <Suspense fallback={<CenterLoader />}>
+              <Routes>
+                <Route element={<Login />} path="/login" />
+                <Route element={<ProtectedRoute />}>
+                  <Route element={<Navigate replace to="/games" />} path="/" />
+                  <Route element={<Games />} path="/games" />
+                  <Route element={<GameDetail />} path="/games/:gameId" />
+                  <Route element={<PrintView />} path="/games/:gameId/print" />
+                </Route>
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </ModalsProvider>
+      </MantineProvider>{' '}
     </AuthProvider>
   </ErrorBoundary>
 );

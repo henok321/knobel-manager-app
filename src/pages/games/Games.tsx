@@ -22,16 +22,8 @@ import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
 
 const Games = () => {
-  const {
-    status,
-    error,
-    allGames,
-    activeGame,
-    createGame,
-    activateGame,
-    deleteGame,
-    fetchGames,
-  } = useGames();
+  const { status, error, allGames, createGame, deleteGame, fetchGames } =
+    useGames();
 
   const [gameModalActive, setGameModalActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -147,8 +139,6 @@ const Games = () => {
                 <GameListItem
                   key={game.id}
                   game={game}
-                  isActive={game.id === activeGame?.id}
-                  onActivate={activateGame}
                   onDelete={handleDeleteGame}
                 />
               ))}
@@ -165,8 +155,6 @@ const Games = () => {
                 <GameListItem
                   key={game.id}
                   game={game}
-                  isActive={game.id === activeGame?.id}
-                  onActivate={activateGame}
                   onDelete={handleDeleteGame}
                 />
               ))}
