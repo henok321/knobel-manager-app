@@ -4,17 +4,14 @@
   "enabledManagers": ["npm", "github-actions"],
   "labels": ["dependencies"],
   "dependencyDashboard": true,
-
   "prCreation": "immediate",
-  "stabilityDays": 7,
-
+  "minimumReleaseAge": "7 days",
   "vulnerabilityAlerts": {
     "description": "Security updates for npm dependencies",
-    "stabilityDays": 0,
+    "minimumReleaseAge": null,
     "automerge": false,
     "labels": ["security", "critical"]
   },
-
   "lockFileMaintenance": {
     "description": "Weekly lock file maintenance",
     "enabled": true,
@@ -22,7 +19,6 @@
     "automerge": false,
     "dependencyDashboardApproval": true
   },
-
   "packageRules": [
     {
       "description": "Automerge non-major updates",
