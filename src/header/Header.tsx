@@ -22,7 +22,6 @@ import { useAuth } from '../auth/useAuth.ts';
 
 interface HeaderProps {
   navbarActive?: boolean;
-  onOpenGameForm?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ navbarActive }) => {

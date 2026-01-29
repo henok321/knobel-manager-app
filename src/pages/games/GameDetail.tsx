@@ -1,7 +1,7 @@
 import { Container, Stack, Text } from '@mantine/core';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import GameViewContent from './components/GameViewContent.tsx';
 import Breadcrumbs from '../../shared/Breadcrumbs.tsx';
@@ -12,7 +12,6 @@ import useGames from '../../slices/games/hooks';
 const GameDetail = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const { t } = useTranslation(['gameDetail', 'common']);
-  const navigate = useNavigate();
   const { allGames, fetchGames, status } = useGames();
 
   useEffect(() => {
@@ -29,7 +28,7 @@ const GameDetail = () => {
 
   if (!game) {
     return (
-      <Layout navbarActive onOpenGameForm={() => navigate('/games')}>
+      <Layout>
         <Container py="md">
           <Text c="red" size="xl">
             {t('notFound')}
@@ -45,7 +44,7 @@ const GameDetail = () => {
   ];
 
   return (
-    <Layout navbarActive onOpenGameForm={() => navigate('/games')}>
+    <Layout>
       <Container py="md" size="xl">
         <Stack gap="lg">
           <Breadcrumbs items={breadcrumbItems} />

@@ -7,14 +7,9 @@ import Header from '../header/Header.tsx';
 interface LayoutProps {
   navbarActive?: boolean;
   children: ReactNode;
-  onOpenGameForm?: () => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({
-  navbarActive,
-  children,
-  onOpenGameForm,
-}) => (
+const Layout: React.FC<LayoutProps> = ({ navbarActive, children }) => (
   <AppShell
     footer={{ height: 'auto' }}
     header={{ height: 60 }}
@@ -26,7 +21,7 @@ const Layout: React.FC<LayoutProps> = ({
     }}
   >
     <AppShell.Header>
-      <Header navbarActive={navbarActive} onOpenGameForm={onOpenGameForm} />
+      <Header navbarActive={navbarActive} />
     </AppShell.Header>
     <AppShell.Main style={{ flex: 1 }}>{children}</AppShell.Main>
     <AppShell.Footer>

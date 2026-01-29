@@ -87,7 +87,7 @@ const Games = () => {
     activeAndInProgressGames.length > 0 || completedGames.length > 0;
 
   return (
-    <Layout navbarActive onOpenGameForm={() => setGameModalActive(true)}>
+    <Layout navbarActive>
       <Container py="xl" size="xl">
         <Stack gap="xl">
           <Group align="center" justify="space-between">
