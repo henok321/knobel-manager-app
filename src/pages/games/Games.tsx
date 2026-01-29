@@ -17,22 +17,13 @@ import { useTranslation } from 'react-i18next';
 
 import GameListItem from './components/GameListItem';
 import GameForm from './GameForm';
-import Breadcrumbs from '../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/Layout';
 import useGames from '../../slices/games/hooks';
 
 const Games = () => {
-  const {
-    status,
-    error,
-    allGames,
-    activeGame,
-    createGame,
-    activateGame,
-    deleteGame,
-    fetchGames,
-  } = useGames();
+  const { status, error, allGames, createGame, deleteGame, fetchGames } =
+    useGames();
 
   const [gameModalActive, setGameModalActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -95,17 +86,10 @@ const Games = () => {
   const hasGames =
     activeAndInProgressGames.length > 0 || completedGames.length > 0;
 
-  const breadcrumbItems = [
-    { label: t('header.nav.home', { ns: 'gameDetail' }), path: '/' },
-    { label: t('heading') },
-  ];
-
   return (
-    <Layout navbarActive onOpenGameForm={() => setGameModalActive(true)}>
+    <Layout navbarActive>
       <Container py="xl" size="xl">
         <Stack gap="xl">
-          <Breadcrumbs items={breadcrumbItems} />
-
           <Group align="center" justify="space-between">
             <div>
               <Title mb="xs" order={1}>
@@ -155,8 +139,6 @@ const Games = () => {
                 <GameListItem
                   key={game.id}
                   game={game}
-                  isActive={game.id === activeGame?.id}
-                  onActivate={activateGame}
                   onDelete={handleDeleteGame}
                 />
               ))}
@@ -173,8 +155,6 @@ const Games = () => {
                 <GameListItem
                   key={game.id}
                   game={game}
-                  isActive={game.id === activeGame?.id}
-                  onActivate={activateGame}
                   onDelete={handleDeleteGame}
                 />
               ))}

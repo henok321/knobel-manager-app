@@ -2,7 +2,6 @@ node_modules/
 dist/
 build/
 coverage/
-CLAUDE.md
 .claude/
 src/generated/
 '.playwright-mcp',

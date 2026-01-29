@@ -22,18 +22,11 @@ import {
 
 interface GameListItemProps {
   game: Game;
-  isActive: boolean;
-  onActivate: (gameId: number) => void;
   onDelete: (gameId: number) => void;
 }
 
-const GameListItem = ({
-  game,
-  isActive,
-  onActivate,
-  onDelete,
-}: GameListItemProps) => {
-  const { t } = useTranslation(['games', 'gameDetail', 'home', 'common']);
+const GameListItem = ({ game, onDelete }: GameListItemProps) => {
+  const { t } = useTranslation(['games', 'gameDetail', 'common']);
   const navigate = useNavigate();
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -53,7 +46,6 @@ const GameListItem = ({
   };
 
   const handleOpen = () => {
-    onActivate(game.id);
     navigate(`/games/${game.id}`);
   };
 
@@ -62,19 +54,8 @@ const GameListItem = ({
       <Stack gap="sm">
         <Group align="center" justify="space-between" wrap="nowrap">
           <Group gap="sm" style={{ flex: 1, minWidth: 0 }}>
-            {isActive && (
-              <div
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--mantine-color-blue-6)',
-                  flexShrink: 0,
-                }}
-              />
-            )}
             <Stack gap={4} style={{ flex: 1, minWidth: 0 }}>
-              <Text truncate fw={isActive ? 700 : 500} size="md">
+              <Text truncate fw={500} size="md">
                 {game.name}
               </Text>
               <Group gap="xs">
@@ -87,8 +68,7 @@ const GameListItem = ({
                   {t(`status.${game.status}`, { ns: 'gameDetail' })}
                 </Badge>
                 <Text c="dimmed" size="xs">
-                  {game.teams.length}{' '}
-                  {t('picker.teams', { ns: 'home' }).toLowerCase()} •{' '}
+                  {game.teams.length} {t('picker.teams').toLowerCase()} •{' '}
                   {game.numberOfRounds}{' '}
                   {t('rounds.round', { ns: 'gameDetail' }).toLowerCase()}
                 </Text>

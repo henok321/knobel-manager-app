@@ -17,7 +17,7 @@ interface TeamFormProps {
 }
 
 const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
-  const { t } = useTranslation(['home', 'games', 'common']);
+  const { t } = useTranslation(['games', 'common']);
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState(['']);
 

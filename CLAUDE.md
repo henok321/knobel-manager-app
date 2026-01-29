@@ -105,7 +105,7 @@ The application uses Redux Toolkit with **normalized state** using `createEntity
 - **Entity Adapters**: Each slice uses `createEntityAdapter` for CRUD operations
 - **ID References**: Relationships stored as ID arrays, not nested objects
 - **Immer Updates**: Redux Toolkit's Immer handles immutable updates automatically
-- **Memoized Selectors**: Uses `createSelector` for performance (e.g., `selectActiveGame`)
+- **Memoized Selectors**: Uses `createSelector` for performance optimizations
 - **Cross-Slice Coordination**: `extraReducers` keep related entities synchronized
 - **Type Safety**: Custom types in `src/slices/types.ts` define the normalized structure
 - **Async Operations**: Uses `createAsyncThunk` with `pending/fulfilled/rejected` states for API calls
@@ -121,16 +121,18 @@ Firebase Authentication is used throughout the app:
   if not authenticated
 - **API Interceptor** (`src/api/apiClient.ts`): Axios interceptor automatically attaches Firebase JWT token to all API
   requests
-- **Firebase Config** (`src/auth/firebaseConfig.ts`): Configuration is checked into source control (API key is public and secured via Firebase domain restrictions)
+- **Firebase Config** (`src/auth/firebaseConfig.ts`): Configuration is checked into source control (API key is public
+  and secured via Firebase domain restrictions)
 
 ### Routing
 
 React Router v7 with route-based code organization:
 
 - `/login` - Public login page
-- `/` - Dashboard/Home page (protected) - Shows active game overview and stats
+- `/` - Redirects to `/games`
 - `/games` - Games management page (protected) - Grid view with search and filters
 - `/games/:gameId` - Game detail page (protected) - Full tournament management interface
+- `/games/:gameId/print` - Print view for game rankings and scores
 
 All protected routes use the `<ProtectedRoute>` component wrapper.
 
@@ -162,22 +164,23 @@ i18next with browser language detection:
 
 ### Project Structure
 
-```
+```text
 src/
 ├── api/           # API client and type definitions
 ├── auth/          # Authentication context, hooks, Firebase config
-├── components/    # Shared components (GameViewContent, ErrorBoundary, etc.)
 ├── generated/     # Auto-generated TypeScript client from OpenAPI spec (DO NOT EDIT)
 │   ├── apis/      # API endpoint classes
 │   └── models/    # TypeScript type definitions
+├── header/        # Header component with language picker and user menu
+│   └── components/  # Header-specific components
 ├── i18n/          # i18next configuration and translations
 ├── pages/         # Route-based page components
-│   ├── home/      # Home page with TeamForm
 │   ├── games/     # Games page with GameForm, GameDetail, and panels
 │   │   ├── panels/       # TeamsPanel, RoundsPanel, RankingsPanel
-│   │   └── components/   # Game-specific components
+│   │   ├── components/   # Game-specific components
+│   │   └── print-views/  # Print view components
 │   └── Login.tsx  # Login page
-├── shared/        # Shared layout components (Layout, Header, CenterLoader)
+├── shared/        # Shared layout components (Layout, Footer, Breadcrumbs, CenterLoader, ErrorBoundary)
 ├── slices/        # Redux state management (normalized with entity adapters)
 │   ├── actions.ts      # Cross-slice actions (fetchAll, resetStore)
 │   ├── types.ts        # Normalized entity type definitions
@@ -189,6 +192,7 @@ src/
 │   ├── players/        # Players slice (similar structure)
 │   └── tables/         # Tables slice (similar structure)
 ├── store/         # Redux store configuration
+├── test/          # Test setup and handlers
 ├── utils/         # Utility functions (rankingsMapper, scoreAggregator)
 ├── App.tsx        # Root component with routing
 └── main.tsx       # Application entry point
@@ -215,18 +219,6 @@ This command:
 
 The application follows modern dashboard design patterns with Mantine UI:
 
-#### Dashboard/Home Page (`/`)
-
-Clean dashboard interface showing:
-
-- **Stats Cards**: Total games, teams, and active game count
-- **Active Game Card**: Featured card with game details and quick actions
-    - Game configuration summary (team size, table size, rounds, teams)
-    - "Manage Game" button linking to detail page
-    - "Add Team" button (when in setup mode)
-- **Recent Games**: Grid of recent games with quick navigation
-- **Empty State**: Prominent CTA when no active game
-
 #### Games Page (`/games`)
 
 Modern grid layout with powerful filtering:
@@ -235,11 +227,11 @@ Modern grid layout with powerful filtering:
 - **Filters**: Segmented control for All/Active/Setup
 - **Grid View**: Responsive 3-column grid (1 on mobile, 2 on tablet)
 - **Game Cards**: Consistent card design with all key info visible
-    - Status badges
-    - Game configuration
-    - Team count
-    - Full-width "View Details" button
-    - Action buttons (Activate, Delete)
+  - Status badges
+  - Game configuration
+  - Team count
+  - Full-width "View Details" button
+  - Action buttons (Activate, Delete)
 - **Empty States**: Context-aware messages for no games or no results
 
 #### Game Detail Page (`/games/:gameId`)
@@ -247,30 +239,29 @@ Modern grid layout with powerful filtering:
 Full tournament management interface with three tabs:
 
 1. **Teams Tab**:
-    - Add teams during the setup phase
-    - View all teams and their players
-    - Edit team and player names (even after game starts)
-    - Team/player IDs are preserved for matchmaking
+   - Add teams during the setup phase
+   - View all teams and their players
+   - Edit team and player names (even after game starts)
+   - Team/player IDs are preserved for matchmaking
 
 2. **Rounds Tab**:
-    - **Setup Phase**: Shows "Setup Matchmaking" button to generate tables
-    - Calls `POST /games/{gameID}/setup` to trigger backend matchmaking
-    - **After Setup**: Select round from dropdown
-    - View all tables for selected round
-    - See player assignments per table (from backend matchmaking)
-    - Enter/edit scores for each table
-    - Scores are saved per player per table
-    - Proper error handling for 404s before setup
+   - **Setup Phase**: Shows "Setup Matchmaking" button to generate tables
+   - Calls `POST /games/{gameID}/setup` to trigger backend matchmaking
+   - **After Setup**: Select round from dropdown
+   - View all tables for selected round
+   - See player assignments per table (from backend matchmaking)
+   - Enter/edit scores for each table
+   - Scores are saved per player per table
+   - Proper error handling for 404s before setup
 
 3. **Rankings Tab**:
-    - Team rankings (aggregated player scores)
-    - Player rankings (individual totals across all rounds)
-    - Automatically calculated from entered scores
-    - Real-time updates when scores change
+   - Team rankings (aggregated player scores)
+   - Player rankings (individual totals across all rounds)
+   - Automatically calculated from entered scores
+   - Real-time updates when scores change
 
 #### Key Components
 
-- **Home.tsx**: Dashboard with stats and active game overview
 - **Games.tsx**: Games list with search, filters, and grid layout
 - **GameDetail.tsx**: Main game page with tab navigation
 - **GameViewContent.tsx**: Game detail view with tabs and status management
@@ -347,10 +338,13 @@ Strict mode is enabled with comprehensive type checking:
 
 ### State Management Issues
 
-- Stale data after API calls: Ensure Redux actions properly update all affected slices and that `extraReducers` handle cross-slice updates
-- Missing related entities: Check that entity IDs are correctly stored in relationship arrays (e.g., `game.teams: number[]`) and that the corresponding entities exist in their slices
+- Stale data after API calls: Ensure Redux actions properly update all affected slices and that `extraReducers` handle
+  cross-slice updates
+- Missing related entities: Check that entity IDs are correctly stored in relationship arrays (e.g.,
+  `game.teams: number[]`) and that the corresponding entities exist in their slices
 - Selector returns `undefined`: Verify entity IDs exist in the appropriate slice and are correctly typed as numbers
-- Cross-slice sync issues: Check `extraReducers` in slices to ensure parent entities update when child entities are created/deleted
+- Cross-slice sync issues: Check `extraReducers` in slices to ensure parent entities update when child entities are
+  created/deleted
 
 ### Build/Test Issues
 
@@ -379,7 +373,8 @@ Strict mode is enabled with comprehensive type checking:
 - Write clean code balancing DRY and locality principles
 - Prefer clarity to abstractions unless the domain truly requires the abstraction
 - Module tests should be in the same module as the implementation using standard patterns and naming structures
-- Use descriptive code and avoid comments that explain the function of the code unless technical or domain decisions are ambiguous or exceptional and need further context to understand the code
+- Use descriptive code and avoid comments that explain the function of the code unless technical or domain decisions are
+  ambiguous or exceptional and need further context to understand the code
 
 ### Component Design
 
@@ -420,6 +415,7 @@ Strict mode is enabled with comprehensive type checking:
 When reviewing or writing code, apply these three lenses:
 
 ### 1. Frontend-Developer Lens (Architecture & UX)
+
 - Component boundaries respect single responsibility principle
 - Composition over inheritance
 - Responsive layouts follow Mantine patterns (Grid, Card, breakpoints)
@@ -429,6 +425,7 @@ When reviewing or writing code, apply these three lenses:
 - User-friendly error notifications with graceful 404 handling
 
 ### 2. React-Pro Lens (React Patterns & Performance)
+
 - Prefer hooks, typed props, and composition
 - Avoid prop drilling - use context/Redux appropriately
 - Correct `useEffect` dependencies to avoid stale closures
@@ -438,6 +435,7 @@ When reviewing or writing code, apply these three lenses:
 - Route params must be typed; use `<ProtectedRoute>` for protected routes
 
 ### 3. TypeScript-Pro Lens (Type Safety)
+
 - **Zero tolerance for `any`** - use domain types or `unknown` with type guards
 - Always handle `undefined` from array/object access (`noUncheckedIndexedAccess` is enabled)
 - Prefer discriminated unions for variants
@@ -445,48 +443,3 @@ When reviewing or writing code, apply these three lenses:
 - Selectors must be typed and memoized
 - Event handlers must be correctly typed (`React.ChangeEvent`, `React.MouseEvent`, etc.)
 - Make invalid states unrepresentable in the type system
-
-## Known UX Issues
-
-### Current Implementation Status (Last analyzed: 2026-01-15)
-
-**Home Page (`/`) - Partial Implementation:**
-- Currently only shows empty state with CTAs when no active game exists
-- **Missing**: Dashboard view with stats cards (total games, teams, active game count)
-- **Missing**: Active Game Card with configuration summary and quick actions
-- **Missing**: Recent Games grid when games exist
-
-**Navigation Warnings:**
-- React Router v7 throws console warnings: "You should call navigate() in React.useEffect()"
-- Occurs when clicking active game selector dropdown and navigating from multiple pages
-- Does not break functionality but indicates improper navigation hook usage
-
-**API Performance Issues:**
-- Multiple duplicate API requests observed (6+ identical calls to same endpoint)
-- No evidence of request deduplication or caching strategy
-- Should implement React Query or manual memoization for `/api/games/{id}/rounds/{round}/tables` endpoints
-
-**Game Detail Page:**
-- "Spiel abschließen" button remains disabled without visual feedback or tooltip explaining why
-- No loading states shown during API calls (should use skeletons or spinners)
-- Score entry modal number inputs work but could be more touch-friendly for mobile tournament use
-
-**Headers and Layout:**
-- Active game dropdown works but could benefit from loading indicator
-- Language selector present but not thoroughly tested
-
-### Performance Optimization Opportunities
-
-- Implement request deduplication for table data fetching
-- Add loading skeletons for initial page loads
-- Consider lazy loading for route components
-- Memoize expensive selector computations in Redux
-
-### Accessibility Reminders
-
-- Verify screen reader compatibility with status indicators (visual-only cues)
-- Test keyboard navigation through score entry modal
-- Ensure color contrast ratios meet WCAG AA standards
-- Add ARIA live regions for score updates and status changes
-
-See `ux-improvement.md` for detailed analysis and improvement recommendations.

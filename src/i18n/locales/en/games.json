@@ -13,6 +13,21 @@
   "createFirstGame": "Create Your First Game",
   "deleteGame": "Delete Game",
   "confirmDelete": "Are you sure you want to delete this game?",
+  "picker": {
+    "teams": "Teams"
+  },
+  "team": {
+    "form": {
+      "heading": "Create team",
+      "label": {
+        "name": "Team name",
+        "players": "Team members"
+      },
+      "addPlayer": "Add member",
+      "removePlayer": "Remove member",
+      "submit": "Create"
+    }
+  },
   "card": {
     "details": {
       "teamSize": "Team size",
@@ -22,12 +37,9 @@
       "status": "Status"
     },
     "activateButton": "Activate",
-    "activateTooltip": "Set as active game to access quickly from Home page",
-    "activateTooltipDisabled": "This game is already active",
-    "activeGameTooltip": "Currently selected for quick access on Home page",
+    "activateTooltip": "Set as active game to access quickly",
     "deleteButton": "Delete",
     "viewDetails": "View Details",
-    "isActive": "Active",
     "gameCreated": "Game \"{{name}}\" created successfully",
     "teamAdded": "Team \"{{name}}\" added successfully"
   },

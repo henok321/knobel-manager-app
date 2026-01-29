@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -7,30 +7,16 @@ import {
   setupGameAction,
   updateGameAction,
 } from './actions';
-import {
-  selectActiveGame,
-  selectAllGames,
-  selectGamesError,
-  selectGamesStatus,
-} from './slice';
-import { GamesContext } from '../../GamesContext.tsx';
+import { selectAllGames, selectGamesError, selectGamesStatus } from './slice';
 import { GameCreateRequest, GameUpdateRequest } from '../../generated';
-import { AppDispatch, RootState } from '../../store/store';
+import { AppDispatch } from '../../store/store';
 import { fetchAll } from '../actions';
 
 const useGames = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const gamesContext = React.useContext(GamesContext);
-  if (gamesContext === undefined) {
-    throw new Error('useGamesContext must be used within a GamesProvider');
-  }
-
-  const { activeGameID, setActiveGameID, clearActiveGameID } = gamesContext;
 
   const allGames = useSelector(selectAllGames);
-  const activeGame = useSelector((state: RootState) =>
-    selectActiveGame(state, activeGameID),
-  );
+
   const status = useSelector(selectGamesStatus);
   const error = useSelector(selectGamesError);
 
@@ -47,19 +33,9 @@ const useGames = () => {
 
   const deleteGame = useCallback(
     (gameID: number) => {
-      if (activeGameID === gameID) {
-        clearActiveGameID();
-      }
       dispatch(deleteGameAction(gameID));
     },
-    [dispatch, activeGameID, clearActiveGameID],
-  );
-
-  const activateGame = useCallback(
-    (gameID: number) => {
-      setActiveGameID(gameID);
-    },
-    [setActiveGameID],
+    [dispatch],
   );
 
   const updateGame = useCallback(
@@ -76,17 +52,14 @@ const useGames = () => {
 
   return {
     allGames,
-    activeGame,
     status,
     error,
 
     fetchGames,
     createGame,
     deleteGame,
-    activateGame,
     updateGame,
     setupGame,
-    clearActiveGameID,
   };
 };
 
