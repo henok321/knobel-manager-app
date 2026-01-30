@@ -156,11 +156,15 @@ Axios-based API client (`src/api/apiClient.ts`) configured with:
 
 ### Internationalization
 
-i18next with browser language detection:
+i18next with browser language detection and **type-safe translations**:
 
 - Configuration: `src/i18n/i18nConfig.ts`
 - Translations: `src/i18n/locales/{en,de}/*.json`
+- Type definitions: `src/i18n/i18next.d.ts` - provides TypeScript autocomplete and compile-time validation for
+  translation keys
 - Detection order: query string → localStorage → cookie → browser navigator
+- **Type Safety**: Translation keys are fully typed - invalid keys will cause TypeScript errors, and IDEs provide
+  autocomplete for all available keys
 
 ### Project Structure
 
