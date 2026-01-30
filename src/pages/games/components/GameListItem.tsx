@@ -14,7 +14,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Game } from '../../../slices/types';
+import { Game, GameStatus } from '../../../slices/types';
 import {
   getStatusColor,
   getStatusIcon,
@@ -49,6 +49,17 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
     navigate(`/games/${game.id}`);
   };
 
+  const translateGameStatus = (gameStatus: GameStatus) => {
+    switch (gameStatus) {
+      case 'in_progress':
+        return t('gameDetail:status.in_progress');
+      case 'completed':
+        return t('gameDetail:status.completed');
+      case 'setup':
+        return t('gameDetail:status.setup');
+    }
+  };
+
   return (
     <Card withBorder padding="md" radius="md" shadow="sm">
       <Stack gap="sm">
@@ -65,7 +76,7 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
                   size="sm"
                   variant="light"
                 >
-                  {t(`gameDetail:status.${game.status}`)}
+                  {translateGameStatus(game.status)}
                 </Badge>
                 <Text c="dimmed" size="xs">
                   {game.teams.length} {t('games:picker.teams').toLowerCase()} •{' '}
