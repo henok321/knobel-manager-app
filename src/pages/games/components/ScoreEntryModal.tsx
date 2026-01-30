@@ -20,7 +20,7 @@ const ScoreEntryModal = ({
   onClose,
   onSubmit,
 }: ScoreEntryModalProps) => {
-  const { t } = useTranslation(['gameDetail', 'common']);
+  const { t } = useTranslation();
   const [scores, setScores] = useState<Record<number, number>>({});
 
   const players = useMemo(() => table?.players || [], [table]);
@@ -45,8 +45,8 @@ const ScoreEntryModal = ({
     }));
     onSubmit(scoresArray);
     notifications.show({
-      title: t('actions.success'),
-      message: t('rounds.scoresSaved', {
+      title: t('common:actions.success'),
+      message: t('gameDetail:rounds.scoresSaved', {
         table: table.tableNumber,
       }),
       color: 'green',
@@ -61,14 +61,15 @@ const ScoreEntryModal = ({
       size="md"
       title={
         <Text fw={600} size="xl">
-          {t('rounds.enterScores')} - {t('rounds.table')} {table.tableNumber}
+          {t('gameDetail:rounds.enterScores')} - {t('gameDetail:rounds.table')}{' '}
+          {table.tableNumber}
         </Text>
       }
       onClose={onClose}
     >
       <Stack gap="md">
         <Text c="dimmed" size="sm">
-          {t('rounds.round')} {roundNumber}
+          {t('gameDetail:rounds.round')} {roundNumber}
         </Text>
 
         {players.map((player: Player) => (
@@ -77,7 +78,7 @@ const ScoreEntryModal = ({
             defaultValue={initialScores[player.id]}
             label={player.name}
             min={0}
-            placeholder={t('rounds.scorePlaceholder')}
+            placeholder={t('gameDetail:rounds.scorePlaceholder')}
             onChange={(value) =>
               setScores((prev) => ({
                 ...prev,
@@ -89,9 +90,11 @@ const ScoreEntryModal = ({
 
         <Group justify="flex-end" mt="md">
           <Button color="gray" variant="subtle" onClick={onClose}>
-            {t('actions.cancel')}
+            {t('common:actions.cancel')}
           </Button>
-          <Button onClick={handleSubmit}>{t('rounds.saveScores')}</Button>
+          <Button onClick={handleSubmit}>
+            {t('gameDetail:rounds.saveScores')}
+          </Button>
         </Group>
       </Stack>
     </Modal>

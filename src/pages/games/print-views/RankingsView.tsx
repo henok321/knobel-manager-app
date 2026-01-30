@@ -40,7 +40,7 @@ const RankingsView = ({
   teams,
   roundNumber,
 }: RankingsViewProps) => {
-  const { t } = useTranslation(['pdf', 'common']);
+  const { t } = useTranslation();
 
   const gameTeams = teams.filter((team) => team.gameID === game.id);
 
@@ -97,15 +97,15 @@ const RankingsView = ({
   teamRankings.sort((a, b) => b.totalScore - a.totalScore);
 
   const roundLabel = roundNumber
-    ? `${t('rankings.round')} ${roundNumber}`
-    : t('rankings.total');
+    ? `${t('pdf:teamHandout.round')} ${roundNumber}`
+    : t('pdf:rankings.total');
 
   return (
     <Stack gap="xl">
       <div className="print-header">
         <Title order={1}>{game.name}</Title>
         <Title c="dimmed" fw={400} order={2}>
-          {t('rankings.title')}
+          {t('pdf:rankings.title')}
         </Title>
         <Badge color="blue" size="lg" variant="light">
           {roundLabel}
@@ -114,23 +114,23 @@ const RankingsView = ({
 
       <Paper withBorder p="lg">
         <Stack gap="md">
-          <Title order={3}>{t('rankings.teamRankings')}</Title>
+          <Title order={3}>{t('pdf:rankings.teamRankings')}</Title>
           <Divider />
 
           {teamRankings.length === 0 ? (
             <Text c="dimmed" fs="italic">
-              {t('rankings.noData')}
+              {t('pdf:rankings.noData')}
             </Text>
           ) : (
             <Table highlightOnHover striped withTableBorder>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th style={{ width: '80px', textAlign: 'center' }}>
-                    {t('rankings.rank')}
+                    {t('pdf:rankings.rank')}
                   </Table.Th>
-                  <Table.Th>{t('rankings.team')}</Table.Th>
+                  <Table.Th>{t('pdf:rankings.team')}</Table.Th>
                   <Table.Th style={{ width: '120px', textAlign: 'center' }}>
-                    {t('rankings.totalScore')}
+                    {t('pdf:rankings.totalScore')}
                   </Table.Th>
                 </Table.Tr>
               </Table.Thead>
@@ -166,24 +166,24 @@ const RankingsView = ({
 
       <Paper withBorder p="lg">
         <Stack gap="md">
-          <Title order={3}>{t('rankings.playerRankings')}</Title>
+          <Title order={3}>{t('pdf:rankings.playerRankings')}</Title>
           <Divider />
 
           {playerRankings.length === 0 ? (
             <Text c="dimmed" fs="italic">
-              {t('rankings.noData')}
+              {t('pdf:rankings.noData')}
             </Text>
           ) : (
             <Table highlightOnHover striped withTableBorder>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th style={{ width: '80px', textAlign: 'center' }}>
-                    {t('rankings.rank')}
+                    {t('pdf:rankings.rank')}
                   </Table.Th>
-                  <Table.Th>{t('rankings.player')}</Table.Th>
-                  <Table.Th>{t('rankings.team')}</Table.Th>
+                  <Table.Th>{t('pdf:rankings.player')}</Table.Th>
+                  <Table.Th>{t('pdf:rankings.team')}</Table.Th>
                   <Table.Th style={{ width: '120px', textAlign: 'center' }}>
-                    {t('rankings.totalScore')}
+                    {t('pdf:rankings.totalScore')}
                   </Table.Th>
                 </Table.Tr>
               </Table.Thead>

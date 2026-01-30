@@ -30,7 +30,7 @@ interface RoundsPanelProps {
 }
 
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
-  const { t } = useTranslation(['gameDetail', 'common']);
+  const { t } = useTranslation();
   const { setupGame, status: gamesStatus } = useGames();
   const { allTeams } = useTeams();
   const {
@@ -55,7 +55,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     () =>
       Array.from({ length: game.numberOfRounds }, (_, i) => ({
         value: String(i + 1),
-        label: `${t('rounds.round')} ${i + 1}`,
+        label: `${t('gameDetail:rounds.round')} ${i + 1}`,
       })),
     [game.numberOfRounds, t],
   );
@@ -97,7 +97,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
           }
         )?.response?.data?.message ||
         (err as Error).message ||
-        t('rounds.setupError');
+        t('gameDetail:rounds.setupError');
       setSetupError(errorMessage);
     }
   };
@@ -122,7 +122,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       setScoreModalOpen(false);
     } catch (err) {
       setSetupError(
-        err instanceof Error ? err.message : t('actions.errorOccurred'),
+        err instanceof Error ? err.message : t('common:actions.errorOccurred'),
       );
     }
   };
@@ -149,14 +149,14 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         <Group align="flex-end" justify="space-between" wrap="wrap">
           <Select
             data={roundOptions}
-            label={t('rounds.selectRound')}
+            label={t('gameDetail:rounds.selectRound')}
             style={{ width: 200 }}
             value={selectedRound}
             onChange={(value) => setSelectedRound(value || '1')}
           />
 
           <TextInput
-            placeholder={t('rounds.searchPlayers')}
+            placeholder={t('gameDetail:rounds.searchPlayers')}
             style={{ width: 250 }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
@@ -169,14 +169,14 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
               variant="light"
               onClick={handleSetupGame}
             >
-              {t('rounds.rerunMatchmaking')}
+              {t('gameDetail:rounds.rerunMatchmaking')}
             </Button>
           )}
         </Group>
       )}
 
       {displayError && (
-        <Alert color="red" title={t('actions.error')}>
+        <Alert color="red" title={t('common:actions.error')}>
           {displayError}
         </Alert>
       )}
@@ -184,12 +184,12 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       {isSetupMode && !loading && !settingUp && canSetupMatchmaking && (
         <Card withBorder padding="xl" radius="md">
           <Stack align="center" gap="md">
-            <Title order={4}>{t('rounds.setupRequired')}</Title>
+            <Title order={4}>{t('gameDetail:rounds.setupRequired')}</Title>
             <Text c="dimmed" size="sm" ta="center">
-              {t('rounds.setupDescription')}
+              {t('gameDetail:rounds.setupDescription')}
             </Text>
             <Button loading={settingUp} size="lg" onClick={handleSetupGame}>
-              {t('rounds.setupMatchmaking')}
+              {t('gameDetail:rounds.setupMatchmaking')}
             </Button>
           </Stack>
         </Card>
@@ -198,9 +198,9 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       {isSetupMode && !loading && !settingUp && !canSetupMatchmaking && (
         <Card withBorder padding="xl" radius="md">
           <Stack align="center" gap="md">
-            <Title order={4}>{t('rounds.setupNotAvailable')}</Title>
+            <Title order={4}>{t('gameDetail:rounds.setupNotAvailable')}</Title>
             <Text c="dimmed" size="sm" ta="center">
-              {t('rounds.setupNotAvailableDescription')}
+              {t('gameDetail:rounds.setupNotAvailableDescription')}
             </Text>
           </Stack>
         </Card>
@@ -208,7 +208,9 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
       {(loading || settingUp) && (
         <Text c="dimmed" ta="center">
-          {settingUp ? t('rounds.generatingTables') : t('actions.loading')}
+          {settingUp
+            ? t('gameDetail:rounds.generatingTables')
+            : t('common:actions.loading')}
         </Text>
       )}
 
@@ -219,7 +221,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         !displayError && (
           <Card withBorder padding="lg" radius="md" shadow="sm">
             <Text c="dimmed" ta="center">
-              {t('rounds.noTables')}
+              {t('gameDetail:rounds.noTables')}
             </Text>
           </Card>
         )}
@@ -232,7 +234,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         searchQuery.trim() && (
           <Card withBorder padding="lg" radius="md" shadow="sm">
             <Text c="dimmed" ta="center">
-              {t('rounds.noSearchResults')}
+              {t('gameDetail:rounds.noSearchResults')}
             </Text>
           </Card>
         )}
@@ -251,7 +253,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                 <Group align="center" justify="space-between">
                   <Group gap="xs">
                     <Title order={4}>
-                      {`${t('rounds.table')} ${table.tableNumber}`}
+                      {`${t('gameDetail:rounds.table')} ${table.tableNumber}`}
                     </Title>
                     {hasScores(table) ? (
                       <Badge
@@ -261,7 +263,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                         }
                         variant="light"
                       >
-                        {t('rounds.scoresEntered')}
+                        {t('gameDetail:rounds.scoresEntered')}
                       </Badge>
                     ) : (
                       <Badge
@@ -271,7 +273,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                         }
                         variant="light"
                       >
-                        {t('rounds.scoresPending')}
+                        {t('gameDetail:rounds.scoresPending')}
                       </Badge>
                     )}
                   </Group>
@@ -282,8 +284,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                       onClick={() => handleOpenScoreEntry(table)}
                     >
                       {hasScores(table)
-                        ? t('rounds.editScores')
-                        : t('rounds.enterScores')}
+                        ? t('gameDetail:rounds.editScores')
+                        : t('gameDetail:rounds.enterScores')}
                     </Button>
                   )}
                 </Group>
@@ -299,9 +301,15 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                   </colgroup>
                   <MantineTable.Thead>
                     <MantineTable.Tr>
-                      <MantineTable.Th>{t('rounds.player')}</MantineTable.Th>
-                      <MantineTable.Th>{t('rounds.team')}</MantineTable.Th>
-                      <MantineTable.Th>{t('rounds.score')}</MantineTable.Th>
+                      <MantineTable.Th>
+                        {t('gameDetail:rounds.player')}
+                      </MantineTable.Th>
+                      <MantineTable.Th>
+                        {t('gameDetail:rounds.team')}
+                      </MantineTable.Th>
+                      <MantineTable.Th>
+                        {t('gameDetail:rounds.score')}
+                      </MantineTable.Th>
                     </MantineTable.Tr>
                   </MantineTable.Thead>
                   <MantineTable.Tbody>

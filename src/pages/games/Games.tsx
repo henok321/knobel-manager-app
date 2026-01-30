@@ -27,7 +27,7 @@ const Games = () => {
 
   const [gameModalActive, setGameModalActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { t } = useTranslation(['games', 'gameDetail', 'common']);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (status === 'idle') {
@@ -50,11 +50,11 @@ const Games = () => {
 
   const handleDeleteGame = (gameID: number) => {
     modals.openConfirmModal({
-      title: t('deleteGame'),
-      children: <Text size="sm">{t('confirmDelete')}</Text>,
+      title: t('games:deleteGame'),
+      children: <Text size="sm">{t('games:confirmDelete')}</Text>,
       labels: {
-        confirm: t('actions.delete'),
-        cancel: t('actions.cancel'),
+        confirm: t('common:actions.delete'),
+        cancel: t('common:actions.cancel'),
       },
       confirmProps: { color: 'red' },
       onConfirm: () => {
@@ -75,7 +75,7 @@ const Games = () => {
       <Center h="100vh">
         <Stack align="center" gap="xs">
           <Text c="red" size="xl">
-            {t('actions.errorOccurred')}
+            {t('common:actions.errorOccurred')}
           </Text>
           <Text c="red">{error}</Text>
         </Stack>
@@ -93,10 +93,10 @@ const Games = () => {
           <Group align="center" justify="space-between">
             <div>
               <Title mb="xs" order={1}>
-                {t('heading')}
+                {t('games:heading')}
               </Title>
               <Text c="dimmed" size="lg">
-                {t('subtitle')}
+                {t('games:subtitle')}
               </Text>
             </div>
             <Button
@@ -104,12 +104,12 @@ const Games = () => {
               size="lg"
               onClick={() => setGameModalActive(true)}
             >
-              {t('createGameButton')}
+              {t('games:createGameButton')}
             </Button>
           </Group>
 
           <TextInput
-            placeholder={t('search')}
+            placeholder={t('games:search')}
             size="md"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
@@ -119,11 +119,11 @@ const Games = () => {
             <Card withBorder p="xl" radius="md">
               <Stack align="center" gap="md">
                 <Text c="dimmed" size="lg" ta="center">
-                  {searchQuery ? t('noResults') : t('noGames')}
+                  {searchQuery ? t('games:noResults') : t('games:noGames')}
                 </Text>
                 {!searchQuery && (
                   <Button size="lg" onClick={() => setGameModalActive(true)}>
-                    {t('createFirstGame')}
+                    {t('games:createFirstGame')}
                   </Button>
                 )}
               </Stack>
@@ -133,7 +133,7 @@ const Games = () => {
           {activeAndInProgressGames.length > 0 && (
             <Stack gap="md">
               <Title order={3}>
-                {t('filters.active')} & {t('filters.setup')}
+                {t('games:filters.active')} & {t('games:filters.setup')}
               </Title>
               {activeAndInProgressGames.map((game) => (
                 <GameListItem
@@ -148,9 +148,7 @@ const Games = () => {
           {completedGames.length > 0 && (
             <Stack gap="md">
               <Divider />
-              <Title order={3}>
-                {t('status.completed', { ns: 'gameDetail' })}
-              </Title>
+              <Title order={3}>{t('gameDetail:status.completed')}</Title>
               {completedGames.map((game) => (
                 <GameListItem
                   key={game.id}

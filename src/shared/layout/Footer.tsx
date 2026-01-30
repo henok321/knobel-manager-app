@@ -8,7 +8,7 @@ const GITHUB_URL = 'https://github.com/henok321/knobel-manager-app';
 const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
 
 const Footer: React.FC = () => {
-  const { t } = useTranslation('footer');
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
   const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
     >
       <Group gap={isMobile ? 'xs' : 'md'} justify="center" wrap="wrap">
         <Text c="dimmed" size={isMobile ? 'xs' : 'sm'}>
-          {t('copyright', { year: currentYear })}
+          {t('footer:copyright', { year: currentYear })}
         </Text>
 
         <Text c="dimmed" size={isMobile ? 'xs' : 'sm'}>
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
         >
           <Group gap={4}>
             <IconBrandGithub size={isMobile ? 14 : 16} />
-            {t('links.github')}
+            {t('footer:links.github')}
           </Group>
         </Anchor>
 
@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
           size={isMobile ? 'xs' : 'sm'}
           target="_blank"
         >
-          {t('links.license')}
+          {t('footer:links.license')}
         </Anchor>
       </Group>
     </Container>

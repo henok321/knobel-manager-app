@@ -27,5 +27,6 @@
   "npm.packageManager": "pnpm",
   "explorer.fileNesting.patterns": {
     "package.json": "pnpm-workspace.yaml, pnpm-lock.yaml"
-  }
+  },
+  "i18n-ally.localesPaths": ["src/i18n"]
 }

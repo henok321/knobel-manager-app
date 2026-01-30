@@ -16,7 +16,7 @@ const TablePlanView = ({
   players: _players,
   teams,
 }: TablePlanViewProps) => {
-  const { t } = useTranslation(['pdf', 'common']);
+  const { t } = useTranslation();
 
   // Group tables by round
   const tablesByRound: Record<number, typeof tables> = {};
@@ -32,10 +32,10 @@ const TablePlanView = ({
       <div className="print-header">
         <Title order={1}>{game.name}</Title>
         <Title c="dimmed" fw={400} order={2}>
-          {t('tablePlan.title')}
+          {t('pdf:tablePlan.title')}
         </Title>
         <Text c="dimmed" size="sm">
-          {t('tablePlan.subtitle')}
+          {t('pdf:tablePlan.subtitle')}
         </Text>
       </div>
 
@@ -49,12 +49,12 @@ const TablePlanView = ({
             <div key={roundNumber} className="print-page-break">
               <Stack gap="md">
                 <Title order={3}>
-                  {t('tablePlan.round')} {roundNumber}
+                  {t('pdf:tablePlan.round')} {roundNumber}
                 </Title>
 
                 {roundTables.length === 0 ? (
                   <Text c="dimmed" fs="italic">
-                    {t('tablePlan.noTables')}
+                    {t('pdf:tablePlan.noTables')}
                   </Text>
                 ) : (
                   <div className="tables-grid">
@@ -70,13 +70,15 @@ const TablePlanView = ({
                         >
                           <Stack gap="xs">
                             <Title order={4} size="h5">
-                              {t('tablePlan.table')} {table.tableNumber}
+                              {t('pdf:tablePlan.table')} {table.tableNumber}
                             </Title>
                             <Table highlightOnHover striped>
                               <Table.Thead>
                                 <Table.Tr>
-                                  <Table.Th>{t('tablePlan.player')}</Table.Th>
-                                  <Table.Th>{t('tablePlan.team')}</Table.Th>
+                                  <Table.Th>
+                                    {t('pdf:tablePlan.player')}
+                                  </Table.Th>
+                                  <Table.Th>{t('pdf:tablePlan.team')}</Table.Th>
                                 </Table.Tr>
                               </Table.Thead>
                               <Table.Tbody>

@@ -33,7 +33,7 @@ interface GameViewContentProps {
 }
 
 const GameViewContent = ({ game }: GameViewContentProps) => {
-  const { t } = useTranslation(['gameDetail', 'common']);
+  const { t } = useTranslation();
   const { updateGame } = useGames();
   const { tables: allTables } = useTables();
 
@@ -108,28 +108,28 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const confirmStartGame = () => {
     modals.openConfirmModal({
-      title: t('actions.startGame'),
+      title: t('gameDetail:actions.startGame'),
       children: (
         <Stack gap="sm">
-          <Text size="sm">{t('actions.startGameConfirmation')}</Text>
+          <Text size="sm">{t('gameDetail:actions.startGameConfirmation')}</Text>
           <Text component="ul" ml="md" size="sm">
-            <li>{t('actions.startGameWarning1')}</li>
-            <li>{t('actions.startGameWarning2')}</li>
-            <li>{t('actions.startGameWarning3')}</li>
+            <li>{t('gameDetail:actions.startGameWarning1')}</li>
+            <li>{t('gameDetail:actions.startGameWarning2')}</li>
+            <li>{t('gameDetail:actions.startGameWarning3')}</li>
           </Text>
         </Stack>
       ),
       labels: {
-        confirm: t('actions.startGame'),
-        cancel: t('actions.cancel'),
+        confirm: t('gameDetail:actions.startGame'),
+        cancel: t('gameDetail:actions.cancel'),
       },
       confirmProps: { color: 'blue' },
       onConfirm: () => {
         handleStatusTransition('in_progress');
         setActiveTab('rounds');
         notifications.show({
-          title: t('actions.gameStartedNotification'),
-          message: t('actions.gameStartedMessage'),
+          title: t('gameDetail:actions.gameStartedNotification'),
+          message: t('gameDetail:actions.gameStartedMessage'),
           color: 'blue',
         });
       },
@@ -138,11 +138,15 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const confirmCompleteGame = () => {
     modals.openConfirmModal({
-      title: t('actions.completeGame'),
-      children: <Text size="sm">{t('actions.completeGameConfirmation')}</Text>,
+      title: t('gameDetail:actions.completeGame'),
+      children: (
+        <Text size="sm">
+          {t('gameDetail:actions.completeGameConfirmation')}
+        </Text>
+      ),
       labels: {
-        confirm: t('actions.completeGame'),
-        cancel: t('actions.cancel'),
+        confirm: t('gameDetail:actions.completeGame'),
+        cancel: t('gameDetail:actions.cancel'),
       },
       confirmProps: { color: 'green' },
       onConfirm: () => handleStatusTransition('completed'),
@@ -156,15 +160,15 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           <Title order={1}>{game.name}</Title>
           <Group gap="xs" mt="xs">
             <Text c="dimmed" size="sm">
-              {t('teamSize')}: {game.teamSize}
+              {t('gameDetail:teamSize')}: {game.teamSize}
             </Text>
             <Text c="dimmed">•</Text>
             <Text c="dimmed" size="sm">
-              {t('tableSize')}: {game.tableSize}
+              {t('gameDetail:tableSize')}: {game.tableSize}
             </Text>
             <Text c="dimmed">•</Text>
             <Text c="dimmed" size="sm">
-              {t('numberOfRounds')}: {game.numberOfRounds}
+              {t('gameDetail:numberOfRounds')}: {game.numberOfRounds}
             </Text>
           </Group>
         </div>
@@ -175,11 +179,11 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
             size="lg"
             variant="filled"
           >
-            {t(`status.${game.status}`)}
+            {t(`gameDetail:status.${game.status}`)}
           </Badge>
           {game.status === 'setup' && (
             <Button color="blue" size="sm" onClick={confirmStartGame}>
-              {t('actions.startGame')}
+              {t('gameDetail:actions.startGame')}
             </Button>
           )}
           {game.status === 'in_progress' && (
@@ -188,7 +192,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
               label={
                 canComplete
                   ? undefined
-                  : t('actions.scoreProgress', {
+                  : t('gameDetail:actions.scoreProgress', {
                       completed: scoreProgress.completed,
                       total: scoreProgress.total,
                     })
@@ -200,7 +204,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
                 size="sm"
                 onClick={confirmCompleteGame}
               >
-                {t('actions.completeGame')}
+                {t('gameDetail:actions.completeGame')}
               </Button>
             </Tooltip>
           )}
@@ -214,23 +218,29 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         <Tabs.List>
           {game.status === 'setup' && (
             <>
-              <Tabs.Tab value="teams">{t('tabs.teams')}</Tabs.Tab>
-              <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>
-              <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
+              <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
+              <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
+              <Tabs.Tab value="rankings">
+                {t('gameDetail:tabs.rankings')}
+              </Tabs.Tab>
             </>
           )}
           {game.status === 'in_progress' && (
             <>
-              <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>
-              <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
-              <Tabs.Tab value="teams">{t('tabs.teams')}</Tabs.Tab>
+              <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
+              <Tabs.Tab value="rankings">
+                {t('gameDetail:tabs.rankings')}
+              </Tabs.Tab>
+              <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
             </>
           )}
           {game.status === 'completed' && (
             <>
-              <Tabs.Tab value="rankings">{t('tabs.rankings')}</Tabs.Tab>
-              <Tabs.Tab value="rounds">{t('tabs.rounds')}</Tabs.Tab>
-              <Tabs.Tab value="teams">{t('tabs.teams')}</Tabs.Tab>
+              <Tabs.Tab value="rankings">
+                {t('gameDetail:tabs.rankings')}
+              </Tabs.Tab>
+              <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
+              <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
             </>
           )}
         </Tabs.List>

@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
               <IconDice />
             </ThemeIcon>
             <Title fw={700} order={4}>
-              {t('header.heading', 'Knobel Manager')}
+              {t('common:header.heading', 'Knobel Manager')}
             </Title>
           </Group>
 

@@ -60,7 +60,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
                 {userDisplayName}
               </Text>
               <Text c="dimmed" size="xs">
-                {t('header.nav.settings')}
+                {t('common:header.nav.settings')}
               </Text>
             </Box>
             <IconChevronDown
@@ -74,7 +74,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
         <Stack gap={0}>
           <Box p="md" pb="xs">
             <Text c="dimmed" fw={600} size="xs" tt="uppercase">
-              {t('header.nav.settings')}
+              {t('common:header.nav.settings')}
             </Text>
           </Box>
 
@@ -91,7 +91,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
             }
             onClick={onLogout}
           >
-            {t('header.logout')}
+            {t('common:header.logout')}
           </Menu.Item>
         </Stack>
       </Menu.Dropdown>

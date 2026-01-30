@@ -59,23 +59,23 @@ class ErrorBoundaryComponent extends Component<
       return (
         <Container py="xl" size="md">
           <Stack gap="lg">
-            <Title order={1}>{t('errorBoundary.title')}</Title>
+            <Title order={1}>{t('common:errorBoundary.title')}</Title>
 
             <Alert
               color="red"
-              title={t('errorBoundary.errorDetails')}
+              title={t('common:errorBoundary.errorDetails')}
               variant="filled"
             >
               <Text size="sm">
                 {this.state.error?.message ||
-                  t('errorBoundary.unexpectedError')}
+                  t('common:errorBoundary.unexpectedError')}
               </Text>
             </Alert>
 
             {import.meta.env.MODE === 'development' && this.state.errorInfo && (
               <Alert
                 color="yellow"
-                title={t('errorBoundary.componentStack')}
+                title={t('common:errorBoundary.componentStack')}
                 variant="light"
               >
                 <Text
@@ -93,7 +93,7 @@ class ErrorBoundaryComponent extends Component<
             )}
 
             <Button onClick={this.handleReset}>
-              {t('errorBoundary.tryAgain')}
+              {t('common:errorBoundary.tryAgain')}
             </Button>
 
             <Button
@@ -104,7 +104,7 @@ class ErrorBoundaryComponent extends Component<
                 window.location.href = '/';
               }}
             >
-              {t('errorBoundary.goToHomePage')}
+              {t('common:errorBoundary.goToHomePage')}
             </Button>
           </Stack>
         </Container>

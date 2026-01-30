@@ -21,7 +21,7 @@ const EditTeamDialogContent = ({
   onClose,
   onSave,
 }: Omit<EditTeamDialogProps, 'isOpen'>) => {
-  const { t } = useTranslation(['gameDetail', 'common']);
+  const { t } = useTranslation();
 
   const initialPlayerNames: Record<number, string> = useMemo(() => {
     const names: Record<number, string> = {};
@@ -66,8 +66,8 @@ const EditTeamDialogContent = ({
       <TextInput
         autoFocus
         data-autofocus
-        label={t('teams.teamName')}
-        placeholder={t('teams.teamNamePlaceholder')}
+        label={t('gameDetail:teams.teamName')}
+        placeholder={t('gameDetail:teams.teamNamePlaceholder')}
         value={name}
         onChange={(e) => setName(e.currentTarget.value)}
         onKeyDown={handleKeyDown}
@@ -77,8 +77,8 @@ const EditTeamDialogContent = ({
         {players.map((player, index) => (
           <TextInput
             key={player.id}
-            label={`${t('teams.player')} ${index + 1}`}
-            placeholder={t('teams.playerNamePlaceholder')}
+            label={`${t('gameDetail:teams.player')} ${index + 1}`}
+            placeholder={t('gameDetail:teams.playerNamePlaceholder')}
             value={playerNames[player.id] || player.name}
             onChange={(e) => updatePlayerName(player.id, e.currentTarget.value)}
             onKeyDown={handleKeyDown}
@@ -88,10 +88,10 @@ const EditTeamDialogContent = ({
 
       <Group gap="sm" justify="flex-end" mt="md">
         <Button variant="subtle" onClick={onClose}>
-          {t('actions.cancel')}
+          {t('common:actions.cancel')}
         </Button>
         <Button disabled={!name.trim()} onClick={handleSave}>
-          {t('actions.save')}
+          {t('common:actions.save')}
         </Button>
       </Group>
     </Stack>
@@ -105,7 +105,7 @@ const EditTeamDialog = ({
   onClose,
   onSave,
 }: EditTeamDialogProps) => {
-  const { t } = useTranslation(['gameDetail', 'common']);
+  const { t } = useTranslation();
   const dialogKey = `${isOpen}-${teamName}-${players.map((p) => p.id).join('-')}`;
 
   return (
@@ -115,7 +115,7 @@ const EditTeamDialog = ({
       size="md"
       title={
         <Text fw={600} size="xl">
-          {t('teams.editTeamDialog')}
+          {t('gameDetail:teams.editTeamDialog')}
         </Text>
       }
       onClose={onClose}

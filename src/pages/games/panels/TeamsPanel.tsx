@@ -26,7 +26,7 @@ interface TeamsPanelProps {
 }
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
-  const { t } = useTranslation(['gameDetail', 'common']);
+  const { t } = useTranslation();
   const { allTeams, createTeam, updateTeam, deleteTeam } = useTeams();
   const { allPlayers, updatePlayer } = usePlayers();
   const { tables: allTables, fetchAllTables, status } = useTables();
@@ -121,11 +121,13 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const handleDeleteTeam = (teamId: number) => {
     modals.openConfirmModal({
-      title: t('teams.deleteTeam'),
-      children: <Text size="sm">{t('teams.confirmDeleteTeam')}</Text>,
+      title: t('gameDetail:teams.deleteTeam'),
+      children: (
+        <Text size="sm">{t('gameDetail:teams.confirmDeleteTeam')}</Text>
+      ),
       labels: {
-        confirm: t('actions.delete'),
-        cancel: t('actions.cancel'),
+        confirm: t('common:actions.delete'),
+        cancel: t('common:actions.cancel'),
       },
       confirmProps: { color: 'red' },
       onConfirm: () => {
@@ -142,23 +144,23 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
           style={{ alignSelf: 'flex-start' }}
           onClick={() => setIsTeamFormOpen(true)}
         >
-          {t('teams.addTeam')}
+          {t('gameDetail:teams.addTeam')}
         </Button>
       ) : (
-        <Tooltip label={t('teams.cannotAddTeamsAfterStart')}>
+        <Tooltip label={t('gameDetail:teams.cannotAddTeamsAfterStart')}>
           <Button
             disabled
             leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
             style={{ alignSelf: 'flex-start' }}
           >
-            {t('teams.addTeam')}
+            {t('gameDetail:teams.addTeam')}
           </Button>
         </Tooltip>
       )}
 
       {canAddDelete && gameTeams.length === 0 && (
         <Text c="dimmed" ta="center">
-          {t('teams.noTeams')}
+          {t('gameDetail:teams.noTeams')}
         </Text>
       )}
 
@@ -197,7 +199,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
                 <Stack gap="xs">
                   <Text fw={500} size="sm">
-                    {t('teams.players')}:
+                    {t('gameDetail:teams.players')}:
                   </Text>
                   {players.map((player) => {
                     if (!player) return null;
@@ -225,9 +227,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                                       size="sm"
                                       variant="light"
                                     >
-                                      {t('teams.roundShort')}
+                                      {t('gameDetail:teams.roundShort')}
                                       {assignment.roundNumber}:
-                                      {t('teams.tableShort')}
+                                      {t('gameDetail:teams.tableShort')}
                                       {assignment.tableNumber}
                                     </Badge>
                                   ))}

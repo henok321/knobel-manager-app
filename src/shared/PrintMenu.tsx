@@ -16,7 +16,7 @@ const PrintMenu = ({
   size = 'sm',
   variant = 'light',
 }: PrintMenuProps) => {
-  const { t } = useTranslation(['gameDetail', 'common']);
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   if (game.status === 'setup') {
@@ -36,25 +36,25 @@ const PrintMenu = ({
           size={size}
           variant={variant}
         >
-          {t('actions.printView')}
+          {t('gameDetail:actions.printView')}
         </Button>
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>{t('printMenu.label')}</Menu.Label>
+        <Menu.Label>{t('gameDetail:printMenu.label')}</Menu.Label>
         <Menu.Item onClick={() => handlePrintView('tablePlan')}>
-          {t('printMenu.tablePlan')}
+          {t('gameDetail:printMenu.tablePlan')}
         </Menu.Item>
         <Menu.Item onClick={() => handlePrintView('scoreSheets')}>
-          {t('printMenu.scoreSheets')}
+          {t('gameDetail:printMenu.scoreSheets')}
         </Menu.Item>
         <Menu.Item onClick={() => handlePrintView('teamHandouts')}>
-          {t('printMenu.teamHandouts')}
+          {t('gameDetail:printMenu.teamHandouts')}
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Label>{t('printMenu.rankingsLabel')}</Menu.Label>
+        <Menu.Label>{t('gameDetail:printMenu.rankingsLabel')}</Menu.Label>
         <Menu.Item onClick={() => handlePrintView('rankings')}>
-          {t('printMenu.rankingsAll')}
+          {t('gameDetail:printMenu.rankingsAll')}
         </Menu.Item>
         {Array.from({ length: game.numberOfRounds }, (_, i) => i + 1).map(
           (roundNum) => (
@@ -64,7 +64,7 @@ const PrintMenu = ({
                 handlePrintView('rankings', { round: String(roundNum) })
               }
             >
-              {t('printMenu.rankingsRound', {
+              {t('gameDetail:printMenu.rankingsRound', {
                 round: roundNum,
               })}
             </Menu.Item>

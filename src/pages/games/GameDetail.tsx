@@ -11,7 +11,7 @@ import useGames from '../../slices/games/hooks';
 
 const GameDetail = () => {
   const { gameId } = useParams<{ gameId: string }>();
-  const { t } = useTranslation(['gameDetail', 'common']);
+  const { t } = useTranslation();
   const { allGames, fetchGames, status } = useGames();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const GameDetail = () => {
       <Layout navbarActive={true}>
         <Container py="md">
           <Text c="red" size="xl">
-            {t('notFound')}
+            {t('gameDetail:notFound')}
           </Text>
         </Container>
       </Layout>
@@ -39,7 +39,7 @@ const GameDetail = () => {
   }
 
   const breadcrumbItems = [
-    { label: t('header.nav.games'), path: '/games' },
+    { label: t('common:header.nav.games'), path: '/games' },
     { label: game.name },
   ];
 

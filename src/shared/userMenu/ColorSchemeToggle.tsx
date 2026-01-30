@@ -63,15 +63,15 @@ const ColorSchemeToggle: React.FC = () => {
       data={[
         {
           value: 'light',
-          label: t('header.nav.colorSchemes.light'),
+          label: t('common:header.nav.colorSchemes.light'),
         },
         {
           value: 'dark',
-          label: t('header.nav.colorSchemes.dark'),
+          label: t('common:header.nav.colorSchemes.dark'),
         },
         {
           value: 'auto',
-          label: t('header.nav.colorSchemes.auto'),
+          label: t('common:header.nav.colorSchemes.auto'),
         },
       ]}
       leftSection={getLeftSectionIcon()}

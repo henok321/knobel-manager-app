@@ -17,7 +17,7 @@ interface TeamFormProps {
 }
 
 const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
-  const { t } = useTranslation(['games', 'common']);
+  const { t } = useTranslation();
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState(['']);
 
@@ -32,8 +32,8 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
     e.preventDefault();
     createTeam({ name: teamName, members: players });
     notifications.show({
-      title: t('actions.success'),
-      message: t('card.teamAdded', { name: teamName, ns: 'games' }),
+      title: t('common:actions.success'),
+      message: t('games:card.teamAdded', { name: teamName }),
       color: 'green',
     });
     handleClose();
@@ -70,7 +70,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
       opened={isOpen}
       title={
         <Text fw={600} size="xl">
-          {t('team.form.heading')}
+          {t('games:team.form.heading')}
         </Text>
       }
       onClose={handleClose}
@@ -81,7 +81,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
             autoFocus
             required
             id="team-name"
-            label={t('team.form.label.name')}
+            label={t('games:team.form.label.name')}
             name="team-name"
             value={teamName}
             onChange={handleChangeTeamName}
@@ -89,7 +89,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
 
           <div>
             <Text fw={500} mb="xs" size="sm">
-              {t('team.form.label.players')}
+              {t('games:team.form.label.players')}
             </Text>
             <Stack gap="xs">
               {players.map((player, index) => (
@@ -103,7 +103,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
                     onChange={(e) => handleChangePlayer(index, e)}
                   />
                   <Button
-                    aria-label={t('team.form.removePlayer')}
+                    aria-label={t('games:team.form.removePlayer')}
                     color="red"
                     disabled={players.length === 1}
                     px={6}
@@ -116,7 +116,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
                 </Group>
               ))}
               <Button
-                aria-label={t('team.form.addPlayer')}
+                aria-label={t('games:team.form.addPlayer')}
                 color="green"
                 disabled={players.length >= teamSize}
                 leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
@@ -126,14 +126,14 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
                 variant="subtle"
                 onClick={addPlayer}
               >
-                <Text size="sm">{t('team.form.addPlayer')}</Text>
+                <Text size="sm">{t('games:team.form.addPlayer')}</Text>
               </Button>
             </Stack>
           </div>
 
           <Group justify="flex-end" mt="md">
             <Button disabled={players.length !== teamSize} type="submit">
-              {t('team.form.submit')}
+              {t('games:team.form.submit')}
             </Button>
           </Group>
         </Stack>

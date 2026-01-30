@@ -26,17 +26,17 @@ interface GameListItemProps {
 }
 
 const GameListItem = ({ game, onDelete }: GameListItemProps) => {
-  const { t } = useTranslation(['games', 'gameDetail', 'common']);
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     modals.openConfirmModal({
-      title: t('deleteGame'),
-      children: <Text size="sm">{t('confirmDelete')}</Text>,
+      title: t('games:deleteGame'),
+      children: <Text size="sm">{t('games:confirmDelete')}</Text>,
       labels: {
-        confirm: t('actions.delete'),
-        cancel: t('actions.cancel'),
+        confirm: t('common:actions.delete'),
+        cancel: t('common:actions.cancel'),
       },
       confirmProps: { color: 'red' },
       onConfirm: () => {
@@ -65,12 +65,12 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
                   size="sm"
                   variant="light"
                 >
-                  {t(`status.${game.status}`, { ns: 'gameDetail' })}
+                  {t(`gameDetail:status.${game.status}`)}
                 </Badge>
                 <Text c="dimmed" size="xs">
-                  {game.teams.length} {t('picker.teams').toLowerCase()} •{' '}
+                  {game.teams.length} {t('games:picker.teams').toLowerCase()} •{' '}
                   {game.numberOfRounds}{' '}
-                  {t('rounds.round', { ns: 'gameDetail' }).toLowerCase()}
+                  {t('gameDetail:rounds.round').toLowerCase()}
                 </Text>
               </Group>
             </Stack>
@@ -78,7 +78,7 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
 
           <Group gap="xs" wrap="nowrap">
             <Button size="sm" onClick={handleOpen}>
-              {t('card.viewDetails')}
+              {t('games:card.viewDetails')}
             </Button>
             <ActionIcon
               color="red"
@@ -95,7 +95,7 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
         <Group gap="md">
           <div>
             <Text c="dimmed" size="xs">
-              {t('card.details.teamSize')}
+              {t('games:card.details.teamSize')}
             </Text>
             <Text fw={600} size="sm">
               {game.teamSize}
@@ -103,7 +103,7 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
           </div>
           <div>
             <Text c="dimmed" size="xs">
-              {t('card.details.tableSize')}
+              {t('games:card.details.tableSize')}
             </Text>
             <Text fw={600} size="sm">
               {game.tableSize}
@@ -111,7 +111,7 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
           </div>
           <div>
             <Text c="dimmed" size="xs">
-              {t('card.details.numberOfRounds')}
+              {t('games:card.details.numberOfRounds')}
             </Text>
             <Text fw={600} size="sm">
               {game.numberOfRounds}
@@ -119,7 +119,7 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
           </div>
           <div>
             <Text c="dimmed" size="xs">
-              {t('card.details.teams')}
+              {t('games:card.details.teams')}
             </Text>
             <Text fw={600} size="sm">
               {game.teams.length}

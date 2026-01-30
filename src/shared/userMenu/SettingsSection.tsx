@@ -21,7 +21,7 @@ const SettingsSection: React.FC = () => {
             }}
           />
           <Text c="dimmed" fw={500} size="xs">
-            {t('header.nav.colorScheme')}
+            {t('common:header.nav.colorScheme')}
           </Text>
         </Group>
         <ColorSchemeToggle />
@@ -37,7 +37,7 @@ const SettingsSection: React.FC = () => {
             }}
           />
           <Text c="dimmed" fw={500} size="xs">
-            {t('header.nav.language')}
+            {t('common:header.nav.language')}
           </Text>
         </Group>
         <LanguagePicker />

@@ -57,8 +57,8 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({
     <Select
       comboboxProps={{ withinPortal: false }}
       data={[
-        { value: 'en', label: t('header.nav.languages.english') },
-        { value: 'de', label: t('header.nav.languages.german') },
+        { value: 'en', label: t('common:header.nav.languages.english') },
+        { value: 'de', label: t('common:header.nav.languages.german') },
       ]}
       leftSection={<Text size="lg">{getFlag(currentLang)}</Text>}
       renderOption={({ option }) => (
