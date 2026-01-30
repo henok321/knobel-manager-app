@@ -55,6 +55,7 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({
 
   return (
     <Select
+      comboboxProps={{ withinPortal: false }}
       data={[
         { value: 'en', label: t('header.nav.languages.english') },
         { value: 'de', label: t('header.nav.languages.german') },

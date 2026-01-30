@@ -59,6 +59,7 @@ const ColorSchemeToggle: React.FC = () => {
 
   return (
     <Select
+      comboboxProps={{ withinPortal: false }}
       data={[
         {
           value: 'light',
