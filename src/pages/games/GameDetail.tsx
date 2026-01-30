@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import GameViewContent from './components/GameViewContent.tsx';
 import Breadcrumbs from '../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../shared/CenterLoader';
-import Layout from '../../shared/Layout';
+import Layout from '../../shared/layout/Layout.tsx';
 import useGames from '../../slices/games/hooks';
 
 const GameDetail = () => {

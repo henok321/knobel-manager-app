@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import GameListItem from './components/GameListItem';
 import GameForm from './GameForm';
 import CenterLoader from '../../shared/CenterLoader';
-import Layout from '../../shared/Layout';
+import Layout from '../../shared/layout/Layout.tsx';
 import useGames from '../../slices/games/hooks';
 
 const Games = () => {

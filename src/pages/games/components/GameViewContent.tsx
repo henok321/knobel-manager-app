@@ -26,9 +26,7 @@ import RankingsPanel from '../panels/RankingsPanel.tsx';
 import RoundsPanel from '../panels/RoundsPanel.tsx';
 import TeamsPanel from '../panels/TeamsPanel.tsx';
 
-const PrintMenu = lazy(
-  () => import('../../../header/components/PrintMenu.tsx'),
-);
+const PrintMenu = lazy(() => import('../../../shared/PrintMenu.tsx'));
 
 interface GameViewContentProps {
   game: Game;

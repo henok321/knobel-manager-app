@@ -4,8 +4,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import UserMenu from './components/UserMenu.tsx';
-import { useAuth } from '../auth/useAuth.ts';
+import { useAuth } from '../../auth/useAuth.ts';
+import UserMenu from '../userMenu/UserMenu.tsx';
 
 interface HeaderProps {
   navbarActive?: boolean;
