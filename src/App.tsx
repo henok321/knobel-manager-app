@@ -6,14 +6,18 @@ import {
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { lazy, Suspense } from 'react';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { AuthProvider } from './auth/AuthContext.tsx';
 import ProtectedRoute from './auth/ProtectedRoute.tsx';
+import i18n from './i18n/i18nConfig.ts';
 import CenterLoader from './shared/CenterLoader.tsx';
-import { ErrorBoundary } from './shared/ErrorBoundary.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import { ErrorBoundary } from './shared/ErrorBoundary.tsx';
+import store from './store/store.ts';
 
 const Login = lazy(() => import('./pages/Login.tsx'));
 const Games = lazy(() => import('./pages/games/Games.tsx'));
@@ -25,32 +29,42 @@ const colorSchemeManager = localStorageColorSchemeManager({
 });
 
 const App = () => (
-  <ErrorBoundary>
-    <AuthProvider>
-      <ColorSchemeScript defaultColorScheme="auto" />
-      <MantineProvider
-        colorSchemeManager={colorSchemeManager}
-        defaultColorScheme="auto"
-      >
-        <ModalsProvider>
-          <Notifications position="top-right" />
-          <BrowserRouter>
-            <Suspense fallback={<CenterLoader />}>
-              <Routes>
-                <Route element={<Login />} path="/login" />
-                <Route element={<ProtectedRoute />}>
-                  <Route element={<Navigate replace to="/games" />} path="/" />
-                  <Route element={<Games />} path="/games" />
-                  <Route element={<GameDetail />} path="/games/:gameId" />
-                  <Route element={<PrintView />} path="/games/:gameId/print" />
-                </Route>
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
-        </ModalsProvider>
-      </MantineProvider>{' '}
-    </AuthProvider>
-  </ErrorBoundary>
+  <Provider store={store}>
+    <I18nextProvider i18n={i18n}>
+      <ErrorBoundary>
+        <AuthProvider>
+          <ColorSchemeScript defaultColorScheme="auto" />
+          <MantineProvider
+            colorSchemeManager={colorSchemeManager}
+            defaultColorScheme="auto"
+          >
+            <ModalsProvider>
+              <Notifications position="top-right" />
+              <BrowserRouter>
+                <Suspense fallback={<CenterLoader />}>
+                  <Routes>
+                    <Route element={<Login />} path="/login" />
+                    <Route element={<ProtectedRoute />}>
+                      <Route
+                        element={<Navigate replace to="/games" />}
+                        path="/"
+                      />
+                      <Route element={<Games />} path="/games" />
+                      <Route element={<GameDetail />} path="/games/:gameId" />
+                      <Route
+                        element={<PrintView />}
+                        path="/games/:gameId/print"
+                      />
+                    </Route>
+                  </Routes>
+                </Suspense>
+              </BrowserRouter>
+            </ModalsProvider>
+          </MantineProvider>
+        </AuthProvider>
+      </ErrorBoundary>
+    </I18nextProvider>
+  </Provider>
 );
 
 export default App;
