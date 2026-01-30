@@ -22,9 +22,16 @@
     "nav": {
       "games": "Games",
       "language": "Language",
+      "settings": "Settings",
       "languages": {
-        "english": "🇬🇧 English",
-        "german": "🇩🇪 Deutsch"
+        "english": "English",
+        "german": "Deutsch"
+      },
+      "colorScheme": "Theme",
+      "colorSchemes": {
+        "light": "Light",
+        "dark": "Dark",
+        "auto": "Auto"
       }
     }
   },

@@ -1,4 +1,8 @@
-import { MantineProvider } from '@mantine/core';
+import {
+  ColorSchemeScript,
+  localStorageColorSchemeManager,
+  MantineProvider,
+} from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { lazy, Suspense } from 'react';
@@ -16,10 +20,18 @@ const Games = lazy(() => import('./pages/games/Games.tsx'));
 const GameDetail = lazy(() => import('./pages/games/GameDetail.tsx'));
 const PrintView = lazy(() => import('./pages/games/PrintView.tsx'));
 
+const colorSchemeManager = localStorageColorSchemeManager({
+  key: 'color-scheme',
+});
+
 const App = () => (
   <ErrorBoundary>
     <AuthProvider>
-      <MantineProvider>
+      <ColorSchemeScript defaultColorScheme="auto" />
+      <MantineProvider
+        colorSchemeManager={colorSchemeManager}
+        defaultColorScheme="auto"
+      >
         <ModalsProvider>
           <Notifications position="top-right" />
           <BrowserRouter>

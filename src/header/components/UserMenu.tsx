@@ -1,7 +1,10 @@
 import {
   Avatar,
+  Box,
+  Divider,
   Group,
   Menu,
+  Stack,
   Text,
   UnstyledButton,
   rem,
@@ -11,6 +14,7 @@ import { IconChevronDown, IconLogout } from '@tabler/icons-react';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import SettingsSection from './SettingsSection.tsx';
 import { useAuth } from '../../auth/useAuth.ts';
 
 interface UserMenuProps {
@@ -34,14 +38,15 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
   };
 
   return (
-    <Menu position="bottom-end" shadow="md" width={220}>
+    <Menu position="bottom-end" shadow="md" width={280}>
       <Menu.Target>
         <UnstyledButton
           style={buttonStyle}
           styles={{
             root: {
               '&:hover': {
-                backgroundColor: 'var(--mantine-color-gray-0)',
+                backgroundColor:
+                  'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))',
               },
             },
           }}
@@ -50,14 +55,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
             <Avatar color="blue" radius="xl" size="sm">
               {userInitial}
             </Avatar>
-            <div style={{ flex: 1, minWidth: 0 }}>
+            <Box style={{ flex: 1, minWidth: 0 }} visibleFrom="md">
               <Text fw={500} size="sm" truncate="end">
                 {userDisplayName}
               </Text>
               <Text c="dimmed" size="xs">
                 {t('header.nav.settings')}
               </Text>
-            </div>
+            </Box>
             <IconChevronDown
               style={{ width: rem(16), height: rem(16), opacity: 0.6 }}
             />
@@ -65,18 +70,30 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
         </UnstyledButton>
       </Menu.Target>
 
-      <Menu.Dropdown>
-        <Menu.Label>{t('header.nav.settings')}</Menu.Label>
+      <Menu.Dropdown p={0}>
+        <Stack gap={0}>
+          <Box p="md" pb="xs">
+            <Text c="dimmed" fw={600} size="xs" tt="uppercase">
+              {t('header.nav.settings')}
+            </Text>
+          </Box>
 
-        <Menu.Item
-          color="red"
-          leftSection={
-            <IconLogout style={{ width: rem(16), height: rem(16) }} />
-          }
-          onClick={onLogout}
-        >
-          {t('header.logout')}
-        </Menu.Item>
+          <Box p="md" pt="xs">
+            <SettingsSection />
+          </Box>
+
+          <Divider />
+
+          <Menu.Item
+            color="red"
+            leftSection={
+              <IconLogout style={{ width: rem(16), height: rem(16) }} />
+            }
+            onClick={onLogout}
+          >
+            {t('header.logout')}
+          </Menu.Item>
+        </Stack>
       </Menu.Dropdown>
     </Menu>
   );

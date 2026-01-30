@@ -28,7 +28,7 @@ const GameDetail = () => {
 
   if (!game) {
     return (
-      <Layout>
+      <Layout navbarActive={true}>
         <Container py="md">
           <Text c="red" size="xl">
             {t('notFound')}
@@ -44,7 +44,7 @@ const GameDetail = () => {
   ];
 
   return (
-    <Layout>
+    <Layout navbarActive={true}>
       <Container py="md" size="xl">
         <Stack gap="lg">
           <Breadcrumbs items={breadcrumbItems} />
