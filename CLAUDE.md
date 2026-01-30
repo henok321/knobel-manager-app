@@ -131,8 +131,8 @@ React Router v7 with route-based code organization:
 - `/login` - Public login page
 - `/` - Redirects to `/games`
 - `/games` - Games management page (protected) - Grid view with search and filters
-- `/games/:gameId` - Game detail page (protected) - Full tournament management interface
-- `/games/:gameId/print` - Print view for game rankings and scores
+- `/games/:gameID` - Game detail page (protected) - Full tournament management interface
+- `/games/:gameID/print` - Print view for game rankings and scores
 
 All protected routes use the `<ProtectedRoute>` component wrapper.
 
@@ -234,7 +234,7 @@ Modern grid layout with powerful filtering:
   - Action buttons (Activate, Delete)
 - **Empty States**: Context-aware messages for no games or no results
 
-#### Game Detail Page (`/games/:gameId`)
+#### Game Detail Page (`/games/:gameID`)
 
 Full tournament management interface with three tabs:
 

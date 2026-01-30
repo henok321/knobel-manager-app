@@ -16,7 +16,7 @@ import useTeams from '../../slices/teams/hooks';
 import './print-views/print.css';
 
 const PrintView = () => {
-  const { gameId } = useParams<{ gameId: string }>();
+  const { gameID } = useParams<{ gameID: string }>();
   const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const PrintView = () => {
 
   const viewType = searchParams.get('type') || 'tablePlan';
   const roundNumber = searchParams.get('round');
-  const teamId = searchParams.get('teamId');
+  const teamID = searchParams.get('teamID');
 
   useEffect(() => {
     if (status === 'idle') {
@@ -39,7 +39,7 @@ const PrintView = () => {
     }
   }, [status, fetchGames]);
 
-  const game = allGames.find((g) => g.id === Number(gameId));
+  const game = allGames.find((g) => g.id === Number(gameID));
 
   useEffect(() => {
     if (game && tablesStatus === 'idle') {
@@ -66,7 +66,7 @@ const PrintView = () => {
   };
 
   const handleBack = () => {
-    navigate(`/games/${gameId}`);
+    navigate(`/games/${gameID}`);
   };
 
   const renderView = () => {
@@ -95,7 +95,7 @@ const PrintView = () => {
             game={game}
             players={allPlayers}
             tables={allTables}
-            teamId={teamId ? Number(teamId) : undefined}
+            teamID={teamID ? Number(teamID) : undefined}
             teams={allTeams}
           />
         );

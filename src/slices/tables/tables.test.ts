@@ -20,7 +20,7 @@ describe('Tables Actions + Slice', () => {
 
       await store.dispatch(
         fetchTablesForRound({
-          gameId: 1,
+          gameID: 1,
           roundNumber: 1,
         }),
       );
@@ -37,7 +37,7 @@ describe('Tables Actions + Slice', () => {
     it('should handle API error', async () => {
       server.use(
         http.get(
-          'http://localhost/api/games/:gameId/rounds/:roundNumber/tables',
+          'http://localhost/api/games/:gameID/rounds/:roundNumber/tables',
           () => new HttpResponse(null, { status: 500 }),
         ),
       );
@@ -46,7 +46,7 @@ describe('Tables Actions + Slice', () => {
 
       await store.dispatch(
         fetchTablesForRound({
-          gameId: 1,
+          gameID: 1,
           roundNumber: 1,
         }),
       );
@@ -62,7 +62,7 @@ describe('Tables Actions + Slice', () => {
 
       const promise = store.dispatch(
         fetchTablesForRound({
-          gameId: 1,
+          gameID: 1,
           roundNumber: 1,
         }),
       );
@@ -81,7 +81,7 @@ describe('Tables Actions + Slice', () => {
 
       await store.dispatch(
         fetchAllTablesForGame({
-          gameId: 1,
+          gameID: 1,
           numberOfRounds: 3,
         }),
       );
@@ -99,7 +99,7 @@ describe('Tables Actions + Slice', () => {
     it('should handle API error', async () => {
       server.use(
         http.get(
-          'http://localhost/api/games/:gameId/rounds/:roundNumber/tables',
+          'http://localhost/api/games/:gameID/rounds/:roundNumber/tables',
           () => new HttpResponse(null, { status: 500 }),
         ),
       );
@@ -108,7 +108,7 @@ describe('Tables Actions + Slice', () => {
 
       await store.dispatch(
         fetchAllTablesForGame({
-          gameId: 1,
+          gameID: 1,
           numberOfRounds: 2,
         }),
       );
@@ -124,7 +124,7 @@ describe('Tables Actions + Slice', () => {
 
       const promise = store.dispatch(
         fetchAllTablesForGame({
-          gameId: 1,
+          gameID: 1,
           numberOfRounds: 2,
         }),
       );
@@ -143,7 +143,7 @@ describe('Tables Actions + Slice', () => {
 
       await store.dispatch(
         fetchTablesForRound({
-          gameId: 1,
+          gameID: 1,
           roundNumber: 1,
         }),
       );
@@ -152,7 +152,7 @@ describe('Tables Actions + Slice', () => {
 
       await store.dispatch(
         updateScoresForTable({
-          gameId: 1,
+          gameID: 1,
           roundNumber: 1,
           tableNumber: 1,
           scores: [
@@ -172,7 +172,7 @@ describe('Tables Actions + Slice', () => {
     it('should handle API error', async () => {
       server.use(
         http.put(
-          'http://localhost/api/games/:gameId/rounds/:roundNumber/tables/:tableNumber/scores',
+          'http://localhost/api/games/:gameID/rounds/:roundNumber/tables/:tableNumber/scores',
           () => new HttpResponse(null, { status: 500 }),
         ),
       );
@@ -181,7 +181,7 @@ describe('Tables Actions + Slice', () => {
 
       await store.dispatch(
         updateScoresForTable({
-          gameId: 1,
+          gameID: 1,
           roundNumber: 1,
           tableNumber: 1,
           scores: [{ playerID: 1, score: 10 }],
@@ -198,7 +198,7 @@ describe('Tables Actions + Slice', () => {
 
       await store.dispatch(
         fetchTablesForRound({
-          gameId: 1,
+          gameID: 1,
           roundNumber: 1,
         }),
       );
@@ -208,7 +208,7 @@ describe('Tables Actions + Slice', () => {
 
       await store.dispatch(
         updateScoresForTable({
-          gameId: 1,
+          gameID: 1,
           roundNumber: 1,
           tableNumber: 1,
           scores: [{ playerID: 1, score: 10 }],

@@ -10,7 +10,7 @@ import Layout from '../../shared/layout/Layout.tsx';
 import useGames from '../../slices/games/hooks';
 
 const GameDetail = () => {
-  const { gameId } = useParams<{ gameId: string }>();
+  const { gameID } = useParams<{ gameID: string }>();
   const { t } = useTranslation();
   const { allGames, fetchGames, status } = useGames();
 
@@ -20,7 +20,7 @@ const GameDetail = () => {
     }
   }, [status, fetchGames]);
 
-  const game = allGames.find((g) => g.id === Number(gameId));
+  const game = allGames.find((g) => g.id === Number(gameID));
 
   if (status === 'pending' || status === 'idle') {
     return <CenterLoader />;

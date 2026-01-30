@@ -6,12 +6,19 @@ import {
   deleteTeamAction,
   updateTeamAction,
 } from './actions.ts';
-import { selectAllTeams, selectTeamsByIds } from './slice.ts';
+import {
+  selectAllTeams,
+  selectTeamsByGameId,
+  selectTeamsByIds,
+} from './slice.ts';
 import { TeamsRequest } from '../../generated';
 import { AppDispatch, RootState } from '../../store/store.ts';
 
-export const useTeamsByIds = (teamIds: number[]) =>
-  useSelector((state: RootState) => selectTeamsByIds(state, teamIds));
+export const useTeamsByIds = (teamIDs: number[]) =>
+  useSelector((state: RootState) => selectTeamsByIds(state, teamIDs));
+
+export const useTeamsByGameId = (gameID: number) =>
+  useSelector((state: RootState) => selectTeamsByGameId(state, gameID));
 
 const useTeams = () => {
   const dispatch = useDispatch<AppDispatch>();

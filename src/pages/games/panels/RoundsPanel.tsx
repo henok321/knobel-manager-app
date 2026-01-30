@@ -73,7 +73,12 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   }, [selectedRound, game.id]);
 
   const filteredAndSortedTables = useSelector((state: RootState) =>
-    selectTablesForRoundWithSearch(state, Number(selectedRound), searchQuery),
+    selectTablesForRoundWithSearch(
+      state,
+      game.id,
+      Number(selectedRound),
+      searchQuery,
+    ),
   );
 
   useEffect(() => {

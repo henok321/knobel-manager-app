@@ -20,15 +20,15 @@ interface RankingsViewProps {
 }
 
 interface PlayerRanking {
-  playerId: number;
+  playerID: number;
   playerName: string;
-  teamId: number;
+  teamID: number;
   teamName: string;
   totalScore: number;
 }
 
 interface TeamRanking {
-  teamId: number;
+  teamID: number;
   teamName: string;
   totalScore: number;
 }
@@ -58,14 +58,14 @@ const RankingsView = ({
 
   const playerRankings: PlayerRanking[] = [];
   gameTeams.forEach((team) => {
-    team.players.forEach((playerId: number) => {
-      const player = players.find((p) => p.id === playerId);
+    team.players.forEach((playerID: number) => {
+      const player = players.find((p) => p.id === playerID);
       if (!player) return;
 
       playerRankings.push({
-        playerId: player.id,
+        playerID: player.id,
         playerName: player.name,
-        teamId: team.id,
+        teamID: team.id,
         teamName: team.name,
         totalScore: scoresByPlayer[player.id] || 0,
       });
@@ -79,16 +79,16 @@ const RankingsView = ({
     teamScoresMap[team.id] = 0;
   });
   playerRankings.forEach((playerRank) => {
-    teamScoresMap[playerRank.teamId] =
-      (teamScoresMap[playerRank.teamId] || 0) + playerRank.totalScore;
+    teamScoresMap[playerRank.teamID] =
+      (teamScoresMap[playerRank.teamID] || 0) + playerRank.totalScore;
   });
 
   const teamRankings: TeamRanking[] = Object.entries(teamScoresMap).map(
-    ([teamIdStr, totalScore]) => {
-      const teamId = Number(teamIdStr);
-      const team = teams.find((t) => t.id === teamId);
+    ([teamIDStr, totalScore]) => {
+      const teamID = Number(teamIDStr);
+      const team = teams.find((t) => t.id === teamID);
       return {
-        teamId,
+        teamID,
         teamName: team?.name || 'Unknown',
         totalScore,
       };
@@ -136,7 +136,7 @@ const RankingsView = ({
               </Table.Thead>
               <Table.Tbody>
                 {teamRankings.map((ranking, index) => (
-                  <Table.Tr key={ranking.teamId}>
+                  <Table.Tr key={ranking.teamID}>
                     <Table.Td style={{ textAlign: 'center' }}>
                       <Badge
                         color={index === 0 ? 'yellow' : 'blue'}
@@ -189,7 +189,7 @@ const RankingsView = ({
               </Table.Thead>
               <Table.Tbody>
                 {playerRankings.map((ranking, index) => (
-                  <Table.Tr key={ranking.playerId}>
+                  <Table.Tr key={ranking.playerID}>
                     <Table.Td style={{ textAlign: 'center' }}>
                       <Badge
                         color={index === 0 ? 'yellow' : 'blue'}

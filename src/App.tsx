@@ -38,10 +38,10 @@ const App = () => (
                         path="/"
                       />
                       <Route element={<Games />} path="/games" />
-                      <Route element={<GameDetail />} path="/games/:gameId" />
+                      <Route element={<GameDetail />} path="/games/:gameID" />
                       <Route
                         element={<PrintView />}
-                        path="/games/:gameId/print"
+                        path="/games/:gameID/print"
                       />
                     </Route>
                   </Routes>

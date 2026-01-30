@@ -70,26 +70,45 @@ const selectAllTables = tablesSelectors.selectAll;
 const selectTablesByRoundNumber = createSelector(
   [
     selectAllTables,
-    (_state: RootState, roundNumber: number | null) => roundNumber,
+    (_state: RootState, gameID: number, _roundNumber: number | null) => gameID,
+    (_state: RootState, _gameID: number, roundNumber: number | null) =>
+      roundNumber,
   ],
-  (tables, roundNumber) => {
-    if (roundNumber === null) {
-      return tables;
+  (tables, gameID, roundNumber) => {
+    let filtered = tables.filter((table) => table.gameID === gameID);
+    if (roundNumber !== null) {
+      filtered = filtered.filter((table) => table.roundNumber === roundNumber);
     }
-    return tables.filter((table) => table.roundNumber === roundNumber);
+    return filtered;
   },
 );
 
 const selectTablesForRoundWithSearch = createSelector(
   [
     selectAllTables,
-    (_state: RootState, roundNumber: number) => roundNumber,
-    (_state: RootState, _roundNumber: number, searchQuery: string) =>
-      searchQuery,
+    (
+      _state: RootState,
+      gameID: number,
+      _roundNumber: number,
+      _searchQuery: string,
+    ) => gameID,
+    (
+      _state: RootState,
+      _gameID: number,
+      roundNumber: number,
+      _searchQuery: string,
+    ) => roundNumber,
+    (
+      _state: RootState,
+      _gameID: number,
+      _roundNumber: number,
+      searchQuery: string,
+    ) => searchQuery,
   ],
-  (tables, roundNumber, searchQuery) => {
+  (tables, gameID, roundNumber, searchQuery) => {
     let filtered = tables.filter(
       (table) =>
+        table.gameID === gameID &&
         table.roundNumber === roundNumber &&
         table.players &&
         table.players.length > 0,

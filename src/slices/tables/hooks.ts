@@ -9,9 +9,9 @@ import {
 import { selectAllTables, selectTablesByRoundNumber } from './slice';
 import { AppDispatch, RootState } from '../../store/store';
 
-export const useTablesByRound = (roundNumber: number | null) =>
+export const useTablesByRound = (gameID: number, roundNumber: number | null) =>
   useSelector((state: RootState) =>
-    selectTablesByRoundNumber(state, roundNumber),
+    selectTablesByRoundNumber(state, gameID, roundNumber),
   );
 
 const useTables = () => {
@@ -21,28 +21,28 @@ const useTables = () => {
   const error = useSelector((state: RootState) => state.tables.error);
 
   const fetchTables = useCallback(
-    (gameId: number, roundNumber: number) => {
-      dispatch(fetchTablesForRound({ gameId, roundNumber }));
+    (gameID: number, roundNumber: number) => {
+      dispatch(fetchTablesForRound({ gameID, roundNumber }));
     },
     [dispatch],
   );
 
   const fetchAllTables = useCallback(
-    (gameId: number, numberOfRounds: number) => {
-      dispatch(fetchAllTablesForGame({ gameId, numberOfRounds }));
+    (gameID: number, numberOfRounds: number) => {
+      dispatch(fetchAllTablesForGame({ gameID, numberOfRounds }));
     },
     [dispatch],
   );
 
   const updateScores = useCallback(
     (
-      gameId: number,
+      gameID: number,
       roundNumber: number,
       tableNumber: number,
       scores: { playerID: number; score: number }[],
     ) => {
       dispatch(
-        updateScoresForTable({ gameId, roundNumber, tableNumber, scores }),
+        updateScoresForTable({ gameID, roundNumber, tableNumber, scores }),
       );
     },
     [dispatch],

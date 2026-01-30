@@ -6,10 +6,10 @@ import type { Table } from '../types';
 
 export const fetchTablesForRound = createAsyncThunk<
   Table[],
-  { gameId: number; roundNumber: number }
->('tables/fetchForRound', async ({ gameId, roundNumber }) => {
+  { gameID: number; roundNumber: number }
+>('tables/fetchForRound', async ({ gameID, roundNumber }) => {
   const response = await getTables({
-    path: { gameID: gameId, roundNumber },
+    path: { gameID: gameID, roundNumber },
     client,
   });
   if (!response.data) {
@@ -18,18 +18,19 @@ export const fetchTablesForRound = createAsyncThunk<
   return response.data.tables.map((table) => ({
     ...table,
     roundNumber,
+    gameID: gameID,
   }));
 });
 
 export const fetchAllTablesForGame = createAsyncThunk<
   Table[],
-  { gameId: number; numberOfRounds: number }
->('tables/fetchAllForGame', async ({ gameId, numberOfRounds }) => {
+  { gameID: number; numberOfRounds: number }
+>('tables/fetchAllForGame', async ({ gameID, numberOfRounds }) => {
   const allTables: Table[] = [];
 
   for (let roundNum = 1; roundNum <= numberOfRounds; roundNum++) {
     const response = await getTables({
-      path: { gameID: gameId, roundNumber: roundNum },
+      path: { gameID: gameID, roundNumber: roundNum },
       client,
     });
     if (!response.data) {
@@ -38,6 +39,7 @@ export const fetchAllTablesForGame = createAsyncThunk<
     const tablesWithRoundNumber = response.data.tables.map((table) => ({
       ...table,
       roundNumber: roundNum,
+      gameID: gameID,
     }));
     allTables.push(...tablesWithRoundNumber);
   }
@@ -48,22 +50,22 @@ export const fetchAllTablesForGame = createAsyncThunk<
 export const updateScoresForTable = createAsyncThunk<
   Table[],
   {
-    gameId: number;
+    gameID: number;
     roundNumber: number;
     tableNumber: number;
     scores: { playerID: number; score: number }[];
   }
 >(
   'tables/updateScores',
-  async ({ gameId, roundNumber, tableNumber, scores }) => {
+  async ({ gameID, roundNumber, tableNumber, scores }) => {
     await updateScores({
-      path: { gameID: gameId, roundNumber, tableNumber },
+      path: { gameID: gameID, roundNumber, tableNumber },
       body: { scores },
       client,
     });
 
     const response = await getTables({
-      path: { gameID: gameId, roundNumber },
+      path: { gameID: gameID, roundNumber },
       client,
     });
     if (!response.data) {
@@ -72,6 +74,7 @@ export const updateScoresForTable = createAsyncThunk<
     return response.data.tables.map((table) => ({
       ...table,
       roundNumber,
+      gameID: gameID,
     }));
   },
 );

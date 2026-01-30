@@ -38,6 +38,7 @@ export type Table = {
   tableNumber: number;
   roundID: number;
   roundNumber?: number;
+  gameID?: number;
   players?: Player[];
   scores?: Score[];
 };

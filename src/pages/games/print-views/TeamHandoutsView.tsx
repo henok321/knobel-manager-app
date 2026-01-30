@@ -16,7 +16,7 @@ interface TeamHandoutsViewProps {
   tables: (TableType & { roundNumber?: number })[];
   players: Player[];
   teams: Team[];
-  teamId?: number;
+  teamID?: number;
 }
 
 const TeamHandoutsView = ({
@@ -24,17 +24,17 @@ const TeamHandoutsView = ({
   tables,
   players,
   teams: allTeams,
-  teamId,
+  teamID,
 }: TeamHandoutsViewProps) => {
   const { t } = useTranslation();
 
   const teams = allTeams.filter(
-    (team) => team.gameID === game.id && (!teamId || team.id === teamId),
+    (team) => team.gameID === game.id && (!teamID || team.id === teamID),
   );
 
   const renderTeamHandout = (team: Team) => {
     const teamPlayers = team.players
-      .map((playerId: number) => players.find((p) => p.id === playerId))
+      .map((playerID: number) => players.find((p) => p.id === playerID))
       .filter((player): player is Player => player !== undefined);
 
     const playerAssignments: Record<
@@ -146,7 +146,7 @@ const TeamHandoutsView = ({
           {t('pdf:teamHandout.title')}
         </Title>
         <Text c="dimmed" size="sm">
-          {teamId
+          {teamID
             ? t('pdf:teamHandout.subtitleSingle')
             : t('pdf:teamHandout.subtitle')}
         </Text>

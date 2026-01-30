@@ -6,15 +6,15 @@ import {
 } from '../../../slices/types';
 
 interface PlayerRanking {
-  playerId: number;
+  playerID: number;
   playerName: string;
-  teamId: number;
+  teamID: number;
   teamName: string;
   totalScore: number;
 }
 
 interface TeamRanking {
-  teamId: number;
+  teamID: number;
   teamName: string;
   totalScore: number;
 }
@@ -29,16 +29,16 @@ const mapPlayersToRankings = (
   teams.forEach((team) => {
     if (!team) return;
 
-    team.players.forEach((playerId) => {
-      const player = players.find((p) => p.id === playerId);
+    team.players.forEach((playerID) => {
+      const player = players.find((p) => p.id === playerID);
       if (!player) return;
 
       rankings.push({
-        playerId,
+        playerID,
         playerName: player.name,
-        teamId: team.id,
+        teamID: team.id,
         teamName: team.name,
-        totalScore: scoresByPlayer[playerId] || 0,
+        totalScore: scoresByPlayer[playerID] || 0,
       });
     });
   });
@@ -59,16 +59,16 @@ const mapTeamsToRankings = (
   });
 
   playerRankings.forEach((playerRank) => {
-    teamScores[playerRank.teamId] =
-      (teamScores[playerRank.teamId] || 0) + playerRank.totalScore;
+    teamScores[playerRank.teamID] =
+      (teamScores[playerRank.teamID] || 0) + playerRank.totalScore;
   });
 
   const rankings: TeamRanking[] = Object.entries(teamScores).map(
-    ([teamIdStr, totalScore]) => {
-      const teamId = Number(teamIdStr);
-      const team = teams.find((t) => t?.id === teamId);
+    ([teamIDStr, totalScore]) => {
+      const teamID = Number(teamIDStr);
+      const team = teams.find((t) => t?.id === teamID);
       return {
-        teamId,
+        teamID,
         teamName: team?.name || 'Unknown',
         totalScore,
       };
@@ -86,9 +86,9 @@ const aggregateScoresFromTables = (
   tables.forEach((table) => {
     if (table.scores && Array.isArray(table.scores)) {
       table.scores.forEach((score: Score) => {
-        const playerId = score.playerID;
+        const playerID = score.playerID;
         const scoreValue = score.score || 0;
-        allScores[playerId] = (allScores[playerId] || 0) + scoreValue;
+        allScores[playerID] = (allScores[playerID] || 0) + scoreValue;
       });
     }
   });

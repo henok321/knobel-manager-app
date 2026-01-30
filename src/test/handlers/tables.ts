@@ -6,7 +6,7 @@ const BASE_URL = 'http://localhost/api';
 
 export const tablesHandlers = [
   http.get(
-    `${BASE_URL}/games/:gameId/rounds/:roundNumber/tables`,
+    `${BASE_URL}/games/:gameID/rounds/:roundNumber/tables`,
     ({ params }) => {
       const roundNumber = Number(params.roundNumber);
 
@@ -34,7 +34,7 @@ export const tablesHandlers = [
   ),
 
   http.put(
-    `${BASE_URL}/games/:gameId/rounds/:roundNumber/tables/:tableNumber/scores`,
+    `${BASE_URL}/games/:gameID/rounds/:roundNumber/tables/:tableNumber/scores`,
     () => new HttpResponse(null, { status: 204 }),
   ),
 ];

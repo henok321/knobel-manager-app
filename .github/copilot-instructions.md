@@ -60,7 +60,7 @@
 ### A. State Management (Redux Toolkit)
 
 - Uses entity adapters for CRUD; selectors exported; cross-slice updates via `extraReducers`.
-- Normalization: e.g. `Game.teamIds: number[]` not `Team[]`.
+- Normalization: e.g. `Game.teamIDs: number[]` not `Team[]`.
 - Async flows use `createAsyncThunk` with `pending/fulfilled/rejected` states and typed payloads.
 
 ### B. React & UI

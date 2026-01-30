@@ -47,6 +47,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   }, [roundsCount, status, fetchAllTables, game.id, game.numberOfRounds]);
 
   const filteredTables = useTablesByRound(
+    game.id,
     selectedRound === 'total' ? null : Number(selectedRound),
   );
 
@@ -126,7 +127,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
               ) : (
                 teamRankings.map((ranking, index) => (
                   <TeamRankingRow
-                    key={ranking.teamId}
+                    key={ranking.teamID}
                     isTopRank={index === 0}
                     rank={index + 1}
                     ranking={ranking}
@@ -162,7 +163,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
               ) : (
                 playerRankings.map((ranking, index) => (
                   <PlayerRankingRow
-                    key={ranking.playerId}
+                    key={ranking.playerID}
                     isTopRank={index === 0}
                     rank={index + 1}
                     ranking={ranking}

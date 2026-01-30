@@ -30,7 +30,7 @@ export const PlayerRankingRow = memo(function PlayerRankingRow({
   const medal = getMedalEmoji(rank);
 
   return (
-    <Table.Tr key={ranking.playerId}>
+    <Table.Tr key={ranking.playerID}>
       <Table.Td>
         <Group gap="xs">
           <Text fw={isTopRank ? 700 : 400} size="lg">
@@ -68,7 +68,7 @@ export const TeamRankingRow = memo(function TeamRankingRow({
   const medal = getMedalEmoji(rank);
 
   return (
-    <Table.Tr key={ranking.teamId}>
+    <Table.Tr key={ranking.teamID}>
       <Table.Td>
         <Group gap="xs">
           <Text fw={isTopRank ? 700 : 400} size="lg">

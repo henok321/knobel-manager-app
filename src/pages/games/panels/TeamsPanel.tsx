@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import EditTeamDialog from './EditTeamDialog.tsx';
 import usePlayers from '../../../slices/players/hooks';
 import useTables from '../../../slices/tables/hooks';
-import useTeams from '../../../slices/teams/hooks';
+import useTeams, { useTeamsByGameId } from '../../../slices/teams/hooks';
 import { Game } from '../../../slices/types';
 import TeamForm, { TeamFormData } from '../components/TeamForm';
 
@@ -40,10 +40,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const roundsCount = game.rounds?.length || 0;
 
-  const gameTeams = useMemo(
-    () => allTeams.filter((team) => team && game.teams.includes(team.id)),
-    [allTeams, game.teams],
-  );
+  const gameTeams = useTeamsByGameId(game.id);
 
   useEffect(() => {
     if (roundsCount > 0 && status === 'idle') {
@@ -65,8 +62,8 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       const tableRoundNumber =
         (table as typeof table & { roundNumber?: number }).roundNumber ||
         table.roundID;
-      for (const playerId of players) {
-        const id = playerId.id;
+      for (const playerID of players) {
+        const id = playerID.id;
         assignments[id] ??= [];
         assignments[id].push({
           roundNumber: tableRoundNumber,
@@ -78,11 +75,11 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     return assignments;
   }, [allTables]);
 
-  const getPlayersForTeam = (teamId: number) => {
-    const team = allTeams.find((t) => t?.id === teamId);
+  const getPlayersForTeam = (teamID: number) => {
+    const team = allTeams.find((t) => t?.id === teamID);
     if (!team) return [];
     return team.players
-      .map((playerId) => allPlayers.find((p) => p.id === playerId))
+      .map((playerID) => allPlayers.find((p) => p.id === playerID))
       .filter(
         (player): player is NonNullable<typeof player> => player !== undefined,
       );
@@ -97,8 +94,8 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     setIsTeamFormOpen(false);
   };
 
-  const handleStartEditTeam = (teamId: number) => {
-    setEditingTeamId(teamId);
+  const handleStartEditTeam = (teamID: number) => {
+    setEditingTeamId(teamID);
     setEditTeamDialogOpen(true);
   };
 
@@ -119,7 +116,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     setEditingTeamId(null);
   };
 
-  const handleDeleteTeam = (teamId: number) => {
+  const handleDeleteTeam = (teamID: number) => {
     modals.openConfirmModal({
       title: t('gameDetail:teams.deleteTeam'),
       children: (
@@ -131,7 +128,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        deleteTeam(teamId);
+        deleteTeam(teamID);
       },
     });
   };
