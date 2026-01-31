@@ -19,6 +19,8 @@ i18n
   .init({
     fallbackLng: 'en',
     supportedLngs: ['en', 'de'],
+    defaultNS: 'common',
+    ns: ['common', 'footer', 'games', 'gameDetail', 'pdf'],
     debug: !import.meta.env.PROD,
     detection: {
       order: ['querystring', 'localStorage', 'cookie', 'navigator'],
