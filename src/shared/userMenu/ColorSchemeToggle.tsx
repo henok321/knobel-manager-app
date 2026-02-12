@@ -1,40 +1,7 @@
-import { Group, Select, Text, useMantineColorScheme } from '@mantine/core';
+import { Group, SegmentedControl, useMantineColorScheme } from '@mantine/core';
 import { IconDeviceDesktop, IconMoon, IconSun } from '@tabler/icons-react';
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  label: string;
-  value: string;
-}
-
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-  ({ label, value, ...others }, ref) => {
-    const getIcon = () => {
-      switch (value) {
-        case 'light':
-          return <IconSun size={16} />;
-        case 'dark':
-          return <IconMoon size={16} />;
-        case 'auto':
-          return <IconDeviceDesktop size={16} />;
-        default:
-          return null;
-      }
-    };
-
-    return (
-      <div ref={ref} {...others}>
-        <Group gap="xs">
-          {getIcon()}
-          <Text size="sm">{label}</Text>
-        </Group>
-      </div>
-    );
-  },
-);
-
-SelectItem.displayName = 'SelectItem';
 
 const ColorSchemeToggle: React.FC = () => {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
@@ -46,40 +13,40 @@ const ColorSchemeToggle: React.FC = () => {
     }
   };
 
-  const getLeftSectionIcon = () => {
-    switch (colorScheme) {
-      case 'dark':
-        return <IconMoon size={16} />;
-      case 'light':
-        return <IconSun size={16} />;
-      default:
-        return <IconDeviceDesktop size={16} />;
-    }
-  };
-
   return (
-    <Select
-      comboboxProps={{ withinPortal: false }}
+    <SegmentedControl
       data={[
         {
+          value: 'auto',
+          label: (
+            <Group gap="xs" wrap="nowrap">
+              <IconDeviceDesktop size={16} />
+              {t('common:header.nav.colorSchemes.auto')}
+            </Group>
+          ),
+        },
+        {
           value: 'light',
-          label: t('common:header.nav.colorSchemes.light'),
+          label: (
+            <Group gap="xs" wrap="nowrap">
+              <IconSun size={16} />
+              {t('common:header.nav.colorSchemes.light')}
+            </Group>
+          ),
         },
         {
           value: 'dark',
-          label: t('common:header.nav.colorSchemes.dark'),
-        },
-        {
-          value: 'auto',
-          label: t('common:header.nav.colorSchemes.auto'),
+          label: (
+            <Group gap="xs" wrap="nowrap">
+              <IconMoon size={16} />
+              {t('common:header.nav.colorSchemes.dark')}
+            </Group>
+          ),
         },
       ]}
-      leftSection={getLeftSectionIcon()}
-      renderOption={({ option }) => (
-        <SelectItem label={option.label} value={option.value} />
-      )}
       size="sm"
       value={colorScheme}
+      w="100%"
       onChange={handleColorSchemeChange}
     />
   );

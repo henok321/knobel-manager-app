@@ -38,7 +38,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
   };
 
   return (
-    <Menu position="bottom-end" shadow="md" width={280}>
+    <Menu position="bottom-end" shadow="md" width={360}>
       <Menu.Target>
         <UnstyledButton
           style={buttonStyle}
