@@ -115,7 +115,7 @@ export default [
           project: './tsconfig.json',
         },
       },
-      react: { version: '19.2.4' },
+      react: { version: 'detect' },
     },
   },
 
