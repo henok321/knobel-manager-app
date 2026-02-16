@@ -73,8 +73,8 @@ export default [
       'no-debugger': 'error',
       'no-process-env': 'error',
 
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
+      'no-unused-vars': 'error',
+      '@typescript-eslint/no-unused-vars': 'error',
 
       'func-style': ['error', 'expression', { allowArrowFunctions: true }],
 
