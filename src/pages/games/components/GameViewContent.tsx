@@ -216,33 +216,13 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tabs.List>
-          {game.status === 'setup' && (
-            <>
-              <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
-              <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
-              <Tabs.Tab value="rankings">
-                {t('gameDetail:tabs.rankings')}
-              </Tabs.Tab>
-            </>
-          )}
-          {game.status === 'in_progress' && (
-            <>
-              <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
-              <Tabs.Tab value="rankings">
-                {t('gameDetail:tabs.rankings')}
-              </Tabs.Tab>
-              <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
-            </>
-          )}
-          {game.status === 'completed' && (
-            <>
-              <Tabs.Tab value="rankings">
-                {t('gameDetail:tabs.rankings')}
-              </Tabs.Tab>
-              <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
-              <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
-            </>
-          )}
+          <>
+            <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
+            <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
+            <Tabs.Tab value="rankings">
+              {t('gameDetail:tabs.rankings')}
+            </Tabs.Tab>
+          </>
         </Tabs.List>
 
         <Tabs.Panel pt="md" value="teams">
