@@ -1,7 +1,7 @@
 import { defaultPlugins, defineConfig } from '@hey-api/openapi-ts';
 
 export default defineConfig({
-  input: 'https://api.railway.knobel-manager.de/openapi.yaml',
+  input: 'https://api.knobel-manager.de/openapi.yaml',
   output: {
     path: 'src/generated',
     postProcess: ['eslint', 'prettier'],
