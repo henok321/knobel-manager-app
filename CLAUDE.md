@@ -289,7 +289,7 @@ Create `.env.development` and `.env.production` files:
 
 - `VITE_API_URL` - Backend API base URL
   - Development: `http://localhost:8080`
-  - Production: `https://api.knobel-manager.de`
+  - Production: `https://api.railway.knobel-manager.de`
 
 ## Package Management
 
