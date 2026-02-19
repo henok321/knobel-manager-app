@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { type GameUpdateRequest } from '../../../generated';
 import useGames from '../../../slices/games/hooks.ts';
 import useTables from '../../../slices/tables/hooks.ts';
-import { Game, GameStatus as GameStatusType } from '../../../slices/types.ts';
+import { Game, GameStatus } from '../../../slices/types.ts';
 import {
   getStatusColor,
   getStatusIcon,
@@ -32,34 +32,37 @@ interface GameViewContentProps {
   game: Game;
 }
 
+const GAME_TYPES = ['teams', 'rounds', 'rankings'] as const;
+
+type GameTab = (typeof GAME_TYPES)[number];
+
+const isGameTab = (tab: string): tab is GameTab =>
+  (GAME_TYPES as readonly string[]).includes(tab);
+
+const getDefaultTab = (status: GameStatus): GameTab => {
+  switch (status) {
+    case 'setup':
+      return 'teams';
+    case 'in_progress':
+      return 'rounds';
+    case 'completed':
+      return 'rankings';
+    default:
+      return 'teams';
+  }
+};
+
 const GameViewContent = ({ game }: GameViewContentProps) => {
   const { t } = useTranslation();
   const { updateGame } = useGames();
   const { tables: allTables } = useTables();
 
-  const getDefaultTab = () => {
-    switch (game.status) {
-      case 'setup':
-        return 'teams';
-      case 'in_progress':
-        return 'rounds';
-      case 'completed':
-        return 'rankings';
-      default:
-        return 'teams';
-    }
+  const getPersistedTab = (): GameTab => {
+    const stored = localStorage.getItem(`selected_tab_for_game_${game.id}`);
+    return !stored || !isGameTab(stored) ? getDefaultTab(game.status) : stored;
   };
 
-  const getPersistedTab = () => {
-    try {
-      const stored = localStorage.getItem(`selected_tab_for_game_${game.id}`);
-      return stored || getDefaultTab();
-    } catch {
-      return getDefaultTab();
-    }
-  };
-
-  const [activeTab, setActiveTab] = useState<string | null>(getPersistedTab());
+  const [activeTab, setActiveTab] = useState<GameTab | null>(getPersistedTab());
 
   useEffect(() => {
     if (activeTab) {
@@ -95,7 +98,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const canComplete = scoreProgress.canComplete;
 
-  const handleStatusTransition = (newStatus: GameStatusType) => {
+  const handleStatusTransition = (newStatus: GameStatus) => {
     const gameRequest: GameUpdateRequest = {
       name: game.name,
       numberOfRounds: game.numberOfRounds,
@@ -214,7 +217,15 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         </Group>
       </Group>
 
-      <Tabs value={activeTab} onChange={setActiveTab}>
+      <Tabs
+        value={activeTab}
+        onChange={(value) => {
+          if (!(value && isGameTab(value))) {
+            return;
+          }
+          setActiveTab(value);
+        }}
+      >
         <Tabs.List>
           <>
             <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>

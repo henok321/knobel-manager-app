@@ -62,14 +62,17 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   const getPersistedRound = () => {
     const stored = localStorage.getItem(`selected_round_for_game_${game.id}`);
-    return stored || '1';
+    return Number(stored) || 1;
   };
 
   const [selectedRound, setSelectedRound] =
-    useState<string>(getPersistedRound());
+    useState<number>(getPersistedRound());
 
   useEffect(() => {
-    localStorage.setItem(`selected_round_for_game_${game.id}`, selectedRound);
+    localStorage.setItem(
+      `selected_round_for_game_${game.id}`,
+      `${selectedRound}`,
+    );
   }, [selectedRound, game.id]);
 
   const filteredAndSortedTables = useSelector((state: RootState) =>
@@ -156,8 +159,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
             data={roundOptions}
             label={t('gameDetail:rounds.selectRound')}
             style={{ width: 200 }}
-            value={selectedRound}
-            onChange={(value) => setSelectedRound(value || '1')}
+            value={`${selectedRound}`}
+            onChange={(value) => setSelectedRound(Number(value || 1))}
           />
 
           <TextInput
