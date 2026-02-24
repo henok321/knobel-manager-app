@@ -102,5 +102,10 @@
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.59.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "minimatch": ">=10.2.1"
+    }
   }
 }
