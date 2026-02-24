@@ -78,7 +78,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
       <form onSubmit={submit}>
         <Stack gap="md">
           <TextInput
-            autoFocus
+            autoFocus // eslint-disable-line jsx-a11y/no-autofocus
             required
             id="team-name"
             label={t('games:team.form.label.name')}

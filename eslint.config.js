@@ -36,14 +36,9 @@ export default tsEslint.config(
 
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
-    extends: [...tsEslint.configs.recommendedTypeChecked],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      parserOptions: {
-        project: './tsconfig.json',
-        tsconfigRootDir: import.meta.dirname,
-      },
       globals: {
         ...globals.browser,
         ...globals.es2021,
@@ -86,8 +81,6 @@ export default tsEslint.config(
         'error',
         { props: 'never', children: 'never' },
       ],
-      'jsx-a11y/no-autofocus': 'off',
-
       'react/jsx-sort-props': [
         'error',
         {
@@ -143,6 +136,13 @@ export default tsEslint.config(
 
   {
     files: ['**/*.{ts,tsx}'],
+    extends: [...tsEslint.configs.recommendedTypeChecked],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     rules: {
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
@@ -155,6 +155,7 @@ export default tsEslint.config(
           ignoreRestSiblings: true,
         },
       ],
+      '@typescript-eslint/no-explicit-any': 'error',
     },
   },
 

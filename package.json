@@ -67,8 +67,6 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/react-redux": "^7.1.34",
-    "@typescript-eslint/eslint-plugin": "^8.56.1",
-    "@typescript-eslint/parser": "^8.56.1",
     "@vitejs/plugin-react": "^5.1.4",
     "babel-jest": "^30.2.0",
     "babel-plugin-transform-vite-meta-env": "^1.0.3",
