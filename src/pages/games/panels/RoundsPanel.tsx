@@ -115,7 +115,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     setScoreModalOpen(true);
   };
 
-  const handleSubmitScores = async (
+  const handleSubmitScores = (
     scores: { playerID: number; score: number }[],
   ) => {
     if (!selectedTable) return;
@@ -175,7 +175,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
               loading={settingUp}
               size="md"
               variant="light"
-              onClick={handleSetupGame}
+              onClick={() => void handleSetupGame()}
             >
               {t('gameDetail:rounds.rerunMatchmaking')}
             </Button>
@@ -196,7 +196,11 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
             <Text c="dimmed" size="sm" ta="center">
               {t('gameDetail:rounds.setupDescription')}
             </Text>
-            <Button loading={settingUp} size="lg" onClick={handleSetupGame}>
+            <Button
+              loading={settingUp}
+              size="lg"
+              onClick={() => void handleSetupGame()}
+            >
               {t('gameDetail:rounds.setupMatchmaking')}
             </Button>
           </Stack>

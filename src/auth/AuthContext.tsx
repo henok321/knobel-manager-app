@@ -36,7 +36,7 @@ export interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   loading: false,
-  loginAction: async () => null,
+  loginAction: () => Promise.resolve(null),
   logOut: () => {},
 });
 

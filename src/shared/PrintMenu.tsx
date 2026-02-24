@@ -25,7 +25,7 @@ const PrintMenu = ({
 
   const handlePrintView = (type: string, params?: Record<string, string>) => {
     const queryParams = new URLSearchParams({ type, ...params });
-    navigate(`/games/${game.id}/print?${queryParams.toString()}`);
+    void navigate(`/games/${game.id}/print?${queryParams.toString()}`);
   };
 
   return (

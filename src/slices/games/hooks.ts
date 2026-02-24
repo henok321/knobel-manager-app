@@ -21,26 +21,26 @@ const useGames = () => {
   const error = useSelector(selectGamesError);
 
   const fetchGames = useCallback(() => {
-    dispatch(fetchAll());
+    void dispatch(fetchAll());
   }, [dispatch]);
 
   const createGame = useCallback(
     (gameRequest: GameCreateRequest) => {
-      dispatch(createGameAction(gameRequest));
+      void dispatch(createGameAction(gameRequest));
     },
     [dispatch],
   );
 
   const deleteGame = useCallback(
     (gameID: number) => {
-      dispatch(deleteGameAction(gameID));
+      void dispatch(deleteGameAction(gameID));
     },
     [dispatch],
   );
 
   const updateGame = useCallback(
     (gameID: number, gameRequest: GameUpdateRequest) => {
-      dispatch(updateGameAction({ gameID, gameRequest }));
+      void dispatch(updateGameAction({ gameID, gameRequest }));
     },
     [dispatch],
   );

@@ -28,21 +28,21 @@ const useTeams = () => {
 
   const createTeam = useCallback(
     (gameID: number, teamRequest: TeamsRequest) => {
-      dispatch(createTeamAction({ gameID, teamRequest }));
+      void dispatch(createTeamAction({ gameID, teamRequest }));
     },
     [dispatch],
   );
 
   const updateTeam = useCallback(
     (teamID: number, name: string) => {
-      dispatch(updateTeamAction({ teamID, name }));
+      void dispatch(updateTeamAction({ teamID, name }));
     },
     [dispatch],
   );
 
   const deleteTeam = useCallback(
     (teamID: number) => {
-      dispatch(deleteTeamAction(teamID));
+      void dispatch(deleteTeamAction(teamID));
     },
     [dispatch],
   );

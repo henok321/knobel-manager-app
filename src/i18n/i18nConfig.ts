@@ -13,7 +13,7 @@ import gameDetailEN from './locales/en/gameDetail.json';
 import gamesEN from './locales/en/games.json';
 import pdfEN from './locales/en/pdf.json';
 
-i18n
+void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({

@@ -37,7 +37,9 @@ const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
           <Group
             gap="xs"
             style={{ cursor: 'pointer' }}
-            onClick={() => navigate('/')}
+            onClick={() => {
+              void navigate('/');
+            }}
           >
             <ThemeIcon size="lg" variant="light">
               <IconDice />
