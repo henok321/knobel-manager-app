@@ -115,23 +115,23 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     setScoreModalOpen(true);
   };
 
-  const handleSubmitScores = (
+  const handleSubmitScores = async (
     scores: { playerID: number; score: number }[],
   ) => {
     if (!selectedTable) return;
 
     try {
-      updateScores(
+      await updateScores(
         game.id,
         Number(selectedRound),
         selectedTable.tableNumber,
         scores,
-      );
-      setScoreModalOpen(false);
+      ).unwrap();
     } catch (err) {
       setSetupError(
         err instanceof Error ? err.message : t('common:actions.errorOccurred'),
       );
+      throw err;
     }
   };
 

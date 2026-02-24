@@ -40,11 +40,10 @@ const useTables = () => {
       roundNumber: number,
       tableNumber: number,
       scores: { playerID: number; score: number }[],
-    ) => {
-      void dispatch(
+    ) =>
+      dispatch(
         updateScoresForTable({ gameID, roundNumber, tableNumber, scores }),
-      );
-    },
+      ),
     [dispatch],
   );
 

@@ -10,7 +10,7 @@ interface ScoreEntryModalProps {
   table: Table | null;
   roundNumber: number;
   onClose: () => void;
-  onSubmit: (scores: { playerID: number; score: number }[]) => void;
+  onSubmit: (scores: { playerID: number; score: number }[]) => Promise<void>;
 }
 
 const ScoreEntryModal = ({
@@ -38,12 +38,16 @@ const ScoreEntryModal = ({
 
   if (!table) return null;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const scoresArray = players.map((player: Player) => ({
       playerID: player.id,
       score: scores[player.id] ?? initialScores[player.id] ?? 0,
     }));
-    onSubmit(scoresArray);
+    try {
+      await onSubmit(scoresArray);
+    } catch {
+      return;
+    }
     notifications.show({
       title: t('common:actions.success'),
       message: t('gameDetail:rounds.scoresSaved', {
@@ -92,7 +96,7 @@ const ScoreEntryModal = ({
           <Button color="gray" variant="subtle" onClick={onClose}>
             {t('common:actions.cancel')}
           </Button>
-          <Button onClick={handleSubmit}>
+          <Button onClick={() => void handleSubmit()}>
             {t('gameDetail:rounds.saveScores')}
           </Button>
         </Group>
