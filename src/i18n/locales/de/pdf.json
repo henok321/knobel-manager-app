@@ -5,6 +5,7 @@
     "subtitleSingle": "Turnierplan für ausgewähltes Team",
     "round": "Runde",
     "table": "Tisch",
+    "player": "Spieler",
     "assignments": "Spielerzuweisungen",
     "notAssigned": "Nicht zugewiesen",
     "summary": "{{players}} Spieler über {{rounds}} Runden"

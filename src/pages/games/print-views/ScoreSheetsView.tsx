@@ -1,4 +1,4 @@
-import { Title, Text, Paper, Table, Stack, Divider } from '@mantine/core';
+import { Title, Text, Paper, Table, Stack } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import { Table as TableType, Player, Game, Team } from '../../../slices/types';
@@ -18,7 +18,6 @@ const ScoreSheetsView = ({
 }: ScoreSheetsViewProps) => {
   const { t } = useTranslation();
 
-  // Sort tables by round and table number
   const sortedTables = [...tables].sort((a, b) => {
     if (a.roundNumber && b.roundNumber && a.roundNumber !== b.roundNumber) {
       return a.roundNumber - b.roundNumber;
@@ -27,46 +26,41 @@ const ScoreSheetsView = ({
   });
 
   return (
-    <Stack gap="xl">
+    <Stack gap={0}>
       <div className="print-header">
         <Title order={1}>{game.name}</Title>
         <Title c="dimmed" fw={400} order={2}>
           {t('pdf:scoreSheets.title')}
         </Title>
         <Text c="dimmed" size="sm">
-          {t('pdf:scoreSheets.subtitle')}
+          {t('pdf:scoreSheets.instructions')}
         </Text>
       </div>
 
-      {sortedTables.map((table) => {
+      {sortedTables.map((table, index) => {
         const tablePlayers = table.players || [];
-
         return (
-          <div key={table.id} className="print-page-break">
-            <Paper withBorder p="lg">
-              <Stack gap="md">
+          <div key={table.id} className="score-sheet-item">
+            {index > 0 && <div className="score-sheet-divider" />}
+            <Paper withBorder className="score-sheet-card" p="sm">
+              <Stack gap="xs">
                 <div>
                   <Title order={3}>
-                    {t('pdf:scoreSheets.round')} {table.roundNumber} -{' '}
+                    {t('pdf:scoreSheets.round')} {table.roundNumber}
+                    {' – '}
                     {t('pdf:scoreSheets.table')} {table.tableNumber}
                   </Title>
-                  <Text c="dimmed" size="sm">
+                  <Text c="dimmed" size="xs">
                     {game.name}
                   </Text>
                 </div>
-
-                <Divider />
-
-                <Text fw={500} size="sm">
-                  {t('pdf:scoreSheets.instructions')}
-                </Text>
 
                 <Table striped withColumnBorders withTableBorder>
                   <Table.Thead>
                     <Table.Tr>
                       <Table.Th>{t('pdf:scoreSheets.player')}</Table.Th>
                       <Table.Th>{t('pdf:scoreSheets.team')}</Table.Th>
-                      <Table.Th style={{ width: '120px' }}>
+                      <Table.Th style={{ width: '80px' }}>
                         {t('pdf:scoreSheets.score')}
                       </Table.Th>
                     </Table.Tr>
@@ -85,17 +79,16 @@ const ScoreSheetsView = ({
                   </Table.Tbody>
                 </Table>
 
-                <Divider />
-
-                <div>
-                  <Text fw={500} mb="xs">
+                <div
+                  style={{
+                    borderTop: '1px solid #dee2e6',
+                    paddingTop: '4px',
+                    minHeight: '80px',
+                  }}
+                >
+                  <Text c="dimmed" size="xs">
                     {t('pdf:scoreSheets.notes')}
                   </Text>
-                  <Paper withBorder p="md" style={{ minHeight: '100px' }}>
-                    <Text c="dimmed" size="sm">
-                      {t('pdf:scoreSheets.notesPlaceholder')}
-                    </Text>
-                  </Paper>
                 </div>
               </Stack>
             </Paper>

@@ -5,6 +5,7 @@
     "subtitleSingle": "Tournament Schedule for Selected Team",
     "round": "Round",
     "table": "Table",
+    "player": "Player",
     "assignments": "Player Assignments",
     "notAssigned": "Not Assigned",
     "summary": "{{players}} players across {{rounds}} rounds"
