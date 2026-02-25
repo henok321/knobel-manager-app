@@ -120,7 +120,6 @@ export default tsEslint.config(
   {
     files: ['**/*.{js,jsx}'],
     rules: {
-      '@typescript-eslint/no-unused-vars': 'off',
       'no-unused-vars': [
         'error',
         {
