@@ -43,7 +43,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
-  const [setupError, setSetupError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   const canEditScores = game.status === 'in_progress';
@@ -91,7 +91,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   }, [game.id, hasRounds, tablesStatus, fetchAllTables, game.numberOfRounds]);
 
   const handleSetupGame = async () => {
-    setSetupError(null);
+    setError(null);
 
     try {
       await setupGame(game.id);
@@ -105,8 +105,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
           }
         )?.response?.data?.message ||
         (err as Error).message ||
-        t('gameDetail:rounds.setupError');
-      setSetupError(errorMessage);
+        t('gameDetail:rounds.error');
+      setError(errorMessage);
     }
   };
 
@@ -119,19 +119,20 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     scores: { playerID: number; score: number }[],
   ) => {
     if (!selectedTable) return;
+    setError(null);
 
     try {
-      updateScores(
+      await updateScores(
         game.id,
         Number(selectedRound),
         selectedTable.tableNumber,
         scores,
-      );
-      setScoreModalOpen(false);
+      ).unwrap();
     } catch (err) {
-      setSetupError(
+      setError(
         err instanceof Error ? err.message : t('common:actions.errorOccurred'),
       );
+      throw err;
     }
   };
 
@@ -140,7 +141,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const settingUp = gamesStatus === 'pending';
   const loading = tablesStatus === 'pending';
   const displayError =
-    setupError ||
+    error ||
     (tablesStatus === 'failed' && !tablesError?.includes('404')
       ? tablesError
       : null);
@@ -175,7 +176,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
               loading={settingUp}
               size="md"
               variant="light"
-              onClick={handleSetupGame}
+              onClick={() => void handleSetupGame()}
             >
               {t('gameDetail:rounds.rerunMatchmaking')}
             </Button>
@@ -196,7 +197,11 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
             <Text c="dimmed" size="sm" ta="center">
               {t('gameDetail:rounds.setupDescription')}
             </Text>
-            <Button loading={settingUp} size="lg" onClick={handleSetupGame}>
+            <Button
+              loading={settingUp}
+              size="lg"
+              onClick={() => void handleSetupGame()}
+            >
               {t('gameDetail:rounds.setupMatchmaking')}
             </Button>
           </Stack>

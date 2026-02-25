@@ -66,7 +66,7 @@ const PrintView = () => {
   };
 
   const handleBack = () => {
-    navigate(`/games/${gameID}`);
+    void navigate(`/games/${gameID}`);
   };
 
   const renderView = () => {

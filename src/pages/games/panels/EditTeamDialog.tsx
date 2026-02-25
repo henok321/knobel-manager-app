@@ -64,7 +64,7 @@ const EditTeamDialogContent = ({
   return (
     <Stack gap="md">
       <TextInput
-        autoFocus
+        autoFocus // eslint-disable-line jsx-a11y/no-autofocus
         data-autofocus
         label={t('gameDetail:teams.teamName')}
         placeholder={t('gameDetail:teams.teamNamePlaceholder')}

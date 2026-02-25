@@ -13,14 +13,14 @@ const usePlayers = () => {
 
   const updatePlayer = useCallback(
     (playerID: number, name: string) => {
-      dispatch(updatePlayerAction({ playerID, name }));
+      void dispatch(updatePlayerAction({ playerID, name }));
     },
     [dispatch],
   );
 
   const deletePlayer = useCallback(
     (playerID: number) => {
-      dispatch(deletePlayerAction(playerID));
+      void dispatch(deletePlayerAction(playerID));
     },
     [dispatch],
   );

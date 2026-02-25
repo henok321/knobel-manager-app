@@ -46,7 +46,7 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
   };
 
   const handleOpen = () => {
-    navigate(`/games/${game.id}`);
+    void navigate(`/games/${game.id}`);
   };
 
   const translateGameStatus = (gameStatus: GameStatus) => {

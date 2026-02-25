@@ -1,17 +1,17 @@
 import js from '@eslint/js';
 import markdown from '@eslint/markdown';
-import ts from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+import tsEslint from 'typescript-eslint';
 import prettierConfig from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import jest from 'eslint-plugin-jest';
 import prettier from 'eslint-plugin-prettier';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 
-export default [
+export default tsEslint.config(
   {
     ignores: [
       'dist',
@@ -25,6 +25,10 @@ export default [
       'playwright.config.ts',
       '.playwright-mcp',
       '.pnp.*',
+      'eslint.config.js',
+      'jest.config.js',
+      'openapi-ts.config.ts',
+      'vite.config.ts',
     ],
   },
 
@@ -33,29 +37,28 @@ export default [
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
-      parser: tsParser,
       ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
         ...globals.browser,
         ...globals.es2021,
         ...globals.node,
-        ...globals.jest,
+        // removed globals.jest from here — scoped to test files only
       },
     },
     plugins: {
-      '@typescript-eslint': ts,
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'jsx-a11y': jsxA11y,
       prettier,
       import: importPlugin,
     },
     rules: {
       ...js.configs.recommended.rules,
-      ...ts.configs.recommended.rules,
       ...react.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
+      ...jsxA11y.configs.recommended.rules,
       ...prettierConfig.rules,
       'prettier/prettier': 'error',
 
@@ -71,14 +74,9 @@ export default [
       'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
       'no-console': 'error',
       'no-debugger': 'error',
-      'no-process-env': 'error',
-
-      'no-unused-vars': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
 
       'func-style': ['error', 'expression', { allowArrowFunctions: true }],
 
-      'react/sort-comp': ['error', { order: ['everything-else', 'render'] }],
       'react/jsx-curly-brace-presence': [
         'error',
         { props: 'never', children: 'never' },
@@ -132,12 +130,18 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
-      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
 
   {
     files: ['**/*.{ts,tsx}'],
+    extends: [...tsEslint.configs.recommendedTypeChecked],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     rules: {
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
@@ -150,6 +154,7 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
+      '@typescript-eslint/no-explicit-any': 'error',
     },
   },
 
@@ -168,4 +173,4 @@ export default [
       'jest/valid-expect': 'error',
     },
   },
-];
+);

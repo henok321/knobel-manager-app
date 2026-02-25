@@ -22,14 +22,14 @@ const useTables = () => {
 
   const fetchTables = useCallback(
     (gameID: number, roundNumber: number) => {
-      dispatch(fetchTablesForRound({ gameID, roundNumber }));
+      void dispatch(fetchTablesForRound({ gameID, roundNumber }));
     },
     [dispatch],
   );
 
   const fetchAllTables = useCallback(
     (gameID: number, numberOfRounds: number) => {
-      dispatch(fetchAllTablesForGame({ gameID, numberOfRounds }));
+      void dispatch(fetchAllTablesForGame({ gameID, numberOfRounds }));
     },
     [dispatch],
   );
@@ -40,11 +40,10 @@ const useTables = () => {
       roundNumber: number,
       tableNumber: number,
       scores: { playerID: number; score: number }[],
-    ) => {
+    ) =>
       dispatch(
         updateScoresForTable({ gameID, roundNumber, tableNumber, scores }),
-      );
-    },
+      ),
     [dispatch],
   );
 
