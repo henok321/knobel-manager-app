@@ -79,13 +79,7 @@ const ScoreSheetsView = ({
                   </Table.Tbody>
                 </Table>
 
-                <div
-                  style={{
-                    borderTop: '1px solid #dee2e6',
-                    paddingTop: '4px',
-                    minHeight: '80px',
-                  }}
-                >
+                <div className="score-sheet-notes">
                   <Text c="dimmed" size="xs">
                     {t('pdf:scoreSheets.notes')}
                   </Text>

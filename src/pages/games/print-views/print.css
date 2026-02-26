@@ -13,7 +13,6 @@
     page-break-inside: avoid;
     break-inside: avoid;
     margin-bottom: 0;
-    border: 1px solid #dee2e6;
   }
 
   .mantine-Paper-root {
@@ -125,6 +124,12 @@
   .score-sheet-item {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+
+  .score-sheet-notes {
+    border-top: 1px solid #dee2e6;
+    padding-top: 4px;
+    min-height: 80px;
   }
 }
 
