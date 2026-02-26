@@ -93,7 +93,7 @@
   /* Compact table cells globally */
   td,
   th {
-    padding: 3px 8px !important;
+    padding: 0.1875rem 0.5rem !important;
   }
 
   /* Team handouts: each card stays on one page, flows naturally 2-4 per page */
@@ -105,7 +105,7 @@
 
   .team-handout-table td,
   .team-handout-table th {
-    padding: 8px 10px !important;
+    padding: 0.5rem 0.625rem !important;
   }
 
   /* Score sheets: each card stays together, dashed divider between them */
@@ -128,8 +128,8 @@
 
   .score-sheet-notes {
     border-top: 1px solid #dee2e6;
-    padding-top: 4px;
-    min-height: 80px;
+    padding-top: 0.25rem;
+    min-height: 5rem;
   }
 }
 
@@ -145,7 +145,7 @@
 
   .tables-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(18.75rem, 1fr));
     gap: 1rem;
   }
 
