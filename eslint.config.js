@@ -58,7 +58,7 @@ export default tsEslint.config(
       ...js.configs.recommended.rules,
       ...react.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      ...jsxA11y.configs.recommended.rules,
+      ...jsxA11y.flatConfigs.recommended.rules,
       ...prettierConfig.rules,
       'prettier/prettier': 'error',
 
