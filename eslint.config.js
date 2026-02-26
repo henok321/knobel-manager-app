@@ -62,6 +62,8 @@ export default tsEslint.config(
       ...prettierConfig.rules,
       'prettier/prettier': 'error',
 
+      '@typescript-eslint/no-deprecated': 'error',
+
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
 

@@ -8,7 +8,7 @@ import {
   Group,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface GameFormData {
@@ -27,7 +27,7 @@ interface GameFormProps {
 const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
   const { t } = useTranslation();
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);

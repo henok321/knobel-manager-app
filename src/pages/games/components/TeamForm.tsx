@@ -1,7 +1,7 @@
 import { Modal, Text, TextInput, Button, Group, Stack } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export interface TeamFormData {
@@ -28,7 +28,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
     onClose();
   };
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     createTeam({ name: teamName, members: players });
     notifications.show({
