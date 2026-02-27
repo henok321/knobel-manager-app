@@ -1,6 +1,6 @@
 import { Anchor, Container, Group, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconBrandGithub } from '@tabler/icons-react';
+import { IconBrandGithub, IconLicense } from '@tabler/icons-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,7 +9,6 @@ const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
 
 const Footer: React.FC = () => {
   const { t } = useTranslation();
-  const currentYear = new Date().getFullYear();
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
@@ -24,7 +23,7 @@ const Footer: React.FC = () => {
     >
       <Group gap={isMobile ? 'xs' : 'md'} justify="center" wrap="wrap">
         <Text c="dimmed" size={isMobile ? 'xs' : 'sm'}>
-          {t('footer:copyright', { year: currentYear })}
+          {t('footer:copyright', { year: '2024' })}
         </Text>
 
         <Text c="dimmed" size={isMobile ? 'xs' : 'sm'}>
@@ -55,7 +54,11 @@ const Footer: React.FC = () => {
           size={isMobile ? 'xs' : 'sm'}
           target="_blank"
         >
-          {t('footer:links.license')}
+          <Group gap={4}>
+            {' '}
+            <IconLicense size={isMobile ? 14 : 16} />
+            {t('footer:links.license')}
+          </Group>
         </Anchor>
       </Group>
     </Container>
