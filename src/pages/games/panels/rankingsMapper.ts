@@ -27,11 +27,15 @@ const mapPlayersToRankings = (
   const rankings: PlayerRanking[] = [];
 
   teams.forEach((team) => {
-    if (!team) return;
+    if (!team) {
+      return;
+    }
 
     team.players.forEach((playerID) => {
       const player = players.find((p) => p.id === playerID);
-      if (!player) return;
+      if (!player) {
+        return;
+      }
 
       rankings.push({
         playerID,

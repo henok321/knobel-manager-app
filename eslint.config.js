@@ -172,6 +172,7 @@ export default tsEslint.config(
       'jest/no-identical-title': 'error',
       'jest/prefer-to-have-length': 'warn',
       'jest/valid-expect': 'error',
+      curly: ['error', 'all'],
     },
   },
 );

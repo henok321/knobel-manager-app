@@ -58,7 +58,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
     for (const table of allTables) {
       const players = table.players;
-      if (!players) continue;
+      if (!players) {
+        continue;
+      }
       const tableRoundNumber =
         (table as typeof table & { roundNumber?: number }).roundNumber ||
         table.roundID;
@@ -77,7 +79,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const getPlayersForTeam = (teamID: number) => {
     const team = allTeams.find((t) => t?.id === teamID);
-    if (!team) return [];
+    if (!team) {
+      return [];
+    }
     return team.players
       .map((playerID) => allPlayers.find((p) => p.id === playerID))
       .filter(
@@ -163,7 +167,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
       <Stack gap="md">
         {gameTeams.map((team) => {
-          if (!team) return null;
+          if (!team) {
+            return null;
+          }
           const players = getPlayersForTeam(team.id);
 
           return (
@@ -199,7 +205,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                     {t('gameDetail:teams.players')}:
                   </Text>
                   {players.map((player) => {
-                    if (!player) return null;
+                    if (!player) {
+                      return null;
+                    }
                     return (
                       <Group
                         key={player.id}

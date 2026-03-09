@@ -36,7 +36,9 @@ const ScoreEntryModal = ({
     return scoreMap;
   }, [players, table?.scores]);
 
-  if (!table) return null;
+  if (!table) {
+    return null;
+  }
 
   const handleSubmit = async () => {
     const scoresArray = players.map((player: Player) => ({

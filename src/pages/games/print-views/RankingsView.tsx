@@ -52,7 +52,9 @@ const RankingsView = ({
   gameTeams.forEach((team) => {
     team.players.forEach((playerID: number) => {
       const player = players.find((p) => p.id === playerID);
-      if (!player) return;
+      if (!player) {
+        return;
+      }
 
       playerRankings.push({
         playerID: player.id,

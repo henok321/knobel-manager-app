@@ -37,7 +37,9 @@ const TeamHandoutsView = ({
     > = {};
 
     tables.forEach((table) => {
-      if (!table.roundNumber) return;
+      if (!table.roundNumber) {
+        return;
+      }
 
       (table.players || []).forEach((player) => {
         if (team.players.includes(player.id)) {

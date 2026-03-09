@@ -85,7 +85,9 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   );
 
   useEffect(() => {
-    if (!game.id || !hasRounds || tablesStatus !== 'idle') return;
+    if (!game.id || !hasRounds || tablesStatus !== 'idle') {
+      return;
+    }
 
     fetchAllTables(game.id, game.numberOfRounds);
   }, [game.id, hasRounds, tablesStatus, fetchAllTables, game.numberOfRounds]);
@@ -118,7 +120,9 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const handleSubmitScores = async (
     scores: { playerID: number; score: number }[],
   ) => {
-    if (!selectedTable) return;
+    if (!selectedTable) {
+      return;
+    }
     setError(null);
 
     try {
