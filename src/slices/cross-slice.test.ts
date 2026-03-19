@@ -2,15 +2,15 @@
  * @jest-environment node
  */
 
-import { http, HttpResponse } from 'msw';
+import { HttpResponse, http } from 'msw';
 
+import { server } from '../test/setup/msw';
+import { createTestStore } from '../test/setup/store';
 import { fetchAll } from './actions';
 import { selectAllGames } from './games/slice';
 import { selectAllPlayers } from './players/slice';
 import { createTeamAction } from './teams/actions';
 import { selectAllTeams } from './teams/slice';
-import { server } from '../test/setup/msw';
-import { createTestStore } from '../test/setup/store';
 
 describe('Cross-Slice Integration Tests', () => {
   describe('fetchAll action', () => {

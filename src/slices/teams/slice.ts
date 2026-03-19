@@ -4,13 +4,13 @@ import {
   createSlice,
 } from '@reduxjs/toolkit';
 
-import { RootState } from '../../store/store.ts';
+import type { RootState } from '../../store/store.ts';
 import { fetchAll } from '../actions.ts';
-import { Team } from '../types.ts';
+import type { Team } from '../types.ts';
 import {
   createTeamAction,
-  updateTeamAction,
   deleteTeamAction,
+  updateTeamAction,
 } from './actions.ts';
 
 type AdditionalTeamState = {
@@ -101,6 +101,6 @@ const selectTeamsByGameId = createDraftSafeSelector(
   (teams, teamIDs) => teams.filter((team) => team.gameID === teamIDs),
 );
 
-export { selectAllTeams, selectTeamsByIds, selectTeamsByGameId };
+export { selectAllTeams, selectTeamsByGameId, selectTeamsByIds };
 
 export default teamsSlice.reducer;

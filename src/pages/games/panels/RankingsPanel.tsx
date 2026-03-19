@@ -2,16 +2,16 @@ import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import usePlayers from '../../../slices/players/hooks.ts';
+import useTables, { useTablesByRound } from '../../../slices/tables/hooks.ts';
+import useTeams, { useTeamsByIds } from '../../../slices/teams/hooks.ts';
+import type { Game } from '../../../slices/types';
+import { PlayerRankingRow, TeamRankingRow } from '../components/RankingRow';
 import {
   aggregateScoresFromTables,
   mapPlayersToRankings,
   mapTeamsToRankings,
 } from './rankingsMapper.ts';
-import usePlayers from '../../../slices/players/hooks.ts';
-import useTables, { useTablesByRound } from '../../../slices/tables/hooks.ts';
-import useTeams, { useTeamsByIds } from '../../../slices/teams/hooks.ts';
-import { Game } from '../../../slices/types';
-import { PlayerRankingRow, TeamRankingRow } from '../components/RankingRow';
 
 interface RankingsPanelProps {
   game: Game;

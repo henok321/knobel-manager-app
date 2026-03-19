@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import GameViewContent from './components/GameViewContent.tsx';
 import Breadcrumbs from '../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/layout/Layout.tsx';
 import useGames from '../../slices/games/hooks';
+import GameViewContent from './components/GameViewContent.tsx';
 
 const GameDetail = () => {
   const { gameID } = useParams<{ gameID: string }>();

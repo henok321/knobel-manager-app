@@ -1,6 +1,6 @@
-import { http, HttpResponse } from 'msw';
+import { HttpResponse, http } from 'msw';
 
-import { TeamResponse } from '../../generated';
+import type { TeamResponse } from '../../generated';
 
 const BASE_URL = 'http://localhost/api';
 

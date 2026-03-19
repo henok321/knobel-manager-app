@@ -1,7 +1,12 @@
-import { Title, Text, Table, Stack, Badge } from '@mantine/core';
+import { Badge, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { Table as TableType, Player, Game, Team } from '../../../slices/types';
+import type {
+  Game,
+  Player,
+  Table as TableType,
+  Team,
+} from '../../../slices/types';
 
 interface RankingsViewProps {
   game: Game;
@@ -41,19 +46,19 @@ const RankingsView = ({
     : tables;
 
   const scoresByPlayer: Record<number, number> = {};
-  relevantTables.forEach((table) => {
-    (table.scores || []).forEach((score) => {
+  for (const table of relevantTables) {
+    for (const score of table.scores || []) {
       scoresByPlayer[score.playerID] =
         (scoresByPlayer[score.playerID] || 0) + (score.score || 0);
-    });
-  });
+    }
+  }
 
   const playerRankings: PlayerRanking[] = [];
-  gameTeams.forEach((team) => {
-    team.players.forEach((playerID: number) => {
+  for (const team of gameTeams) {
+    for (const playerID of team.players as number[]) {
       const player = players.find((p) => p.id === playerID);
       if (!player) {
-        return;
+        continue;
       }
 
       playerRankings.push({
@@ -63,18 +68,18 @@ const RankingsView = ({
         teamName: team.name,
         totalScore: scoresByPlayer[player.id] || 0,
       });
-    });
-  });
+    }
+  }
   playerRankings.sort((a, b) => b.totalScore - a.totalScore);
 
   const teamScoresMap: Record<number, number> = {};
-  gameTeams.forEach((team) => {
+  for (const team of gameTeams) {
     teamScoresMap[team.id] = 0;
-  });
-  playerRankings.forEach((playerRank) => {
+  }
+  for (const playerRank of playerRankings) {
     teamScoresMap[playerRank.teamID] =
       (teamScoresMap[playerRank.teamID] || 0) + playerRank.totalScore;
-  });
+  }
 
   const teamRankings: TeamRanking[] = Object.entries(teamScoresMap).map(
     ([teamIDStr, totalScore]) => {

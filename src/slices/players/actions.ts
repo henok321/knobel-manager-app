@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { client } from '../../api/apiClient';
-import { deletePlayer, updatePlayer, type Player } from '../../generated';
-import { RootState } from '../../store/store';
+import { deletePlayer, type Player, updatePlayer } from '../../generated';
+import type { RootState } from '../../store/store';
 
 export const updatePlayerAction = createAsyncThunk<
   Player,

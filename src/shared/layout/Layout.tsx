@@ -1,5 +1,6 @@
 import { AppShell } from '@mantine/core';
-import React, { ReactNode } from 'react';
+import type React from 'react';
+import type { ReactNode } from 'react';
 
 import Footer from './Footer.tsx';
 import Header from './Header.tsx';

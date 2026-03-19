@@ -1,18 +1,18 @@
-import { Container, Stack, Text, Button, Group } from '@mantine/core';
-import { IconPrinter, IconArrowLeft } from '@tabler/icons-react';
+import { Button, Container, Group, Stack, Text } from '@mantine/core';
+import { IconArrowLeft, IconPrinter } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
-import RankingsView from './print-views/RankingsView';
-import ScoreSheetsView from './print-views/ScoreSheetsView';
-import TablePlanView from './print-views/TablePlanView';
-import TeamHandoutsView from './print-views/TeamHandoutsView';
 import CenterLoader from '../../shared/CenterLoader';
 import useGames from '../../slices/games/hooks';
 import usePlayers from '../../slices/players/hooks';
 import useTables from '../../slices/tables/hooks';
 import useTeams from '../../slices/teams/hooks';
+import RankingsView from './print-views/RankingsView';
+import ScoreSheetsView from './print-views/ScoreSheetsView';
+import TablePlanView from './print-views/TablePlanView';
+import TeamHandoutsView from './print-views/TeamHandoutsView';
 import './print-views/print.css';
 
 const PrintView = () => {

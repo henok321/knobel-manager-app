@@ -14,12 +14,12 @@ import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import EditTeamDialog from './EditTeamDialog.tsx';
 import usePlayers from '../../../slices/players/hooks';
 import useTables from '../../../slices/tables/hooks';
 import useTeams, { useTeamsByGameId } from '../../../slices/teams/hooks';
-import { Game } from '../../../slices/types';
-import TeamForm, { TeamFormData } from '../components/TeamForm';
+import type { Game } from '../../../slices/types';
+import TeamForm, { type TeamFormData } from '../components/TeamForm';
+import EditTeamDialog from './EditTeamDialog.tsx';
 
 interface TeamsPanelProps {
   game: Game;
@@ -112,9 +112,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       updateTeam(editingTeamId, teamName);
 
       // Update all player names
-      players.forEach((player) => {
+      for (const player of players) {
         updatePlayer(player.id, player.name);
-      });
+      }
     }
     setEditTeamDialogOpen(false);
     setEditingTeamId(null);

@@ -1,7 +1,7 @@
 import { Group, Table, Text } from '@mantine/core';
 import { memo } from 'react';
 
-import { PlayerRanking, TeamRanking } from '../panels/rankingsMapper.ts';
+import type { PlayerRanking, TeamRanking } from '../panels/rankingsMapper.ts';
 
 const getMedalEmoji = (rank: number) => {
   switch (rank) {

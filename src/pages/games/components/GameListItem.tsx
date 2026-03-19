@@ -14,7 +14,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Game, GameStatus } from '../../../slices/types';
+import type { Game, GameStatus } from '../../../slices/types';
 import {
   getStatusColor,
   getStatusIcon,

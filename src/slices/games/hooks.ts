@@ -1,6 +1,9 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import type { GameCreateRequest, GameUpdateRequest } from '../../generated';
+import type { AppDispatch } from '../../store/store';
+import { fetchAll } from '../actions';
 import {
   createGameAction,
   deleteGameAction,
@@ -8,9 +11,6 @@ import {
   updateGameAction,
 } from './actions';
 import { selectAllGames, selectGamesError, selectGamesStatus } from './slice';
-import { GameCreateRequest, GameUpdateRequest } from '../../generated';
-import { AppDispatch } from '../../store/store';
-import { fetchAll } from '../actions';
 
 const useGames = () => {
   const dispatch = useDispatch<AppDispatch>();

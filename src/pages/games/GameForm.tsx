@@ -1,14 +1,14 @@
 import {
+  Button,
+  Group,
   Modal,
+  NumberInput,
+  Stack,
   Text,
   TextInput,
-  NumberInput,
-  Button,
-  Stack,
-  Group,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { SubmitEvent } from 'react';
+import type { SubmitEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface GameFormData {

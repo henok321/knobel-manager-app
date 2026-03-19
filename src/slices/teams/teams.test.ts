@@ -2,16 +2,16 @@
  * @jest-environment node
  */
 
-import { http, HttpResponse } from 'msw';
+import { HttpResponse, http } from 'msw';
 
-import {
-  createTeamAction,
-  updateTeamAction,
-  deleteTeamAction,
-} from './actions';
-import { selectAllTeams } from './slice';
 import { server } from '../../test/setup/msw';
 import { createTestStore } from '../../test/setup/store';
+import {
+  createTeamAction,
+  deleteTeamAction,
+  updateTeamAction,
+} from './actions';
+import { selectAllTeams } from './slice';
 
 describe('Teams Actions + Slice', () => {
   describe('createTeamAction', () => {

@@ -4,11 +4,11 @@ import { client } from '../../api/apiClient';
 import {
   createTeam,
   deleteTeam,
-  updateTeam,
   type Player,
   type TeamsRequest,
+  updateTeam,
 } from '../../generated';
-import { RootState } from '../../store/store';
+import type { RootState } from '../../store/store';
 import { normalizeTeamResponse } from '../normalize';
 import type { Team } from '../types';
 

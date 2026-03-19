@@ -1,7 +1,12 @@
-import { Title, Text, Paper, Table, Stack } from '@mantine/core';
+import { Paper, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { Game, Team, Player, Table as TableType } from '../../../slices/types';
+import type {
+  Game,
+  Player,
+  Table as TableType,
+  Team,
+} from '../../../slices/types';
 
 interface TablePlanViewProps {
   game: Game;
@@ -20,12 +25,12 @@ const TablePlanView = ({
 
   // Group tables by round
   const tablesByRound: Record<number, typeof tables> = {};
-  tables.forEach((table) => {
+  for (const table of tables) {
     if (table.roundNumber) {
       tablesByRound[table.roundNumber] ??= [];
       tablesByRound[table.roundNumber]?.push(table);
     }
-  });
+  }
 
   return (
     <Stack gap="xl">

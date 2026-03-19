@@ -2,9 +2,9 @@ import { setupServer } from 'msw/node';
 
 import {
   gamesHandlers,
-  teamsHandlers,
   playersHandlers,
   tablesHandlers,
+  teamsHandlers,
 } from '../handlers';
 
 export const server = setupServer(

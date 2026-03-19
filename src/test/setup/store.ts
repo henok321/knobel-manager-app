@@ -4,7 +4,7 @@ import gamesReducer from '../../slices/games/slice';
 import playersReducer from '../../slices/players/slice';
 import tablesReducer from '../../slices/tables/slice';
 import teamsReducer from '../../slices/teams/slice';
-import { RootState } from '../../store/store';
+import type { RootState } from '../../store/store';
 
 export const createTestStore = (preloadedState?: Partial<RootState>) =>
   configureStore({

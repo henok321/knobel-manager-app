@@ -14,10 +14,10 @@ import { notifications } from '@mantine/notifications';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { type GameUpdateRequest } from '../../../generated';
+import type { GameUpdateRequest } from '../../../generated';
 import useGames from '../../../slices/games/hooks.ts';
 import useTables from '../../../slices/tables/hooks.ts';
-import { Game, GameStatus } from '../../../slices/types.ts';
+import type { Game, GameStatus } from '../../../slices/types.ts';
 import {
   getStatusColor,
   getStatusIcon,
@@ -227,13 +227,9 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         }}
       >
         <Tabs.List>
-          <>
-            <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
-            <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
-            <Tabs.Tab value="rankings">
-              {t('gameDetail:tabs.rankings')}
-            </Tabs.Tab>
-          </>
+          <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
+          <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
+          <Tabs.Tab value="rankings">{t('gameDetail:tabs.rankings')}</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel pt="md" value="teams">

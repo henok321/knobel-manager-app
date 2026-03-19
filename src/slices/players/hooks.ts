@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import type { AppDispatch, RootState } from '../../store/store';
 import { deletePlayerAction, updatePlayerAction } from './actions';
 import { selectAllPlayers } from './slice';
-import { AppDispatch, RootState } from '../../store/store';
 
 const usePlayers = () => {
   const dispatch = useDispatch<AppDispatch>();

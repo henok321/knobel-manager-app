@@ -1,7 +1,12 @@
-import { Title, Text, Paper, Table, Stack, Badge } from '@mantine/core';
+import { Badge, Paper, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { Table as TableType, Player, Game, Team } from '../../../slices/types';
+import type {
+  Game,
+  Player,
+  Table as TableType,
+  Team,
+} from '../../../slices/types';
 
 interface TeamHandoutsViewProps {
   game: Game;
@@ -36,12 +41,12 @@ const TeamHandoutsView = ({
       Record<number, { tableNumber: number; roundNumber: number }>
     > = {};
 
-    tables.forEach((table) => {
+    for (const table of tables) {
       if (!table.roundNumber) {
-        return;
+        continue;
       }
 
-      (table.players || []).forEach((player) => {
+      for (const player of table.players || []) {
         if (team.players.includes(player.id)) {
           playerAssignments[player.id] ??= {};
           playerAssignments[player.id]![table.roundNumber!] = {
@@ -49,8 +54,8 @@ const TeamHandoutsView = ({
             roundNumber: table.roundNumber!,
           };
         }
-      });
-    });
+      }
+    }
 
     return (
       <Paper key={team.id} withBorder className="team-handout-card" p="md">

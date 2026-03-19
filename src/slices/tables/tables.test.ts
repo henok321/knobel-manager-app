@@ -2,16 +2,16 @@
  * @jest-environment node
  */
 
-import { http, HttpResponse } from 'msw';
+import { HttpResponse, http } from 'msw';
 
+import { server } from '../../test/setup/msw';
+import { createTestStore } from '../../test/setup/store';
 import {
   fetchAllTablesForGame,
   fetchTablesForRound,
   updateScoresForTable,
 } from './actions';
 import { selectAllTables } from './slice';
-import { server } from '../../test/setup/msw';
-import { createTestStore } from '../../test/setup/store';
 
 describe('Tables Actions + Slice', () => {
   describe('fetchTablesForRound', () => {

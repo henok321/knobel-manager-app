@@ -1,5 +1,6 @@
 import { Group, Select, Text } from '@mantine/core';
-import React, { forwardRef } from 'react';
+import type React from 'react';
+import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface LanguagePickerProps {

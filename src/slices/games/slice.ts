@@ -1,15 +1,15 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
-import { Game } from '../types.ts';
+import type { RootState } from '../../store/store.ts';
+import { fetchAll } from '../actions.ts';
+import { createTeamAction, deleteTeamAction } from '../teams/actions.ts';
+import type { Game } from '../types.ts';
 import {
   createGameAction,
   deleteGameAction,
   setupGameAction,
   updateGameAction,
 } from './actions.ts';
-import { RootState } from '../../store/store.ts';
-import { fetchAll } from '../actions.ts';
-import { createTeamAction, deleteTeamAction } from '../teams/actions.ts';
 
 type AdditionalGamesState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -145,6 +145,6 @@ const { selectAll: selectAllGames } = gamesAdapter.getSelectors<RootState>(
 const selectGamesStatus = (state: RootState) => state.games.status;
 const selectGamesError = (state: RootState) => state.games.error;
 
-export { selectAllGames, selectGamesStatus, selectGamesError };
+export { selectAllGames, selectGamesError, selectGamesStatus };
 
 export default gamesSlice.reducer;

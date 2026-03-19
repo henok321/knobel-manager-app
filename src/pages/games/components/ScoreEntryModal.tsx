@@ -1,6 +1,6 @@
 import { Button, Group, Modal, NumberInput, Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Player, Table } from '../../../slices/types';

@@ -4,9 +4,9 @@ import {
   Button,
   Card,
   Group,
+  Table as MantineTable,
   Select,
   Stack,
-  Table as MantineTable,
   Text,
   TextInput,
   Title,
@@ -20,8 +20,8 @@ import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
 import { selectTablesForRoundWithSearch } from '../../../slices/tables/slice';
 import useTeams from '../../../slices/teams/hooks';
-import { Game, Table } from '../../../slices/types';
-import { RootState } from '../../../store/store';
+import type { Game, Table } from '../../../slices/types';
+import type { RootState } from '../../../store/store';
 import { PlayerScoreRow } from '../components/PlayerScoreRow';
 import ScoreEntryModal from '../components/ScoreEntryModal';
 
@@ -65,8 +65,9 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     return Number(stored) || 1;
   };
 
-  const [selectedRound, setSelectedRound] =
-    useState<number>(getPersistedRound());
+  const [selectedRound, setSelectedRound] = useState<number>(
+    getPersistedRound(),
+  );
 
   useEffect(() => {
     localStorage.setItem(

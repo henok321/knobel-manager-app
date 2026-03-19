@@ -4,7 +4,7 @@ import {
   Flex,
   Group,
   Paper,
-  PaperProps,
+  type PaperProps,
   PasswordInput,
   Stack,
   Text,
@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { LoginData } from '../auth/AuthContext';
+import type { LoginData } from '../auth/AuthContext';
 import { useAuth } from '../auth/useAuth';
 import CenterLoader from '../shared/CenterLoader';
 import Layout from '../shared/layout/Layout.tsx';

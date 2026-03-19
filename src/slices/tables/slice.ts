@@ -4,13 +4,13 @@ import {
   createSlice,
 } from '@reduxjs/toolkit';
 
+import type { RootState } from '../../store/store';
+import type { Table } from '../types';
 import {
   fetchAllTablesForGame,
   fetchTablesForRound,
   updateScoresForTable,
 } from './actions';
-import { RootState } from '../../store/store';
-import type { Table } from '../types';
 
 const tablesAdapter = createEntityAdapter<Table>();
 
@@ -128,8 +128,8 @@ const selectTablesForRoundWithSearch = createSelector(
 );
 
 export {
-  selectTablesByRoundNumber,
   selectAllTables,
+  selectTablesByRoundNumber,
   selectTablesForRoundWithSearch,
 };
 

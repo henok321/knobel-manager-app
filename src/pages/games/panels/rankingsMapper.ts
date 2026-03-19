@@ -1,8 +1,8 @@
-import {
+import type {
   Player,
-  Team,
   Score,
   Table as TableModel,
+  Team,
 } from '../../../slices/types';
 
 interface PlayerRanking {
@@ -26,15 +26,15 @@ const mapPlayersToRankings = (
 ): PlayerRanking[] => {
   const rankings: PlayerRanking[] = [];
 
-  teams.forEach((team) => {
+  for (const team of teams) {
     if (!team) {
-      return;
+      continue;
     }
 
-    team.players.forEach((playerID) => {
+    for (const playerID of team.players) {
       const player = players.find((p) => p.id === playerID);
       if (!player) {
-        return;
+        continue;
       }
 
       rankings.push({
@@ -44,8 +44,8 @@ const mapPlayersToRankings = (
         teamName: team.name,
         totalScore: scoresByPlayer[playerID] || 0,
       });
-    });
-  });
+    }
+  }
 
   return rankings.sort((a, b) => b.totalScore - a.totalScore);
 };
@@ -56,16 +56,16 @@ const mapTeamsToRankings = (
 ): TeamRanking[] => {
   const teamScores: Record<number, number> = {};
 
-  teams.forEach((team) => {
+  for (const team of teams) {
     if (team) {
       teamScores[team.id] = 0;
     }
-  });
+  }
 
-  playerRankings.forEach((playerRank) => {
+  for (const playerRank of playerRankings) {
     teamScores[playerRank.teamID] =
       (teamScores[playerRank.teamID] || 0) + playerRank.totalScore;
-  });
+  }
 
   const rankings: TeamRanking[] = Object.entries(teamScores).map(
     ([teamIDStr, totalScore]) => {
@@ -87,17 +87,18 @@ const aggregateScoresFromTables = (
 ): Record<number, number> => {
   const allScores: Record<number, number> = {};
 
-  tables.forEach((table) => {
+  for (const table of tables) {
     if (table.scores && Array.isArray(table.scores)) {
-      table.scores.forEach((score: Score) => {
+      for (const score of table.scores as Score[]) {
         const playerID = score.playerID;
         const scoreValue = score.score || 0;
         allScores[playerID] = (allScores[playerID] || 0) + scoreValue;
-      });
+      }
     }
-  });
+  }
 
   return allScores;
 };
+
 export type { PlayerRanking, TeamRanking };
-export { mapPlayersToRankings, mapTeamsToRankings, aggregateScoresFromTables };
+export { aggregateScoresFromTables, mapPlayersToRankings, mapTeamsToRankings };

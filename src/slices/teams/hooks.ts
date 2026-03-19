@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import type { TeamsRequest } from '../../generated';
+import type { AppDispatch, RootState } from '../../store/store.ts';
 import {
   createTeamAction,
   deleteTeamAction,
@@ -11,8 +13,6 @@ import {
   selectTeamsByGameId,
   selectTeamsByIds,
 } from './slice.ts';
-import { TeamsRequest } from '../../generated';
-import { AppDispatch, RootState } from '../../store/store.ts';
 
 export const useTeamsByIds = (teamIDs: number[]) =>
   useSelector((state: RootState) => selectTeamsByIds(state, teamIDs));

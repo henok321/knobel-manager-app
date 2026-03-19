@@ -1,6 +1,6 @@
 import { Group, rem, Stack, Text } from '@mantine/core';
 import { IconLanguage, IconPalette } from '@tabler/icons-react';
-import React from 'react';
+import type React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ColorSchemeToggle from './ColorSchemeToggle.tsx';

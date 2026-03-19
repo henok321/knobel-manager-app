@@ -1,6 +1,6 @@
 import { Group, SegmentedControl, useMantineColorScheme } from '@mantine/core';
 import { IconDeviceDesktop, IconMoon, IconSun } from '@tabler/icons-react';
-import React from 'react';
+import type React from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ColorSchemeToggle: React.FC = () => {

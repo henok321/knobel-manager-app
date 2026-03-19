@@ -1,7 +1,12 @@
-import { Title, Text, Paper, Table, Stack } from '@mantine/core';
+import { Paper, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { Table as TableType, Player, Game, Team } from '../../../slices/types';
+import type {
+  Game,
+  Player,
+  Table as TableType,
+  Team,
+} from '../../../slices/types';
 
 interface ScoreSheetsViewProps {
   game: Game;

@@ -1,7 +1,7 @@
 import { Anchor, Container, Group, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconBrandGithub, IconLicense } from '@tabler/icons-react';
-import React from 'react';
+import type React from 'react';
 import { useTranslation } from 'react-i18next';
 
 const GITHUB_URL = 'https://github.com/henok321/knobel-manager-app';

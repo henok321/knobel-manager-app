@@ -2,8 +2,10 @@
  * @jest-environment node
  */
 
-import { http, HttpResponse } from 'msw';
+import { HttpResponse, http } from 'msw';
 
+import { server } from '../../test/setup/msw';
+import { createTestStore } from '../../test/setup/store';
 import {
   createGameAction,
   deleteGameAction,
@@ -11,8 +13,6 @@ import {
   updateGameAction,
 } from './actions';
 import { selectAllGames, selectGamesError, selectGamesStatus } from './slice';
-import { server } from '../../test/setup/msw';
-import { createTestStore } from '../../test/setup/store';
 
 describe('Games Actions + Slice', () => {
   describe('createGameAction', () => {

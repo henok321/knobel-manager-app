@@ -46,8 +46,8 @@ jobs:
       - name: Setup project
         uses: ./.github/actions/setup-project
 
-      - name: Run linting checks
-        run: pnpm lint
+      - name: Biome CI (lint + format check)
+        run: pnpm check
 
       - name: Knip (production check)
         run: pnpm knip

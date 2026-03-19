@@ -4,18 +4,19 @@ import {
   Divider,
   Group,
   Menu,
+  rem,
   Stack,
   Text,
   UnstyledButton,
-  rem,
   useMantineTheme,
 } from '@mantine/core';
 import { IconChevronDown, IconLogout } from '@tabler/icons-react';
-import React, { CSSProperties } from 'react';
+import type React from 'react';
+import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import SettingsSection from './SettingsSection.tsx';
 import { useAuth } from '../../auth/useAuth.ts';
+import SettingsSection from './SettingsSection.tsx';
 
 interface UserMenuProps {
   onLogout: () => void;

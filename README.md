@@ -52,10 +52,10 @@ pnpm deploy  # Build + Firebase deploy
 ## Code Quality
 
 ```bash
-pnpm fix   # Auto-fix linting and formatting (runs on pre-commit)
-pnpm lint  # ESLint check
-pnpm test  # Run tests
-pnpm knip  # Check for unused files/dependencies
+pnpm fix    # Auto-fix linting and formatting (runs on pre-commit)
+pnpm check  # Biome CI check — lint + format (read-only)
+pnpm test   # Run tests
+pnpm knip   # Check for unused files/dependencies
 ```
 
 ## Maintenance

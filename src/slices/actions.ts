@@ -1,8 +1,8 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { client } from '../api/apiClient';
-import { getGames, type GamesResponse } from '../generated';
-import { NormalizedData } from './types';
+import { type GamesResponse, getGames } from '../generated';
+import type { NormalizedData } from './types';
 
 export const resetStore = createAction('store/reset');
 
@@ -27,7 +27,7 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
     scores: {},
   };
 
-  apiData.games.forEach((apiGame) => {
+  for (const apiGame of apiData.games) {
     const gameID = apiGame.id;
     normalizedData.games[gameID] = {
       id: apiGame.id,
@@ -41,19 +41,19 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
       rounds: apiGame.rounds?.map((round) => round.id) || [],
     };
 
-    apiGame.teams?.forEach((apiTeam) => {
+    for (const apiTeam of apiGame.teams ?? []) {
       const teamID = apiTeam.id;
       normalizedData.teams[teamID] = {
         ...apiTeam,
         players: apiTeam.players?.map((player) => player.id) || [],
       };
 
-      apiTeam.players?.forEach((player) => {
+      for (const player of apiTeam.players ?? []) {
         normalizedData.players[player.id] = { ...player };
-      });
-    });
+      }
+    }
 
-    apiGame.rounds?.forEach((round) => {
+    for (const round of apiGame.rounds ?? []) {
       const roundID = round.id;
       normalizedData.rounds[roundID] = {
         id: round.id,
@@ -63,18 +63,18 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
         tables: round.tables?.map((table) => table.id) || [],
       };
 
-      round.tables?.forEach((table) => {
+      for (const table of round.tables ?? []) {
         const tableId = table.id;
         normalizedData.tables[tableId] = {
           ...table,
           roundNumber: round.roundNumber,
         };
-        table.scores?.forEach((score) => {
+        for (const score of table.scores ?? []) {
           normalizedData.scores[score.id] = score;
-        });
-      });
-    });
-  });
+        }
+      }
+    }
+  }
 
   return normalizedData;
 };

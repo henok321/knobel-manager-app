@@ -1,10 +1,10 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
-import { RootState } from '../../store/store.ts';
+import type { RootState } from '../../store/store.ts';
 import { fetchAll } from '../actions.ts';
-import { deletePlayerAction, updatePlayerAction } from './actions.ts';
 import { createTeamAction } from '../teams/actions.ts';
-import { Player } from '../types.ts';
+import type { Player } from '../types.ts';
+import { deletePlayerAction, updatePlayerAction } from './actions.ts';
 
 type AdditionalPlayerState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed';

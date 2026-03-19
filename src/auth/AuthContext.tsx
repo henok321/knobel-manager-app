@@ -3,9 +3,10 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
-  User,
+  type User,
 } from 'firebase/auth';
-import React, {
+import type React from 'react';
+import {
   createContext,
   useCallback,
   useEffect,
@@ -13,9 +14,9 @@ import React, {
   useState,
 } from 'react';
 
-import { auth as firebaseAuth } from './firebaseConfig.ts';
 import { resetStore } from '../slices/actions.ts';
 import store from '../store/store.ts';
+import { auth as firebaseAuth } from './firebaseConfig.ts';
 
 type LoginData = {
   email: string;

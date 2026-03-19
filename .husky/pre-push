@@ -1,4 +1,4 @@
 pnpm audit --prod --audit-level=high
 pnpm knip
-pnpm lint
+pnpm check
 pnpm test

@@ -1,15 +1,15 @@
-const { TextEncoder, TextDecoder } = require('util');
+const { TextEncoder, TextDecoder } = require('node:util');
 const {
   ReadableStream,
   TransformStream,
   WritableStream,
 } = require('web-streams-polyfill');
 
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
-global.ReadableStream = ReadableStream;
-global.TransformStream = TransformStream;
-global.WritableStream = WritableStream;
+globalThis.TextEncoder = TextEncoder;
+globalThis.TextDecoder = TextDecoder;
+globalThis.ReadableStream = ReadableStream;
+globalThis.TransformStream = TransformStream;
+globalThis.WritableStream = WritableStream;
 
 class BroadcastChannelMock {
   constructor(name) {
@@ -20,10 +20,11 @@ class BroadcastChannelMock {
   addEventListener() {}
   removeEventListener() {}
 }
-global.BroadcastChannel = BroadcastChannelMock;
+
+globalThis.BroadcastChannel = BroadcastChannelMock;
 
 const localStorageMock = (() => {
-  let store = new Map();
+  const store = new Map();
   return {
     getItem: (key) => (store.has(key) ? store.get(key) : null),
     setItem: (key, value) => {
@@ -38,9 +39,9 @@ const localStorageMock = (() => {
   };
 })();
 
-global.localStorage = localStorageMock;
+globalThis.localStorage = localStorageMock;
 
-global.importMeta = {
+globalThis.importMeta = {
   env: {
     PROD: false,
     VITE_API_URL: 'http://localhost:8080',

@@ -4,11 +4,11 @@ import { client } from '../../api/apiClient';
 import {
   createGame,
   deleteGame,
+  type GameCreateRequest,
+  type GameUpdateRequest,
   getGame,
   setupGame,
   updateGame,
-  type GameCreateRequest,
-  type GameUpdateRequest,
 } from '../../generated';
 import { normalizeGame, normalizeGameResponse } from '../normalize';
 import type { Game } from '../types';

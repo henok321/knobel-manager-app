@@ -1,6 +1,6 @@
 import { Alert, Button, Container, Stack, Text, Title } from '@mantine/core';
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { type WithTranslation, withTranslation } from 'react-i18next';
 
 interface ErrorBoundaryProps extends WithTranslation {
   children: ReactNode;
