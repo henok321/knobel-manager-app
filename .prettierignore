@@ -1,8 +1,0 @@
-node_modules/
-dist/
-build/
-coverage/
-.claude/
-src/generated/
-'.playwright-mcp',
-.pnp.*
