@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "packageManager": "pnpm@10.32.1",
+  "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=24.0.0 <25.0.0",
     "pnpm": ">=10.0.0"
@@ -36,24 +36,24 @@
     "@mantine/modals": "^8.3.18",
     "@mantine/notifications": "^8.3.18",
     "@reduxjs/toolkit": "^2.11.2",
-    "@tabler/icons-react": "^3.40.0",
+    "@tabler/icons-react": "^3.41.0",
     "axios": "^1.13.6",
     "firebase": "^12.11.0",
-    "i18next": "^25.8.19",
+    "i18next": "^25.10.10",
     "i18next-browser-languagedetector": "^8.2.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-i18next": "^16.5.8",
+    "react-i18next": "^16.6.6",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^7.13.1",
+    "react-router-dom": "^7.13.2",
     "redux": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.2",
     "@babel/preset-typescript": "^7.28.5",
-    "@biomejs/biome": "^2.4.8",
-    "@hey-api/openapi-ts": "^0.94.3",
+    "@biomejs/biome": "^2.4.9",
+    "@hey-api/openapi-ts": "^0.94.5",
     "@playwright/test": "^1.58.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^30.0.0",
@@ -68,21 +68,21 @@
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
     "jest-util": "^30.3.0",
-    "knip": "^5.88.1",
+    "knip": "^6.0.6",
     "lint-staged": "^16.4.0",
-    "msw": "^2.12.13",
+    "msw": "^2.12.14",
     "postcss": "^8.5.8",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
     "ts-jest": "^29.4.6",
-    "typescript": "^5.9.3",
-    "vite": "^8.0.1",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.3",
     "vite-plugin-mkcert": "^1.17.10",
     "web-streams-polyfill": "^4.2.0",
     "whatwg-fetch": "^3.6.20"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.59.0"
+    "@rollup/rollup-linux-x64-gnu": "^4.60.0"
   },
   "pnpm": {
     "overrides": {
