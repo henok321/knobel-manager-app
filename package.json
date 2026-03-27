@@ -68,7 +68,7 @@
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
     "jest-util": "^30.3.0",
-    "knip": "^5.88.1",
+    "knip": "^6.0.0",
     "lint-staged": "^16.4.0",
     "msw": "^2.12.13",
     "postcss": "^8.5.8",
