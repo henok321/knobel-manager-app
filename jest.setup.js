@@ -1,23 +1,19 @@
 const { TextEncoder, TextDecoder } = require('node:util');
-const {
-  ReadableStream,
-  TransformStream,
-  WritableStream,
-} = require('web-streams-polyfill');
 
 globalThis.TextEncoder = TextEncoder;
 globalThis.TextDecoder = TextDecoder;
-globalThis.ReadableStream = ReadableStream;
-globalThis.TransformStream = TransformStream;
-globalThis.WritableStream = WritableStream;
 
 class BroadcastChannelMock {
   constructor(name) {
     this.name = name;
   }
+
   postMessage() {}
+
   close() {}
+
   addEventListener() {}
+
   removeEventListener() {}
 }
 
