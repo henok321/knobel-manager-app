@@ -14,7 +14,7 @@ const getBaseUrl = () => {
 export const client = createClient(
   createConfig({
     auth: () => firebaseAuth.currentUser?.getIdToken(),
-    baseURL: getBaseUrl(),
+    baseUrl: getBaseUrl(),
     throwOnError: true,
   }),
 );
