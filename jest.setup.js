@@ -44,7 +44,6 @@ globalThis.importMeta = {
   },
 };
 
-require('whatwg-fetch');
 require('@testing-library/jest-dom');
 
 jest.mock('./src/auth/firebaseConfig', () => ({

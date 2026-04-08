@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     ...defaultPlugins,
     {
-      name: '@hey-api/client-axios',
+      name: '@hey-api/client-fetch',
     },
   ],
 });
