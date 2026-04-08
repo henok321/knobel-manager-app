@@ -13,9 +13,10 @@ export default {
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   transform: {
-    '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest',
+    '^.+\\.(ts|tsx|js|jsx|mjs)$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(.pnpm|msw|@mswjs|@bundled-es-modules|until-async)/)',
+    'node_modules/(?!(.pnpm|msw|@mswjs|@bundled-es-modules|until-async|rettime)/)',
   ],
+  testPathIgnorePatterns: ['/node_modules/', '/.claude/'],
 };
