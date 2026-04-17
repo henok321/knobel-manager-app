@@ -16,7 +16,7 @@ export default {
     '^.+\\.(ts|tsx|js|jsx|mjs)$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(.pnpm|msw|@mswjs|@bundled-es-modules|until-async|rettime)/)',
+    'node_modules/(?!(.pnpm|msw|@mswjs|@bundled-es-modules|until-async|rettime|@open-draft)/)',
   ],
   testPathIgnorePatterns: ['/node_modules/', '/.claude/'],
 };
