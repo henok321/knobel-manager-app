@@ -10,7 +10,8 @@
     "playwright.config.ts",
     "vite.config.ts",
     ".pnp.*",
-    ".pnp.*"
+    ".pnp.*",
+    "i18next.config.ts"
   ],
   "ignoreDependencies": ["redux"],
   "vitest": false,
