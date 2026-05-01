@@ -9,6 +9,7 @@
     "completed": "Abgeschlossen"
   },
   "actions": {
+    "cancel": "Abbrechen",
     "startGame": "Spiel starten",
     "startGameConfirmation": "Bist du sicher, dass du dieses Turnier starten möchtest? Nach dem Start:",
     "startGameWarning1": "Du kannst keine weiteren Teams hinzufügen",
@@ -17,7 +18,7 @@
     "gameStartedNotification": "Spiel gestartet",
     "gameStartedMessage": "Richte die Spielpaarungen im Runden-Tab ein, um zu beginnen",
     "completeGame": "Spiel abschließen",
-    "completeGameConfirmation": "Bist du sicher, dass du dieses Turnier abschließen möchtest? Dies wird alle Punkte und Ranglisten finalisieren.",
+    "completeGameConfirmation": "Bist du sicher, dass du dieses Turnier abschließen möchtest? Dies wird alle Punkte und Ranglisten finalisieren und kann nicht rückgängig gemacht werden.",
     "completeGameDisabledTooltip": "Alle Punkte müssen für jede Runde eingetragen werden, bevor das Spiel abgeschlossen werden kann",
     "scoreProgress": "Punkte-Fortschritt: {{completed}} von {{total}} Tischen abgeschlossen",
     "printView": "Druckansicht"

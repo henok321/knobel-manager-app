@@ -9,6 +9,7 @@
     "completed": "Completed"
   },
   "actions": {
+    "cancel": "Cancel",
     "startGame": "Start Game",
     "startGameConfirmation": "Are you sure you want to start this tournament? After starting:",
     "startGameWarning1": "You won't be able to add more teams",
@@ -17,7 +18,7 @@
     "gameStartedNotification": "Game Started",
     "gameStartedMessage": "Setup matchmaking in the Rounds tab to begin",
     "completeGame": "Complete Game",
-    "completeGameConfirmation": "Are you sure you want to complete this tournament? This will finalize all scores and rankings.",
+    "completeGameConfirmation": "Are you sure you want to complete this tournament? This will finalize all scores and rankings and cannot be undone.",
     "completeGameDisabledTooltip": "All scores must be entered for every round before completing the game",
     "scoreProgress": "Score progress: {{completed}} of {{total}} tables completed",
     "printView": "Print View"
