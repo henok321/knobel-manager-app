@@ -1,42 +1,45 @@
 {
   "actions": {
-    "loading": "Loading...",
-    "error": "Error",
-    "errorOccurred": "An error occurred",
-    "success": "Success",
     "cancel": "Cancel",
     "delete": "Delete",
-    "save": "Save"
+    "error": "Error",
+    "errorOccurred": "An error occurred",
+    "loading": "Loading...",
+    "save": "Save",
+    "success": "Success"
   },
   "errorBoundary": {
-    "title": "Something went wrong",
-    "errorDetails": "Error Details",
-    "unexpectedError": "An unexpected error occurred",
     "componentStack": "Component Stack",
+    "errorDetails": "Error Details",
+    "goToHomePage": "Go to Home Page",
+    "title": "Something went wrong",
     "tryAgain": "Try Again",
-    "goToHomePage": "Go to Home Page"
+    "unexpectedError": "An unexpected error occurred"
   },
   "header": {
     "heading": "Knobel Manager",
     "logout": "Logout",
     "nav": {
+      "colorScheme": "Theme",
+      "colorSchemes": {
+        "auto": "Auto",
+        "dark": "Dark",
+        "light": "Light"
+      },
       "games": "Games",
       "language": "Language",
-      "settings": "Settings",
       "languages": {
         "english": "English",
         "german": "Deutsch"
       },
-      "colorScheme": "Theme",
-      "colorSchemes": {
-        "light": "Light",
-        "dark": "Dark",
-        "auto": "Auto"
-      }
+      "settings": "Settings"
     }
   },
   "login": {
-    "heading": "Login to your account",
+    "error": {
+      "invalidCredentials": "Invalid login credentials",
+      "unknown": "An unknown error occurred"
+    },
     "fields": {
       "email": {
         "label": "Email",
@@ -49,10 +52,7 @@
         "validationMessage": "Password must be at least 6 characters long"
       }
     },
-    "error": {
-      "invalidCredentials": "Invalid login credentials",
-      "unknown": "An unknown error occurred"
-    },
+    "heading": "Login to your account",
     "submit": "Login"
   }
 }

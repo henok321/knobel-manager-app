@@ -1,45 +1,42 @@
 {
-  "teamHandout": {
-    "title": "Team-Handout",
-    "subtitle": "Vollständiger Turnierplan für alle Teams",
-    "subtitleSingle": "Turnierplan für ausgewähltes Team",
-    "round": "Runde",
-    "table": "Tisch",
-    "player": "Spieler",
-    "assignments": "Spielerzuweisungen",
-    "notAssigned": "Nicht zugewiesen",
-    "summary": "{{players}} Spieler über {{rounds}} Runden"
-  },
-  "tablePlan": {
-    "title": "Tischplan",
-    "subtitle": "Turnier-Spielpaarungen Übersicht",
-    "round": "Runde",
-    "table": "Tisch",
-    "player": "Spieler",
-    "team": "Team",
-    "noTables": "Keine Tische für diese Runde zugewiesen"
-  },
-  "scoreSheets": {
-    "title": "Punktebögen",
-    "subtitle": "Manuelle Punkteeintragung",
-    "round": "Runde",
-    "table": "Tisch",
-    "instructions": "Der Tischsieger bekommt 4 Punkte + verbleibende Leben, der Zweitplatzierte bekommt 3 Punkte usw. Sobald das Spiel beendet wurde, gibt der Zweitplatzierte diesen Punktebogen bei der Turnierleitung ab.",
-    "player": "Spieler",
-    "team": "Team",
-    "score": "Punktzahl",
-    "notes": "Notizen",
-    "notesPlaceholder": "Zusätzliche Notizen oder Anmerkungen..."
-  },
   "rankings": {
-    "title": "Ranglisten",
-    "total": "Gesamt (Alle Runden)",
-    "teamRankings": "Team-Rangliste",
+    "noData": "Keine Ranglistendaten verfügbar",
+    "player": "Spieler",
     "playerRankings": "Spieler-Rangliste",
     "rank": "Rang",
     "team": "Team",
+    "teamRankings": "Team-Rangliste",
+    "title": "Ranglisten",
+    "total": "Gesamt (Alle Runden)",
+    "totalScore": "Gesamtpunktzahl"
+  },
+  "scoreSheets": {
+    "instructions": "Der Tischsieger bekommt 4 Punkte + verbleibende Leben, der Zweitplatzierte bekommt 3 Punkte usw. Sobald das Spiel beendet wurde, gibt der Zweitplatzierte diesen Punktebogen bei der Turnierleitung ab.",
+    "notes": "Notizen",
     "player": "Spieler",
-    "totalScore": "Gesamtpunktzahl",
-    "noData": "Keine Ranglistendaten verfügbar"
+    "round": "Runde",
+    "score": "Punktzahl",
+    "table": "Tisch",
+    "team": "Team",
+    "title": "Punktebögen"
+  },
+  "tablePlan": {
+    "noTables": "Keine Tische für diese Runde zugewiesen",
+    "player": "Spieler",
+    "round": "Runde",
+    "subtitle": "Turnier-Spielpaarungen Übersicht",
+    "table": "Tisch",
+    "team": "Team",
+    "title": "Tischplan"
+  },
+  "teamHandout": {
+    "notAssigned": "Nicht zugewiesen",
+    "player": "Spieler",
+    "round": "Runde",
+    "subtitle": "Vollständiger Turnierplan für alle Teams",
+    "subtitleSingle": "Turnierplan für ausgewähltes Team",
+    "summary": "{{players}} Spieler über {{rounds}} Runden",
+    "table": "Tisch",
+    "title": "Team-Handout"
   }
 }

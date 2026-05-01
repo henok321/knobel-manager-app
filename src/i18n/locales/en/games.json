@@ -1,56 +1,51 @@
 {
-  "heading": "Games",
-  "subtitle": "Manage all your tournaments",
-  "createGameButton": "Create game",
-  "search": "Search games...",
-  "filters": {
-    "all": "All",
-    "active": "Active",
-    "setup": "Setup"
-  },
-  "noGames": "No games yet. Create your first tournament!",
-  "noResults": "No games found matching your search.",
-  "createFirstGame": "Create Your First Game",
-  "deleteGame": "Delete Game",
-  "confirmDelete": "Are you sure you want to delete this game?",
-  "picker": {
-    "teams": "Teams"
-  },
-  "team": {
-    "form": {
-      "heading": "Create team",
-      "label": {
-        "name": "Team name",
-        "players": "Team members"
-      },
-      "addPlayer": "Add member",
-      "removePlayer": "Remove member",
-      "submit": "Create"
-    }
-  },
   "card": {
     "details": {
-      "teamSize": "Team size",
-      "tableSize": "Table size",
       "numberOfRounds": "Rounds",
+      "tableSize": "Table size",
       "teams": "Teams",
-      "status": "Status"
+      "teamSize": "Team size"
     },
-    "activateButton": "Activate",
-    "activateTooltip": "Set as active game to access quickly",
-    "deleteButton": "Delete",
-    "viewDetails": "View Details",
     "gameCreated": "Game \"{{name}}\" created successfully",
-    "teamAdded": "Team \"{{name}}\" added successfully"
+    "teamAdded": "Team \"{{name}}\" added successfully",
+    "viewDetails": "View Details"
+  },
+  "confirmDelete": "Are you sure you want to delete this game?",
+  "createFirstGame": "Create Your First Game",
+  "createGameButton": "Create game",
+  "deleteGame": "Delete Game",
+  "filters": {
+    "active": "Active",
+    "setup": "Setup"
   },
   "form": {
     "heading": "Create game",
     "label": {
       "name": "Name",
-      "teamSize": "Team size",
+      "numberOfRounds": "Number of rounds",
       "tableSize": "Table size",
-      "numberOfRounds": "Number of rounds"
+      "teamSize": "Team size"
     },
     "submit": "Create"
+  },
+  "heading": "Games",
+  "noGames": "No games yet. Create your first tournament!",
+  "noResults": "No games found matching your search.",
+  "picker": {
+    "teams": "Teams"
+  },
+  "search": "Search games...",
+  "subtitle": "Manage all your tournaments",
+  "team": {
+    "form": {
+      "addPlayer": "Add member",
+      "heading": "Create team",
+      "label": {
+        "name": "Team name",
+        "players": "Team members"
+      },
+      "removePlayer": "Remove member",
+      "submit": "Create"
+    }
   }
 }

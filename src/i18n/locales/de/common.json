@@ -1,42 +1,45 @@
 {
   "actions": {
-    "loading": "Lädt...",
-    "error": "Fehler",
-    "errorOccurred": "Ein Fehler ist aufgetreten",
-    "success": "Erfolg",
     "cancel": "Abbrechen",
     "delete": "Löschen",
-    "save": "Speichern"
+    "error": "Fehler",
+    "errorOccurred": "Ein Fehler ist aufgetreten",
+    "loading": "Lädt...",
+    "save": "Speichern",
+    "success": "Erfolg"
   },
   "errorBoundary": {
-    "title": "Etwas ist schiefgelaufen",
-    "errorDetails": "Fehlerdetails",
-    "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten",
     "componentStack": "Komponenten-Stack",
+    "errorDetails": "Fehlerdetails",
+    "goToHomePage": "Zur Startseite",
+    "title": "Etwas ist schiefgelaufen",
     "tryAgain": "Erneut versuchen",
-    "goToHomePage": "Zur Startseite"
+    "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten"
   },
   "header": {
     "heading": "Knobel-Manager",
     "logout": "Abmelden",
     "nav": {
+      "colorScheme": "Design",
+      "colorSchemes": {
+        "auto": "Auto",
+        "dark": "Dunkel",
+        "light": "Hell"
+      },
       "games": "Spiele",
       "language": "Sprache",
-      "settings": "Einstellungen",
       "languages": {
         "english": "English",
         "german": "Deutsch"
       },
-      "colorScheme": "Design",
-      "colorSchemes": {
-        "light": "Hell",
-        "dark": "Dunkel",
-        "auto": "Auto"
-      }
+      "settings": "Einstellungen"
     }
   },
   "login": {
-    "heading": "Anmelden bei Knobel-Manager",
+    "error": {
+      "invalidCredentials": "Ungültige Anmeldedaten",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten"
+    },
     "fields": {
       "email": {
         "label": "E-Mail",
@@ -49,10 +52,7 @@
         "validationMessage": "Passwort muss mindestens 6 Zeichen lang sein"
       }
     },
-    "error": {
-      "invalidCredentials": "Ungültige Anmeldedaten",
-      "unknown": "Ein unbekannter Fehler ist aufgetreten"
-    },
+    "heading": "Anmelden bei Knobel-Manager",
     "submit": "Anmelden"
   }
 }

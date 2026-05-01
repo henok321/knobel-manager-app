@@ -1,45 +1,42 @@
 {
-  "teamHandout": {
-    "title": "Team Handout",
-    "subtitle": "Complete Tournament Schedule for All Teams",
-    "subtitleSingle": "Tournament Schedule for Selected Team",
-    "round": "Round",
-    "table": "Table",
-    "player": "Player",
-    "assignments": "Player Assignments",
-    "notAssigned": "Not Assigned",
-    "summary": "{{players}} players across {{rounds}} rounds"
-  },
-  "tablePlan": {
-    "title": "Table Plan",
-    "subtitle": "Tournament Matchmaking Overview",
-    "round": "Round",
-    "table": "Table",
-    "player": "Player",
-    "team": "Team",
-    "noTables": "No tables assigned for this round"
-  },
-  "scoreSheets": {
-    "title": "Score Sheets",
-    "subtitle": "Manual Score Entry",
-    "round": "Round",
-    "table": "Table",
-    "instructions": "The winner of the table receives 4 points + remaining lives, the runner-up receives 3 points, etc. Once the game is over, the runner-up submits this score sheet to the tournament management.",
-    "player": "Player",
-    "team": "Team",
-    "score": "Score",
-    "notes": "Notes",
-    "notesPlaceholder": "Additional notes or remarks..."
-  },
   "rankings": {
-    "title": "Rankings",
-    "total": "Total (All Rounds)",
-    "teamRankings": "Team Rankings",
+    "noData": "No ranking data available",
+    "player": "Player",
     "playerRankings": "Player Rankings",
     "rank": "Rank",
     "team": "Team",
+    "teamRankings": "Team Rankings",
+    "title": "Rankings",
+    "total": "Total (All Rounds)",
+    "totalScore": "Total Score"
+  },
+  "scoreSheets": {
+    "instructions": "The winner of the table receives 4 points + remaining lives, the runner-up receives 3 points, etc. Once the game is over, the runner-up submits this score sheet to the tournament management.",
+    "notes": "Notes",
     "player": "Player",
-    "totalScore": "Total Score",
-    "noData": "No ranking data available"
+    "round": "Round",
+    "score": "Score",
+    "table": "Table",
+    "team": "Team",
+    "title": "Score Sheets"
+  },
+  "tablePlan": {
+    "noTables": "No tables assigned for this round",
+    "player": "Player",
+    "round": "Round",
+    "subtitle": "Tournament Matchmaking Overview",
+    "table": "Table",
+    "team": "Team",
+    "title": "Table Plan"
+  },
+  "teamHandout": {
+    "notAssigned": "Not Assigned",
+    "player": "Player",
+    "round": "Round",
+    "subtitle": "Complete Tournament Schedule for All Teams",
+    "subtitleSingle": "Tournament Schedule for Selected Team",
+    "summary": "{{players}} players across {{rounds}} rounds",
+    "table": "Table",
+    "title": "Team Handout"
   }
 }

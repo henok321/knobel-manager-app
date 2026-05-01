@@ -182,6 +182,9 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
             size="lg"
             variant="filled"
           >
+            {/* t('gameDetail:status.setup') */}
+            {/* t('gameDetail:status.in_progress') */}
+            {/* t('gameDetail:status.completed') */}
             {t(`gameDetail:status.${game.status}`)}
           </Badge>
           {game.status === 'setup' && (
