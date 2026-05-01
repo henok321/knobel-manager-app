@@ -163,13 +163,19 @@ i18next with browser language detection and **type-safe translations**:
 - Type augmentation: `src/i18n/i18next.d.ts` declares `CustomTypeOptions` with EN as the resource
   type. `defaultNS` is set as an array of all namespaces so `t('namespace:key')` syntax is type-checked.
 - Detection order: query string → localStorage → cookie → browser navigator
-- **Type Safety**: Translation keys are fully typed - invalid keys will cause TypeScript errors, and IDEs provide
-  autocomplete for all available keys. Caught at compile time by `pnpm check`.
-- **Unused-key detection**: `i18next-cli` (`pnpm i18n:check`) scans source via AST, reports unused keys and
-  drift. Run `pnpm i18n:scan` to apply fixes locally; `pnpm i18n:check` is the CI-safe variant that exits
-  non-zero on drift.
+- **Type Safety**: Translation keys are fully typed via `src/i18n/i18next.d.ts` — invalid keys cause
+  TypeScript errors at compile time, caught by `pnpm check`.
+- **Static checks** (all run via `pnpm check`): `i18next-cli status --hide-translated` (incomplete
+  translations), `i18next-cli lint` (hardcoded strings), `i18next-cli extract --ci` (unused keys / drift).
+  Lint also runs in `lint-staged` on staged `.ts`/`.tsx` so hardcoded strings block commits.
+- **Adding new translation keys**: add the key to both `src/i18n/locales/en/<namespace>.json` AND
+  `src/i18n/locales/de/<namespace>.json` manually before referencing it in code. `tsc` will block any
+  `t('foo:bar')` call where `bar` doesn't exist — there's no auto-creation of empty placeholders.
+- **Cleaning drift**: when `pnpm check` fails on `extract --ci` (unused keys, sort order), run
+  `pnpm exec i18next-cli extract` explicitly to apply the changes.
 - **Dynamic keys**: when calling `t()` with a template literal, add `// t('namespace:key')` comment hints
-  above the call so the extractor knows which keys are referenced (see `GameViewContent.tsx` for an example).
+  above the call so the extractor knows which keys are referenced (see
+  `src/pages/games/components/GameViewContent.tsx:185` for an example).
 
 ### Project Structure
 
