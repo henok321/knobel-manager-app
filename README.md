@@ -60,7 +60,8 @@ pnpm knip   # Check for unused files/dependencies
 
 ## Translations
 
-The default locale is `en`. The config `src/i18n/i18next.d.ts` enforces type safety for default translations. Other locales are checked with `i18next-cli status`.
+The default locale is `en`. The config `src/i18n/i18next.d.ts` enforces type safety for the default locale as a single
+source of truth. Other locales are checked with `i18next-cli status`.
 
 ```bash
 pnpm exec i18next-cli extract                      # Apply drift (sort, remove unused)
