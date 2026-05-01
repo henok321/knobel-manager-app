@@ -13,7 +13,7 @@
     "local": "vite --mode development",
     "api:gen": "openapi-ts",
     "build": "tsc -b && vite build --mode production",
-    "check": "tsc --noEmit && biome ci .",
+    "check": "tsc --noEmit && biome ci . && i18next-cli status && i18next-cli lint && i18next-cli extract --ci",
     "fix": "biome check --write .",
     "test": "jest",
     "knip": "knip --strict",
@@ -25,7 +25,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "bash -c 'tsc --noEmit'"
+      "bash -c 'tsc --noEmit'",
+      "bash -c 'pnpm exec i18next-cli lint'"
     ],
     "*": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
   },
@@ -64,6 +65,7 @@
     "babel-jest": "^30.3.0",
     "babel-plugin-transform-vite-meta-env": "^1.0.3",
     "husky": "^9.1.7",
+    "i18next-cli": "^1.56.9",
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
     "jest-util": "^30.3.0",

@@ -53,9 +53,18 @@ pnpm deploy  # Build + Firebase deploy
 
 ```bash
 pnpm fix    # Auto-fix linting and formatting (runs on pre-commit)
-pnpm check  # Biome CI check — lint + format (read-only)
+pnpm check  # tsc + biome + i18next checks (status, lint, extract --ci)
 pnpm test   # Run tests
 pnpm knip   # Check for unused files/dependencies
+```
+
+## Translations
+
+The default locale is `en`. The config `src/i18n/i18next.d.ts` enforces type safety for default translations. Other locales are checked with `i18next-cli status`.
+
+```bash
+pnpm exec i18next-cli extract                      # Apply drift (sort, remove unused)
+pnpm exec i18next-cli status de --hide-translated  # Show missing keys per namespace
 ```
 
 ## Maintenance

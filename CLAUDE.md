@@ -156,15 +156,45 @@ Axios-based API client (`src/api/apiClient.ts`) configured with:
 
 ### Internationalization
 
-i18next with browser language detection and **type-safe translations**:
+i18next with browser language detection and **type-safe translations**.
 
-- Configuration: `src/i18n/i18nConfig.ts`
+- Configuration: `src/i18n/i18nConfig.ts` (runtime: `fallbackLng: 'en'`, EN is primary)
 - Translations: `src/i18n/locales/{en,de}/*.json`
-- Type definitions: `src/i18n/i18next.d.ts` - provides TypeScript autocomplete and compile-time validation for
-  translation keys
+- Type augmentation: `src/i18n/i18next.d.ts` types `CustomTypeOptions` against EN's JSON via `typeof`.
+  `defaultNS` is declared as an array of all namespaces so `t('namespace:key')` syntax is type-checked.
 - Detection order: query string → localStorage → cookie → browser navigator
-- **Type Safety**: Translation keys are fully typed - invalid keys will cause TypeScript errors, and IDEs provide
-  autocomplete for all available keys
+
+**Layered enforcement** (each layer covers a different concern; the languages have asymmetric roles):
+
+| Concern | Caught by | Stage |
+|---|---|---|
+| EN has the key | `tsc --noEmit` (type augmentation against EN) | edit-time |
+| DE has the key (structurally) | `i18next-cli extract --ci` (writes all configured locales) | `pnpm check` |
+| Every secondary locale is complete | `i18next-cli status` (fails on any incomplete locale) | `pnpm check` |
+| No hardcoded strings in code | `i18next-cli lint` | `pnpm check` + lint-staged on staged `.ts`/`.tsx` |
+| Runtime safety net | `fallbackLng: 'en'` | runtime |
+
+`tsc` validates only the *source* language by design — that mirrors the workflow: author EN keys first,
+translate DE later. `extract --ci` and `status` are what guarantee DE catches up before merge.
+
+**Adding new translation keys**: add the key to both `en/<namespace>.json` AND `de/<namespace>.json`
+manually before referencing it in code. `pnpm fix` no longer auto-creates empty placeholders — that
+was removed deliberately so missing keys surface as `tsc` errors instead.
+
+**Cleaning drift**: when `pnpm check` fails on `extract --ci` (unused keys, sort order), run
+`pnpm exec i18next-cli extract` explicitly to apply the changes.
+
+**Dynamic keys**: when calling `t()` with a template literal, add `// t('namespace:key')` comment
+hints above the call so the extractor knows which keys are referenced (see
+`src/pages/games/components/GameViewContent.tsx:185` for an example).
+
+**Adding a new locale**: add it to `locales` in `i18next.config.ts` and to `supportedLngs` in
+`i18nConfig.ts`. `status` covers all configured locales automatically, so the `check` script
+doesn't need to change. Type augmentation doesn't need to change either (still types against EN).
+
+**Debugging incomplete translations**: when `pnpm check` fails on `status` and you need to see which
+keys are missing, run `pnpm exec i18next-cli status <locale> --hide-translated`
+(e.g. `status de --hide-translated`).
 
 ### Project Structure
 
