@@ -6,7 +6,7 @@
   "status": {
     "setup": "Setup",
     "in_progress": "In Progress",
-    "completed": "Completed"
+    "completed": "Finalized"
   },
   "actions": {
     "cancel": "Cancel",
@@ -17,10 +17,10 @@
     "startGameWarning3": "You can begin entering scores",
     "gameStartedNotification": "Game Started",
     "gameStartedMessage": "Setup matchmaking in the Rounds tab to begin",
-    "completeGame": "Complete Game",
-    "completeGameConfirmation": "Are you sure you want to complete this tournament? This will finalize all scores and rankings and cannot be undone.",
-    "completeGameDisabledTooltip": "All scores must be entered for every round before completing the game",
-    "scoreProgress": "Score progress: {{completed}} of {{total}} tables completed",
+    "completeGame": "Finalize Game",
+    "completeGameConfirmation": "Are you sure you want to finalize this tournament? All scores and rankings will be locked permanently and cannot be changed anymore.",
+    "completeGameDisabledTooltip": "All scores must be entered for every round before finalizing the game",
+    "scoreProgress": "Score progress: {{completed}} of {{total}} tables scored",
     "printView": "Print View"
   },
   "printMenu": {

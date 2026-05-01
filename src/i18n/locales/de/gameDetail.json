@@ -18,9 +18,9 @@
     "gameStartedNotification": "Spiel gestartet",
     "gameStartedMessage": "Richte die Spielpaarungen im Runden-Tab ein, um zu beginnen",
     "completeGame": "Spiel abschließen",
-    "completeGameConfirmation": "Bist du sicher, dass du dieses Turnier abschließen möchtest? Dies wird alle Punkte und Ranglisten finalisieren und kann nicht rückgängig gemacht werden.",
+    "completeGameConfirmation": "Bist du sicher, dass du dieses Turnier abschließen möchtest? Alle Punkte und Ranglisten werden dauerhaft gesperrt und können nicht geändert werden.",
     "completeGameDisabledTooltip": "Alle Punkte müssen für jede Runde eingetragen werden, bevor das Spiel abgeschlossen werden kann",
-    "scoreProgress": "Punkte-Fortschritt: {{completed}} von {{total}} Tischen abgeschlossen",
+    "scoreProgress": "Punkte-Fortschritt: {{completed}} von {{total}} Tischen bewertet",
     "printView": "Druckansicht"
   },
   "printMenu": {

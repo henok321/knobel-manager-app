@@ -151,7 +151,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         confirm: t('gameDetail:actions.completeGame'),
         cancel: t('gameDetail:actions.cancel'),
       },
-      confirmProps: { color: 'green' },
+      confirmProps: { color: 'red' },
       onConfirm: () => handleStatusTransition('completed'),
     });
   };
@@ -202,7 +202,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
               }
             >
               <Button
-                color="green"
+                color="red"
                 disabled={!canComplete}
                 size="sm"
                 onClick={confirmCompleteGame}
