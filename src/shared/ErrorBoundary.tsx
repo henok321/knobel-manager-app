@@ -1,4 +1,12 @@
-import { Alert, Button, Container, Stack, Text, Title } from '@mantine/core';
+import {
+  Alert,
+  Button,
+  Container,
+  rem,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { type WithTranslation, withTranslation } from 'react-i18next';
 
@@ -83,7 +91,7 @@ class ErrorBoundaryComponent extends Component<
                   size="xs"
                   style={{
                     overflow: 'auto',
-                    maxHeight: '300px',
+                    maxHeight: rem(300),
                     fontFamily: 'monospace',
                   }}
                 >

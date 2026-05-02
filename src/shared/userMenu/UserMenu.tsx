@@ -32,7 +32,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
     user?.displayName || user?.email?.split('@')[0] || 'User';
 
   const buttonStyle: CSSProperties = {
-    padding: '8px 12px',
+    padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
     borderRadius: theme.radius.sm,
     transition: 'background-color 150ms ease',
     backgroundColor: 'transparent',

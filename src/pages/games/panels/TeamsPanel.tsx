@@ -216,12 +216,12 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                         justify="space-between"
                         wrap="wrap"
                       >
-                        <Stack gap="4px" style={{ flex: 1 }}>
+                        <Stack gap={4} style={{ flex: 1 }}>
                           <Text size="sm">{player.name}</Text>
                           {showTableAssignments &&
                             (playerTableAssignments[player.id]?.length ?? 0) >
                               0 && (
-                              <Group gap="4px" wrap="wrap">
+                              <Group gap={4} wrap="wrap">
                                 {(playerTableAssignments[player.id] ?? [])
                                   .slice()
                                   .sort((a, b) => a.roundNumber - b.roundNumber)

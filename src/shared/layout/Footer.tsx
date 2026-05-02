@@ -1,4 +1,11 @@
-import { Anchor, Container, Group, Text } from '@mantine/core';
+import {
+  Anchor,
+  Container,
+  Group,
+  rem,
+  Text,
+  useMantineTheme,
+} from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconBrandGithub, IconLicense } from '@tabler/icons-react';
 import type React from 'react';
@@ -9,7 +16,8 @@ const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
 
 const Footer: React.FC = () => {
   const { t } = useTranslation();
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const theme = useMantineTheme();
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
 
   return (
     <Container
@@ -37,7 +45,7 @@ const Footer: React.FC = () => {
           target="_blank"
         >
           <Group gap={4}>
-            <IconBrandGithub size={isMobile ? 14 : 16} />
+            <IconBrandGithub size={rem(isMobile ? 14 : 16)} />
             {t('footer:links.github')}
           </Group>
         </Anchor>
@@ -55,7 +63,7 @@ const Footer: React.FC = () => {
         >
           <Group gap={4}>
             {' '}
-            <IconLicense size={isMobile ? 14 : 16} />
+            <IconLicense size={rem(isMobile ? 14 : 16)} />
             {t('footer:links.license')}
           </Group>
         </Anchor>

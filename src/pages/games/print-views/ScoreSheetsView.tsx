@@ -1,4 +1,4 @@
-import { Paper, Stack, Table, Text, Title } from '@mantine/core';
+import { Paper, rem, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import type {
@@ -65,7 +65,7 @@ const ScoreSheetsView = ({
                     <Table.Tr>
                       <Table.Th>{t('pdf:scoreSheets.player')}</Table.Th>
                       <Table.Th>{t('pdf:scoreSheets.team')}</Table.Th>
-                      <Table.Th style={{ width: '80px' }}>
+                      <Table.Th style={{ width: rem(80) }}>
                         {t('pdf:scoreSheets.score')}
                       </Table.Th>
                     </Table.Tr>
@@ -77,7 +77,9 @@ const ScoreSheetsView = ({
                         <Table.Tr key={player.id}>
                           <Table.Td>{player.name}</Table.Td>
                           <Table.Td>{team?.name || '-'}</Table.Td>
-                          <Table.Td style={{ height: '40px' }}>&nbsp;</Table.Td>
+                          <Table.Td style={{ height: rem(40) }}>
+                            &nbsp;
+                          </Table.Td>
                         </Table.Tr>
                       );
                     })}
