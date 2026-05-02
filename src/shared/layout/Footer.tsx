@@ -18,7 +18,6 @@ const Footer: React.FC = () => {
       style={{
         backgroundColor: 'var(--mantine-color-gray-0)',
         borderTop: '1px solid var(--mantine-color-gray-3)',
-        marginTop: 'auto',
       }}
     >
       <Group gap={isMobile ? 'xs' : 'md'} justify="center" wrap="wrap">

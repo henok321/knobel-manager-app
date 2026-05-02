@@ -12,19 +12,14 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ navbarActive, children }) => (
   <AppShell
-    footer={{ height: 'auto' }}
-    header={{ height: 60 }}
+    footer={{ height: { base: '5rem', sm: '3.5rem' } }}
+    header={{ height: '3.75rem' }}
     padding={0}
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '100vh',
-    }}
   >
     <AppShell.Header>
       <Header navbarActive={navbarActive} />
     </AppShell.Header>
-    <AppShell.Main style={{ flex: 1 }}>{children}</AppShell.Main>
+    <AppShell.Main>{children}</AppShell.Main>
     <AppShell.Footer>
       <Footer />
     </AppShell.Footer>
