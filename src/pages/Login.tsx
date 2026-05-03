@@ -21,6 +21,7 @@ import type { LoginData } from '../auth/AuthContext';
 import { useAuth } from '../auth/useAuth';
 import CenterLoader from '../shared/CenterLoader';
 import Layout from '../shared/layout/Layout.tsx';
+import { assertNever } from '../utils/assertNever.ts';
 
 const Login = (props: PaperProps) => {
   const { user, loading, loginAction } = useAuth();
@@ -51,6 +52,16 @@ const Login = (props: PaperProps) => {
     const loginResult = await loginAction(formData);
 
     if (loginResult) {
+      switch (loginResult.code) {
+        case 'INVALID_CREDENTIALS':
+          setLoginError(t('common:login.error.invalidCredentials'));
+          break;
+        case 'UNKNOWN_ERROR':
+          setLoginError(t('common:login.error.unknown'));
+          break;
+        default:
+          assertNever(loginResult.code);
+      }
       if (loginResult.code === 'INVALID_CREDENTIALS') {
         setLoginError(t('common:login.error.invalidCredentials'));
       } else {
