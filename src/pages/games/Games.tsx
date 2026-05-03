@@ -18,6 +18,8 @@ import { useTranslation } from 'react-i18next';
 import CenterLoader from '../../shared/CenterLoader';
 import Layout from '../../shared/layout/Layout.tsx';
 import useGames from '../../slices/games/hooks';
+import type { Game } from '../../slices/types.ts';
+import { assertNever } from '../../utils/assertNever';
 import GameListItem from './components/GameListItem';
 import GameForm from './GameForm';
 
@@ -40,12 +42,22 @@ const Games = () => {
       game.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
-    return {
-      activeAndInProgressGames: filtered.filter(
-        (game) => game.status === 'setup' || game.status === 'in_progress',
-      ),
-      completedGames: filtered.filter((game) => game.status === 'completed'),
-    };
+    const activeAndInProgressGames: Game[] = [];
+    const completedGames: Game[] = [];
+    for (const game of filtered) {
+      switch (game.status) {
+        case 'setup':
+        case 'in_progress':
+          activeAndInProgressGames.push(game);
+          break;
+        case 'completed':
+          completedGames.push(game);
+          break;
+        default:
+          assertNever(game.status);
+      }
+    }
+    return { activeAndInProgressGames, completedGames };
   }, [allGames, searchQuery]);
 
   const handleDeleteGame = (gameID: number) => {

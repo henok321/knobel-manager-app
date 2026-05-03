@@ -20,14 +20,33 @@ import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
 import { selectTablesForRoundWithSearch } from '../../../slices/tables/slice';
 import useTeams from '../../../slices/teams/hooks';
-import type { Game, Table } from '../../../slices/types';
+import type { Game, GameStatus, Table } from '../../../slices/types';
 import type { RootState } from '../../../store/store';
+import { assertNever } from '../../../utils/assertNever';
 import { PlayerScoreRow } from '../components/PlayerScoreRow';
 import ScoreEntryModal from '../components/ScoreEntryModal';
 
 interface RoundsPanelProps {
   game: Game;
 }
+
+interface RoundsPermissions {
+  canEditScores: boolean;
+  canSetupMatchmaking: boolean;
+}
+
+const getRoundsPermissions = (status: GameStatus): RoundsPermissions => {
+  switch (status) {
+    case 'setup':
+      return { canEditScores: false, canSetupMatchmaking: true };
+    case 'in_progress':
+      return { canEditScores: true, canSetupMatchmaking: false };
+    case 'completed':
+      return { canEditScores: false, canSetupMatchmaking: false };
+    default:
+      return assertNever(status);
+  }
+};
 
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
@@ -46,8 +65,9 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const canEditScores = game.status === 'in_progress';
-  const canSetupMatchmaking = game.status === 'setup';
+  const { canEditScores, canSetupMatchmaking } = getRoundsPermissions(
+    game.status,
+  );
   const hasRounds = (game.rounds?.length || 0) > 0;
   const isSetupMode = !hasRounds || allTables.length === 0;
 

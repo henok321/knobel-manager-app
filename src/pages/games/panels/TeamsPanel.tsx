@@ -17,13 +17,33 @@ import { useTranslation } from 'react-i18next';
 import usePlayers from '../../../slices/players/hooks';
 import useTables from '../../../slices/tables/hooks';
 import useTeams, { useTeamsByGameId } from '../../../slices/teams/hooks';
-import type { Game } from '../../../slices/types';
+import type { Game, GameStatus } from '../../../slices/types';
+import { assertNever } from '../../../utils/assertNever';
 import TeamForm, { type TeamFormData } from '../components/TeamForm';
 import EditTeamDialog from './EditTeamDialog.tsx';
 
 interface TeamsPanelProps {
   game: Game;
 }
+
+interface TeamsPermissions {
+  canAddDelete: boolean;
+  canEdit: boolean;
+  isCompleted: boolean;
+}
+
+const getTeamsPermissions = (status: GameStatus): TeamsPermissions => {
+  switch (status) {
+    case 'setup':
+      return { canAddDelete: true, canEdit: true, isCompleted: false };
+    case 'in_progress':
+      return { canAddDelete: false, canEdit: true, isCompleted: false };
+    case 'completed':
+      return { canAddDelete: false, canEdit: false, isCompleted: true };
+    default:
+      return assertNever(status);
+  }
+};
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
@@ -34,9 +54,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
 
-  const canAddDelete = game.status === 'setup';
-  const canEdit = game.status === 'setup' || game.status === 'in_progress';
-  const isCompleted = game.status === 'completed';
+  const { canAddDelete, canEdit, isCompleted } = getTeamsPermissions(
+    game.status,
+  );
 
   const roundsCount = game.rounds?.length || 0;
 

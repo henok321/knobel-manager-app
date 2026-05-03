@@ -18,6 +18,7 @@ import type { GameUpdateRequest } from '../../../generated';
 import useGames from '../../../slices/games/hooks.ts';
 import useTables from '../../../slices/tables/hooks.ts';
 import type { Game, GameStatus } from '../../../slices/types.ts';
+import { assertNever } from '../../../utils/assertNever';
 import {
   statusColor,
   statusIcon,
@@ -49,7 +50,7 @@ const getDefaultTab = (status: GameStatus): GameTab => {
     case 'completed':
       return 'rankings';
     default:
-      return 'teams';
+      return assertNever(status);
   }
 };
 
