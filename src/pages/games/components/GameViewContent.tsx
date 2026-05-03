@@ -19,8 +19,9 @@ import useGames from '../../../slices/games/hooks.ts';
 import useTables from '../../../slices/tables/hooks.ts';
 import type { Game, GameStatus } from '../../../slices/types.ts';
 import {
-  getStatusColor,
-  getStatusIcon,
+  statusColor,
+  statusIcon,
+  translateGameStatus,
 } from '../../../utils/gameStatusHelpers';
 import RankingsPanel from '../panels/RankingsPanel.tsx';
 import RoundsPanel from '../panels/RoundsPanel.tsx';
@@ -177,15 +178,12 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         </div>
         <Group gap="sm">
           <Badge
-            color={getStatusColor(game.status)}
-            leftSection={getStatusIcon(game.status)}
+            color={statusColor(game.status)}
+            leftSection={statusIcon(game.status)}
             size="lg"
             variant="filled"
           >
-            {/* t('gameDetail:status.setup') */}
-            {/* t('gameDetail:status.in_progress') */}
-            {/* t('gameDetail:status.completed') */}
-            {t(`gameDetail:status.${game.status}`)}
+            {translateGameStatus(t, game.status)}
           </Badge>
           {game.status === 'setup' && (
             <Button color="blue" size="sm" onClick={confirmStartGame}>

@@ -184,9 +184,13 @@ was removed deliberately so missing keys surface as `tsc` errors instead.
 **Cleaning drift**: when `pnpm check` fails on `extract --ci` (unused keys, sort order), run
 `pnpm exec i18next-cli extract` explicitly to apply the changes.
 
-**Dynamic keys**: when calling `t()` with a template literal, add `// t('namespace:key')` comment
-hints above the call so the extractor knows which keys are referenced (see
-`src/pages/games/components/GameViewContent.tsx:185` for an example).
+**Avoid dynamic keys**: never call `t()` with a template literal or interpolated string
+(e.g. `` t(`gameDetail:status.${status}`) ``). Type augmentation only validates static
+literal keys, so dynamic keys silently bypass the EN-source check and the extractor can't
+see them either. Instead, branch on the variant with a `switch` (or lookup map) and call
+`t()` with a static literal in each arm. Prefer making the variant a union type so the
+switch is exhaustive — adding a new case will then fail `tsc` until the corresponding
+translation key is wired up.
 
 **Adding a new locale**: add it to `locales` in `i18next.config.ts` and to `supportedLngs` in
 `i18nConfig.ts`. `status` covers all configured locales automatically, so the `check` script

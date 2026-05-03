@@ -1,8 +1,8 @@
 import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
-
+import type { TFunction } from 'i18next';
 import type { GameStatus } from '../slices/types';
 
-export const getStatusColor = (status: GameStatus): string => {
+export const statusColor = (status: GameStatus): string => {
   switch (status) {
     case 'setup':
       return 'gray';
@@ -15,7 +15,7 @@ export const getStatusColor = (status: GameStatus): string => {
   }
 };
 
-export const getStatusIcon = (status: GameStatus, size = 16) => {
+export const statusIcon = (status: GameStatus, size = 16) => {
   const style = { width: size, height: size };
 
   switch (status) {
@@ -27,5 +27,19 @@ export const getStatusIcon = (status: GameStatus, size = 16) => {
       return <IconCheck style={style} />;
     default:
       return null;
+  }
+};
+
+export const translateGameStatus = (
+  t: TFunction,
+  status: GameStatus,
+): string => {
+  switch (status) {
+    case 'in_progress':
+      return t('gameDetail:status.in_progress');
+    case 'completed':
+      return t('gameDetail:status.completed');
+    case 'setup':
+      return t('gameDetail:status.setup');
   }
 };
