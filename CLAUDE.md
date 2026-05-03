@@ -4,480 +4,211 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Knobel Manager is a tournament management application for the dice game "Knobeln" (also known as "Schocken"). Built with
-React and TypeScript, it uses Firebase Authentication with JWT tokens and communicates with a backend API provided
-by [Knobel Manager Service](https://github.com/henok321/knobel-manager-service).
-
-**Architecture Overview**: See the Mermaid diagram in README.md for a visual representation of the auth flow:
-Web App ↔ Firebase Auth (JWT) ↔ Backend Service.
+Knobel Manager is a tournament management application for the dice game "Knobeln" (also known as "Schocken"). React 19 +
+TypeScript + Redux Toolkit + Mantine UI v9, built with Vite. Auth is delegated to Firebase (JWT); all domain data comes
+from a separate backend service ([knobel-manager-service](https://github.com/henok321/knobel-manager-service)). Auth
+flow diagram: see README.md.
 
 ## Development Commands
 
-### Environment Setup
-
 ```bash
-# Install NodeJS version from .nvmrc (Node 24)
-nvm install && nvm use
-
-# Enable Corepack (required for pnpm)
-corepack enable
-
-# Install dependencies (uses pnpm with standard node_modules)
+nvm install && nvm use   # Node 24 (per .nvmrc)
+corepack enable          # required for pnpm
 pnpm install
 ```
 
-### Development Servers
-
 ```bash
-# Run with local API
-pnpm local
+# Dev servers
+pnpm local               # vite --mode development (proxies /api → VITE_API_URL, default localhost:8080)
+pnpm prod                # vite --mode production (talks to deployed API)
 
-# Run with production API
-pnpm prod
+# Quality (one entry point each — there are no separate `lint`/`format` scripts)
+pnpm fix                 # biome check --write .  (auto-fix lint + format)
+pnpm check               # tsc --noEmit && biome ci . && i18next-cli status && i18next-cli lint && i18next-cli extract --ci
+pnpm test                # jest (single file: pnpm test <path>;   watch: pnpm test --watch)
+pnpm knip                # unused-files/deps audit (--strict)
+
+# Build & deploy
+pnpm build               # tsc -b && vite build --mode production
+pnpm deploy              # build + firebase deploy --only hosting
+
+# Code generation (overwrites src/generated — never edit by hand)
+pnpm api:gen             # @hey-api/openapi-ts; pulls spec from https://api.knobel-manager.de/openapi.yaml
 ```
 
-### Build and Quality
-
-```bash
-# Build for production
-pnpm build
-
-# Run all linters and formatters (auto-fix)
-pnpm fix
-
-# Run linters separately
-pnpm lint          # ESLint (check only)
-pnpm lint:fix      # ESLint (auto-fix)
-pnpm format        # Prettier
-
-# Run tests
-pnpm test              # Run all tests
-pnpm test <path>       # Run specific test file
-pnpm test --watch      # Run tests in watch mode
-```
-
-### Deployment
-
-```bash
-# Build and deploy to Firebase
-pnpm deploy
-```
-
-### Maintenance
-
-```bash
-# Check for unused files/dependencies
-pnpm knip          # Strict check
-pnpm knip:fix      # Auto-remove unused files
-
-# Update dependencies interactively
-pnpm up -i                          # Update dependencies interactively
-pnpm dlx npm-check-updates -u -i   # Alternative updater
-
-# Clean build artifacts and dependencies
-pnpm clean         # Remove node_modules and dist directories
-pnpm install       # Clean install after removing node_modules
-```
+`pnpm fix` covers everything Biome handles. `pnpm check` is the gate that mirrors CI — run it before declaring work
+done. lint-staged runs `tsc --noEmit`, `i18next-cli lint`, and `biome check --write` on commit (Husky `pre-commit`).
 
 ## Architecture
 
-### State Management
+### State management — normalized Redux
 
-The application uses Redux Toolkit with **normalized state** using `createEntityAdapter`:
+Redux Toolkit with `createEntityAdapter` per slice. Four slices live under `src/slices/`: `games`, `teams`, `players`,
+`tables`. Each has `actions.ts` (async thunks), `slice.ts` (reducers + selectors + `extraReducers`), and `hooks.ts`
+(`useGames`, `useTeams`, `usePlayers`, `useTables`).
 
-- **Store** (`src/store/store.ts`): Combines 4 separate reducers: `games`, `teams`, `players`, `tables`
-- **Normalized Structure**: Each entity type has its own slice with `createEntityAdapter`
-  - `games` slice stores games with ID references (`Game.teams: number[]`)
-  - `teams` slice stores teams with ID references (`Team.players: number[]`)
-  - `players` slice stores individual players
-  - `tables` slice stores tables with scores
-- **Cross-Slice Updates**: Uses `extraReducers` for coordination
-  - Example: Creating a team updates the parent game's `teams` array
-  - Example: Deleting a team removes its ID from the game's `teams` array
-- **Hooks**: Each slice has dedicated hooks
-  - `useGames()` - Game CRUD operations
-  - `useTeams()` - Team operations
-  - `usePlayers()` - Player operations
-  - `useTables()` - Table and score operations
+Relationships are stored as **ID arrays** (e.g. `Game.teams: number[]`, `Team.players: number[]`), not nested objects.
+Entity types live in `src/slices/types.ts`. Cross-slice coordination — e.g. creating a team appending its ID to the
+parent game's `teams` array, or deleting a team removing the ID — is done via `extraReducers`. When you add a new
+mutation, mirror this pattern: the mutation lives in its own slice, but parent slices subscribe via `extraReducers` to
+stay in sync. There's a `cross-slice.test.ts` at `src/slices/cross-slice.test.ts` that locks in this behavior.
 
-**Key Redux Patterns:**
+Async thunks use the standard `pending/fulfilled/rejected` lifecycle. Selectors are memoized with `createSelector`.
+Cross-slice utilities sit at `src/slices/actions.ts` (`fetchAll`, `resetStore`) and `src/slices/normalize.ts`.
 
-- **Entity Adapters**: Each slice uses `createEntityAdapter` for CRUD operations
-- **ID References**: Relationships stored as ID arrays, not nested objects
-- **Immer Updates**: Redux Toolkit's Immer handles immutable updates automatically
-- **Memoized Selectors**: Uses `createSelector` for performance optimizations
-- **Cross-Slice Coordination**: `extraReducers` keep related entities synchronized
-- **Type Safety**: Custom types in `src/slices/types.ts` define the normalized structure
-- **Async Operations**: Uses `createAsyncThunk` with `pending/fulfilled/rejected` states for API calls
+### Auth
 
-### Authentication
+Firebase Auth (`src/auth/`):
+- `AuthContext.tsx` exposes `loginAction` / `logOut` via React Context.
+- `useAuth.ts` is the consumer hook.
+- `ProtectedRoute.tsx` wraps protected routes; redirects to `/login` if unauthenticated.
+- `firebaseConfig.ts` is intentionally checked in — Firebase API keys are public and secured via domain restrictions.
+- `src/api/apiClient.ts` is the only HTTP client; an axios request interceptor attaches the Firebase JWT to every
+  request. Don't bypass it.
 
-Firebase Authentication is used throughout the app:
+### Routing (React Router v7)
 
-- **AuthContext** (`src/auth/AuthContext.tsx`): Provides authentication state and actions (`loginAction`, `logOut`) via
-  React Context
-- **useAuth** hook (`src/auth/useAuth.ts`): Access authentication state from any component
-- **ProtectedRoute** (`src/auth/ProtectedRoute.tsx`): Wrapper for routes requiring authentication; redirects to `/login`
-  if not authenticated
-- **API Interceptor** (`src/api/apiClient.ts`): Axios interceptor automatically attaches Firebase JWT token to all API
-  requests
-- **Firebase Config** (`src/auth/firebaseConfig.ts`): Configuration is checked into source control (API key is public
-  and secured via Firebase domain restrictions)
+`/login` (public), `/` → `/games`, `/games`, `/games/:gameID`, `/games/:gameID/print`. Everything except `/login` is
+gated by `<ProtectedRoute>` (see `src/App.tsx`). Page components are lazy-loaded with `React.lazy`.
 
-### Routing
+### API client
 
-React Router v7 with route-based code organization:
+`src/api/apiClient.ts` is the single entry point. Base URL is `VITE_API_URL` (env). In dev, Vite proxies `/api/*`
+to the backend with a path rewrite (`/api/games` → `/games`), see `vite.config.ts`. In Jest (jsdom), MSW handlers in
+`src/test/handlers/` intercept absolute URLs at `http://localhost/api`.
 
-- `/login` - Public login page
-- `/` - Redirects to `/games`
-- `/games` - Games management page (protected) - Grid view with search and filters
-- `/games/:gameID` - Game detail page (protected) - Full tournament management interface
-- `/games/:gameID/print` - Print view for game rankings and scores
+Generated types and clients live in `src/generated/` (produced by `pnpm api:gen` from the deployed OpenAPI spec via
+`@hey-api/openapi-ts` with the `@hey-api/client-fetch` plugin). **Never edit `src/generated/` by hand** — changes are
+overwritten on regeneration. Use `src/generated/models/` for request/response typing.
 
-All protected routes use the `<ProtectedRoute>` component wrapper.
+### Internationalization — type-safe i18next
 
-### API Client
+Config: `src/i18n/i18nConfig.ts` (runtime, `fallbackLng: 'en'`). Detection order: query string → localStorage → cookie →
+browser. Translation files: `src/i18n/locales/{en,de}/*.json`. Extract config: `i18next.config.ts`.
 
-Axios-based API client (`src/api/apiClient.ts`) configured with:
+Type augmentation in `src/i18n/i18next.d.ts` types `CustomTypeOptions` against EN's JSON via `typeof`. `defaultNS` is
+declared as an array of all namespaces, so `t('namespace:key')` is type-checked. EN is the source of truth.
 
-- Base URL from environment variable `VITE_API_URL`
-- Request interceptor that adds Firebase JWT token to Authorization header
-- Typed API functions for games, teams, and players
-- **Type Definitions**: All API types come from `src/generated/models/` - use these for request/response typing
-- **Development Proxy**: Vite proxies `/api` requests to the backend (see `vite.config.ts`)
-  - In development: API calls to `/api/*` are proxied to `VITE_API_URL`
-  - Path rewrite: `/api/games` becomes `/games` on the backend
-  - In tests (Node environment): Uses absolute URL `http://localhost/api`
+**Layered enforcement** (each layer covers a different concern):
 
-### Styling
+| Concern                            | Caught by                                     | Stage                       |
+| ---------------------------------- | --------------------------------------------- | --------------------------- |
+| EN has the key                     | `tsc --noEmit` (type augmentation against EN) | edit-time                   |
+| DE has the key (structurally)      | `i18next-cli extract --ci`                    | `pnpm check`                |
+| Every secondary locale is complete | `i18next-cli status`                          | `pnpm check`                |
+| No hardcoded strings in code       | `i18next-cli lint`                            | `pnpm check` + lint-staged  |
+| Runtime safety net                 | `fallbackLng: 'en'`                           | runtime                     |
 
-- **Mantine UI** v8 - Component library with built-in theming
-- **PostCSS** - CSS processing with Mantine preset
+`tsc` validates only the *source* language by design — that mirrors the workflow: author EN keys first, translate DE
+later. `extract --ci` and `status` are what guarantee DE catches up before merge.
 
-### Internationalization
-
-i18next with browser language detection and **type-safe translations**.
-
-- Configuration: `src/i18n/i18nConfig.ts` (runtime: `fallbackLng: 'en'`, EN is primary)
-- Translations: `src/i18n/locales/{en,de}/*.json`
-- Type augmentation: `src/i18n/i18next.d.ts` types `CustomTypeOptions` against EN's JSON via `typeof`.
-  `defaultNS` is declared as an array of all namespaces so `t('namespace:key')` syntax is type-checked.
-- Detection order: query string → localStorage → cookie → browser navigator
-
-**Layered enforcement** (each layer covers a different concern; the languages have asymmetric roles):
-
-| Concern | Caught by | Stage |
-|---|---|---|
-| EN has the key | `tsc --noEmit` (type augmentation against EN) | edit-time |
-| DE has the key (structurally) | `i18next-cli extract --ci` (writes all configured locales) | `pnpm check` |
-| Every secondary locale is complete | `i18next-cli status` (fails on any incomplete locale) | `pnpm check` |
-| No hardcoded strings in code | `i18next-cli lint` | `pnpm check` + lint-staged on staged `.ts`/`.tsx` |
-| Runtime safety net | `fallbackLng: 'en'` | runtime |
-
-`tsc` validates only the *source* language by design — that mirrors the workflow: author EN keys first,
-translate DE later. `extract --ci` and `status` are what guarantee DE catches up before merge.
-
-**Adding new translation keys**: add the key to both `en/<namespace>.json` AND `de/<namespace>.json`
-manually before referencing it in code. `pnpm fix` no longer auto-creates empty placeholders — that
-was removed deliberately so missing keys surface as `tsc` errors instead.
+**Adding new keys**: write the key in both `en/<namespace>.json` AND `de/<namespace>.json` manually before referencing
+it in code. `pnpm fix` no longer auto-creates empty placeholders — that was removed deliberately so missing keys
+surface as `tsc` errors instead.
 
 **Cleaning drift**: when `pnpm check` fails on `extract --ci` (unused keys, sort order), run
-`pnpm exec i18next-cli extract` explicitly to apply the changes.
+`pnpm exec i18next-cli extract` to apply the changes.
 
-**Avoid dynamic keys**: never call `t()` with a template literal or interpolated string
-(e.g. `` t(`gameDetail:status.${status}`) ``). Type augmentation only validates static
-literal keys, so dynamic keys silently bypass the EN-source check and the extractor can't
-see them either. Instead, branch on the variant with a `switch` (or lookup map) and call
-`t()` with a static literal in each arm. Prefer making the variant a union type so the
-switch is exhaustive — adding a new case will then fail `tsc` until the corresponding
-translation key is wired up.
+**Avoid dynamic keys**: never call `t()` with a template literal (`` t(`status.${variant}`) ``). Type augmentation
+only validates static literal keys, and the extractor can't see them. Branch on the variant with a `switch` (or lookup
+map), call `t()` with a static literal in each arm, and end the switch with `assertNever(value)` from
+`src/utils/assertNever.ts` — adding a new variant then fails `tsc` until every branch is wired up.
 
-**Adding a new locale**: add it to `locales` in `i18next.config.ts` and to `supportedLngs` in
-`i18nConfig.ts`. `status` covers all configured locales automatically, so the `check` script
-doesn't need to change. Type augmentation doesn't need to change either (still types against EN).
+**Adding a new locale**: add it to `locales` in `i18next.config.ts` and to `supportedLngs` in `i18nConfig.ts`. `status`
+covers all configured locales automatically. Type augmentation doesn't change (still EN).
 
-**Debugging incomplete translations**: when `pnpm check` fails on `status` and you need to see which
-keys are missing, run `pnpm exec i18next-cli status <locale> --hide-translated`
-(e.g. `status de --hide-translated`).
+**Debugging missing keys**: `pnpm exec i18next-cli status de --hide-translated`.
 
-### Project Structure
+### Layout structure
 
-```text
-src/
-├── api/           # API client and type definitions
-├── auth/          # Authentication context, hooks, Firebase config
-├── generated/     # Auto-generated TypeScript client from OpenAPI spec (DO NOT EDIT)
-│   ├── apis/      # API endpoint classes
-│   └── models/    # TypeScript type definitions
-├── header/        # Header component with language picker and user menu
-│   └── components/  # Header-specific components
-├── i18n/          # i18next configuration and translations
-├── pages/         # Route-based page components
-│   ├── games/     # Games page with GameForm, GameDetail, and panels
-│   │   ├── panels/       # TeamsPanel, RoundsPanel, RankingsPanel
-│   │   ├── components/   # Game-specific components
-│   │   └── print-views/  # Print view components
-│   └── Login.tsx  # Login page
-├── shared/        # Shared layout components (Layout, Footer, Breadcrumbs, CenterLoader, ErrorBoundary)
-├── slices/        # Redux state management (normalized with entity adapters)
-│   ├── actions.ts      # Cross-slice actions (fetchAll, resetStore)
-│   ├── types.ts        # Normalized entity type definitions
-│   ├── games/          # Games slice
-│   │   ├── actions.ts  # Game-specific async thunks
-│   │   ├── slice.ts    # Slice with reducers, selectors, extraReducers
-│   │   └── hooks.ts    # useGames hook
-│   ├── teams/          # Teams slice (similar structure)
-│   ├── players/        # Players slice (similar structure)
-│   └── tables/         # Tables slice (similar structure)
-├── store/         # Redux store configuration
-├── test/          # Test setup and handlers
-├── utils/         # Utility functions (rankingsMapper, scoreAggregator)
-├── App.tsx        # Root component with routing
-└── main.tsx       # Application entry point
-```
+`src/App.tsx` is the composition root. The persistent shell is `src/shared/layout/Layout.tsx` (wraps `Header` + page
+content + `Footer`); `src/shared/userMenu/` holds the language picker, color-scheme toggle, and user menu. Page entry
+points are under `src/pages/` — `Login.tsx` and `games/{Games,GameDetail,GameForm,PrintView}.tsx` plus subdirs
+`panels/`, `components/`, and `print-views/` for the game-detail interior. Shared utilities sit at `src/utils/`
+(currently `assertNever.ts`, `gameStatusHelpers.tsx`).
 
-### OpenAPI Code Generation
+## TypeScript
 
-The project uses OpenAPI Generator to create TypeScript API clients from the backend's OpenAPI specification:
+`tsconfig.json` is strict, with `noUncheckedIndexedAccess`, `noImplicitOverride`, `noUnusedLocals`/`Parameters`,
+`useUnknownInCatchVariables`, `noFallthroughCasesInSwitch`, `allowUnreachableCode: false`, and module resolution
+`bundler` (Vite). Implications:
 
-```bash
-# Regenerate API client from latest OpenAPI spec
-pnpm api:gen
-```
-
-This command:
-
-- Fetches the OpenAPI spec from the deployed backend service
-- Generates TypeScript types and API client classes in `src/generated/`
-- Creates separate directories for models (`src/generated/models/`) and APIs (`src/generated/apis/`)
-
-**Important**: Never manually edit files in `src/generated/` - they will be overwritten on the next generation.
-
-### UI Design
-
-The application follows modern dashboard design patterns with Mantine UI:
-
-#### Games Page (`/games`)
-
-Modern grid layout with powerful filtering:
-
-- **Search**: Real-time search by game name
-- **Filters**: Segmented control for All/Active/Setup
-- **Grid View**: Responsive 3-column grid (1 on mobile, 2 on tablet)
-- **Game Cards**: Consistent card design with all key info visible
-  - Status badges
-  - Game configuration
-  - Team count
-  - Full-width "View Details" button
-  - Action buttons (Activate, Delete)
-- **Empty States**: Context-aware messages for no games or no results
-
-#### Game Detail Page (`/games/:gameID`)
-
-Full tournament management interface with three tabs:
-
-1. **Teams Tab**:
-   - Add teams during the setup phase
-   - View all teams and their players
-   - Edit team and player names (even after game starts)
-   - Team/player IDs are preserved for matchmaking
-
-2. **Rounds Tab**:
-   - **Setup Phase**: Shows "Setup Matchmaking" button to generate tables
-   - Calls `POST /games/{gameID}/setup` to trigger backend matchmaking
-   - **After Setup**: Select round from dropdown
-   - View all tables for selected round
-   - See player assignments per table (from backend matchmaking)
-   - Enter/edit scores for each table
-   - Scores are saved per player per table
-   - Proper error handling for 404s before setup
-
-3. **Rankings Tab**:
-   - Team rankings (aggregated player scores)
-   - Player rankings (individual totals across all rounds)
-   - Automatically calculated from entered scores
-   - Real-time updates when scores change
-
-#### Key Components
-
-- **Games.tsx**: Games list with search, filters, and grid layout
-- **GameDetail.tsx**: Main game page with tab navigation
-- **GameViewContent.tsx**: Game detail view with tabs and status management
-- **panels/TeamsPanel.tsx**: Team management with inline editing
-- **panels/RoundsPanel.tsx**: Round/table display with score entry
-- **panels/RankingsPanel.tsx**: Calculated rankings display
-- **components/ScoreEntryModal.tsx**: Modal for entering scores
+- Array/object access returns `T | undefined` — handle it explicitly. Don't paper over with non-null assertions unless
+  the invariant is genuinely enforced upstream (Biome leaves `noNonNullAssertion` off, but use sparingly).
+- Catch variables are `unknown` — narrow before use.
+- No `any`. Biome enforces `noExplicitAny: error`.
+- Use `assertNever` in switch defaults over union types so adding a variant breaks the build.
 
 ## Testing
 
-Jest with ts-jest preset and jsdom environment:
+Jest + ts-jest + jsdom. Setup: `jest.setup.js`. Test files: `*.test.{ts,tsx}` / `*.spec.{ts,tsx}` co-located with the
+code under test. CSS imports map to `identity-obj-proxy`; static assets to `__mocks__/fileMock.js`. MSW handlers for
+HTTP mocking live in `src/test/handlers/`. The Redux cross-slice contract has dedicated tests at
+`src/slices/cross-slice.test.ts` — when changing entity relationships, update or add to those.
 
-- Test files: `*.test.ts`, `*.test.tsx`, `*.spec.ts`, `*.spec.tsx`
-- Setup file: `jest.setup.js`
-- CSS imports mocked with `identity-obj-proxy`
-- Static assets mocked via `__mocks__/fileMock.js`
+## Environment
 
-## Environment Variables
+`.env.development` and `.env.production` provide `VITE_API_URL`:
+- dev: `http://localhost:8080`
+- prod: `https://api.knobel-manager.de`
 
-Create `.env.development` and `.env.production` files:
+If the local backend isn't reachable at `http://localhost:8080/health`, fall back to `pnpm prod` (deployed API).
 
-- `VITE_API_URL` - Backend API base URL
-  - Development: `http://localhost:8080`
-  - Production: `https://api.knobel-manager.de`
+## Package manager
 
-## Package Management
-
-The project uses **pnpm** as its package manager:
-
-- **Efficient disk usage**: Dependencies are stored in a global content-addressable store
-- **Fast installations**: Hard links from global store to node_modules
-- **Strict by default**: Prevents phantom dependencies (similar to Yarn PnP)
-- **Standard node_modules**: Compatible with all tooling without special configuration
-
-**Important**: Always use `pnpm` commands, not `npm` or `yarn`. Package scripts must use `pnpm`.
-
-## Git Hooks
-
-Husky + lint-staged runs ESLint and Prettier on staged files before each commit.
-
-## Key Dependencies
-
-- **React 19** with react-router-dom v7
-- **Redux Toolkit** for state management
-- **Firebase** v12 for authentication
-- **Mantine** v8 for UI components
-- **Axios** for HTTP requests
-- **i18next** for internationalization
-- **MSW** for API mocking in tests
-- **pnpm** for package management
-
-## TypeScript Configuration
-
-Strict mode is enabled with comprehensive type checking:
-
-- `strict: true` (enables all strict checks)
-- `noImplicitAny`, `strictNullChecks`, `strictFunctionTypes`, `noImplicitReturns`, `noImplicitThis`
-- `noUncheckedIndexedAccess` for safe array/object access (prevents `undefined` access bugs)
-- `noUnusedLocals`, `noUnusedParameters` for cleaner code
-- `noFallthroughCasesInSwitch` to catch switch statement bugs
-- `noImplicitOverride` to enforce explicit override declarations
-- `allowUnreachableCode: false` to catch dead code
-- `useUnknownInCatchVariables: true` for safer error handling
-- Module resolution: "bundler" (Vite-compatible)
-
-## Troubleshooting
-
-### API Connection Issues
-
-- If `pnpm local` fails to connect: Check if backend is running at `http://localhost:8080/health`
-- If local backend is unavailable: Use `pnpm prod` to connect to deployed API
-- 404 errors on `/api/*` routes: Vite proxy may not be running - restart dev server
-- Authentication errors: Check Firebase token is being attached in browser Network tab
-
-### State Management Issues
-
-- Stale data after API calls: Ensure Redux actions properly update all affected slices and that `extraReducers` handle
-  cross-slice updates
-- Missing related entities: Check that entity IDs are correctly stored in relationship arrays (e.g.,
-  `game.teams: number[]`) and that the corresponding entities exist in their slices
-- Selector returns `undefined`: Verify entity IDs exist in the appropriate slice and are correctly typed as numbers
-- Cross-slice sync issues: Check `extraReducers` in slices to ensure parent entities update when child entities are
-  created/deleted
-
-### Build/Test Issues
-
-- TypeScript errors with `undefined`: Check `noUncheckedIndexedAccess` - array/object access requires explicit checks
-- Jest import errors: Check `transformIgnorePatterns` in `jest.config.js` for ESM module handling
-- Vite build fails: Run `pnpm clean` then `pnpm install` to clear build cache
-- pnpm module resolution issues: Run `pnpm install` to refresh symlinks, or clear the pnpm store with `pnpm store prune`
+**pnpm only** (`packageManager: pnpm@10.33.2`, enforced by `engines`). Never use `npm` or `yarn`; package scripts must
+shell out via `pnpm` (e.g. `pnpm exec ...`).
 
 ## Development Guidelines
 
-### Communication Style
+### Communication
 
-- Conversation attitude/tone: Do not sugar coat questions and answers - use German honesty
-- Be direct and pragmatic in technical discussions
+- German honesty: don't sugar-coat questions or answers, be direct and pragmatic.
 
-### Git Workflow
+### Git workflow
 
-- NEVER commit without asking first
-- Use brief, descriptive commit messages
-- Never use Claude as an author
-- NEVER EVER push changes without explicit permission
+- **NEVER** commit without asking first.
+- **NEVER EVER** push without explicit permission.
+- Brief, descriptive commit messages. **Never list Claude as an author / co-author.**
 
-### Code Quality
+### Code quality
 
-- You are a senior engineer - focus on clean design, modularity, and clear boundaries
-- Write clean code balancing DRY and locality principles
-- Prefer clarity to abstractions unless the domain truly requires the abstraction
-- Module tests should be in the same module as the implementation using standard patterns and naming structures
-- Use descriptive code and avoid comments that explain the function of the code unless technical or domain decisions are
-  ambiguous or exceptional and need further context to understand the code
+- Senior-engineer standard: clean design, modularity, clear boundaries.
+- Balance DRY with locality — prefer clarity over premature abstraction.
+- Tests live next to the code under test.
+- Comments explain *why* (non-obvious constraints, domain decisions). Don't narrate *what* the code does — let the
+  identifiers carry that.
 
-### Component Design
+### Component design
 
-- Focus on single responsibility and composition over inheritance
-- Extract complex logic into custom hooks
-- Keep components focused - heavy logic should live in hooks or utility functions
-- Use `React.memo` for expensive pure components; `useCallback`/`useMemo` where re-render churn is evident
-- Ensure proper `useEffect` dependencies to avoid stale closures
+- Single responsibility, composition over inheritance.
+- Heavy logic belongs in hooks or utilities, not components.
+- `React.memo` for expensive pure components; `useCallback`/`useMemo` only when re-render churn is real.
+- Keep `useEffect` dependency arrays correct — stale closures are a recurring class of bug here.
 
-### Type Safety
+### Type safety
 
-- **Never use `any`** - use domain types or `unknown` with type guards
-- Always handle `undefined` from array/object access (`noUncheckedIndexedAccess` is enabled)
-- Prefer discriminated unions for variants; use utility types (`Pick`, `Omit`, `Record`, `Partial`)
-- Event handlers must be correctly typed (`React.ChangeEvent`, `React.MouseEvent`, etc.)
-
-### Performance
-
-- Avoid needless re-renders - verify `useEffect` dependency arrays
-- For large lists, consider virtualization
-- Keep abstractions local - prefer clarity to premature optimization
+- No `any`. Use domain types or `unknown` + type guards.
+- Always handle `undefined` from indexed access.
+- Discriminated unions for variants; reach for `Pick`/`Omit`/`Record`/`Partial` rather than re-defining shapes.
+- Type event handlers explicitly (`React.ChangeEvent<...>`, `React.MouseEvent<...>`).
+- Exhaustive `switch` over unions, ending with `assertNever(value)`. Especially valuable for `GameStatus`, `GameTab`,
+  async-thunk status, and any `t()` lookup keyed off a union.
 
 ### Localization
 
-- Never use inline translations - always use i18n JSON files and language keys
-- All strings must use `useTranslation()` with keys from `src/i18n/locales/{en,de}/*.json`
-- New translation keys must be added to both English and German files
-- Use namespaced keys: `page.section.label` pattern
+- No inline strings. Always `useTranslation()` + a static literal key.
+- New keys go in **both** `en/` and `de/` JSON files.
+- Namespaced keys, `page.section.label` pattern.
 
-### Environment Configuration
+## Code Review Lenses
 
-- `pnpm local` requires the local backend started
-- `pnpm prod` uses the deployed API
-- If the local API at `localhost:8080/health` is not available, try to use the prod API
+When reviewing or writing non-trivial changes, apply three lenses:
 
-## Code Review Guidelines
-
-When reviewing or writing code, apply these three lenses:
-
-### 1. Frontend-Developer Lens (Architecture & UX)
-
-- Component boundaries respect single responsibility principle
-- Composition over inheritance
-- Responsive layouts follow Mantine patterns (Grid, Card, breakpoints)
-- Empty states include clear CTAs; status badges consistent
-- Primary actions should be full-width on cards
-- API integration through `src/api/apiClient.ts` only
-- User-friendly error notifications with graceful 404 handling
-
-### 2. React-Pro Lens (React Patterns & Performance)
-
-- Prefer hooks, typed props, and composition
-- Avoid prop drilling - use context/Redux appropriately
-- Correct `useEffect` dependencies to avoid stale closures
-- Memoize expensive pure components with `React.memo`
-- Use `useCallback`/`useMemo` where re-render churn is evident
-- Accessibility: labeled inputs, ARIA attributes, keyboard navigation
-- Route params must be typed; use `<ProtectedRoute>` for protected routes
-
-### 3. TypeScript-Pro Lens (Type Safety)
-
-- **Zero tolerance for `any`** - use domain types or `unknown` with type guards
-- Always handle `undefined` from array/object access (`noUncheckedIndexedAccess` is enabled)
-- Prefer discriminated unions for variants
-- Use utility types: `Pick`, `Omit`, `Record`, `Partial`
-- Selectors must be typed and memoized
-- Event handlers must be correctly typed (`React.ChangeEvent`, `React.MouseEvent`, etc.)
-- Make invalid states unrepresentable in the type system
+1. **Frontend / UX** — component boundaries respect SRP; Mantine layout primitives (Grid, Card, breakpoints) used
+   correctly; empty states have clear CTAs; status badges consistent; primary card actions full-width; HTTP only via
+   `apiClient.ts`; user-friendly errors with graceful 404 handling.
+2. **React patterns** — hooks + typed props + composition; no prop drilling (use Redux/Context); correct effect deps;
+   memoization where churn is evident; keyboard / ARIA accessibility; route params typed; protected routes wrapped.
+3. **TypeScript** — zero `any`; explicit `undefined` handling; discriminated unions; selectors typed and memoized;
+   event handlers typed; invalid states made unrepresentable.
