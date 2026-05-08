@@ -3,7 +3,7 @@ import { IconBrandGithub, IconLicense } from '@tabler/icons-react';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Icon from '../Icon.tsx';
+import Icon from '../Icon';
 import Logo from '../Logo.tsx';
 
 const GITHUB_URL = 'https://github.com/henok321/knobel-manager-app';
@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
         <Group gap="xs">
           <Logo size={14} variant="mark" />
           <Text c="dimmed" size="xs">
-            © 2026
+            © {new Date().getFullYear()}
           </Text>
         </Group>
 

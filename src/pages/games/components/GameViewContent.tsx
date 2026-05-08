@@ -127,14 +127,14 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         confirm: t('gameDetail:actions.startGame'),
         cancel: t('gameDetail:actions.cancel'),
       },
-      confirmProps: { color: 'blue' },
+      confirmProps: { color: 'cobalt' },
       onConfirm: () => {
         handleStatusTransition('in_progress');
         setActiveTab('rounds');
         notifications.show({
           title: t('gameDetail:actions.gameStartedNotification'),
           message: t('gameDetail:actions.gameStartedMessage'),
-          color: 'blue',
+          color: 'cobalt',
         });
       },
     });
@@ -181,7 +181,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
             {translateGameStatus(t, game.status)}
           </Badge>
           {game.status === 'setup' && (
-            <Button color="blue" size="sm" onClick={confirmStartGame}>
+            <Button color="cobalt" size="sm" onClick={confirmStartGame}>
               {t('gameDetail:actions.startGame')}
             </Button>
           )}

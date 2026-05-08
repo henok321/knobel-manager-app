@@ -20,7 +20,6 @@ const Glyph: React.FC<{ size: number }> = ({ size }) => (
     width={size}
     xmlns="http://www.w3.org/2000/svg"
   >
-    {/* top-left outline square */}
     <rect
       height="9.5"
       stroke="currentColor"
@@ -29,7 +28,6 @@ const Glyph: React.FC<{ size: number }> = ({ size }) => (
       x="0.75"
       y="0.75"
     />
-    {/* bottom-right outline square */}
     <rect
       height="9.5"
       stroke="currentColor"
@@ -38,7 +36,7 @@ const Glyph: React.FC<{ size: number }> = ({ size }) => (
       x="13.75"
       y="13.75"
     />
-    {/* centre filled square (drawn last so it overlaps) */}
+    {/* drawn last so it overlaps the outlines */}
     <rect
       fill="var(--mantine-color-cobalt-6)"
       height="10"
