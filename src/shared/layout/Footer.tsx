@@ -1,72 +1,60 @@
-import {
-  Anchor,
-  Container,
-  Group,
-  rem,
-  Text,
-  useMantineTheme,
-} from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
+import { ActionIcon, Container, Group, Text, Tooltip } from '@mantine/core';
 import { IconBrandGithub, IconLicense } from '@tabler/icons-react';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import Icon from '../Icon.tsx';
+import Logo from '../Logo.tsx';
 
 const GITHUB_URL = 'https://github.com/henok321/knobel-manager-app';
 const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
 
 const Footer: React.FC = () => {
   const { t } = useTranslation();
-  const theme = useMantineTheme();
-  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
 
   return (
     <Container
       fluid
       p={{ base: 'xs', sm: 'md' }}
       style={{
-        backgroundColor: 'var(--mantine-color-gray-0)',
-        borderTop: '1px solid var(--mantine-color-gray-3)',
+        backgroundColor:
+          'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7))',
+        borderTop:
+          '1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5))',
       }}
     >
-      <Group gap={isMobile ? 'xs' : 'md'} justify="center" wrap="wrap">
-        <Text c="dimmed" size={isMobile ? 'xs' : 'sm'}>
-          {t('footer:copyright', { year: '2024' })}
-        </Text>
+      <Group gap="md" justify="space-between" wrap="wrap">
+        <Group gap="xs">
+          <Logo size={14} variant="mark" />
+          <Text c="dimmed" size="xs">
+            © 2026
+          </Text>
+        </Group>
 
-        <Text c="dimmed" size={isMobile ? 'xs' : 'sm'}>
-          •
-        </Text>
-
-        <Anchor
-          c="dimmed"
-          href={GITHUB_URL}
-          rel="noopener noreferrer"
-          size={isMobile ? 'xs' : 'sm'}
-          target="_blank"
-        >
-          <Group gap={4}>
-            <IconBrandGithub size={rem(isMobile ? 14 : 16)} />
-            {t('footer:links.github')}
-          </Group>
-        </Anchor>
-
-        <Text c="dimmed" size={isMobile ? 'xs' : 'sm'}>
-          •
-        </Text>
-
-        <Anchor
-          c="dimmed"
-          href={LICENSE_URL}
-          rel="noopener noreferrer"
-          size={isMobile ? 'xs' : 'sm'}
-          target="_blank"
-        >
-          <Group gap={4}>
-            {' '}
-            <IconLicense size={rem(isMobile ? 14 : 16)} />
-            {t('footer:links.license')}
-          </Group>
-        </Anchor>
+        <Group gap="xs">
+          <Tooltip label={t('footer:links.github')}>
+            <ActionIcon
+              aria-label={t('footer:links.github')}
+              component="a"
+              href={GITHUB_URL}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <Icon icon={IconBrandGithub} size={16} />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip label={t('footer:links.license')}>
+            <ActionIcon
+              aria-label={t('footer:links.license')}
+              component="a"
+              href={LICENSE_URL}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <Icon icon={IconLicense} size={16} />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
       </Group>
     </Container>
   );
