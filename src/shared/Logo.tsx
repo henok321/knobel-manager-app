@@ -1,5 +1,5 @@
+import { IconDice } from '@tabler/icons-react';
 import type React from 'react';
-
 import { useTranslation } from 'react-i18next';
 
 type LogoVariant = 'mark' | 'full';
@@ -9,45 +9,6 @@ interface LogoProps {
   size?: number;
   className?: string;
 }
-
-const Glyph: React.FC<{ size: number }> = ({ size }) => (
-  <svg
-    aria-hidden="true"
-    fill="none"
-    height={size}
-    role="presentation"
-    viewBox="0 0 24 24"
-    width={size}
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    {/* top face — lit */}
-    <path d="M12 3 L21 8 L12 12 L3 8 Z" fill="var(--mantine-color-cobalt-4)" />
-    {/* left-front face — shadow side */}
-    <path d="M3 8 L12 12 L12 21 L3 16 Z" fill="var(--mantine-color-cobalt-8)" />
-    {/* right-front face — brand cobalt */}
-    <path
-      d="M21 8 L21 16 L12 21 L12 12 Z"
-      fill="var(--mantine-color-cobalt-6)"
-    />
-    {/* top face pip — 1 */}
-    <circle cx="12" cy="7.75" fill="#ffffff" r="1.2" />
-    {/* left-front face pips — 2 */}
-    <circle cx="6" cy="12.3" fill="#ffffff" r="1" />
-    <circle cx="9" cy="17" fill="#ffffff" r="1" />
-    {/* right-front face pips — 3 */}
-    <circle cx="19" cy="11" fill="#ffffff" r="1" />
-    <circle cx="16.5" cy="14.5" fill="#ffffff" r="1" />
-    <circle cx="14" cy="18" fill="#ffffff" r="1" />
-    {/* hexagon silhouette + internal Y, drawn last */}
-    <path
-      d="M12 3 L21 8 L21 16 L12 21 L3 16 L3 8 Z M12 12 L21 8 M12 12 L3 8 M12 12 L12 21"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.5"
-    />
-  </svg>
-);
 
 const Logo: React.FC<LogoProps> = ({
   variant = 'full',
@@ -60,7 +21,11 @@ const Logo: React.FC<LogoProps> = ({
   if (variant === 'mark') {
     return (
       <span aria-label={appName} className={className} role="img">
-        <Glyph size={size} />
+        <IconDice
+          color="var(--mantine-color-cobalt-6)"
+          size={size}
+          stroke={1.5}
+        />
       </span>
     );
   }
@@ -77,7 +42,11 @@ const Logo: React.FC<LogoProps> = ({
         gap: 8,
       }}
     >
-      <Glyph size={glyphSize} />
+      <IconDice
+        color="var(--mantine-color-cobalt-6)"
+        size={glyphSize}
+        stroke={1.5}
+      />
       <span
         style={{
           fontWeight: 600,

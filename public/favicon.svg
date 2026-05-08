@@ -1,12 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
-  <path d="M12 3 L21 8 L12 12 L3 8 Z" fill="#818cf8"/>
-  <path d="M3 8 L12 12 L12 21 L3 16 Z" fill="#1e40af"/>
-  <path d="M21 8 L21 16 L12 21 L12 12 Z" fill="#2563eb"/>
-  <circle cx="12" cy="7.75" r="1.2" fill="#ffffff"/>
-  <circle cx="6" cy="12.3" r="1" fill="#ffffff"/>
-  <circle cx="9" cy="17" r="1" fill="#ffffff"/>
-  <circle cx="19" cy="11" r="1" fill="#ffffff"/>
-  <circle cx="16.5" cy="14.5" r="1" fill="#ffffff"/>
-  <circle cx="14" cy="18" r="1" fill="#ffffff"/>
-  <path d="M12 3 L21 8 L21 16 L12 21 L3 16 L3 8 Z M12 12 L21 8 M12 12 L3 8 M12 12 L12 21" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/>
+  <path d="M8.5 8.5l.01 0"/>
+  <path d="M15.5 8.5l.01 0"/>
+  <path d="M8.5 15.5l.01 0"/>
+  <path d="M15.5 15.5l.01 0"/>
+  <path d="M12 12l.01 0"/>
 </svg>
