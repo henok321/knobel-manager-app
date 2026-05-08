@@ -14,6 +14,7 @@ import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Icon from '../../../shared/Icon';
 import usePlayers from '../../../slices/players/hooks';
 import useTables from '../../../slices/tables/hooks';
 import useTeams, { useTeamsByGameId } from '../../../slices/teams/hooks';
@@ -161,7 +162,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     <Stack gap="md">
       {canAddDelete ? (
         <Button
-          leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
+          leftSection={<Icon icon={IconPlus} size={20} />}
           style={{ alignSelf: 'flex-start' }}
           onClick={() => setIsTeamFormOpen(true)}
         >
@@ -171,7 +172,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         <Tooltip label={t('gameDetail:teams.cannotAddTeamsAfterStart')}>
           <Button
             disabled
-            leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
+            leftSection={<Icon icon={IconPlus} size={20} />}
             style={{ alignSelf: 'flex-start' }}
           >
             {t('gameDetail:teams.addTeam')}
@@ -204,7 +205,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                           variant="subtle"
                           onClick={() => handleStartEditTeam(team.id)}
                         >
-                          <IconPencil style={{ width: 16, height: 16 }} />
+                          <Icon icon={IconPencil} size={16} />
                         </ActionIcon>
                       )}
                       {canAddDelete && (
@@ -213,7 +214,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                           variant="subtle"
                           onClick={() => handleDeleteTeam(team.id)}
                         >
-                          <IconTrash style={{ width: 16, height: 16 }} />
+                          <Icon icon={IconTrash} size={16} />
                         </ActionIcon>
                       )}
                     </Group>

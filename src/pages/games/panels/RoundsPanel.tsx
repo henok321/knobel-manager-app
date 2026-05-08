@@ -15,6 +15,7 @@ import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import Icon from '../../../shared/Icon';
 
 import useGames from '../../../slices/games/hooks';
 import useTables from '../../../slices/tables/hooks';
@@ -296,9 +297,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                     {hasScores(table) ? (
                       <Badge
                         color="green"
-                        leftSection={
-                          <IconCheck style={{ width: 14, height: 14 }} />
-                        }
+                        leftSection={<Icon icon={IconCheck} size={14} />}
                         variant="light"
                       >
                         {t('gameDetail:rounds.scoresEntered')}
@@ -306,9 +305,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                     ) : (
                       <Badge
                         color="gray"
-                        leftSection={
-                          <IconClock style={{ width: 14, height: 14 }} />
-                        }
+                        leftSection={<Icon icon={IconClock} size={14} />}
                         variant="light"
                       >
                         {t('gameDetail:rounds.scoresPending')}
