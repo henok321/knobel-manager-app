@@ -1222,9 +1222,9 @@ git commit -m "refactor(icons): adopt shared Icon wrapper for consistent stroke 
 
 **Files:**
 - Modify (auto-generated): `src/i18n/locales/en/common.json`
-- Modify (auto-generated): `src/i18n/locales/de/common.json`
+- Modify (auto-generated): `src/i18n/locales/de/common.json` (and possibly `footer.json` for both locales)
 
-The `common:header.heading` key is no longer referenced anywhere (Header now uses the `<Logo>` SVG component). The `i18next-cli` extract config has `removeUnusedKeys: true`, so a single command takes care of it.
+> **Plan correction (post Task 4):** `common:header.heading` is no longer removed. The `Logo` component reads it via `useTranslation` because `i18next-cli lint` flags hardcoded user-facing strings, and the brand reads slightly differently in EN ("Knobel Manager") vs DE ("Knobel-Manager"). Only `footer:copyright` is potentially unused after Task 7 — the new footer hard-codes `© 2026` and does not call `t('footer:copyright')`.
 
 - [ ] **Step 1: Run extract**
 
@@ -1233,9 +1233,9 @@ pnpm exec i18next-cli extract
 ```
 
 Expected:
-- `src/i18n/locales/en/common.json` and `src/i18n/locales/de/common.json` have the `header.heading` key removed.
-- No other keys are touched.
-- If `footer:copyright` was referenced via the old footer (`{ year: '2024' }`), it is also removed by the same pass — that's correct because the new footer hard-codes `© 2026` without using a translation. (The new design accepts that trade-off; localising "©" is unnecessary.)
+- If `footer:copyright` is no longer referenced, it is removed from `src/i18n/locales/en/footer.json` and `src/i18n/locales/de/footer.json`.
+- No other keys are touched. In particular, `common:header.heading` stays — it is referenced by `Logo`.
+- It's possible that `pnpm check`'s `i18next-cli extract --ci` already kept things in sync after earlier task commits and this step produces no diff. That is fine.
 
 - [ ] **Step 2: Verify**
 
@@ -1243,15 +1243,21 @@ Expected:
 pnpm check
 ```
 
-Expected: passes (`tsc`, `biome ci`, `i18next-cli status`, `i18next-cli lint`, `i18next-cli extract --ci` all green).
+Expected: passes.
 
-If `i18next-cli status` reports an EN/DE drift, run `pnpm exec i18next-cli extract` once more — the first pass may have only touched one locale due to ordering.
+If `i18next-cli status` reports EN/DE drift, run `pnpm exec i18next-cli extract` once more — the first pass may have only touched one locale due to ordering.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 3: Commit (only if there is a diff)**
+
+```bash
+git status --short
+```
+
+If `git status` shows no changes, skip this commit and report that no cleanup was needed. Otherwise:
 
 ```bash
 git add src/i18n/locales
-git commit -m "chore(i18n): drop unused header.heading and footer.copyright keys"
+git commit -m "chore(i18n): drop unused footer.copyright key"
 ```
 
 ---

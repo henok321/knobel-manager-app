@@ -150,7 +150,7 @@ Existing inline `style={{ width: 20, height: 20 }}` patterns at icon usage sites
 - Centre column intentionally empty.
 - Right column: existing `<UserMenu />` when `navbarActive`.
 - Border-bottom replaced with `1px solid var(--mantine-color-gray-2)` light / `var(--mantine-color-dark-5)` dark; no shadow.
-- `i18n` key `common:header.heading` becomes unused (the wordmark is part of the SVG component) — flag with `knip` and remove.
+- The `i18n` key `common:header.heading` is still consumed — but now from inside `<Logo>` rather than from `Header.tsx`. The brand-name string differs slightly between EN ("Knobel Manager") and DE ("Knobel-Manager"), and the project's `i18next-cli lint` rule flags hardcoded user-facing strings. The wordmark therefore reads `t('common:header.heading')` instead of being literal in the JSX. The key is **kept**, not removed.
 
 ### Footer (`src/shared/layout/Footer.tsx`)
 

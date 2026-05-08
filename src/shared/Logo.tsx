@@ -20,29 +20,15 @@ const Glyph: React.FC<{ size: number }> = ({ size }) => (
     width={size}
     xmlns="http://www.w3.org/2000/svg"
   >
-    <rect
-      height="9.5"
+    {/* top face fill (cobalt accent) */}
+    <path d="M12 3 L21 8 L12 12 L3 8 Z" fill="var(--mantine-color-cobalt-6)" />
+    {/* hexagon silhouette + internal Y */}
+    <path
+      d="M12 3 L21 8 L21 16 L12 21 L3 16 L3 8 Z M12 12 L21 8 M12 12 L3 8 M12 12 L12 21"
       stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       strokeWidth="1.5"
-      width="9.5"
-      x="0.75"
-      y="0.75"
-    />
-    <rect
-      height="9.5"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      width="9.5"
-      x="13.75"
-      y="13.75"
-    />
-    {/* drawn last so it overlaps the outlines */}
-    <rect
-      fill="var(--mantine-color-cobalt-6)"
-      height="10"
-      width="10"
-      x="7"
-      y="7"
     />
   </svg>
 );
