@@ -14,10 +14,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import Icon from '../../../shared/Icon';
 import type { Game } from '../../../slices/types';
 import {
   statusColor,
-  statusIcon,
   translateGameStatus,
 } from '../../../utils/gameStatusHelpers';
 
@@ -50,21 +50,21 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
     void navigate(`/games/${game.id}`);
   };
 
+  const isInProgress = game.status === 'in_progress';
+
   return (
-    <Card withBorder padding="md" radius="md" shadow="sm">
+    <Card className="km-card-interactive" padding="md" onClick={handleOpen}>
       <Stack gap="sm">
         <Group align="center" justify="space-between" wrap="nowrap">
           <Group gap="sm" style={{ flex: 1, minWidth: 0 }}>
             <Stack gap={4} style={{ flex: 1, minWidth: 0 }}>
-              <Text truncate fw={500} size="md">
+              <Text truncate fw={600} size="lg">
                 {game.name}
               </Text>
               <Group gap="xs">
                 <Badge
+                  className={isInProgress ? 'km-badge-pulse' : undefined}
                   color={statusColor(game.status)}
-                  leftSection={statusIcon(game.status, 14)}
-                  size="sm"
-                  variant="light"
                 >
                   {translateGameStatus(t, game.status)}
                 </Badge>
@@ -82,12 +82,12 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
               {t('games:card.viewDetails')}
             </Button>
             <ActionIcon
-              color="red"
+              aria-label={t('common:actions.delete')}
+              color="gray"
               size="lg"
-              variant="subtle"
               onClick={handleDelete}
             >
-              <IconTrash style={{ width: 20, height: 20 }} />
+              <Icon icon={IconTrash} size={20} />
             </ActionIcon>
           </Group>
         </Group>

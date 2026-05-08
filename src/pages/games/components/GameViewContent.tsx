@@ -21,7 +21,6 @@ import type { Game, GameStatus } from '../../../slices/types.ts';
 import { assertNever } from '../../../utils/assertNever';
 import {
   statusColor,
-  statusIcon,
   translateGameStatus,
 } from '../../../utils/gameStatusHelpers';
 import RankingsPanel from '../panels/RankingsPanel.tsx';
@@ -178,12 +177,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           </Group>
         </div>
         <Group gap="sm">
-          <Badge
-            color={statusColor(game.status)}
-            leftSection={statusIcon(game.status)}
-            size="lg"
-            variant="filled"
-          >
+          <Badge color={statusColor(game.status)} size="lg" variant="filled">
             {translateGameStatus(t, game.status)}
           </Badge>
           {game.status === 'setup' && (
