@@ -22,7 +22,16 @@ const Glyph: React.FC<{ size: number }> = ({ size }) => (
   >
     {/* top face fill (cobalt accent) */}
     <path d="M12 3 L21 8 L12 12 L3 8 Z" fill="var(--mantine-color-cobalt-6)" />
-    {/* hexagon silhouette + internal Y */}
+    {/* top face pip — 1 */}
+    <circle cx="12" cy="7.75" fill="#ffffff" r="1.2" />
+    {/* left-front face pips — 2 */}
+    <circle cx="6" cy="12.3" fill="var(--mantine-color-cobalt-6)" r="1" />
+    <circle cx="9" cy="17" fill="var(--mantine-color-cobalt-6)" r="1" />
+    {/* right-front face pips — 3 */}
+    <circle cx="19" cy="11" fill="var(--mantine-color-cobalt-6)" r="1" />
+    <circle cx="16.5" cy="14.5" fill="var(--mantine-color-cobalt-6)" r="1" />
+    <circle cx="14" cy="18" fill="var(--mantine-color-cobalt-6)" r="1" />
+    {/* hexagon silhouette + internal Y, drawn last so strokes stay sharp */}
     <path
       d="M12 3 L21 8 L21 16 L12 21 L3 16 L3 8 Z M12 12 L21 8 M12 12 L3 8 M12 12 L12 21"
       stroke="currentColor"
