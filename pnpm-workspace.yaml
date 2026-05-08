@@ -1,0 +1,6 @@
+allowBuilds:
+  '@firebase/util': true
+  '@swc/core': true
+  msw: true
+  protobufjs: true
+  unrs-resolver: true
