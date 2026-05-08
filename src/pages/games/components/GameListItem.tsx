@@ -50,10 +50,24 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
     void navigate(`/games/${game.id}`);
   };
 
+  const handleCardKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleOpen();
+    }
+  };
+
   const isInProgress = game.status === 'in_progress';
 
   return (
-    <Card className="km-card-interactive" padding="md" onClick={handleOpen}>
+    <Card
+      className="km-card-interactive"
+      padding="md"
+      role="button"
+      tabIndex={0}
+      onClick={handleOpen}
+      onKeyDown={handleCardKeyDown}
+    >
       <Stack gap="sm">
         <Group align="center" justify="space-between" wrap="nowrap">
           <Group gap="sm" style={{ flex: 1, minWidth: 0 }}>
@@ -78,7 +92,13 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
           </Group>
 
           <Group gap="xs" wrap="nowrap">
-            <Button size="sm" onClick={handleOpen}>
+            <Button
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleOpen();
+              }}
+            >
               {t('games:card.viewDetails')}
             </Button>
             <ActionIcon
