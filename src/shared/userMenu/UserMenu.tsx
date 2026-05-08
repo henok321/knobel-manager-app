@@ -4,7 +4,6 @@ import {
   Divider,
   Group,
   Menu,
-  rem,
   Stack,
   Text,
   UnstyledButton,
@@ -16,6 +15,7 @@ import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '../../auth/useAuth.ts';
+import Icon from '../Icon';
 import SettingsSection from './SettingsSection.tsx';
 
 interface UserMenuProps {
@@ -64,9 +64,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
                 {t('common:header.nav.settings')}
               </Text>
             </Box>
-            <IconChevronDown
-              style={{ width: rem(16), height: rem(16), opacity: 0.6 }}
-            />
+            <span style={{ opacity: 0.6, display: 'inline-flex' }}>
+              <Icon icon={IconChevronDown} size={16} />
+            </span>
           </Group>
         </UnstyledButton>
       </Menu.Target>
@@ -87,9 +87,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
 
           <Menu.Item
             color="red"
-            leftSection={
-              <IconLogout style={{ width: rem(16), height: rem(16) }} />
-            }
+            leftSection={<Icon icon={IconLogout} size={16} />}
             onClick={onLogout}
           >
             {t('common:header.logout')}

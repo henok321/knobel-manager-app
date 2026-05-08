@@ -1,10 +1,9 @@
-import { Box, Group, ThemeIcon, Title } from '@mantine/core';
-import { IconDice } from '@tabler/icons-react';
+import { Box, Group } from '@mantine/core';
 import type React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../auth/useAuth.ts';
+import Logo from '../Logo.tsx';
 import UserMenu from '../userMenu/UserMenu.tsx';
 
 interface HeaderProps {
@@ -12,7 +11,6 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const { logOut } = useAuth();
 
@@ -20,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
     <Box
       style={{
         borderBottom:
-          '1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4))',
+          '1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5))',
         backgroundColor: 'var(--mantine-color-body)',
       }}
     >
@@ -33,20 +31,14 @@ const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
         px="xl"
         wrap="nowrap"
       >
-        <Group
-          gap="xs"
+        <Box
           style={{ cursor: 'pointer' }}
           onClick={() => {
             void navigate('/');
           }}
         >
-          <ThemeIcon size="lg" variant="light">
-            <IconDice />
-          </ThemeIcon>
-          <Title fw={700} order={4}>
-            {t('common:header.heading', 'Knobel Manager')}
-          </Title>
-        </Group>
+          <Logo size={16} variant="full" />
+        </Box>
 
         {navbarActive && (
           <Group gap="xs">

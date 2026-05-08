@@ -21,7 +21,6 @@ import type { Game, GameStatus } from '../../../slices/types.ts';
 import { assertNever } from '../../../utils/assertNever';
 import {
   statusColor,
-  statusIcon,
   translateGameStatus,
 } from '../../../utils/gameStatusHelpers';
 import RankingsPanel from '../panels/RankingsPanel.tsx';
@@ -128,14 +127,14 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         confirm: t('gameDetail:actions.startGame'),
         cancel: t('gameDetail:actions.cancel'),
       },
-      confirmProps: { color: 'blue' },
+      confirmProps: { color: 'cobalt' },
       onConfirm: () => {
         handleStatusTransition('in_progress');
         setActiveTab('rounds');
         notifications.show({
           title: t('gameDetail:actions.gameStartedNotification'),
           message: t('gameDetail:actions.gameStartedMessage'),
-          color: 'blue',
+          color: 'cobalt',
         });
       },
     });
@@ -178,16 +177,11 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           </Group>
         </div>
         <Group gap="sm">
-          <Badge
-            color={statusColor(game.status)}
-            leftSection={statusIcon(game.status)}
-            size="lg"
-            variant="filled"
-          >
+          <Badge color={statusColor(game.status)} size="lg" variant="filled">
             {translateGameStatus(t, game.status)}
           </Badge>
           {game.status === 'setup' && (
-            <Button color="blue" size="sm" onClick={confirmStartGame}>
+            <Button color="cobalt" size="sm" onClick={confirmStartGame}>
               {t('gameDetail:actions.startGame')}
             </Button>
           )}

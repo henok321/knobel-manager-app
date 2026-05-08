@@ -1,4 +1,3 @@
-import { IconCheck, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import type { TFunction } from 'i18next';
 import type { GameStatus } from '../slices/types';
 import { assertNever } from './assertNever';
@@ -8,24 +7,9 @@ export const statusColor = (status: GameStatus): string => {
     case 'setup':
       return 'gray';
     case 'in_progress':
-      return 'blue';
+      return 'cobalt';
     case 'completed':
       return 'green';
-    default:
-      return assertNever(status);
-  }
-};
-
-export const statusIcon = (status: GameStatus, size = 16) => {
-  const style = { width: size, height: size };
-
-  switch (status) {
-    case 'setup':
-      return <IconSettings style={style} />;
-    case 'in_progress':
-      return <IconPlayerPlay style={style} />;
-    case 'completed':
-      return <IconCheck style={style} />;
     default:
       return assertNever(status);
   }

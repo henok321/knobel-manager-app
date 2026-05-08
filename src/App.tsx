@@ -12,8 +12,10 @@ import i18n from './i18n/i18nConfig.ts';
 import CenterLoader from './shared/CenterLoader.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import './shared/global.css';
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx';
 import store from './store/store.ts';
+import { theme } from './theme.ts';
 
 const Login = lazy(() => import('./pages/Login.tsx'));
 const Games = lazy(() => import('./pages/games/Games.tsx'));
@@ -25,7 +27,7 @@ const App = () => (
     <I18nextProvider i18n={i18n}>
       <ErrorBoundary>
         <AuthProvider>
-          <MantineProvider defaultColorScheme="auto">
+          <MantineProvider defaultColorScheme="auto" theme={theme}>
             <ModalsProvider>
               <Notifications position="top-right" />
               <BrowserRouter>

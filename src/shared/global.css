@@ -1,0 +1,41 @@
+:root {
+  font-feature-settings: "tnum", "ss01";
+}
+
+@keyframes km-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.92);
+  }
+}
+
+.km-badge-pulse [data-variant="dot"]::before,
+.km-badge-pulse::before {
+  animation: km-pulse 1.4s ease-in-out infinite;
+}
+
+.km-card-interactive {
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.km-card-interactive:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--mantine-shadow-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .km-badge-pulse [data-variant="dot"]::before,
+  .km-badge-pulse::before,
+  .km-card-interactive {
+    animation: none;
+    transition: none;
+  }
+}

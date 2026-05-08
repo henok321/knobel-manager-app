@@ -16,6 +16,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CenterLoader from '../../shared/CenterLoader';
+import Icon from '../../shared/Icon';
 import Layout from '../../shared/layout/Layout.tsx';
 import useGames from '../../slices/games/hooks';
 import type { Game } from '../../slices/types.ts';
@@ -112,7 +113,7 @@ const Games = () => {
               </Text>
             </div>
             <Button
-              leftSection={<IconPlus style={{ width: 20, height: 20 }} />}
+              leftSection={<Icon icon={IconPlus} size={20} />}
               size="lg"
               onClick={() => setGameModalActive(true)}
             >
