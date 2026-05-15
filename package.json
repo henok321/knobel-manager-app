@@ -36,7 +36,7 @@
     "@mantine/hooks": "^9.2.1",
     "@mantine/modals": "^9.2.1",
     "@mantine/notifications": "^9.2.1",
-    "@reduxjs/toolkit": "^2.11.2",
+    "@reduxjs/toolkit": "^2.12.0",
     "@tabler/icons-react": "^3.44.0",
     "firebase": "^12.13.0",
     "i18next": "^26.2.0",
@@ -44,7 +44,7 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-i18next": "^17.0.8",
-    "react-redux": "^9.2.0",
+    "react-redux": "^9.3.0",
     "react-router-dom": "^7.15.1",
     "redux": "^5.0.1"
   },
@@ -69,7 +69,7 @@
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "jest-util": "^30.4.1",
-    "knip": "^6.13.1",
+    "knip": "^6.14.0",
     "lint-staged": "^17.0.4",
     "msw": "^2.14.6",
     "postcss": "^8.5.14",
@@ -79,7 +79,7 @@
     "typescript": "^6.0.3",
     "vite": "^8.0.13",
     "vite-plugin-mkcert": "^2.0.0",
-    "web-streams-polyfill": "^4.2.0"
+    "web-streams-polyfill": "^4.3.0"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.60.4"
