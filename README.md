@@ -31,7 +31,7 @@ graph LR
 
 ```bash
 nvm install && nvm use
-corepack enable
+npm install -g corepack && corepack enable  # Node 26+ no longer bundles corepack
 pnpm install
 ```
 

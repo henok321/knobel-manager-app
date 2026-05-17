@@ -12,8 +12,9 @@ flow diagram: see README.md.
 ## Development Commands
 
 ```bash
-nvm install && nvm use   # Node 24 (per .nvmrc)
-corepack enable          # required for pnpm
+nvm install && nvm use          # Node 26 (per .nvmrc)
+npm install -g corepack        # Node 26+ no longer bundles corepack
+corepack enable                # required for pnpm
 pnpm install
 ```
 
@@ -27,6 +28,7 @@ pnpm fix                 # biome check --write .  (auto-fix lint + format)
 pnpm check               # tsc --noEmit && biome ci . && i18next-cli status && i18next-cli lint && i18next-cli extract --ci
 pnpm test                # jest (single file: pnpm test <path>;   watch: pnpm test --watch)
 pnpm knip                # unused-files/deps audit (--strict)
+pnpm knip:fix            # knip --fix --format (auto-remove unused exports/files)
 
 # Build & deploy
 pnpm build               # tsc -b && vite build --mode production
@@ -63,8 +65,8 @@ Firebase Auth (`src/auth/`):
 - `useAuth.ts` is the consumer hook.
 - `ProtectedRoute.tsx` wraps protected routes; redirects to `/login` if unauthenticated.
 - `firebaseConfig.ts` is intentionally checked in — Firebase API keys are public and secured via domain restrictions.
-- `src/api/apiClient.ts` is the only HTTP client; an axios request interceptor attaches the Firebase JWT to every
-  request. Don't bypass it.
+- `src/api/apiClient.ts` is the only HTTP client; it creates a `@hey-api/client-fetch` client with an `auth` callback
+  that attaches the Firebase JWT to every request. Don't bypass it.
 
 ### Routing (React Router v7)
 
@@ -79,7 +81,7 @@ to the backend with a path rewrite (`/api/games` → `/games`), see `vite.config
 
 Generated types and clients live in `src/generated/` (produced by `pnpm api:gen` from the deployed OpenAPI spec via
 `@hey-api/openapi-ts` with the `@hey-api/client-fetch` plugin). **Never edit `src/generated/` by hand** — changes are
-overwritten on regeneration. Use `src/generated/models/` for request/response typing.
+overwritten on regeneration. Use `src/generated/types.gen.ts` for request/response typing.
 
 ### Internationalization — type-safe i18next
 
@@ -156,7 +158,7 @@ If the local backend isn't reachable at `http://localhost:8080/health`, fall bac
 
 ## Package manager
 
-**pnpm only** (`packageManager: pnpm@10.33.2`, enforced by `engines`). Never use `npm` or `yarn`; package scripts must
+**pnpm only** (`packageManager: pnpm@11.1.2`, enforced by `engines`). Never use `npm` or `yarn`; package scripts must
 shell out via `pnpm` (e.g. `pnpm exec ...`).
 
 ## Development Guidelines
