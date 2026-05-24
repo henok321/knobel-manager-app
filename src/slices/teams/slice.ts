@@ -87,10 +87,7 @@ const teamsSlice = createSlice({
 const { selectAll: selectAllTeams } = teamsAdapter.getSelectors<RootState>(
   (state) => state.teams,
 );
-createDraftSafeSelector(
-  [selectAllTeams, (_: RootState, gameID: number) => gameID],
-  (teams, gameID) => teams.filter((team) => team.gameID === gameID),
-);
+
 const selectTeamsByIds = createDraftSafeSelector(
   [selectAllTeams, (_: RootState, teamIDs: number[]) => teamIDs],
   (teams, teamIDs) => teams.filter((team) => teamIDs.includes(team.id)),
@@ -98,7 +95,7 @@ const selectTeamsByIds = createDraftSafeSelector(
 
 const selectTeamsByGameId = createDraftSafeSelector(
   [selectAllTeams, (_: RootState, gameID: number) => gameID],
-  (teams, teamIDs) => teams.filter((team) => team.gameID === teamIDs),
+  (teams, gameID) => teams.filter((team) => team.gameID === gameID),
 );
 
 export { selectAllTeams, selectTeamsByGameId, selectTeamsByIds };

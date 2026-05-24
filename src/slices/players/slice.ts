@@ -1,8 +1,13 @@
-import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+import {
+  createDraftSafeSelector,
+  createEntityAdapter,
+  createSlice,
+} from '@reduxjs/toolkit';
 
 import type { RootState } from '../../store/store.ts';
 import { fetchAll } from '../actions.ts';
 import { createTeamAction } from '../teams/actions.ts';
+import { selectAllTeams } from '../teams/slice.ts';
 import type { Player } from '../types.ts';
 import { deletePlayerAction, updatePlayerAction } from './actions.ts';
 
@@ -79,6 +84,16 @@ const { selectAll: selectAllPlayers } = playersAdapter.getSelectors<RootState>(
   (state) => state.players,
 );
 
-export { selectAllPlayers };
+const selectPlayersByGameId = createDraftSafeSelector(
+  [selectAllPlayers, selectAllTeams, (_: RootState, gameID: number) => gameID],
+  (players, teams, gameID) => {
+    const teamIds = new Set(
+      teams.filter((team) => team.gameID === gameID).map((team) => team.id),
+    );
+    return players.filter((player) => teamIds.has(player.teamID));
+  },
+);
+
+export { selectAllPlayers, selectPlayersByGameId };
 
 export default playersSlice.reducer;

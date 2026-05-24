@@ -1,10 +1,14 @@
 import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import usePlayers from '../../../slices/players/hooks.ts';
-import useTables, { useTablesByRound } from '../../../slices/tables/hooks.ts';
-import useTeams, { useTeamsByIds } from '../../../slices/teams/hooks.ts';
+import EmptyStateCard from '../../../shared/EmptyStateCard';
+import { usePlayersByGameId } from '../../../slices/players/hooks.ts';
+import {
+  useGameTablesFetch,
+  useTablesByRound,
+} from '../../../slices/tables/hooks.ts';
+import { useTeamsByIds } from '../../../slices/teams/hooks.ts';
 import type { Game } from '../../../slices/types';
 import { PlayerRankingRow, TeamRankingRow } from '../components/RankingRow';
 import {
@@ -12,6 +16,7 @@ import {
   mapPlayersToRankings,
   mapTeamsToRankings,
 } from './rankingsMapper.ts';
+import { buildRoundOptions } from './roundOptions.ts';
 
 interface RankingsPanelProps {
   game: Game;
@@ -21,30 +26,17 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const { t } = useTranslation();
   const [selectedRound, setSelectedRound] = useState<string>('total');
 
-  useTeams();
-  const { allPlayers } = usePlayers();
-  const { fetchAllTables, status } = useTables();
+  const players = usePlayersByGameId(game.id);
 
-  const gameTeams = useTeamsByIds(game.teams);
+  const teams = useTeamsByIds(game.teams);
 
   const roundOptions = useMemo(
-    () => [
-      { value: 'total', label: t('gameDetail:rankings.totalRanking') },
-      ...Array.from({ length: game.numberOfRounds }, (_, i) => ({
-        value: String(i + 1),
-        label: `${t('gameDetail:rounds.round')} ${i + 1}`,
-      })),
-    ],
-    [game.numberOfRounds, t],
+    () => buildRoundOptions(t, game.numberOfRounds, { includeTotal: true }),
+    [t, game.numberOfRounds],
   );
 
-  const roundsCount = game.rounds?.length || 0;
-
-  useEffect(() => {
-    if (roundsCount > 0 && status === 'idle') {
-      fetchAllTables(game.id, game.numberOfRounds);
-    }
-  }, [roundsCount, status, fetchAllTables, game.id, game.numberOfRounds]);
+  const hasRounds = (game.rounds?.length || 0) > 0;
+  const status = useGameTablesFetch(game.id, game.numberOfRounds, hasRounds);
 
   const filteredTables = useTablesByRound(
     game.id,
@@ -59,13 +51,13 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const hasNoScores = Object.keys(allScores).length === 0;
 
   const playerRankings = useMemo(
-    () => mapPlayersToRankings(gameTeams, allPlayers, allScores),
-    [gameTeams, allPlayers, allScores],
+    () => mapPlayersToRankings(teams, players, allScores),
+    [teams, players, allScores],
   );
 
   const teamRankings = useMemo(
-    () => mapTeamsToRankings(gameTeams, playerRankings),
-    [gameTeams, playerRankings],
+    () => mapTeamsToRankings(teams, playerRankings),
+    [teams, playerRankings],
   );
 
   const loading = status === 'pending';
@@ -80,17 +72,13 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
 
   if (hasNoScores && teamRankings.length === 0) {
     return (
-      <Card withBorder padding="xl" radius="md">
-        <Stack align="center" gap="md">
-          <Title order={4}>{t('gameDetail:rankings.noScoresYet')}</Title>
-          <Text c="dimmed" size="sm" ta="center">
-            {t('gameDetail:rankings.noScoresMessage')}
-          </Text>
-          <Text c="dimmed" size="sm" ta="center">
-            {t('gameDetail:rankings.noScoresInstructions')}
-          </Text>
-        </Stack>
-      </Card>
+      <EmptyStateCard
+        description={[
+          t('gameDetail:rankings.noScoresMessage'),
+          t('gameDetail:rankings.noScoresInstructions'),
+        ]}
+        title={t('gameDetail:rankings.noScoresYet')}
+      />
     );
   }
 

@@ -20,14 +20,14 @@ const TeamHandoutsView = ({
   game,
   tables,
   players,
-  teams: allTeams,
+  teams,
   teamID,
 }: TeamHandoutsViewProps) => {
   const { t } = useTranslation();
 
-  const teams = allTeams.filter(
-    (team) => team.gameID === game.id && (!teamID || team.id === teamID),
-  );
+  const filteredTeams = teamID
+    ? teams.filter((team) => team.id === teamID)
+    : teams;
 
   const rounds = Array.from({ length: game.numberOfRounds }, (_, i) => i + 1);
 
@@ -137,7 +137,7 @@ const TeamHandoutsView = ({
         </Text>
       </div>
 
-      {teams.map(renderTeamHandout)}
+      {filteredTeams.map(renderTeamHandout)}
     </Stack>
   );
 };

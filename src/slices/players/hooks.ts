@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import type { AppDispatch, RootState } from '../../store/store';
 import { deletePlayerAction, updatePlayerAction } from './actions';
-import { selectAllPlayers } from './slice';
+import { selectAllPlayers, selectPlayersByGameId } from './slice';
+
+export const usePlayersByGameId = (gameID: number) =>
+  useSelector((state: RootState) => selectPlayersByGameId(state, gameID));
 
 const usePlayers = () => {
   const dispatch = useDispatch<AppDispatch>();

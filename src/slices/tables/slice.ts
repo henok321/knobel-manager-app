@@ -67,6 +67,11 @@ const tablesSelectors = tablesAdapter.getSelectors<RootState>(
 
 const selectAllTables = tablesSelectors.selectAll;
 
+const selectTablesByGameId = createSelector(
+  [selectAllTables, (_state: RootState, gameID: number) => gameID],
+  (tables, gameID) => tables.filter((table) => table.gameID === gameID),
+);
+
 const selectTablesByRoundNumber = createSelector(
   [
     selectAllTables,
@@ -119,6 +124,7 @@ const selectTablesForRoundWithSearch = createSelector(
 
 export {
   selectAllTables,
+  selectTablesByGameId,
   selectTablesByRoundNumber,
   selectTablesForRoundWithSearch,
 };

@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { GameUpdateRequest } from '../../../generated';
 import useGames from '../../../slices/games/hooks.ts';
-import useTables from '../../../slices/tables/hooks.ts';
+import { useTablesByGameId } from '../../../slices/tables/hooks.ts';
 import type { Game, GameStatus } from '../../../slices/types.ts';
 import { assertNever } from '../../../utils/assertNever';
 import {
@@ -56,7 +56,7 @@ const getDefaultTab = (status: GameStatus): GameTab => {
 const GameViewContent = ({ game }: GameViewContentProps) => {
   const { t } = useTranslation();
   const { updateGame } = useGames();
-  const { tables: allTables } = useTables();
+  const tables = useTablesByGameId(game.id);
 
   const getPersistedTab = (): GameTab => {
     const stored = localStorage.getItem(`selected_tab_for_game_${game.id}`);
@@ -76,9 +76,9 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       return { canComplete: false, completed: 0, total: 0 };
     }
 
-    const totalTables = allTables.length;
+    const totalTables = tables.length;
 
-    const completedTables = allTables.reduce((acc, table) => {
+    const completedTables = tables.reduce((acc, table) => {
       if (!table.players || table.players.length === 0) {
         return acc;
       }
@@ -95,9 +95,11 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       completed: completedTables,
       total: totalTables,
     };
-  }, [game, allTables]);
+  }, [game, tables]);
 
   const canComplete = scoreProgress.canComplete;
+
+  const sufficientTeams = game.teamSize <= game.teams.length;
 
   const handleStatusTransition = (newStatus: GameStatus) => {
     const gameRequest: GameUpdateRequest = {
@@ -180,7 +182,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           <Badge color={statusColor(game.status)} size="lg" variant="filled">
             {translateGameStatus(t, game.status)}
           </Badge>
-          {game.status === 'setup' && (
+          {game.status === 'setup' && sufficientTeams && (
             <Button color="cobalt" size="sm" onClick={confirmStartGame}>
               {t('gameDetail:actions.startGame')}
             </Button>

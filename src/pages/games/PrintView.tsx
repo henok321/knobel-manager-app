@@ -6,9 +6,9 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import CenterLoader from '../../shared/CenterLoader';
 import useGames from '../../slices/games/hooks';
-import usePlayers from '../../slices/players/hooks';
-import useTables from '../../slices/tables/hooks';
-import useTeams from '../../slices/teams/hooks';
+import { usePlayersByGameId } from '../../slices/players/hooks';
+import useTables, { useTablesByGameId } from '../../slices/tables/hooks';
+import { useTeamsByGameId } from '../../slices/teams/hooks';
 import RankingsView from './print-views/RankingsView';
 import ScoreSheetsView from './print-views/ScoreSheetsView';
 import TablePlanView from './print-views/TablePlanView';
@@ -21,13 +21,11 @@ const PrintView = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { allGames, fetchGames, status } = useGames();
-  const { allTeams } = useTeams();
-  const { allPlayers } = usePlayers();
-  const {
-    tables: allTables,
-    fetchAllTables,
-    status: tablesStatus,
-  } = useTables();
+  const numericGameId = Number(gameID);
+  const teams = useTeamsByGameId(numericGameId);
+  const players = usePlayersByGameId(numericGameId);
+  const tables = useTablesByGameId(numericGameId);
+  const { fetchAllTables, status: tablesStatus } = useTables();
 
   const viewType = searchParams.get('type') || 'tablePlan';
   const roundNumber = searchParams.get('round');
@@ -72,31 +70,27 @@ const PrintView = () => {
   const renderView = () => {
     switch (viewType) {
       case 'tablePlan':
-        return (
-          <TablePlanView game={game} tables={allTables} teams={allTeams} />
-        );
+        return <TablePlanView game={game} tables={tables} teams={teams} />;
       case 'scoreSheets':
-        return (
-          <ScoreSheetsView game={game} tables={allTables} teams={allTeams} />
-        );
+        return <ScoreSheetsView game={game} tables={tables} teams={teams} />;
       case 'teamHandouts':
         return (
           <TeamHandoutsView
             game={game}
-            players={allPlayers}
-            tables={allTables}
+            players={players}
+            tables={tables}
             teamID={teamID ? Number(teamID) : undefined}
-            teams={allTeams}
+            teams={teams}
           />
         );
       case 'rankings':
         return (
           <RankingsView
             game={game}
-            players={allPlayers}
+            players={players}
             roundNumber={roundNumber ? Number(roundNumber) : undefined}
-            tables={allTables}
-            teams={allTeams}
+            tables={tables}
+            teams={teams}
           />
         );
       default:

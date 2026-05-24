@@ -15,17 +15,22 @@ import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import EmptyStateCard from '../../../shared/EmptyStateCard';
 import Icon from '../../../shared/Icon';
 
 import useGames from '../../../slices/games/hooks';
-import useTables from '../../../slices/tables/hooks';
+import useTables, {
+  useGameTablesFetch,
+  useTablesByGameId,
+} from '../../../slices/tables/hooks';
 import { selectTablesForRoundWithSearch } from '../../../slices/tables/slice';
-import useTeams from '../../../slices/teams/hooks';
+import { useTeamsByGameId } from '../../../slices/teams/hooks';
 import type { Game, GameStatus, Table } from '../../../slices/types';
 import type { RootState } from '../../../store/store';
 import { assertNever } from '../../../utils/assertNever';
 import { PlayerScoreRow } from '../components/PlayerScoreRow';
 import ScoreEntryModal from '../components/ScoreEntryModal';
+import { buildRoundOptions } from './roundOptions.ts';
 
 interface RoundsPanelProps {
   game: Game;
@@ -52,9 +57,9 @@ const getRoundsPermissions = (status: GameStatus): RoundsPermissions => {
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
   const { setupGame, status: gamesStatus } = useGames();
-  const { allTeams } = useTeams();
+  const teams = useTeamsByGameId(game.id);
+  const tables = useTablesByGameId(game.id);
   const {
-    tables: allTables,
     status: tablesStatus,
     error: tablesError,
     fetchAllTables,
@@ -70,15 +75,11 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     game.status,
   );
   const hasRounds = (game.rounds?.length || 0) > 0;
-  const isSetupMode = !hasRounds || allTables.length === 0;
+  const isSetupMode = !hasRounds || tables.length === 0;
 
   const roundOptions = useMemo(
-    () =>
-      Array.from({ length: game.numberOfRounds }, (_, i) => ({
-        value: String(i + 1),
-        label: `${t('gameDetail:rounds.round')} ${i + 1}`,
-      })),
-    [game.numberOfRounds, t],
+    () => buildRoundOptions(t, game.numberOfRounds),
+    [t, game.numberOfRounds],
   );
 
   const getPersistedRound = () => {
@@ -89,6 +90,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [selectedRound, setSelectedRound] = useState<number>(
     getPersistedRound(),
   );
+
+  const sufficientTeams = teams.length >= game.tableSize;
 
   useEffect(() => {
     localStorage.setItem(
@@ -106,13 +109,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     ),
   );
 
-  useEffect(() => {
-    if (!game.id || !hasRounds || tablesStatus !== 'idle') {
-      return;
-    }
-
-    fetchAllTables(game.id, game.numberOfRounds);
-  }, [game.id, hasRounds, tablesStatus, fetchAllTables, game.numberOfRounds]);
+  useGameTablesFetch(game.id, game.numberOfRounds, hasRounds);
 
   const handleSetupGame = async () => {
     setError(null);
@@ -196,11 +193,11 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
           />
-
           {canSetupMatchmaking && (
             <Button
               loading={settingUp}
               size="md"
+              disabled={!sufficientTeams}
               variant="light"
               onClick={() => void handleSetupGame()}
             >
@@ -217,32 +214,26 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       )}
 
       {isSetupMode && !loading && !settingUp && canSetupMatchmaking && (
-        <Card withBorder padding="xl" radius="md">
-          <Stack align="center" gap="md">
-            <Title order={4}>{t('gameDetail:rounds.setupRequired')}</Title>
-            <Text c="dimmed" size="sm" ta="center">
-              {t('gameDetail:rounds.setupDescription')}
-            </Text>
-            <Button
-              loading={settingUp}
-              size="lg"
-              onClick={() => void handleSetupGame()}
-            >
-              {t('gameDetail:rounds.setupMatchmaking')}
-            </Button>
-          </Stack>
-        </Card>
+        <EmptyStateCard
+          description={t('gameDetail:rounds.setupDescription')}
+          title={t('gameDetail:rounds.setupRequired')}
+        >
+          <Button
+            loading={settingUp}
+            disabled={!sufficientTeams}
+            size="lg"
+            onClick={() => void handleSetupGame()}
+          >
+            {t('gameDetail:rounds.setupMatchmaking')}
+          </Button>
+        </EmptyStateCard>
       )}
 
       {isSetupMode && !loading && !settingUp && !canSetupMatchmaking && (
-        <Card withBorder padding="xl" radius="md">
-          <Stack align="center" gap="md">
-            <Title order={4}>{t('gameDetail:rounds.setupNotAvailable')}</Title>
-            <Text c="dimmed" size="sm" ta="center">
-              {t('gameDetail:rounds.setupNotAvailableDescription')}
-            </Text>
-          </Stack>
-        </Card>
+        <EmptyStateCard
+          description={t('gameDetail:rounds.setupNotAvailableDescription')}
+          title={t('gameDetail:rounds.setupNotAvailable')}
+        />
       )}
 
       {(loading || settingUp) && (
@@ -256,7 +247,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       {!loading &&
         !isSetupMode &&
         !settingUp &&
-        allTables.length === 0 &&
+        tables.length === 0 &&
         !displayError && (
           <Card withBorder padding="lg" radius="md" shadow="sm">
             <Text c="dimmed" ta="center">
@@ -268,7 +259,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       {!loading &&
         !isSetupMode &&
         !settingUp &&
-        allTables.length > 0 &&
+        tables.length > 0 &&
         filteredAndSortedTables.length === 0 &&
         searchQuery.trim() && (
           <Card withBorder padding="lg" radius="md" shadow="sm">
@@ -353,7 +344,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                         (s) => s.playerID === player.id,
                       );
                       const team = player.teamID
-                        ? allTeams.find((t) => t.id === player.teamID)
+                        ? teams.find((t) => t.id === player.teamID)
                         : undefined;
                       return (
                         <PlayerScoreRow
