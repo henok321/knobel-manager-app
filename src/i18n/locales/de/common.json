@@ -17,7 +17,7 @@
     "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten"
   },
   "header": {
-    "heading": "Knobel-Manager",
+    "heading": "Knobel Manager",
     "logout": "Abmelden",
     "nav": {
       "colorScheme": "Design",
@@ -52,7 +52,7 @@
         "validationMessage": "Passwort muss mindestens 6 Zeichen lang sein"
       }
     },
-    "heading": "Anmelden bei Knobel-Manager",
+    "heading": "Anmelden bei Knobel Manager",
     "submit": "Anmelden"
   }
 }
