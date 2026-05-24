@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import type { AppDispatch, RootState } from '../../store/store';
@@ -7,12 +7,35 @@ import {
   fetchTablesForRound,
   updateScoresForTable,
 } from './actions';
-import { selectAllTables, selectTablesByRoundNumber } from './slice';
+import {
+  selectAllTables,
+  selectTablesByGameId,
+  selectTablesByRoundNumber,
+} from './slice';
+
+export const useTablesByGameId = (gameID: number) =>
+  useSelector((state: RootState) => selectTablesByGameId(state, gameID));
 
 export const useTablesByRound = (gameID: number, roundNumber: number | null) =>
   useSelector((state: RootState) =>
     selectTablesByRoundNumber(state, gameID, roundNumber),
   );
+
+export const useGameTablesFetch = (
+  gameID: number,
+  numberOfRounds: number,
+  enabled: boolean,
+) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const status = useSelector((state: RootState) => state.tables.status);
+
+  useEffect(() => {
+    if (!enabled || status !== 'idle') return;
+    void dispatch(fetchAllTablesForGame({ gameID, numberOfRounds }));
+  }, [dispatch, gameID, numberOfRounds, enabled, status]);
+
+  return status;
+};
 
 const useTables = () => {
   const dispatch = useDispatch<AppDispatch>();

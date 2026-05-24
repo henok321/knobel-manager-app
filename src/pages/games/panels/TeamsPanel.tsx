@@ -15,8 +15,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Icon from '../../../shared/Icon';
-import usePlayers from '../../../slices/players/hooks';
-import useTables from '../../../slices/tables/hooks';
+import usePlayers, { usePlayersByGameId } from '../../../slices/players/hooks';
+import useTables, { useTablesByGameId } from '../../../slices/tables/hooks';
 import useTeams, { useTeamsByGameId } from '../../../slices/teams/hooks';
 import type { Game, GameStatus } from '../../../slices/types';
 import { assertNever } from '../../../utils/assertNever';
@@ -48,9 +48,12 @@ const getTeamsPermissions = (status: GameStatus): TeamsPermissions => {
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
-  const { allTeams, createTeam, updateTeam, deleteTeam } = useTeams();
-  const { allPlayers, updatePlayer } = usePlayers();
-  const { tables: allTables, fetchAllTables, status } = useTables();
+  const { createTeam, updateTeam, deleteTeam } = useTeams();
+  const { updatePlayer } = usePlayers();
+  const { fetchAllTables, status } = useTables();
+  const teams = useTeamsByGameId(game.id);
+  const players = usePlayersByGameId(game.id);
+  const tables = useTablesByGameId(game.id);
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
@@ -61,15 +64,13 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const roundsCount = game.rounds?.length || 0;
 
-  const gameTeams = useTeamsByGameId(game.id);
-
   useEffect(() => {
     if (roundsCount > 0 && status === 'idle') {
       fetchAllTables(game.id, game.numberOfRounds);
     }
   }, [game.id, game.numberOfRounds, roundsCount, fetchAllTables, status]);
 
-  const showTableAssignments = allTables.length > 0;
+  const showTableAssignments = tables.length > 0;
 
   const playerTableAssignments = useMemo(() => {
     const assignments: Record<
@@ -77,7 +78,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       { roundNumber: number; tableNumber: number }[]
     > = {};
 
-    for (const table of allTables) {
+    for (const table of tables) {
       const players = table.players;
       if (!players) {
         continue;
@@ -96,15 +97,15 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     }
 
     return assignments;
-  }, [allTables]);
+  }, [tables]);
 
   const getPlayersForTeam = (teamID: number) => {
-    const team = allTeams.find((t) => t?.id === teamID);
+    const team = teams.find((t) => t?.id === teamID);
     if (!team) {
       return [];
     }
     return team.players
-      .map((playerID) => allPlayers.find((p) => p.id === playerID))
+      .map((playerID) => players.find((p) => p.id === playerID))
       .filter(
         (player): player is NonNullable<typeof player> => player !== undefined,
       );
@@ -180,14 +181,14 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         </Tooltip>
       )}
 
-      {canAddDelete && gameTeams.length === 0 && (
+      {canAddDelete && teams.length === 0 && (
         <Text c="dimmed" ta="center">
           {t('gameDetail:teams.noTeams')}
         </Text>
       )}
 
       <Stack gap="md">
-        {gameTeams.map((team) => {
+        {teams.map((team) => {
           if (!team) {
             return null;
           }
@@ -283,7 +284,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         <EditTeamDialog
           isOpen={editTeamDialogOpen}
           players={getPlayersForTeam(editingTeamId)}
-          teamName={allTeams.find((t) => t?.id === editingTeamId)?.name || ''}
+          teamName={teams.find((t) => t?.id === editingTeamId)?.name || ''}
           onClose={() => {
             setEditTeamDialogOpen(false);
             setEditingTeamId(null);
