@@ -1,26 +1,15 @@
 import { Paper, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type {
-  Game,
-  Player,
-  Table as TableType,
-  Team,
-} from '../../../slices/types';
+import type { Game, Table as TableType, Team } from '../../../slices/types';
 
 interface TablePlanViewProps {
   game: Game;
   tables: (TableType & { roundNumber?: number })[];
-  players: Player[];
   teams: Team[];
 }
 
-const TablePlanView = ({
-  game,
-  tables,
-  players: _players,
-  teams,
-}: TablePlanViewProps) => {
+const TablePlanView = ({ game, tables, teams }: TablePlanViewProps) => {
   const { t } = useTranslation();
 
   // Group tables by round

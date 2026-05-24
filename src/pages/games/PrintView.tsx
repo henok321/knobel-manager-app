@@ -73,21 +73,11 @@ const PrintView = () => {
     switch (viewType) {
       case 'tablePlan':
         return (
-          <TablePlanView
-            game={game}
-            players={allPlayers}
-            tables={allTables}
-            teams={allTeams}
-          />
+          <TablePlanView game={game} tables={allTables} teams={allTeams} />
         );
       case 'scoreSheets':
         return (
-          <ScoreSheetsView
-            game={game}
-            players={allPlayers}
-            tables={allTables}
-            teams={allTeams}
-          />
+          <ScoreSheetsView game={game} tables={allTables} teams={allTeams} />
         );
       case 'teamHandouts':
         return (

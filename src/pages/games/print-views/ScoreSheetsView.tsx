@@ -1,26 +1,15 @@
 import { Paper, rem, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type {
-  Game,
-  Player,
-  Table as TableType,
-  Team,
-} from '../../../slices/types';
+import type { Game, Table as TableType, Team } from '../../../slices/types';
 
 interface ScoreSheetsViewProps {
   game: Game;
   tables: (TableType & { roundNumber?: number })[];
-  players: Player[];
   teams: Team[];
 }
 
-const ScoreSheetsView = ({
-  game,
-  tables,
-  players: _players,
-  teams,
-}: ScoreSheetsViewProps) => {
+const ScoreSheetsView = ({ game, tables, teams }: ScoreSheetsViewProps) => {
   const { t } = useTranslation();
 
   const sortedTables = [...tables].sort((a, b) => {

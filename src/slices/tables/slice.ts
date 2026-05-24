@@ -70,7 +70,7 @@ const selectAllTables = tablesSelectors.selectAll;
 const selectTablesByRoundNumber = createSelector(
   [
     selectAllTables,
-    (_state: RootState, gameID: number, _roundNumber: number | null) => gameID,
+    (_state: RootState, gameID: number) => gameID,
     (_state: RootState, _gameID: number, roundNumber: number | null) =>
       roundNumber,
   ],
@@ -86,18 +86,8 @@ const selectTablesByRoundNumber = createSelector(
 const selectTablesForRoundWithSearch = createSelector(
   [
     selectAllTables,
-    (
-      _state: RootState,
-      gameID: number,
-      _roundNumber: number,
-      _searchQuery: string,
-    ) => gameID,
-    (
-      _state: RootState,
-      _gameID: number,
-      roundNumber: number,
-      _searchQuery: string,
-    ) => roundNumber,
+    (_state: RootState, gameID: number) => gameID,
+    (_state: RootState, _gameID: number, roundNumber: number) => roundNumber,
     (
       _state: RootState,
       _gameID: number,
