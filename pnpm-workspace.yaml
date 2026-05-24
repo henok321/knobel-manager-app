@@ -1,3 +1,11 @@
+shamefullyHoist: false
+strictPeerDependencies: false
+autoInstallPeers: true
+enablePrePostScripts: true
+
+overrides:
+  minimatch: '>=10.2.1'
+
 allowBuilds:
   '@firebase/util': true
   '@swc/core': true
