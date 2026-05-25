@@ -15,14 +15,14 @@ import { IconPlus } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CenterLoader from '../../shared/CenterLoader';
-import Icon from '../../shared/Icon';
-import Layout from '../../shared/layout/Layout.tsx';
-import useGames from '../../slices/games/hooks';
-import type { Game } from '../../slices/types.ts';
-import { assertNever } from '../../utils/assertNever';
-import GameListItem from './components/GameListItem';
+import CenterLoader from '../../../shared/CenterLoader';
+import Icon from '../../../shared/Icon';
+import Layout from '../../../shared/layout/Layout.tsx';
+import useGames from '../../../slices/games/hooks';
+import type { Game } from '../../../slices/types.ts';
+import { assertNever } from '../../../utils/assertNever';
 import GameForm from './GameForm';
+import GameListItem from './GameListItem';
 
 const Games = () => {
   const { status, error, allGames, createGame, deleteGame, fetchGames } =

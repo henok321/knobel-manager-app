@@ -3,7 +3,7 @@ import { notifications } from '@mantine/notifications';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { type ChangeEvent, type SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Icon from '../../../shared/Icon';
+import Icon from '../../../../shared/Icon';
 
 export interface TeamFormData {
   name: string;

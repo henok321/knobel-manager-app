@@ -1,194 +1,24 @@
-import {
-  ActionIcon,
-  Badge,
-  Button,
-  Card,
-  Group,
-  Stack,
-  Table,
-  Text,
-  Title,
-  Tooltip,
-} from '@mantine/core';
+import { Button, Stack, Text, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
+import { IconPlus } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Icon from '../../../shared/Icon';
-import usePlayers, { usePlayersByGameId } from '../../../slices/players/hooks';
-import useTables, { useTablesByGameId } from '../../../slices/tables/hooks';
-import useTeams, { useTeamsByGameId } from '../../../slices/teams/hooks';
-import type { Game, GameStatus, Player } from '../../../slices/types';
-import { assertNever } from '../../../utils/assertNever';
-import TeamForm, { type TeamFormData } from '../components/TeamForm';
-import EditTeamDialog from './EditTeamDialog.tsx';
+import Icon from '../../../../shared/Icon';
+import usePlayers, {
+  usePlayersByGameId,
+} from '../../../../slices/players/hooks';
+import useTables, { useTablesByGameId } from '../../../../slices/tables/hooks';
+import useTeams, { useTeamsByGameId } from '../../../../slices/teams/hooks';
+import type { Game, GameStatus } from '../../../../slices/types';
+import { assertNever } from '../../../../utils/assertNever';
+import EditTeamDialog from './EditTeamDialog';
+import TeamCard from './TeamCard';
+import TeamForm, { type TeamFormData } from './TeamForm';
 
 interface TeamsPanelProps {
   game: Game;
 }
-
-type RoundTableAssignment = { roundNumber: number; tableNumber: number };
-
-interface TeamScheduleMatrixProps {
-  players: Player[];
-  playerTableAssignments: Record<number, RoundTableAssignment[]>;
-  numberOfRounds: number;
-}
-
-const PLAYER_COL_PERCENT = 32;
-
-const TeamScheduleMatrix = ({
-  players,
-  playerTableAssignments,
-  numberOfRounds,
-}: TeamScheduleMatrixProps) => {
-  const { t } = useTranslation();
-  const rounds = Array.from({ length: numberOfRounds }, (_, i) => i + 1);
-  const roundColWidth = `${(100 - PLAYER_COL_PERCENT) / numberOfRounds}%`;
-
-  return (
-    <Table
-      horizontalSpacing="xs"
-      style={{ tableLayout: 'fixed', width: '100%' }}
-      verticalSpacing="xs"
-      withRowBorders={false}
-    >
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th w={`${PLAYER_COL_PERCENT}%`}>
-            {t('gameDetail:teams.players')}
-          </Table.Th>
-          {rounds.map((round) => (
-            <Table.Th key={round} ta="center" w={roundColWidth}>
-              <Text component="span" fw={600} size="sm" visibleFrom="sm">
-                {t('gameDetail:teams.roundColumn', { round })}
-              </Text>
-              <Text component="span" fw={600} hiddenFrom="sm" size="sm">
-                {t('gameDetail:teams.roundColumnShort', { round })}
-              </Text>
-            </Table.Th>
-          ))}
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {players.map((player) => {
-          const tableByRound = new Map<number, number>(
-            (playerTableAssignments[player.id] ?? []).map((a) => [
-              a.roundNumber,
-              a.tableNumber,
-            ]),
-          );
-          return (
-            <Table.Tr key={player.id}>
-              <Table.Td>
-                <Text size="sm" truncate>
-                  {player.name}
-                </Text>
-              </Table.Td>
-              {rounds.map((round) => {
-                const tableNumber = tableByRound.get(round);
-                return (
-                  <Table.Td key={round} ta="center">
-                    {tableNumber !== undefined && (
-                      <Badge color="indigo" size="sm" variant="light">
-                        <Text component="span" inherit visibleFrom="sm">
-                          {t('gameDetail:teams.tableCell', {
-                            table: tableNumber,
-                          })}
-                        </Text>
-                        <Text component="span" hiddenFrom="sm" inherit>
-                          {t('gameDetail:teams.tableCellShort', {
-                            table: tableNumber,
-                          })}
-                        </Text>
-                      </Badge>
-                    )}
-                  </Table.Td>
-                );
-              })}
-            </Table.Tr>
-          );
-        })}
-      </Table.Tbody>
-    </Table>
-  );
-};
-
-interface TeamCardProps {
-  team: { id: number; name: string };
-  players: Player[];
-  numberOfRounds: number;
-  playerTableAssignments: Record<number, RoundTableAssignment[]>;
-  showTableAssignments: boolean;
-  canEdit: boolean;
-  canAddDelete: boolean;
-  isCompleted: boolean;
-  onEdit: (teamID: number) => void;
-  onDelete: (teamID: number) => void;
-}
-
-const TeamCard = ({
-  team,
-  players,
-  numberOfRounds,
-  playerTableAssignments,
-  showTableAssignments,
-  canEdit,
-  canAddDelete,
-  isCompleted,
-  onEdit,
-  onDelete,
-}: TeamCardProps) => {
-  const { t } = useTranslation();
-
-  return (
-    <Card withBorder padding="lg" radius="md" shadow="sm">
-      <Stack gap="md">
-        <Group align="center" justify="space-between">
-          <Title order={3}>{team.name}</Title>
-          {!isCompleted && (
-            <Group gap="xs">
-              {canEdit && (
-                <ActionIcon variant="subtle" onClick={() => onEdit(team.id)}>
-                  <Icon icon={IconPencil} size={16} />
-                </ActionIcon>
-              )}
-              {canAddDelete && (
-                <ActionIcon
-                  color="red"
-                  variant="subtle"
-                  onClick={() => onDelete(team.id)}
-                >
-                  <Icon icon={IconTrash} size={16} />
-                </ActionIcon>
-              )}
-            </Group>
-          )}
-        </Group>
-
-        {showTableAssignments ? (
-          <TeamScheduleMatrix
-            numberOfRounds={numberOfRounds}
-            playerTableAssignments={playerTableAssignments}
-            players={players}
-          />
-        ) : (
-          <Stack gap="xs">
-            <Text fw={500} size="sm">
-              {t('gameDetail:teams.players')}:
-            </Text>
-            {players.map((player) => (
-              <Text key={player.id} size="sm">
-                {player.name}
-              </Text>
-            ))}
-          </Stack>
-        )}
-      </Stack>
-    </Card>
-  );
-};
 
 interface TeamsPermissions {
   canAddDelete: boolean;

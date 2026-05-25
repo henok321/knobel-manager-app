@@ -2,21 +2,21 @@ import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import EmptyStateCard from '../../../shared/EmptyStateCard';
-import { usePlayersByGameId } from '../../../slices/players/hooks.ts';
+import EmptyStateCard from '../../../../shared/EmptyStateCard';
+import { usePlayersByGameId } from '../../../../slices/players/hooks.ts';
 import {
   useGameTablesFetch,
   useTablesByRound,
-} from '../../../slices/tables/hooks.ts';
-import { useTeamsByIds } from '../../../slices/teams/hooks.ts';
-import type { Game } from '../../../slices/types';
-import { PlayerRankingRow, TeamRankingRow } from '../components/RankingRow';
+} from '../../../../slices/tables/hooks.ts';
+import { useTeamsByIds } from '../../../../slices/teams/hooks.ts';
+import type { Game } from '../../../../slices/types';
+import { buildRoundOptions } from '../roundOptions.ts';
+import { PlayerRankingRow, TeamRankingRow } from './RankingRow';
 import {
   aggregateScoresFromTables,
   mapPlayersToRankings,
   mapTeamsToRankings,
 } from './rankingsMapper.ts';
-import { buildRoundOptions } from './roundOptions.ts';
 
 interface RankingsPanelProps {
   game: Game;

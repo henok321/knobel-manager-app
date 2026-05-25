@@ -18,8 +18,10 @@ import store from './store/store.ts';
 import { theme } from './theme.ts';
 
 const Login = lazy(() => import('./pages/Login.tsx'));
-const Games = lazy(() => import('./pages/games/Games.tsx'));
-const GameDetail = lazy(() => import('./pages/games/GameDetail.tsx'));
+const Games = lazy(() => import('./pages/games/Games/Games.tsx'));
+const GameDetail = lazy(
+  () => import('./pages/games/GameDetail/GameDetail.tsx'),
+);
 const PrintView = lazy(() => import('./pages/games/PrintView.tsx'));
 
 const App = () => (

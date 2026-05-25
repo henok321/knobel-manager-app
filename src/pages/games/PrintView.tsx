@@ -9,10 +9,10 @@ import useGames from '../../slices/games/hooks';
 import { usePlayersByGameId } from '../../slices/players/hooks';
 import useTables, { useTablesByGameId } from '../../slices/tables/hooks';
 import { useTeamsByGameId } from '../../slices/teams/hooks';
-import RankingsView from './print-views/RankingsView';
-import ScoreSheetsView from './print-views/ScoreSheetsView';
-import TablePlanView from './print-views/TablePlanView';
-import TeamHandoutsView from './print-views/TeamHandoutsView';
+import RankingsView from './print-views/RankingsView/RankingsView';
+import ScoreSheetsView from './print-views/ScoreSheetsView/ScoreSheetsView';
+import TablePlanView from './print-views/TablePlanView/TablePlanView';
+import TeamHandoutsView from './print-views/TeamHandoutsView/TeamHandoutsView';
 import './print-views/print.css';
 
 const PrintView = () => {
