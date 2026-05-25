@@ -3,11 +3,12 @@ import { notifications } from '@mantine/notifications';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { Player, Table } from '../../../slices/types';
+import type { Player, Table, Team } from '../../../slices/types';
 
 interface ScoreEntryModalProps {
   isOpen: boolean;
   table: Table | null;
+  teams: Team[];
   roundNumber: number;
   onClose: () => void;
   onSubmit: (scores: { playerID: number; score: number }[]) => Promise<void>;
@@ -16,6 +17,7 @@ interface ScoreEntryModalProps {
 const ScoreEntryModal = ({
   isOpen,
   table,
+  teams,
   roundNumber,
   onClose,
   onSubmit,
@@ -82,7 +84,7 @@ const ScoreEntryModal = ({
           <NumberInput
             key={player.id}
             defaultValue={initialScores[player.id]}
-            label={player.name}
+            label={`${player.name} (${teams.find((t) => t.id === player.teamID)?.name})`}
             min={0}
             placeholder={t('gameDetail:rounds.scorePlaceholder')}
             onChange={(value) =>
