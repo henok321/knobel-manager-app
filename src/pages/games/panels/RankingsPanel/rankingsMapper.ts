@@ -3,7 +3,7 @@ import type {
   Score,
   Table as TableModel,
   Team,
-} from '../../../slices/types';
+} from '../../../../slices/types.ts';
 
 interface PlayerRanking {
   playerID: number;

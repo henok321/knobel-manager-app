@@ -23,9 +23,9 @@ import {
   statusColor,
   translateGameStatus,
 } from '../../../utils/gameStatusHelpers';
-import RankingsPanel from '../panels/RankingsPanel.tsx';
-import RoundsPanel from '../panels/RoundsPanel.tsx';
-import TeamsPanel from '../panels/TeamsPanel.tsx';
+import RankingsPanel from '../panels/RankingsPanel/RankingsPanel';
+import RoundsPanel from '../panels/RoundsPanel/RoundsPanel';
+import TeamsPanel from '../panels/TeamsPanel/TeamsPanel';
 
 const PrintMenu = lazy(() => import('../../../shared/PrintMenu.tsx'));
 
