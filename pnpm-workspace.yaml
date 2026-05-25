@@ -3,6 +3,8 @@ strictPeerDependencies: false
 autoInstallPeers: true
 enablePrePostScripts: true
 
+minimumReleaseAge: 0
+
 overrides:
   minimatch: '>=10.2.1'
 
