@@ -90,8 +90,10 @@
     "player": "Player",
     "playerNamePlaceholder": "Enter player name",
     "players": "Players",
-    "roundShort": "R",
-    "tableShort": "T",
+    "roundColumn": "Round {{round}}",
+    "roundColumnShort": "R{{round}}",
+    "tableCell": "Table {{table}}",
+    "tableCellShort": "T{{table}}",
     "teamName": "Team Name",
     "teamNamePlaceholder": "Enter team name"
   },
