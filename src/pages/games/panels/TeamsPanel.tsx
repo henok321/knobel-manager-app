@@ -5,6 +5,7 @@ import {
   Card,
   Group,
   Stack,
+  Table,
   Text,
   Title,
   Tooltip,
@@ -18,7 +19,7 @@ import Icon from '../../../shared/Icon';
 import usePlayers, { usePlayersByGameId } from '../../../slices/players/hooks';
 import useTables, { useTablesByGameId } from '../../../slices/tables/hooks';
 import useTeams, { useTeamsByGameId } from '../../../slices/teams/hooks';
-import type { Game, GameStatus } from '../../../slices/types';
+import type { Game, GameStatus, Player } from '../../../slices/types';
 import { assertNever } from '../../../utils/assertNever';
 import TeamForm, { type TeamFormData } from '../components/TeamForm';
 import EditTeamDialog from './EditTeamDialog.tsx';
@@ -26,6 +27,93 @@ import EditTeamDialog from './EditTeamDialog.tsx';
 interface TeamsPanelProps {
   game: Game;
 }
+
+type RoundTableAssignment = { roundNumber: number; tableNumber: number };
+
+interface TeamScheduleMatrixProps {
+  players: Player[];
+  playerTableAssignments: Record<number, RoundTableAssignment[]>;
+  numberOfRounds: number;
+}
+
+const PLAYER_COL_PERCENT = 32;
+
+const TeamScheduleMatrix = ({
+  players,
+  playerTableAssignments,
+  numberOfRounds,
+}: TeamScheduleMatrixProps) => {
+  const { t } = useTranslation();
+  const rounds = Array.from({ length: numberOfRounds }, (_, i) => i + 1);
+  const roundColWidth = `${(100 - PLAYER_COL_PERCENT) / numberOfRounds}%`;
+
+  return (
+    <Table
+      horizontalSpacing="xs"
+      style={{ tableLayout: 'fixed', width: '100%' }}
+      verticalSpacing="xs"
+      withRowBorders={false}
+    >
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th w={`${PLAYER_COL_PERCENT}%`}>
+            {t('gameDetail:teams.players')}
+          </Table.Th>
+          {rounds.map((round) => (
+            <Table.Th key={round} ta="center" w={roundColWidth}>
+              <Text component="span" fw={600} size="sm" visibleFrom="sm">
+                {t('gameDetail:teams.roundColumn', { round })}
+              </Text>
+              <Text component="span" fw={600} hiddenFrom="sm" size="sm">
+                {t('gameDetail:teams.roundColumnShort', { round })}
+              </Text>
+            </Table.Th>
+          ))}
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        {players.map((player) => {
+          const tableByRound = new Map<number, number>(
+            (playerTableAssignments[player.id] ?? []).map((a) => [
+              a.roundNumber,
+              a.tableNumber,
+            ]),
+          );
+          return (
+            <Table.Tr key={player.id}>
+              <Table.Td>
+                <Text size="sm" truncate>
+                  {player.name}
+                </Text>
+              </Table.Td>
+              {rounds.map((round) => {
+                const tableNumber = tableByRound.get(round);
+                return (
+                  <Table.Td key={round} ta="center">
+                    {tableNumber !== undefined && (
+                      <Badge color="indigo" size="sm" variant="light">
+                        <Text component="span" inherit visibleFrom="sm">
+                          {t('gameDetail:teams.tableCell', {
+                            table: tableNumber,
+                          })}
+                        </Text>
+                        <Text component="span" hiddenFrom="sm" inherit>
+                          {t('gameDetail:teams.tableCellShort', {
+                            table: tableNumber,
+                          })}
+                        </Text>
+                      </Badge>
+                    )}
+                  </Table.Td>
+                );
+              })}
+            </Table.Tr>
+          );
+        })}
+      </Table.Tbody>
+    </Table>
+  );
+};
 
 interface TeamsPermissions {
   canAddDelete: boolean;
@@ -222,51 +310,26 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
                   )}
                 </Group>
 
-                <Stack gap="xs">
-                  <Text fw={500} size="sm">
-                    {t('gameDetail:teams.players')}:
-                  </Text>
-                  {players.map((player) => {
-                    if (!player) {
-                      return null;
-                    }
-                    return (
-                      <Group
-                        key={player.id}
-                        align="flex-start"
-                        gap="xs"
-                        justify="space-between"
-                        wrap="wrap"
-                      >
-                        <Stack gap={4} style={{ flex: 1 }}>
-                          <Text size="sm">{player.name}</Text>
-                          {showTableAssignments &&
-                            (playerTableAssignments[player.id]?.length ?? 0) >
-                              0 && (
-                              <Group gap={4} wrap="wrap">
-                                {(playerTableAssignments[player.id] ?? [])
-                                  .slice()
-                                  .sort((a, b) => a.roundNumber - b.roundNumber)
-                                  .map((assignment) => (
-                                    <Badge
-                                      key={`${assignment.roundNumber}-${assignment.tableNumber}`}
-                                      color="blue"
-                                      size="sm"
-                                      variant="light"
-                                    >
-                                      {t('gameDetail:teams.roundShort')}
-                                      {assignment.roundNumber}:
-                                      {t('gameDetail:teams.tableShort')}
-                                      {assignment.tableNumber}
-                                    </Badge>
-                                  ))}
-                              </Group>
-                            )}
-                        </Stack>
-                      </Group>
-                    );
-                  })}
-                </Stack>
+                {showTableAssignments ? (
+                  <TeamScheduleMatrix
+                    numberOfRounds={game.numberOfRounds}
+                    playerTableAssignments={playerTableAssignments}
+                    players={players}
+                  />
+                ) : (
+                  <Stack gap="xs">
+                    <Text fw={500} size="sm">
+                      {t('gameDetail:teams.players')}:
+                    </Text>
+                    {players.map((player) =>
+                      player ? (
+                        <Text key={player.id} size="sm">
+                          {player.name}
+                        </Text>
+                      ) : null,
+                    )}
+                  </Stack>
+                )}
               </Stack>
             </Card>
           );
