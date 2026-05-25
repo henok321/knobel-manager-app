@@ -7,20 +7,34 @@ import Breadcrumbs from '../../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../../shared/CenterLoader';
 import Layout from '../../../shared/layout/Layout.tsx';
 import useGames from '../../../slices/games/hooks';
+import useTables from '../../../slices/tables/hooks.ts';
 import GameViewContent from './GameViewContent';
 
 const GameDetail = () => {
   const { gameID } = useParams<{ gameID: string }>();
   const { t } = useTranslation();
   const { allGames, fetchGames, status } = useGames();
+  const { fetchAllTables } = useTables();
 
   useEffect(() => {
-    if (status === 'idle') {
-      fetchGames();
-    }
-  }, [status, fetchGames]);
+    fetchGames();
+  }, [fetchGames]);
 
   const game = allGames.find((g) => g.id === Number(gameID));
+
+  const selectedGameId = game?.id;
+  const numberOfRounds = game?.numberOfRounds;
+  const hasRounds = (game?.rounds.length ?? 0) > 0;
+
+  useEffect(() => {
+    if (
+      selectedGameId !== undefined &&
+      numberOfRounds !== undefined &&
+      hasRounds
+    ) {
+      fetchAllTables(selectedGameId, numberOfRounds);
+    }
+  }, [fetchAllTables, selectedGameId, numberOfRounds, hasRounds]);
 
   if (status === 'pending' || status === 'idle') {
     return <CenterLoader />;

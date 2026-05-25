@@ -1,14 +1,14 @@
 import { Button, Stack, Text, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Icon from '../../../../shared/Icon';
 import usePlayers, {
   usePlayersByGameId,
 } from '../../../../slices/players/hooks';
-import useTables, { useTablesByGameId } from '../../../../slices/tables/hooks';
+import { useTablesByGameId } from '../../../../slices/tables/hooks';
 import useTeams, { useTeamsByGameId } from '../../../../slices/teams/hooks';
 import type { Game, GameStatus } from '../../../../slices/types';
 import { assertNever } from '../../../../utils/assertNever';
@@ -43,7 +43,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
   const { createTeam, updateTeam, deleteTeam } = useTeams();
   const { updatePlayer } = usePlayers();
-  const { fetchAllTables, status } = useTables();
   const teams = useTeamsByGameId(game.id);
   const players = usePlayersByGameId(game.id);
   const tables = useTablesByGameId(game.id);
@@ -54,14 +53,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { canAddDelete, canEdit, isCompleted } = getTeamsPermissions(
     game.status,
   );
-
-  const roundsCount = game.rounds?.length || 0;
-
-  useEffect(() => {
-    if (roundsCount > 0 && status === 'idle') {
-      fetchAllTables(game.id, game.numberOfRounds);
-    }
-  }, [game.id, game.numberOfRounds, roundsCount, fetchAllTables, status]);
 
   const showTableAssignments = tables.length > 0;
 
