@@ -100,6 +100,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   const canComplete = scoreProgress.canComplete;
 
   const sufficientTeams = game.teamSize <= game.teams.length;
+  const sufficientRounds = game.rounds.length === game.numberOfRounds;
 
   const handleStatusTransition = (newStatus: GameStatus) => {
     const gameRequest: GameUpdateRequest = {
@@ -182,7 +183,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           <Badge color={statusColor(game.status)} size="lg" variant="filled">
             {translateGameStatus(t, game.status)}
           </Badge>
-          {game.status === 'setup' && sufficientTeams && (
+          {game.status === 'setup' && sufficientTeams && sufficientRounds && (
             <Button color="cobalt" size="sm" onClick={confirmStartGame}>
               {t('gameDetail:actions.startGame')}
             </Button>
