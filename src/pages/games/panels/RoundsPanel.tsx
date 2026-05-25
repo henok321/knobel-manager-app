@@ -367,6 +367,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         isOpen={scoreModalOpen}
         roundNumber={Number(selectedRound)}
         table={selectedTable}
+        teams={teams}
         onClose={() => setScoreModalOpen(false)}
         onSubmit={handleSubmitScores}
       />
