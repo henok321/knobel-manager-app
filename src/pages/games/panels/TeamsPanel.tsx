@@ -115,6 +115,81 @@ const TeamScheduleMatrix = ({
   );
 };
 
+interface TeamCardProps {
+  team: { id: number; name: string };
+  players: Player[];
+  numberOfRounds: number;
+  playerTableAssignments: Record<number, RoundTableAssignment[]>;
+  showTableAssignments: boolean;
+  canEdit: boolean;
+  canAddDelete: boolean;
+  isCompleted: boolean;
+  onEdit: (teamID: number) => void;
+  onDelete: (teamID: number) => void;
+}
+
+const TeamCard = ({
+  team,
+  players,
+  numberOfRounds,
+  playerTableAssignments,
+  showTableAssignments,
+  canEdit,
+  canAddDelete,
+  isCompleted,
+  onEdit,
+  onDelete,
+}: TeamCardProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <Card withBorder padding="lg" radius="md" shadow="sm">
+      <Stack gap="md">
+        <Group align="center" justify="space-between">
+          <Title order={3}>{team.name}</Title>
+          {!isCompleted && (
+            <Group gap="xs">
+              {canEdit && (
+                <ActionIcon variant="subtle" onClick={() => onEdit(team.id)}>
+                  <Icon icon={IconPencil} size={16} />
+                </ActionIcon>
+              )}
+              {canAddDelete && (
+                <ActionIcon
+                  color="red"
+                  variant="subtle"
+                  onClick={() => onDelete(team.id)}
+                >
+                  <Icon icon={IconTrash} size={16} />
+                </ActionIcon>
+              )}
+            </Group>
+          )}
+        </Group>
+
+        {showTableAssignments ? (
+          <TeamScheduleMatrix
+            numberOfRounds={numberOfRounds}
+            playerTableAssignments={playerTableAssignments}
+            players={players}
+          />
+        ) : (
+          <Stack gap="xs">
+            <Text fw={500} size="sm">
+              {t('gameDetail:teams.players')}:
+            </Text>
+            {players.map((player) => (
+              <Text key={player.id} size="sm">
+                {player.name}
+              </Text>
+            ))}
+          </Stack>
+        )}
+      </Stack>
+    </Card>
+  );
+};
+
 interface TeamsPermissions {
   canAddDelete: boolean;
   canEdit: boolean;
@@ -280,58 +355,20 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
           if (!team) {
             return null;
           }
-          const players = getPlayersForTeam(team.id);
-
           return (
-            <Card key={team.id} withBorder padding="lg" radius="md" shadow="sm">
-              <Stack gap="md">
-                <Group align="center" justify="space-between">
-                  <Title order={3}>{team.name}</Title>
-                  {!isCompleted && (
-                    <Group gap="xs">
-                      {canEdit && (
-                        <ActionIcon
-                          variant="subtle"
-                          onClick={() => handleStartEditTeam(team.id)}
-                        >
-                          <Icon icon={IconPencil} size={16} />
-                        </ActionIcon>
-                      )}
-                      {canAddDelete && (
-                        <ActionIcon
-                          color="red"
-                          variant="subtle"
-                          onClick={() => handleDeleteTeam(team.id)}
-                        >
-                          <Icon icon={IconTrash} size={16} />
-                        </ActionIcon>
-                      )}
-                    </Group>
-                  )}
-                </Group>
-
-                {showTableAssignments ? (
-                  <TeamScheduleMatrix
-                    numberOfRounds={game.numberOfRounds}
-                    playerTableAssignments={playerTableAssignments}
-                    players={players}
-                  />
-                ) : (
-                  <Stack gap="xs">
-                    <Text fw={500} size="sm">
-                      {t('gameDetail:teams.players')}:
-                    </Text>
-                    {players.map((player) =>
-                      player ? (
-                        <Text key={player.id} size="sm">
-                          {player.name}
-                        </Text>
-                      ) : null,
-                    )}
-                  </Stack>
-                )}
-              </Stack>
-            </Card>
+            <TeamCard
+              key={team.id}
+              canAddDelete={canAddDelete}
+              canEdit={canEdit}
+              isCompleted={isCompleted}
+              numberOfRounds={game.numberOfRounds}
+              players={getPlayersForTeam(team.id)}
+              playerTableAssignments={playerTableAssignments}
+              showTableAssignments={showTableAssignments}
+              team={team}
+              onDelete={handleDeleteTeam}
+              onEdit={handleStartEditTeam}
+            />
           );
         })}
       </Stack>
