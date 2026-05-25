@@ -56,7 +56,9 @@ mutation, mirror this pattern: the mutation lives in its own slice, but parent s
 stay in sync. There's a `cross-slice.test.ts` at `src/slices/cross-slice.test.ts` that locks in this behavior.
 
 Async thunks use the standard `pending/fulfilled/rejected` lifecycle. Selectors are memoized with `createSelector`.
-Cross-slice utilities sit at `src/slices/actions.ts` (`fetchAll`, `resetStore`) and `src/slices/normalize.ts`.
+Cross-slice utilities sit at `src/slices/actions.ts` (`fetchAll`, `resetStore`) and `src/slices/normalize.ts`. The store
+itself is composed in `src/store/store.ts`; each slice also has its own `<slice>.test.ts` next to the source, which
+complements the cross-slice contract test.
 
 ### Auth
 
@@ -129,6 +131,11 @@ points are under `src/pages/` — `Login.tsx` and `games/{Games,GameDetail,GameF
 `panels/`, `components/`, and `print-views/` for the game-detail interior. Shared utilities sit at `src/utils/`
 (currently `assertNever.ts`, `gameStatusHelpers.tsx`).
 
+Reusable presentational components live directly under `src/shared/`: `CenterLoader`, `Icon`, `Breadcrumbs`,
+`EmptyStateCard`, `Logo`, `PrintMenu`, `ErrorBoundary`. Prefer these over re-implementing equivalents inside pages —
+especially `EmptyStateCard` for empty-with-CTA states (called out in the Code Review Lenses) and `ErrorBoundary` for
+graceful failure boundaries.
+
 ## TypeScript
 
 `tsconfig.json` is strict, with `noUncheckedIndexedAccess`, `noImplicitOverride`, `noUnusedLocals`/`Parameters`,
@@ -158,8 +165,8 @@ If the local backend isn't reachable at `http://localhost:8080/health`, fall bac
 
 ## Package manager
 
-**pnpm only** (`packageManager: pnpm@11.1.2`, enforced by `engines`). Never use `npm` or `yarn`; package scripts must
-shell out via `pnpm` (e.g. `pnpm exec ...`).
+**pnpm only** (`packageManager` is pinned in `package.json`, enforced by `engines`). Never use `npm` or `yarn`;
+package scripts must shell out via `pnpm` (e.g. `pnpm exec ...`).
 
 ## Development Guidelines
 
