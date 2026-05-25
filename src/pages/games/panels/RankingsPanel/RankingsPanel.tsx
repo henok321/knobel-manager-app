@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import { usePlayersByGameId } from '../../../../slices/players/hooks.ts';
-import {
-  useGameTablesFetch,
+import useTables, {
   useTablesByRound,
 } from '../../../../slices/tables/hooks.ts';
 import { useTeamsByIds } from '../../../../slices/teams/hooks.ts';
@@ -35,8 +34,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     [t, game.numberOfRounds],
   );
 
-  const hasRounds = (game.rounds?.length || 0) > 0;
-  const status = useGameTablesFetch(game.id, game.numberOfRounds, hasRounds);
+  const { status } = useTables();
 
   const filteredTables = useTablesByRound(
     game.id,

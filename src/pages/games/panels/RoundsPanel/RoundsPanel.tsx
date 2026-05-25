@@ -13,10 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import useGames from '../../../../slices/games/hooks';
-import useTables, {
-  useGameTablesFetch,
-  useTablesByGameId,
-} from '../../../../slices/tables/hooks';
+import useTables, { useTablesByGameId } from '../../../../slices/tables/hooks';
 import { selectTablesForRoundWithSearch } from '../../../../slices/tables/slice';
 import { useTeamsByGameId } from '../../../../slices/teams/hooks';
 import type { Game, GameStatus, Table } from '../../../../slices/types';
@@ -102,8 +99,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       searchQuery,
     ),
   );
-
-  useGameTablesFetch(game.id, game.numberOfRounds, hasRounds);
 
   const handleSetupGame = async () => {
     setError(null);
