@@ -1,5 +1,5 @@
 import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
-import { type KeyboardEvent, useMemo, useState } from 'react';
+import { type KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Player {
@@ -23,13 +23,10 @@ const EditTeamDialogContent = ({
 }: Omit<EditTeamDialogProps, 'isOpen'>) => {
   const { t } = useTranslation();
 
-  const initialPlayerNames: Record<number, string> = useMemo(() => {
-    const names: Record<number, string> = {};
-    for (const p of players) {
-      names[p.id] = p.name;
-    }
-    return names;
-  }, [players]);
+  const initialPlayerNames: Record<number, string> = {};
+  for (const p of players) {
+    initialPlayerNames[p.id] = p.name;
+  }
 
   const [name, setName] = useState(teamName);
   const [playerNames, setPlayerNames] =
@@ -64,7 +61,7 @@ const EditTeamDialogContent = ({
   return (
     <Stack gap="md">
       <TextInput
-        autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+        autoFocus
         data-autofocus
         label={t('gameDetail:teams.teamName')}
         placeholder={t('gameDetail:teams.teamNamePlaceholder')}

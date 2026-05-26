@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import type { AppDispatch, RootState } from '../../store/store';
@@ -27,32 +26,23 @@ const useTables = () => {
   const status = useSelector((state: RootState) => state.tables.status);
   const error = useSelector((state: RootState) => state.tables.error);
 
-  const fetchTables = useCallback(
-    (gameID: number, roundNumber: number) => {
-      void dispatch(fetchTablesForRound({ gameID, roundNumber }));
-    },
-    [dispatch],
-  );
+  const fetchTables = (gameID: number, roundNumber: number) => {
+    void dispatch(fetchTablesForRound({ gameID, roundNumber }));
+  };
 
-  const fetchAllTables = useCallback(
-    (gameID: number, numberOfRounds: number) => {
-      void dispatch(fetchAllTablesForGame({ gameID, numberOfRounds }));
-    },
-    [dispatch],
-  );
+  const fetchAllTables = (gameID: number, numberOfRounds: number) => {
+    void dispatch(fetchAllTablesForGame({ gameID, numberOfRounds }));
+  };
 
-  const updateScores = useCallback(
-    (
-      gameID: number,
-      roundNumber: number,
-      tableNumber: number,
-      scores: { playerID: number; score: number }[],
-    ) =>
-      dispatch(
-        updateScoresForTable({ gameID, roundNumber, tableNumber, scores }),
-      ),
-    [dispatch],
-  );
+  const updateScores = (
+    gameID: number,
+    roundNumber: number,
+    tableNumber: number,
+    scores: { playerID: number; score: number }[],
+  ) =>
+    dispatch(
+      updateScoresForTable({ gameID, roundNumber, tableNumber, scores }),
+    );
 
   return {
     tables,

@@ -1,7 +1,7 @@
 import { Button, Stack, Text, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Icon from '../../../../shared/Icon';
@@ -56,32 +56,28 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const showTableAssignments = tables.length > 0;
 
-  const playerTableAssignments = useMemo(() => {
-    const assignments: Record<
-      number,
-      { roundNumber: number; tableNumber: number }[]
-    > = {};
+  const playerTableAssignments: Record<
+    number,
+    { roundNumber: number; tableNumber: number }[]
+  > = {};
 
-    for (const table of tables) {
-      const players = table.players;
-      if (!players) {
-        continue;
-      }
-      const tableRoundNumber =
-        (table as typeof table & { roundNumber?: number }).roundNumber ||
-        table.roundID;
-      for (const playerID of players) {
-        const id = playerID.id;
-        assignments[id] ??= [];
-        assignments[id].push({
-          roundNumber: tableRoundNumber,
-          tableNumber: table.tableNumber,
-        });
-      }
+  for (const table of tables) {
+    const tablePlayers = table.players;
+    if (!tablePlayers) {
+      continue;
     }
-
-    return assignments;
-  }, [tables]);
+    const tableRoundNumber =
+      (table as typeof table & { roundNumber?: number }).roundNumber ||
+      table.roundID;
+    for (const playerID of tablePlayers) {
+      const id = playerID.id;
+      playerTableAssignments[id] ??= [];
+      playerTableAssignments[id].push({
+        roundNumber: tableRoundNumber,
+        tableNumber: table.tableNumber,
+      });
+    }
+  }
 
   const getPlayersForTeam = (teamID: number) => {
     const team = teams.find((t) => t?.id === teamID);

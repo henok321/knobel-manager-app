@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import type { GameCreateRequest, GameUpdateRequest } from '../../generated';
@@ -20,35 +19,23 @@ const useGames = () => {
   const status = useSelector(selectGamesStatus);
   const error = useSelector(selectGamesError);
 
-  const fetchGames = useCallback(() => {
+  const fetchGames = () => {
     void dispatch(fetchAll());
-  }, [dispatch]);
+  };
 
-  const createGame = useCallback(
-    (gameRequest: GameCreateRequest) => {
-      void dispatch(createGameAction(gameRequest));
-    },
-    [dispatch],
-  );
+  const createGame = (gameRequest: GameCreateRequest) => {
+    void dispatch(createGameAction(gameRequest));
+  };
 
-  const deleteGame = useCallback(
-    (gameID: number) => {
-      void dispatch(deleteGameAction(gameID));
-    },
-    [dispatch],
-  );
+  const deleteGame = (gameID: number) => {
+    void dispatch(deleteGameAction(gameID));
+  };
 
-  const updateGame = useCallback(
-    (gameID: number, gameRequest: GameUpdateRequest) => {
-      void dispatch(updateGameAction({ gameID, gameRequest }));
-    },
-    [dispatch],
-  );
+  const updateGame = (gameID: number, gameRequest: GameUpdateRequest) => {
+    void dispatch(updateGameAction({ gameID, gameRequest }));
+  };
 
-  const setupGame = useCallback(
-    (gameID: number) => dispatch(setupGameAction(gameID)),
-    [dispatch],
-  );
+  const setupGame = (gameID: number) => dispatch(setupGameAction(gameID));
 
   return {
     allGames,

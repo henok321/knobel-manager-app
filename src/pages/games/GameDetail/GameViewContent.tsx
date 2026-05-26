@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { GameUpdateRequest } from '../../../generated';
@@ -71,7 +71,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
     }
   }, [activeTab, game.id]);
 
-  const scoreProgress = useMemo(() => {
+  const computeScoreProgress = () => {
     if (!game || game.status !== 'in_progress') {
       return { canComplete: false, completed: 0, total: 0 };
     }
@@ -95,7 +95,9 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       completed: completedTables,
       total: totalTables,
     };
-  }, [game, tables]);
+  };
+
+  const scoreProgress = computeScoreProgress();
 
   const canComplete = scoreProgress.canComplete;
 

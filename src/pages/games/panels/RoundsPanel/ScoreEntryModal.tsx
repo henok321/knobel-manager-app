@@ -1,6 +1,6 @@
 import { Button, Group, Modal, NumberInput, Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Player, Table, Team } from '../../../../slices/types';
@@ -25,18 +25,13 @@ const ScoreEntryModal = ({
   const { t } = useTranslation();
   const [scores, setScores] = useState<Record<number, number>>({});
 
-  const players = useMemo(() => table?.players || [], [table]);
+  const players = table?.players || [];
 
-  const initialScores = useMemo(() => {
-    const scoreMap: Record<number, number> = {};
-    for (const player of players) {
-      const existingScore = table?.scores?.find(
-        (s) => s.playerID === player.id,
-      );
-      scoreMap[player.id] = existingScore?.score || 0;
-    }
-    return scoreMap;
-  }, [players, table?.scores]);
+  const initialScores: Record<number, number> = {};
+  for (const player of players) {
+    const existingScore = table?.scores?.find((s) => s.playerID === player.id);
+    initialScores[player.id] = existingScore?.score || 0;
+  }
 
   if (!table) {
     return null;

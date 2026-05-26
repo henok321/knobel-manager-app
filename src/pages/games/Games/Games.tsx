@@ -12,7 +12,7 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CenterLoader from '../../../shared/CenterLoader';
@@ -38,28 +38,25 @@ const Games = () => {
     }
   }, [status, fetchGames]);
 
-  const { activeAndInProgressGames, completedGames } = useMemo(() => {
-    const filtered = allGames.filter((game) =>
-      game.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+  const filtered = allGames.filter((game) =>
+    game.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
-    const activeAndInProgressGames: Game[] = [];
-    const completedGames: Game[] = [];
-    for (const game of filtered) {
-      switch (game.status) {
-        case 'setup':
-        case 'in_progress':
-          activeAndInProgressGames.push(game);
-          break;
-        case 'completed':
-          completedGames.push(game);
-          break;
-        default:
-          assertNever(game.status);
-      }
+  const activeAndInProgressGames: Game[] = [];
+  const completedGames: Game[] = [];
+  for (const game of filtered) {
+    switch (game.status) {
+      case 'setup':
+      case 'in_progress':
+        activeAndInProgressGames.push(game);
+        break;
+      case 'completed':
+        completedGames.push(game);
+        break;
+      default:
+        assertNever(game.status);
     }
-    return { activeAndInProgressGames, completedGames };
-  }, [allGames, searchQuery]);
+  }
 
   const handleDeleteGame = (gameID: number) => {
     modals.openConfirmModal({

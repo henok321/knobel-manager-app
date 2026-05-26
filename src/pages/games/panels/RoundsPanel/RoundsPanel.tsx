@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
@@ -68,10 +68,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const hasRounds = (game.rounds?.length || 0) > 0;
   const isSetupMode = !hasRounds || tables.length === 0;
 
-  const roundOptions = useMemo(
-    () => buildRoundOptions(t, game.numberOfRounds),
-    [t, game.numberOfRounds],
-  );
+  const roundOptions = buildRoundOptions(t, game.numberOfRounds);
 
   const getPersistedRound = () => {
     const stored = localStorage.getItem(`selected_round_for_game_${game.id}`);

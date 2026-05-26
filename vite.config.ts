@@ -1,4 +1,5 @@
-import react from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 
@@ -9,6 +10,9 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
+      babel({
+        presets: [reactCompilerPreset()],
+      }),
       mkcert({
         hosts: ['localhost', '127.0.0.1'],
         keyFileName: 'knobel-manager-app.key.pem',

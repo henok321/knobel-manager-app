@@ -10,7 +10,7 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconTrash } from '@tabler/icons-react';
-import React from 'react';
+import type React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -152,4 +152,4 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
   );
 };
 
-export default React.memo(GameListItem);
+export default GameListItem;

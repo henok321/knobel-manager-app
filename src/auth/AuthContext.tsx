@@ -6,13 +6,7 @@ import {
   type User,
 } from 'firebase/auth';
 import type React from 'react';
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 import { resetStore } from '../slices/actions.ts';
 import store from '../store/store.ts';
@@ -56,39 +50,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     [],
   );
 
-  const loginAction = useCallback(
-    async ({ email, password }: LoginData): Promise<AuthError | null> => {
-      try {
-        await signInWithEmailAndPassword(firebaseAuth, email, password);
-      } catch (error: unknown) {
-        if (
-          error instanceof FirebaseError &&
-          error.code === 'auth/invalid-credential'
-        ) {
-          return { code: 'INVALID_CREDENTIALS' };
-        }
-        return { code: 'UNKNOWN_ERROR' };
+  const loginAction = async ({
+    email,
+    password,
+  }: LoginData): Promise<AuthError | null> => {
+    try {
+      await signInWithEmailAndPassword(firebaseAuth, email, password);
+    } catch (error: unknown) {
+      if (
+        error instanceof FirebaseError &&
+        error.code === 'auth/invalid-credential'
+      ) {
+        return { code: 'INVALID_CREDENTIALS' };
       }
-      return null;
-    },
-    [],
-  );
+      return { code: 'UNKNOWN_ERROR' };
+    }
+    return null;
+  };
 
-  const logOut = useCallback(() => {
+  const logOut = () => {
     localStorage.clear();
     store.dispatch(resetStore());
     void signOut(firebaseAuth);
-  }, []);
+  };
 
-  const contextValue = useMemo<AuthContextValue>(
-    () => ({
-      user,
-      loading,
-      loginAction,
-      logOut,
-    }),
-    [user, loading, loginAction, logOut],
-  );
+  const contextValue: AuthContextValue = {
+    user,
+    loading,
+    loginAction,
+    logOut,
+  };
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

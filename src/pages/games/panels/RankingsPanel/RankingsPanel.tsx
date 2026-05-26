@@ -1,5 +1,5 @@
 import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
@@ -29,10 +29,9 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
 
   const teams = useTeamsByIds(game.teams);
 
-  const roundOptions = useMemo(
-    () => buildRoundOptions(t, game.numberOfRounds, { includeTotal: true }),
-    [t, game.numberOfRounds],
-  );
+  const roundOptions = buildRoundOptions(t, game.numberOfRounds, {
+    includeTotal: true,
+  });
 
   const { status } = useTables();
 
@@ -41,22 +40,13 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     selectedRound === 'total' ? null : Number(selectedRound),
   );
 
-  const allScores = useMemo(
-    () => aggregateScoresFromTables(filteredTables),
-    [filteredTables],
-  );
+  const allScores = aggregateScoresFromTables(filteredTables);
 
   const hasNoScores = Object.keys(allScores).length === 0;
 
-  const playerRankings = useMemo(
-    () => mapPlayersToRankings(teams, players, allScores),
-    [teams, players, allScores],
-  );
+  const playerRankings = mapPlayersToRankings(teams, players, allScores);
 
-  const teamRankings = useMemo(
-    () => mapTeamsToRankings(teams, playerRankings),
-    [teams, playerRankings],
-  );
+  const teamRankings = mapTeamsToRankings(teams, playerRankings);
 
   const loading = status === 'pending';
 
