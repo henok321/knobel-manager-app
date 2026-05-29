@@ -57,8 +57,6 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
     }
   };
 
-  const isInProgress = game.status === 'in_progress';
-
   return (
     <Card
       className="km-card-interactive"
@@ -77,7 +75,8 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
               </Text>
               <Group gap="xs">
                 <Badge
-                  className={isInProgress ? 'km-badge-pulse' : undefined}
+                  size="sm"
+                  variant="filled"
                   color={statusColor(game.status)}
                 >
                   {translateGameStatus(t, game.status)}
