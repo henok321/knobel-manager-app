@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
         <Group gap="xs">
           <Logo size={14} variant="mark" />
           <Text c="dimmed" size="xs">
-            © {new Date().getFullYear()}
+            © 2024–{new Date().getFullYear()}
           </Text>
         </Group>
 
