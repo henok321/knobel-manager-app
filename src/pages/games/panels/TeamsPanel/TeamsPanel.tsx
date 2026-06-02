@@ -1,4 +1,4 @@
-import { Button, Stack, Text, TextInput, Tooltip } from '@mantine/core';
+import { Button, Group, Stack, Text, TextInput, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -147,32 +147,34 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   return (
     <Stack gap="md">
-      {canAddDelete ? (
-        <Button
-          leftSection={<Icon icon={IconPlus} size={20} />}
-          style={{ alignSelf: 'flex-start' }}
-          onClick={() => setIsTeamFormOpen(true)}
-        >
-          {t('gameDetail:teams.addTeam')}
-        </Button>
-      ) : (
-        <Tooltip label={t('gameDetail:teams.cannotAddTeamsAfterStart')}>
+      <Group align="flex-end" justify="space-between" wrap="wrap">
+        <TextInput
+          placeholder={t('gameDetail:teams.searchTeams')}
+          style={{ width: 250 }}
+          value={searchQuery}
+          disabled={teams.length === 0}
+          onChange={(e) => setSearchQuery(e.currentTarget.value)}
+        />
+        {canAddDelete ? (
           <Button
-            disabled
             leftSection={<Icon icon={IconPlus} size={20} />}
             style={{ alignSelf: 'flex-start' }}
+            onClick={() => setIsTeamFormOpen(true)}
           >
             {t('gameDetail:teams.addTeam')}
           </Button>
-        </Tooltip>
-      )}
-
-      <TextInput
-        placeholder={t('gameDetail:teams.searchTeams')}
-        style={{ width: 250 }}
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.currentTarget.value)}
-      />
+        ) : (
+          <Tooltip label={t('gameDetail:teams.cannotAddTeamsAfterStart')}>
+            <Button
+              disabled
+              leftSection={<Icon icon={IconPlus} size={20} />}
+              style={{ alignSelf: 'flex-start' }}
+            >
+              {t('gameDetail:teams.addTeam')}
+            </Button>
+          </Tooltip>
+        )}
+      </Group>
 
       {canAddDelete && allTeams.length === 0 && (
         <Text c="dimmed" ta="center">

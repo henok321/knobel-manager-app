@@ -160,19 +160,20 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       `}</style>
       {(!isSetupMode || game.status === 'in_progress') && (
         <Group align="flex-end" justify="space-between" wrap="wrap">
+          {' '}
+          <TextInput
+            placeholder={t('gameDetail:rounds.searchPlayers')}
+            style={{ width: 250 }}
+            value={searchQuery}
+            disabled={filteredAndSortedTables.length === 0}
+            onChange={(e) => setSearchQuery(e.currentTarget.value)}
+          />
           <Select
             data={roundOptions}
             label={t('gameDetail:rounds.selectRound')}
             style={{ width: 200 }}
             value={`${selectedRound}`}
             onChange={(value) => setSelectedRound(Number(value || 1))}
-          />
-
-          <TextInput
-            placeholder={t('gameDetail:rounds.searchPlayers')}
-            style={{ width: 250 }}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.currentTarget.value)}
           />
           {canSetupMatchmaking && (
             <Button
