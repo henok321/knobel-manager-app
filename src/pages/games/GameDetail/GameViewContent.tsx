@@ -72,7 +72,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   }, [activeTab, game.id]);
 
   const computeScoreProgress = () => {
-    if (!game || game.status !== 'in_progress') {
+    if (game?.status !== 'in_progress') {
       return { canComplete: false, completed: 0, total: 0 };
     }
 
