@@ -10,6 +10,7 @@ import {
 import {
   selectAllTeams,
   selectTeamsByGameId,
+  selectTeamsByGameIdWithSearch,
   selectTeamsByIds,
 } from './slice.ts';
 
@@ -18,6 +19,14 @@ export const useTeamsByIds = (teamIDs: number[]) =>
 
 export const useTeamsByGameId = (gameID: number) =>
   useSelector((state: RootState) => selectTeamsByGameId(state, gameID));
+
+export const useTeamsByGameIdWithSearch = (
+  gameID: number,
+  searchQuery: string,
+) =>
+  useSelector((state: RootState) =>
+    selectTeamsByGameIdWithSearch(state, gameID, searchQuery),
+  );
 
 const useTeams = () => {
   const dispatch = useDispatch<AppDispatch>();

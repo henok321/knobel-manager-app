@@ -10,14 +10,14 @@ import {
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import useGames from '../../../../slices/games/hooks';
-import useTables, { useTablesByGameId } from '../../../../slices/tables/hooks';
-import { selectTablesForRoundWithSearch } from '../../../../slices/tables/slice';
+import useTables, {
+  useTablesByGameId,
+  useTablesForRoundWithSearch,
+} from '../../../../slices/tables/hooks';
 import { useTeamsByGameId } from '../../../../slices/teams/hooks';
 import type { Game, GameStatus, Table } from '../../../../slices/types';
-import type { RootState } from '../../../../store/store';
 import { assertNever } from '../../../../utils/assertNever';
 import { buildRoundOptions } from '../roundOptions.ts';
 import RoundTableCard from './RoundTableCard';
@@ -88,13 +88,10 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     );
   }, [selectedRound, game.id]);
 
-  const filteredAndSortedTables = useSelector((state: RootState) =>
-    selectTablesForRoundWithSearch(
-      state,
-      game.id,
-      Number(selectedRound),
-      searchQuery,
-    ),
+  const filteredAndSortedTables = useTablesForRoundWithSearch(
+    game.id,
+    Number(selectedRound),
+    searchQuery,
   );
 
   const handleSetupGame = async () => {

@@ -10,6 +10,7 @@ import {
   selectAllTables,
   selectTablesByGameId,
   selectTablesByRoundNumber,
+  selectTablesForRoundWithSearch,
 } from './slice';
 
 export const useTablesByGameId = (gameID: number) =>
@@ -18,6 +19,15 @@ export const useTablesByGameId = (gameID: number) =>
 export const useTablesByRound = (gameID: number, roundNumber: number | null) =>
   useSelector((state: RootState) =>
     selectTablesByRoundNumber(state, gameID, roundNumber),
+  );
+
+export const useTablesForRoundWithSearch = (
+  gameID: number,
+  roundNumber: number,
+  searchQuery: string,
+) =>
+  useSelector((state: RootState) =>
+    selectTablesForRoundWithSearch(state, gameID, roundNumber, searchQuery),
   );
 
 const useTables = () => {

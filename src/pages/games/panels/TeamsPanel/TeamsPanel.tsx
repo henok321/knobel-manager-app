@@ -3,16 +3,16 @@ import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import Icon from '../../../../shared/Icon';
 import usePlayers, {
   usePlayersByGameId,
 } from '../../../../slices/players/hooks';
 import { useTablesByGameId } from '../../../../slices/tables/hooks';
-import useTeams, { useTeamsByGameId } from '../../../../slices/teams/hooks';
-import { selectTeamsByGameIdWithSearch } from '../../../../slices/teams/slice.ts';
+import useTeams, {
+  useTeamsByGameId,
+  useTeamsByGameIdWithSearch,
+} from '../../../../slices/teams/hooks';
 import type { Game, GameStatus } from '../../../../slices/types';
-import type { RootState } from '../../../../store/store.ts';
 import { assertNever } from '../../../../utils/assertNever';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
@@ -54,9 +54,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const allTeams = useTeamsByGameId(game.id);
-  const teams = useSelector((state: RootState) =>
-    selectTeamsByGameIdWithSearch(state, game.id, searchQuery),
-  );
+  const teams = useTeamsByGameIdWithSearch(game.id, searchQuery);
 
   const { canAddDelete, canEdit, isCompleted } = getTeamsPermissions(
     game.status,
