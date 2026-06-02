@@ -1,16 +1,18 @@
-import { Button, Stack, Text, Tooltip } from '@mantine/core';
+import { Button, Stack, Text, TextInput, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
+import { useSelector } from 'react-redux';
 import Icon from '../../../../shared/Icon';
 import usePlayers, {
   usePlayersByGameId,
 } from '../../../../slices/players/hooks';
 import { useTablesByGameId } from '../../../../slices/tables/hooks';
 import useTeams, { useTeamsByGameId } from '../../../../slices/teams/hooks';
+import { selectTeamsByGameIdWithSearch } from '../../../../slices/teams/slice.ts';
 import type { Game, GameStatus } from '../../../../slices/types';
+import type { RootState } from '../../../../store/store.ts';
 import { assertNever } from '../../../../utils/assertNever';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
@@ -43,12 +45,18 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
   const { createTeam, updateTeam, deleteTeam } = useTeams();
   const { updatePlayer } = usePlayers();
-  const teams = useTeamsByGameId(game.id);
   const players = usePlayersByGameId(game.id);
   const tables = useTablesByGameId(game.id);
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const allTeams = useTeamsByGameId(game.id);
+  const teams = useSelector((state: RootState) =>
+    selectTeamsByGameIdWithSearch(state, game.id, searchQuery),
+  );
 
   const { canAddDelete, canEdit, isCompleted } = getTeamsPermissions(
     game.status,
@@ -80,7 +88,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   }
 
   const getPlayersForTeam = (teamID: number) => {
-    const team = teams.find((t) => t?.id === teamID);
+    const team = allTeams.find((t) => t.id === teamID);
     if (!team) {
       return [];
     }
@@ -161,17 +169,27 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         </Tooltip>
       )}
 
-      {canAddDelete && teams.length === 0 && (
+      <TextInput
+        placeholder={t('gameDetail:teams.searchTeams')}
+        style={{ width: 250 }}
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.currentTarget.value)}
+      />
+
+      {canAddDelete && allTeams.length === 0 && (
         <Text c="dimmed" ta="center">
           {t('gameDetail:teams.noTeams')}
         </Text>
       )}
 
+      {allTeams.length > 0 && teams.length === 0 && searchQuery.trim() && (
+        <Text c="dimmed" ta="center">
+          {t('gameDetail:teams.noSearchResults')}
+        </Text>
+      )}
+
       <Stack gap="md">
         {teams.map((team) => {
-          if (!team) {
-            return null;
-          }
           return (
             <TeamCard
               key={team.id}

@@ -98,6 +98,27 @@ const selectTeamsByGameId = createDraftSafeSelector(
   (teams, gameID) => teams.filter((team) => team.gameID === gameID),
 );
 
-export { selectAllTeams, selectTeamsByGameId, selectTeamsByIds };
+const selectTeamsByGameIdWithSearch = createDraftSafeSelector(
+  [
+    selectAllTeams,
+    (_: RootState, gameID: number) => gameID,
+    (_: RootState, _gameID: number, searchQuery: string) => searchQuery,
+  ],
+  (teams, gameID, searchQuery) => {
+    const filtered = teams.filter((team) => team.gameID === gameID);
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) {
+      return filtered;
+    }
+    return filtered.filter((team) => team.name.toLowerCase().includes(query));
+  },
+);
+
+export {
+  selectAllTeams,
+  selectTeamsByGameId,
+  selectTeamsByGameIdWithSearch,
+  selectTeamsByIds,
+};
 
 export default teamsSlice.reducer;
