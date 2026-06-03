@@ -4,6 +4,7 @@ import gamesReducer from '../../slices/games/slice';
 import playersReducer from '../../slices/players/slice';
 import tablesReducer from '../../slices/tables/slice';
 import teamsReducer from '../../slices/teams/slice';
+import { api } from '../../store/apiSlice';
 import type { RootState } from '../../store/store';
 
 export const createTestStore = (preloadedState?: Partial<RootState>) =>
@@ -13,10 +14,11 @@ export const createTestStore = (preloadedState?: Partial<RootState>) =>
       teams: teamsReducer,
       players: playersReducer,
       tables: tablesReducer,
+      [api.reducerPath]: api.reducer,
     },
     preloadedState: preloadedState as RootState | undefined,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: false,
-      }),
+      }).concat(api.middleware),
   });
