@@ -152,7 +152,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
           placeholder={t('gameDetail:teams.searchTeams')}
           style={{ width: 250 }}
           value={searchQuery}
-          disabled={teams.length === 0}
           onChange={(e) => setSearchQuery(e.currentTarget.value)}
         />
         {canAddDelete ? (
