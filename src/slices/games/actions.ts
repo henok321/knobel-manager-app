@@ -10,7 +10,7 @@ import {
   setupGame,
   updateGame,
 } from '../../generated';
-import { normalizeGame, normalizeGameResponse } from '../normalize';
+import { normalizeGameResponse } from '../normalize';
 import type { Game } from '../types';
 
 export const createGameAction = createAsyncThunk<Game, GameCreateRequest>(
@@ -54,6 +54,6 @@ export const setupGameAction = createAsyncThunk<Game, number>(
     if (!response.data) {
       throw new Error('API returned empty response data');
     }
-    return normalizeGame(response.data);
+    return normalizeGameResponse(response.data);
   },
 );

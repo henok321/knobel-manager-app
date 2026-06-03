@@ -137,32 +137,33 @@ export const gamesHandlers = [
   http.get(`${BASE_URL}/games/:id`, ({ params }) => {
     const gameID = Number(params.id);
 
-    const game: GameResponse['game'] = {
-      id: gameID,
-      name: 'Game to Setup',
-      teamSize: 3,
-      tableSize: 4,
-      numberOfRounds: 5,
-      status: 'in_progress',
-      owners: [
-        {
-          gameID,
-          ownerSub: 'test-user-123',
-        },
-      ],
-      teams: [],
-      rounds: [
-        {
-          id: 1,
-          roundNumber: 1,
-          gameID,
-          status: 'in_progress',
-          tables: [],
-        },
-      ],
+    const response: GameResponse = {
+      game: {
+        id: gameID,
+        name: 'Game to Setup',
+        teamSize: 3,
+        tableSize: 4,
+        numberOfRounds: 5,
+        status: 'in_progress',
+        owners: [
+          {
+            gameID,
+            ownerSub: 'test-user-123',
+          },
+        ],
+        teams: [],
+        rounds: [
+          {
+            id: 1,
+            roundNumber: 1,
+            gameID,
+            status: 'in_progress',
+            tables: [],
+          },
+        ],
+      },
     };
 
-    // getGame returns Game directly (not wrapped in GameResponse)
-    return HttpResponse.json(game);
+    return HttpResponse.json(response);
   }),
 ];
