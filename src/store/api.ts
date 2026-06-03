@@ -1,56 +1,95 @@
 import { generatedApi } from './generatedApi.ts';
 
-const gameTag = (id: number) => ({ type: 'Game' as const, id });
-const gameList = { type: 'Game' as const, id: 'LIST' };
-const tableTag = (gameId: number, roundNumber: number) => ({
-  type: 'Tables' as const,
-  id: `${gameId}:${roundNumber}`,
-});
-const gameTablesTag = (gameId: number) => ({
-  type: 'Tables' as const,
-  id: `game:${gameId}`,
-});
-
-const invalidatesGame = (_r: unknown, _e: unknown, arg: { gameId: number }) => [
-  gameTag(arg.gameId),
-];
+const tablesTag = (gameId: number, roundNumber: number) =>
+  `${gameId}:${roundNumber}`;
+const gameTablesTag = (gameId: number) => `game:${gameId}`;
 
 export const api = generatedApi.enhanceEndpoints({
   endpoints: {
     getGames: {
       providesTags: (result) => [
-        gameList,
-        ...(result?.games ?? []).map((game) => gameTag(game.id)),
+        { type: 'Game', id: 'LIST' },
+        ...(result?.games ?? []).map((game) => ({
+          type: 'Game' as const,
+          id: game.id,
+        })),
       ],
     },
-    getGame: { providesTags: (_r, _e, a) => [gameTag(a.gameId)] },
+    getGame: {
+      providesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+      ],
+    },
     getTables: {
-      providesTags: (_r, _e, a) => [tableTag(a.gameId, a.roundNumber)],
+      providesTags: (_result, _error, arg) => [
+        { type: 'Tables', id: tablesTag(arg.gameId, arg.roundNumber) },
+      ],
     },
     getTable: {
-      providesTags: (_r, _e, a) => [tableTag(a.gameId, a.roundNumber)],
+      providesTags: (_result, _error, arg) => [
+        { type: 'Tables', id: tablesTag(arg.gameId, arg.roundNumber) },
+      ],
     },
-    getGameTables: { providesTags: (_r, _e, a) => [gameTablesTag(a.gameId)] },
-    createGame: { invalidatesTags: [gameList] },
+    getGameTables: {
+      providesTags: (_result, _error, arg) => [
+        { type: 'Tables', id: gameTablesTag(arg.gameId) },
+      ],
+    },
+    createGame: {
+      invalidatesTags: [{ type: 'Game', id: 'LIST' }],
+    },
     updateGame: {
-      invalidatesTags: (_r, _e, a) => [gameTag(a.gameId), gameList],
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+        { type: 'Game', id: 'LIST' },
+      ],
     },
     deleteGame: {
-      invalidatesTags: (_r, _e, a) => [gameList, gameTag(a.gameId)],
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: 'LIST' },
+        { type: 'Game', id: arg.gameId },
+      ],
     },
     setupGame: {
-      invalidatesTags: (_r, _e, a) => [gameTag(a.gameId), { type: 'Tables' }],
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+        { type: 'Tables' },
+      ],
     },
-    createTeam: { invalidatesTags: invalidatesGame },
-    updateTeam: { invalidatesTags: invalidatesGame },
-    deleteTeam: { invalidatesTags: invalidatesGame },
-    createPlayer: { invalidatesTags: invalidatesGame },
-    updatePlayer: { invalidatesTags: invalidatesGame },
-    deletePlayer: { invalidatesTags: invalidatesGame },
+    createTeam: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+      ],
+    },
+    updateTeam: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+      ],
+    },
+    deleteTeam: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+      ],
+    },
+    createPlayer: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+      ],
+    },
+    updatePlayer: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+      ],
+    },
+    deletePlayer: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+      ],
+    },
     updateScores: {
-      invalidatesTags: (_r, _e, a) => [
-        tableTag(a.gameId, a.roundNumber),
-        gameTablesTag(a.gameId),
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Tables', id: tablesTag(arg.gameId, arg.roundNumber) },
+        { type: 'Tables', id: gameTablesTag(arg.gameId) },
       ],
     },
   },
