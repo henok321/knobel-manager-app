@@ -110,13 +110,13 @@ const injectedRtkApi = api.injectEndpoints({
 export { injectedRtkApi as generatedApi };
 export type LivenessCheckApiResponse =
   /** status 200 Process is alive */ HealthCheckResponse;
-export type LivenessCheckApiArg = void;
+export type LivenessCheckApiArg = undefined;
 export type ReadinessCheckApiResponse =
   /** status 200 Service is ready to serve traffic (status "pass") */ HealthCheckDetailedResponse;
-export type ReadinessCheckApiArg = void;
+export type ReadinessCheckApiArg = undefined;
 export type GetGamesApiResponse =
   /** status 200 Games list (can be empty) */ GamesResponse;
-export type GetGamesApiArg = void;
+export type GetGamesApiArg = undefined;
 export type CreateGameApiResponse = /** status 201 Game created */ GameResponse;
 export type CreateGameApiArg = {
   gameCreateRequest: GameCreateRequest;
