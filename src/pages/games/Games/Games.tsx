@@ -29,7 +29,7 @@ import GameForm from './GameForm';
 import GameListItem from './GameListItem';
 
 const Games = () => {
-  const { data, isLoading, isError, error } = useGetGamesQuery(undefined);
+  const { data, isLoading, isError, error } = useGetGamesQuery();
   const allGames = data?.games ?? [];
   const [createGame] = useCreateGameMutation();
   const [deleteGame] = useDeleteGameMutation();
