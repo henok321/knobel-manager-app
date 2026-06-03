@@ -5,10 +5,7 @@ import { useParams } from 'react-router-dom';
 import Breadcrumbs from '../../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../../shared/CenterLoader';
 import Layout from '../../../shared/layout/Layout.tsx';
-import {
-  useGetGameQuery,
-  useGetGameTablesQuery,
-} from '../../../store/apiSlice.ts';
+import { useGetGameQuery, useGetGameTablesQuery } from '../../../store/api.ts';
 import GameViewContent from './GameViewContent';
 
 const GameDetail = () => {
@@ -16,16 +13,23 @@ const GameDetail = () => {
   const { t } = useTranslation();
   const gameId = Number(gameID);
 
-  const { data: game, isLoading } = useGetGameQuery(gameId, {
-    skip: Number.isNaN(gameId),
-  });
+  const { data, isLoading } = useGetGameQuery(
+    { gameId },
+    {
+      skip: Number.isNaN(gameId),
+    },
+  );
+  const game = data?.game;
 
   const hasRounds = (game?.rounds?.length ?? 0) > 0;
 
   // Warm the tables cache for the game once it is known to have rounds.
-  useGetGameTablesQuery(gameId, {
-    skip: Number.isNaN(gameId) || !hasRounds,
-  });
+  useGetGameTablesQuery(
+    { gameId },
+    {
+      skip: Number.isNaN(gameId) || !hasRounds,
+    },
+  );
 
   if (isLoading) {
     return <CenterLoader />;

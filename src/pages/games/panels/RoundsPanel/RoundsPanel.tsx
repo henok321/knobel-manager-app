@@ -10,14 +10,18 @@ import {
 } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Game, GameStatus, Table } from '../../../../generated';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import {
   useGetGameTablesQuery,
-  useGetTablesForRoundQuery,
+  useGetTablesQuery,
   useSetupGameMutation,
   useUpdateScoresMutation,
-} from '../../../../store/apiSlice';
+} from '../../../../store/api';
+import type {
+  Game,
+  GameStatus,
+  Table,
+} from '../../../../store/generatedApi.ts';
 import { assertNever } from '../../../../utils/assertNever';
 import { buildRoundOptions } from '../roundOptions.ts';
 import RoundTableCard from './RoundTableCard';
@@ -50,7 +54,8 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [setupGame, { isLoading: settingUp }] = useSetupGameMutation();
   const [updateScores] = useUpdateScoresMutation();
   const teams = useMemo(() => game.teams ?? [], [game.teams]);
-  const { data: allTables = [] } = useGetGameTablesQuery(game.id);
+  const { data: allTablesData } = useGetGameTablesQuery({ gameId: game.id });
+  const allTables = allTablesData?.tables ?? [];
 
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
@@ -84,14 +89,15 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   }, [selectedRound, game.id]);
 
   const {
-    data: roundTables = [],
+    data: roundTablesData,
     isFetching: loading,
     isError: roundTablesIsError,
     error: roundTablesError,
-  } = useGetTablesForRoundQuery(
-    { gameID: game.id, roundNumber: Number(selectedRound) },
+  } = useGetTablesQuery(
+    { gameId: game.id, roundNumber: Number(selectedRound) },
     { skip: isSetupMode },
   );
+  const roundTables = roundTablesData?.tables ?? [];
 
   const filteredAndSortedTables = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -109,7 +115,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     setError(null);
 
     try {
-      await setupGame(game.id).unwrap();
+      await setupGame({ gameId: game.id }).unwrap();
     } catch (err) {
       const errorMessage =
         (
@@ -139,10 +145,10 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
     try {
       await updateScores({
-        gameID: game.id,
+        gameId: game.id,
         roundNumber: Number(selectedRound),
         tableNumber: selectedTable.tableNumber,
-        scores: { scores },
+        scoresRequest: { scores },
       }).unwrap();
     } catch (err) {
       setError(

@@ -11,6 +11,7 @@ overrides:
 allowBuilds:
   '@firebase/util': true
   '@swc/core': true
+  esbuild: set this to true or false
   msw: true
   protobufjs: true
   unrs-resolver: true

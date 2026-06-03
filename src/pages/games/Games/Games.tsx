@@ -15,7 +15,6 @@ import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { Game } from '../../../generated';
 import CenterLoader from '../../../shared/CenterLoader';
 import Icon from '../../../shared/Icon';
 import Layout from '../../../shared/layout/Layout.tsx';
@@ -23,13 +22,15 @@ import {
   useCreateGameMutation,
   useDeleteGameMutation,
   useGetGamesQuery,
-} from '../../../store/apiSlice.ts';
+} from '../../../store/api.ts';
+import type { Game } from '../../../store/generatedApi.ts';
 import { assertNever } from '../../../utils/assertNever';
 import GameForm from './GameForm';
 import GameListItem from './GameListItem';
 
 const Games = () => {
-  const { data: allGames = [], isLoading, isError, error } = useGetGamesQuery();
+  const { data, isLoading, isError, error } = useGetGamesQuery();
+  const allGames = data?.games ?? [];
   const [createGame] = useCreateGameMutation();
   const [deleteGame] = useDeleteGameMutation();
 
@@ -67,7 +68,7 @@ const Games = () => {
       },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        void deleteGame(gameID);
+        void deleteGame({ gameId: gameID });
       },
     });
   };
@@ -168,7 +169,7 @@ const Games = () => {
       </Container>
 
       <GameForm
-        createGame={createGame}
+        createGame={(game) => createGame({ gameCreateRequest: game })}
         isOpen={gameModalActive}
         onClose={() => setGameModalActive(false)}
       />

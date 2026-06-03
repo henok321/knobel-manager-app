@@ -5,10 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import CenterLoader from '../../shared/CenterLoader';
-import {
-  useGetGameQuery,
-  useGetGameTablesQuery,
-} from '../../store/apiSlice.ts';
+import { useGetGameQuery, useGetGameTablesQuery } from '../../store/api.ts';
 import RankingsView from './print-views/RankingsView/RankingsView';
 import ScoreSheetsView from './print-views/ScoreSheetsView/ScoreSheetsView';
 import TablePlanView from './print-views/TablePlanView/TablePlanView';
@@ -22,12 +19,20 @@ const PrintView = () => {
   const navigate = useNavigate();
   const numericGameId = Number(gameID);
 
-  const { data: game, isLoading } = useGetGameQuery(numericGameId, {
-    skip: Number.isNaN(numericGameId),
-  });
-  const { data: rawTables = [] } = useGetGameTablesQuery(numericGameId, {
-    skip: Number.isNaN(numericGameId),
-  });
+  const { data: gameData, isLoading } = useGetGameQuery(
+    { gameId: numericGameId },
+    {
+      skip: Number.isNaN(numericGameId),
+    },
+  );
+  const game = gameData?.game;
+  const { data: rawTablesData } = useGetGameTablesQuery(
+    { gameId: numericGameId },
+    {
+      skip: Number.isNaN(numericGameId),
+    },
+  );
+  const rawTables = rawTablesData?.tables ?? [];
 
   const teams = useMemo(() => game?.teams ?? [], [game]);
   const players = useMemo(

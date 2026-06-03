@@ -2,9 +2,9 @@ import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { Game } from '../../../../generated';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
-import { useGetGameTablesQuery } from '../../../../store/apiSlice.ts';
+import { useGetGameTablesQuery } from '../../../../store/api.ts';
+import type { Game } from '../../../../store/generatedApi.ts';
 import { buildRoundOptions } from '../roundOptions.ts';
 import { PlayerRankingRow, TeamRankingRow } from './RankingRow';
 import {
@@ -36,9 +36,10 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     includeTotal: true,
   });
 
-  const { data: allTables = [], isLoading: loading } = useGetGameTablesQuery(
-    game.id,
-  );
+  const { data: allTablesData, isLoading: loading } = useGetGameTablesQuery({
+    gameId: game.id,
+  });
+  const allTables = allTablesData?.tables ?? [];
 
   const filteredTables = useMemo(() => {
     if (selectedRound === 'total') {

@@ -3,7 +3,7 @@ import type {
   Score,
   Table as TableModel,
   Team,
-} from '../../../../generated';
+} from '../../../../store/generatedApi.ts';
 
 interface PlayerRanking {
   playerID: number;

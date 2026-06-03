@@ -6,7 +6,7 @@ import type {
   Player,
   Table as TableType,
   Team,
-} from '../../../../generated';
+} from '../../../../store/generatedApi.ts';
 import PlayerRankingsSection, {
   type PlayerRanking,
 } from './PlayerRankingsSection';

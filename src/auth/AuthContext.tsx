@@ -8,7 +8,7 @@ import {
 import type React from 'react';
 import { createContext, useEffect, useState } from 'react';
 
-import { api } from '../store/apiSlice.ts';
+import { api } from '../store/api.ts';
 import store from '../store/store.ts';
 import { auth as firebaseAuth } from './firebaseConfig.ts';
 

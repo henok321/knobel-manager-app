@@ -1,7 +1,7 @@
 import { Badge, Table, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type { Player } from '../../../../generated';
+import type { Player } from '../../../../store/generatedApi.ts';
 
 export type RoundTableAssignment = {
   roundNumber: number;

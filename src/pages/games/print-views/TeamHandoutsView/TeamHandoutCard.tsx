@@ -1,7 +1,11 @@
 import { Badge, Paper, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type { Player, Table as TableType, Team } from '../../../../generated';
+import type {
+  Player,
+  Table as TableType,
+  Team,
+} from '../../../../store/generatedApi.ts';
 
 interface TeamHandoutCardProps {
   team: Team;

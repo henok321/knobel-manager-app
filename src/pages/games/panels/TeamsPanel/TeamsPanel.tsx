@@ -3,7 +3,6 @@ import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Game, GameStatus } from '../../../../generated';
 import Icon from '../../../../shared/Icon';
 import {
   useCreateTeamMutation,
@@ -11,7 +10,8 @@ import {
   useGetGameTablesQuery,
   useUpdatePlayerMutation,
   useUpdateTeamMutation,
-} from '../../../../store/apiSlice';
+} from '../../../../store/api';
+import type { Game, GameStatus } from '../../../../store/generatedApi.ts';
 import { assertNever } from '../../../../utils/assertNever';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
@@ -46,7 +46,8 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const [updateTeam] = useUpdateTeamMutation();
   const [deleteTeam] = useDeleteTeamMutation();
   const [updatePlayer] = useUpdatePlayerMutation();
-  const { data: tables = [] } = useGetGameTablesQuery(game.id);
+  const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
+  const tables = tablesData?.tables ?? [];
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
@@ -105,7 +106,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       name: teamData.name,
       players: teamData.members.map((name) => ({ name })),
     };
-    void createTeam({ gameID: game.id, body: teamsRequest });
+    void createTeam({ gameId: game.id, teamsRequest });
     setIsTeamFormOpen(false);
   };
 
@@ -121,18 +122,18 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     if (editingTeamId) {
       // Update team name
       void updateTeam({
-        gameID: game.id,
-        teamID: editingTeamId,
-        body: { name: teamName },
+        gameId: game.id,
+        teamId: editingTeamId,
+        teamsRequest: { name: teamName },
       });
 
       // Update all player names
       for (const player of players) {
         void updatePlayer({
-          gameID: game.id,
-          teamID: editingTeamId,
-          playerID: player.id,
-          body: { name: player.name },
+          gameId: game.id,
+          teamId: editingTeamId,
+          playerId: player.id,
+          playersRequest: { name: player.name },
         });
       }
     }
@@ -152,7 +153,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        void deleteTeam({ gameID: game.id, teamID });
+        void deleteTeam({ gameId: game.id, teamId: teamID });
       },
     });
   };

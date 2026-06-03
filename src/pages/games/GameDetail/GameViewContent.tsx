@@ -14,11 +14,15 @@ import { notifications } from '@mantine/notifications';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { Game, GameStatus, GameUpdateRequest } from '../../../generated';
 import {
   useGetGameTablesQuery,
   useUpdateGameMutation,
-} from '../../../store/apiSlice.ts';
+} from '../../../store/api.ts';
+import type {
+  Game,
+  GameStatus,
+  GameUpdateRequest,
+} from '../../../store/generatedApi.ts';
 import { assertNever } from '../../../utils/assertNever';
 import {
   statusColor,
@@ -57,7 +61,8 @@ const getDefaultTab = (status: GameStatus): GameTab => {
 const GameViewContent = ({ game }: GameViewContentProps) => {
   const { t } = useTranslation();
   const [updateGame] = useUpdateGameMutation();
-  const { data: tables = [] } = useGetGameTablesQuery(game.id);
+  const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
+  const tables = tablesData?.tables ?? [];
 
   const getPersistedTab = (): GameTab => {
     const stored = localStorage.getItem(`selected_tab_for_game_${game.id}`);
@@ -113,7 +118,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       tableSize: game.tableSize,
       status: newStatus,
     };
-    void updateGame({ gameID: game.id, body: gameRequest });
+    void updateGame({ gameId: game.id, gameUpdateRequest: gameRequest });
   };
 
   const confirmStartGame = () => {
