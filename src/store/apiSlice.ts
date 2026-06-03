@@ -8,6 +8,8 @@ import type {
   GameResponse,
   GamesResponse,
   GameUpdateRequest,
+  PlayersRequest,
+  PlayersResponse,
   ScoresRequest,
   Table,
   TablesResponse,
@@ -17,6 +19,7 @@ import type {
 
 const tablesTagId = (gameID: number, roundNumber: number) =>
   `${gameID}:${roundNumber}`;
+const gameTablesTagId = (gameID: number) => `game:${gameID}`;
 
 export const api = createApi({
   reducerPath: 'api',
@@ -57,6 +60,13 @@ export const api = createApi({
       transformResponse: (response: TablesResponse) => response.tables,
       providesTags: (_result, _error, { gameID, roundNumber }) => [
         { type: 'Tables', id: tablesTagId(gameID, roundNumber) },
+      ],
+    }),
+    getGameTables: builder.query<Table[], number>({
+      query: (gameID) => `/games/${gameID}/tables`,
+      transformResponse: (response: TablesResponse) => response.tables,
+      providesTags: (_result, _error, gameID) => [
+        { type: 'Tables', id: gameTablesTagId(gameID) },
       ],
     }),
     createGame: builder.mutation<GameResponse, GameCreateRequest>({
@@ -138,6 +148,19 @@ export const api = createApi({
         { type: 'Game', id: gameID },
       ],
     }),
+    updatePlayer: builder.mutation<
+      PlayersResponse,
+      { gameID: number; teamID: number; playerID: number; body: PlayersRequest }
+    >({
+      query: ({ gameID, teamID, playerID, body }) => ({
+        url: `/games/${gameID}/teams/${teamID}/players/${playerID}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (_result, _error, { gameID }) => [
+        { type: 'Game', id: gameID },
+      ],
+    }),
     updateScores: builder.mutation<
       Table,
       {
@@ -154,6 +177,7 @@ export const api = createApi({
       }),
       invalidatesTags: (_result, _error, { gameID, roundNumber }) => [
         { type: 'Tables', id: tablesTagId(gameID, roundNumber) },
+        { type: 'Tables', id: gameTablesTagId(gameID) },
       ],
     }),
   }),
@@ -163,6 +187,7 @@ export const {
   useGetGamesQuery,
   useGetGameQuery,
   useGetTablesForRoundQuery,
+  useGetGameTablesQuery,
   useCreateGameMutation,
   useUpdateGameMutation,
   useDeleteGameMutation,
@@ -170,5 +195,6 @@ export const {
   useCreateTeamMutation,
   useUpdateTeamMutation,
   useDeleteTeamMutation,
+  useUpdatePlayerMutation,
   useUpdateScoresMutation,
 } = api;
