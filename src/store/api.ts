@@ -4,8 +4,6 @@ const tablesTag = (gameId: number, roundNumber: number) =>
   `${gameId}:${roundNumber}`;
 const gameTablesTag = (gameId: number) => `game:${gameId}`;
 
-// Layer cache/invalidation behavior onto the generated endpoints.
-// (codegen produces the endpoints + hooks + types; tags are added here.)
 export const api = generatedApi.enhanceEndpoints({
   endpoints: {
     getGames: {
