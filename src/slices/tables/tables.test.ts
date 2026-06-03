@@ -138,7 +138,7 @@ describe('Tables Actions + Slice', () => {
   });
 
   describe('updateScoresForTable', () => {
-    it('should update scores and refresh tables', async () => {
+    it('should update the returned table in place from the response', async () => {
       const store = createTestStore();
 
       await store.dispatch(
@@ -167,6 +167,8 @@ describe('Tables Actions + Slice', () => {
 
       expect(tables).toHaveLength(2);
       expect(state.tables.status).toBe('succeeded');
+      const updated = tables.find((t) => t.tableNumber === 1);
+      expect(updated?.scores).toHaveLength(2);
     });
 
     it('should handle API error', async () => {
