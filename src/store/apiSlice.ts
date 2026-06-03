@@ -101,7 +101,7 @@ export const api = createApi({
         { type: 'Game', id: gameID },
       ],
     }),
-    setupGame: builder.mutation<GameResponse | undefined, number>({
+    setupGame: builder.mutation<void, number>({
       query: (gameID) => ({
         url: `/games/${gameID}/setup`,
         method: 'POST',

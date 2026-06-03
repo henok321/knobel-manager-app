@@ -5,7 +5,6 @@
     "dist/**",
     "build/**",
     "src/generated/**",
-    "src/test/**",
     "openapi-ts.config.ts",
     "playwright.config.ts",
     "vite.config.ts",
