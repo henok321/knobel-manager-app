@@ -10,8 +10,8 @@ import {
 import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
+import type { Table, Team } from '../../../../generated';
 import Icon from '../../../../shared/Icon';
-import type { Table, Team } from '../../../../slices/types';
 import { PlayerScoreRow } from './PlayerScoreRow';
 
 interface RoundTableCardProps {

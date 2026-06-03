@@ -3,7 +3,7 @@ import { IconPrinter } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import type { Game } from '../slices/types.ts';
+import type { Game } from '../generated';
 import Icon from './Icon';
 
 interface PrintMenuProps {

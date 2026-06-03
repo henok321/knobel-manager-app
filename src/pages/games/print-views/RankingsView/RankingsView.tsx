@@ -6,7 +6,7 @@ import type {
   Player,
   Table as TableType,
   Team,
-} from '../../../../slices/types';
+} from '../../../../generated';
 import PlayerRankingsSection, {
   type PlayerRanking,
 } from './PlayerRankingsSection';
@@ -45,11 +45,8 @@ const RankingsView = ({
 
   const playerRankings: PlayerRanking[] = [];
   for (const team of gameTeams) {
-    for (const playerID of team.players as number[]) {
-      const player = players.find((p) => p.id === playerID);
-      if (!player) {
-        continue;
-      }
+    for (const teamPlayer of team.players ?? []) {
+      const player = players.find((p) => p.id === teamPlayer.id) ?? teamPlayer;
 
       playerRankings.push({
         playerID: player.id,

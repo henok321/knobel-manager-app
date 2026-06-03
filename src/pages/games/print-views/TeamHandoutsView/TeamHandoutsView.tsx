@@ -6,7 +6,7 @@ import type {
   Player,
   Table as TableType,
   Team,
-} from '../../../../slices/types';
+} from '../../../../generated';
 import TeamHandoutCard from './TeamHandoutCard';
 
 interface TeamHandoutsViewProps {

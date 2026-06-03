@@ -14,10 +14,11 @@ import { notifications } from '@mantine/notifications';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { GameUpdateRequest } from '../../../generated';
-import useGames from '../../../slices/games/hooks.ts';
-import { useTablesByGameId } from '../../../slices/tables/hooks.ts';
-import type { Game, GameStatus } from '../../../slices/types.ts';
+import type { Game, GameStatus, GameUpdateRequest } from '../../../generated';
+import {
+  useGetGameTablesQuery,
+  useUpdateGameMutation,
+} from '../../../store/apiSlice.ts';
 import { assertNever } from '../../../utils/assertNever';
 import {
   statusColor,
@@ -55,8 +56,8 @@ const getDefaultTab = (status: GameStatus): GameTab => {
 
 const GameViewContent = ({ game }: GameViewContentProps) => {
   const { t } = useTranslation();
-  const { updateGame } = useGames();
-  const tables = useTablesByGameId(game.id);
+  const [updateGame] = useUpdateGameMutation();
+  const { data: tables = [] } = useGetGameTablesQuery(game.id);
 
   const getPersistedTab = (): GameTab => {
     const stored = localStorage.getItem(`selected_tab_for_game_${game.id}`);
@@ -101,8 +102,8 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
   const canComplete = scoreProgress.canComplete;
 
-  const sufficientTeams = game.teamSize <= game.teams.length;
-  const sufficientRounds = game.rounds.length === game.numberOfRounds;
+  const sufficientTeams = game.teamSize <= (game.teams?.length ?? 0);
+  const sufficientRounds = (game.rounds?.length ?? 0) === game.numberOfRounds;
 
   const handleStatusTransition = (newStatus: GameStatus) => {
     const gameRequest: GameUpdateRequest = {
@@ -112,7 +113,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       tableSize: game.tableSize,
       status: newStatus,
     };
-    updateGame(game.id, gameRequest);
+    void updateGame({ gameID: game.id, body: gameRequest });
   };
 
   const confirmStartGame = () => {

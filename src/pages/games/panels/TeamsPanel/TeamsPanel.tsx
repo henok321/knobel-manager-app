@@ -1,18 +1,17 @@
 import { Button, Group, Stack, Text, TextInput, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { Game, GameStatus } from '../../../../generated';
 import Icon from '../../../../shared/Icon';
-import usePlayers, {
-  usePlayersByGameId,
-} from '../../../../slices/players/hooks';
-import { useTablesByGameId } from '../../../../slices/tables/hooks';
-import useTeams, {
-  useTeamsByGameId,
-  useTeamsByGameIdWithSearch,
-} from '../../../../slices/teams/hooks';
-import type { Game, GameStatus } from '../../../../slices/types';
+import {
+  useCreateTeamMutation,
+  useDeleteTeamMutation,
+  useGetGameTablesQuery,
+  useUpdatePlayerMutation,
+  useUpdateTeamMutation,
+} from '../../../../store/apiSlice';
 import { assertNever } from '../../../../utils/assertNever';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
@@ -43,18 +42,30 @@ const getTeamsPermissions = (status: GameStatus): TeamsPermissions => {
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
-  const { createTeam, updateTeam, deleteTeam } = useTeams();
-  const { updatePlayer } = usePlayers();
-  const players = usePlayersByGameId(game.id);
-  const tables = useTablesByGameId(game.id);
+  const [createTeam] = useCreateTeamMutation();
+  const [updateTeam] = useUpdateTeamMutation();
+  const [deleteTeam] = useDeleteTeamMutation();
+  const [updatePlayer] = useUpdatePlayerMutation();
+  const { data: tables = [] } = useGetGameTablesQuery(game.id);
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const allTeams = useTeamsByGameId(game.id);
-  const teams = useTeamsByGameIdWithSearch(game.id, searchQuery);
+  const allTeams = useMemo(() => game.teams ?? [], [game.teams]);
+  const teams = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) {
+      return allTeams;
+    }
+    return allTeams.filter((team) => team.name.toLowerCase().includes(query));
+  }, [allTeams, searchQuery]);
+
+  const roundNumberByRoundId = useMemo(
+    () => new Map((game.rounds ?? []).map((r) => [r.id, r.roundNumber])),
+    [game.rounds],
+  );
 
   const { canAddDelete, canEdit, isCompleted } = getTeamsPermissions(
     game.status,
@@ -73,10 +84,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       continue;
     }
     const tableRoundNumber =
-      (table as typeof table & { roundNumber?: number }).roundNumber ||
-      table.roundID;
-    for (const playerID of tablePlayers) {
-      const id = playerID.id;
+      roundNumberByRoundId.get(table.roundID) ?? table.roundID;
+    for (const player of tablePlayers) {
+      const id = player.id;
       playerTableAssignments[id] ??= [];
       playerTableAssignments[id].push({
         roundNumber: tableRoundNumber,
@@ -87,14 +97,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const getPlayersForTeam = (teamID: number) => {
     const team = allTeams.find((t) => t.id === teamID);
-    if (!team) {
-      return [];
-    }
-    return team.players
-      .map((playerID) => players.find((p) => p.id === playerID))
-      .filter(
-        (player): player is NonNullable<typeof player> => player !== undefined,
-      );
+    return team?.players ?? [];
   };
 
   const handleCreateTeam = (teamData: TeamFormData) => {
@@ -102,7 +105,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       name: teamData.name,
       players: teamData.members.map((name) => ({ name })),
     };
-    createTeam(game.id, teamsRequest);
+    void createTeam({ gameID: game.id, body: teamsRequest });
     setIsTeamFormOpen(false);
   };
 
@@ -117,11 +120,20 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   ) => {
     if (editingTeamId) {
       // Update team name
-      updateTeam(editingTeamId, teamName);
+      void updateTeam({
+        gameID: game.id,
+        teamID: editingTeamId,
+        body: { name: teamName },
+      });
 
       // Update all player names
       for (const player of players) {
-        updatePlayer(player.id, player.name);
+        void updatePlayer({
+          gameID: game.id,
+          teamID: editingTeamId,
+          playerID: player.id,
+          body: { name: player.name },
+        });
       }
     }
     setEditTeamDialogOpen(false);
@@ -140,7 +152,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        deleteTeam(teamID);
+        void deleteTeam({ gameID: game.id, teamID });
       },
     });
   };

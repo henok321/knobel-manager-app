@@ -9,6 +9,7 @@ import type React from 'react';
 import { createContext, useEffect, useState } from 'react';
 
 import { resetStore } from '../slices/actions.ts';
+import { api } from '../store/apiSlice.ts';
 import store from '../store/store.ts';
 import { auth as firebaseAuth } from './firebaseConfig.ts';
 
@@ -71,6 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logOut = () => {
     localStorage.clear();
     store.dispatch(resetStore());
+    store.dispatch(api.util.resetApiState());
     void signOut(firebaseAuth);
   };
 

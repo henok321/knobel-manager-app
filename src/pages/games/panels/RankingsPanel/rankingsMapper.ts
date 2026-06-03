@@ -3,7 +3,7 @@ import type {
   Score,
   Table as TableModel,
   Team,
-} from '../../../../slices/types.ts';
+} from '../../../../generated';
 
 interface PlayerRanking {
   playerID: number;
@@ -25,24 +25,22 @@ const mapPlayersToRankings = (
   scoresByPlayer: Record<number, number>,
 ): PlayerRanking[] => {
   const rankings: PlayerRanking[] = [];
+  const playersById = new Map(players.map((player) => [player.id, player]));
 
   for (const team of teams) {
     if (!team) {
       continue;
     }
 
-    for (const playerID of team.players) {
-      const player = players.find((p) => p.id === playerID);
-      if (!player) {
-        continue;
-      }
+    for (const teamPlayer of team.players ?? []) {
+      const player = playersById.get(teamPlayer.id) ?? teamPlayer;
 
       rankings.push({
-        playerID,
+        playerID: player.id,
         playerName: player.name,
         teamID: team.id,
         teamName: team.name,
-        totalScore: scoresByPlayer[playerID] || 0,
+        totalScore: scoresByPlayer[player.id] || 0,
       });
     }
   }

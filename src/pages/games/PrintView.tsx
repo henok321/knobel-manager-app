@@ -1,14 +1,14 @@
 import { Button, Container, Group, Stack, Text } from '@mantine/core';
 import { IconArrowLeft, IconPrinter } from '@tabler/icons-react';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import CenterLoader from '../../shared/CenterLoader';
-import useGames from '../../slices/games/hooks';
-import { usePlayersByGameId } from '../../slices/players/hooks';
-import useTables, { useTablesByGameId } from '../../slices/tables/hooks';
-import { useTeamsByGameId } from '../../slices/teams/hooks';
+import {
+  useGetGameQuery,
+  useGetGameTablesQuery,
+} from '../../store/apiSlice.ts';
 import RankingsView from './print-views/RankingsView/RankingsView';
 import ScoreSheetsView from './print-views/ScoreSheetsView/ScoreSheetsView';
 import TablePlanView from './print-views/TablePlanView/TablePlanView';
@@ -20,32 +20,36 @@ const PrintView = () => {
   const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { allGames, fetchGames, status } = useGames();
   const numericGameId = Number(gameID);
-  const teams = useTeamsByGameId(numericGameId);
-  const players = usePlayersByGameId(numericGameId);
-  const tables = useTablesByGameId(numericGameId);
-  const { fetchAllTables, status: tablesStatus } = useTables();
+
+  const { data: game, isLoading } = useGetGameQuery(numericGameId, {
+    skip: Number.isNaN(numericGameId),
+  });
+  const { data: rawTables = [] } = useGetGameTablesQuery(numericGameId, {
+    skip: Number.isNaN(numericGameId),
+  });
+
+  const teams = useMemo(() => game?.teams ?? [], [game]);
+  const players = useMemo(
+    () => teams.flatMap((team) => team.players ?? []),
+    [teams],
+  );
+
+  const tables = useMemo(() => {
+    const roundNumberByRoundId = new Map(
+      (game?.rounds ?? []).map((r) => [r.id, r.roundNumber]),
+    );
+    return rawTables.map((table) => ({
+      ...table,
+      roundNumber: roundNumberByRoundId.get(table.roundID),
+    }));
+  }, [rawTables, game]);
 
   const viewType = searchParams.get('type') || 'tablePlan';
   const roundNumber = searchParams.get('round');
   const teamID = searchParams.get('teamID');
 
-  useEffect(() => {
-    if (status === 'idle') {
-      fetchGames();
-    }
-  }, [status, fetchGames]);
-
-  const game = allGames.find((g) => g.id === Number(gameID));
-
-  useEffect(() => {
-    if (game && tablesStatus === 'idle') {
-      fetchAllTables(game.id, game.numberOfRounds);
-    }
-  }, [game, tablesStatus, fetchAllTables]);
-
-  if (status === 'pending' || status === 'idle') {
+  if (isLoading) {
     return <CenterLoader />;
   }
 

@@ -8,16 +8,16 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { Game, GameStatus, Table } from '../../../../generated';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
-import useGames from '../../../../slices/games/hooks';
-import useTables, {
-  useTablesByGameId,
-  useTablesForRoundWithSearch,
-} from '../../../../slices/tables/hooks';
-import { useTeamsByGameId } from '../../../../slices/teams/hooks';
-import type { Game, GameStatus, Table } from '../../../../slices/types';
+import {
+  useGetGameTablesQuery,
+  useGetTablesForRoundQuery,
+  useSetupGameMutation,
+  useUpdateScoresMutation,
+} from '../../../../store/apiSlice';
 import { assertNever } from '../../../../utils/assertNever';
 import { buildRoundOptions } from '../roundOptions.ts';
 import RoundTableCard from './RoundTableCard';
@@ -47,15 +47,10 @@ const getRoundsPermissions = (status: GameStatus): RoundsPermissions => {
 
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
-  const { setupGame, status: gamesStatus } = useGames();
-  const teams = useTeamsByGameId(game.id);
-  const tables = useTablesByGameId(game.id);
-  const {
-    status: tablesStatus,
-    error: tablesError,
-    fetchAllTables,
-    updateScores,
-  } = useTables();
+  const [setupGame, { isLoading: settingUp }] = useSetupGameMutation();
+  const [updateScores] = useUpdateScoresMutation();
+  const teams = useMemo(() => game.teams ?? [], [game.teams]);
+  const { data: allTables = [] } = useGetGameTablesQuery(game.id);
 
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
@@ -66,7 +61,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     game.status,
   );
   const hasRounds = (game.rounds?.length || 0) > 0;
-  const isSetupMode = !hasRounds || tables.length === 0;
+  const isSetupMode = !hasRounds || allTables.length === 0;
 
   const roundOptions = buildRoundOptions(t, game.numberOfRounds);
 
@@ -88,18 +83,33 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     );
   }, [selectedRound, game.id]);
 
-  const filteredAndSortedTables = useTablesForRoundWithSearch(
-    game.id,
-    Number(selectedRound),
-    searchQuery,
+  const {
+    data: roundTables = [],
+    isFetching: loading,
+    isError: roundTablesIsError,
+    error: roundTablesError,
+  } = useGetTablesForRoundQuery(
+    { gameID: game.id, roundNumber: Number(selectedRound) },
+    { skip: isSetupMode },
   );
+
+  const filteredAndSortedTables = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    const filtered = query
+      ? roundTables.filter((table) =>
+          (table.players ?? []).some((player) =>
+            player.name.toLowerCase().includes(query),
+          ),
+        )
+      : roundTables;
+    return [...filtered].sort((a, b) => a.tableNumber - b.tableNumber);
+  }, [roundTables, searchQuery]);
 
   const handleSetupGame = async () => {
     setError(null);
 
     try {
-      await setupGame(game.id);
-      fetchAllTables(game.id, game.numberOfRounds);
+      await setupGame(game.id).unwrap();
     } catch (err) {
       const errorMessage =
         (
@@ -128,12 +138,12 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     setError(null);
 
     try {
-      await updateScores(
-        game.id,
-        Number(selectedRound),
-        selectedTable.tableNumber,
-        scores,
-      ).unwrap();
+      await updateScores({
+        gameID: game.id,
+        roundNumber: Number(selectedRound),
+        tableNumber: selectedTable.tableNumber,
+        scores: { scores },
+      }).unwrap();
     } catch (err) {
       setError(
         err instanceof Error ? err.message : t('common:actions.errorOccurred'),
@@ -142,13 +152,15 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     }
   };
 
-  const settingUp = gamesStatus === 'pending';
-  const loading = tablesStatus === 'pending';
+  const isNotFound =
+    roundTablesIsError &&
+    typeof roundTablesError === 'object' &&
+    roundTablesError !== null &&
+    'status' in roundTablesError &&
+    roundTablesError.status === 404;
   const displayError =
     error ||
-    (tablesStatus === 'failed' && !tablesError?.includes('404')
-      ? tablesError
-      : null);
+    (roundTablesIsError && !isNotFound ? t('gameDetail:rounds.error') : null);
 
   return (
     <Stack gap="md">
@@ -228,7 +240,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       {!loading &&
         !isSetupMode &&
         !settingUp &&
-        tables.length === 0 &&
+        roundTables.length === 0 &&
         !displayError && (
           <Card withBorder padding="lg" radius="md" shadow="sm">
             <Text c="dimmed" ta="center">
@@ -240,7 +252,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       {!loading &&
         !isSetupMode &&
         !settingUp &&
-        tables.length > 0 &&
+        roundTables.length > 0 &&
         filteredAndSortedTables.length === 0 &&
         searchQuery.trim() && (
           <Card withBorder padding="lg" radius="md" shadow="sm">

@@ -1,7 +1,7 @@
 import { Stack, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type { Table as TableType, Team } from '../../../../slices/types';
+import type { Table as TableType, Team } from '../../../../generated';
 import TableCard from './TableCard';
 
 interface RoundSectionProps {

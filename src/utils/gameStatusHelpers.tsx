@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next';
-import type { GameStatus } from '../slices/types';
+import type { GameStatus } from '../generated';
 import { assertNever } from './assertNever';
 
 export const statusColor = (status: GameStatus): string => {
