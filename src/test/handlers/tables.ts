@@ -1,6 +1,6 @@
 import { HttpResponse, http } from 'msw';
 
-import type { TablesResponse } from '../../generated';
+import type { TableResponse, TablesResponse } from '../../generated';
 
 const BASE_URL = 'http://localhost/api';
 
@@ -35,6 +35,30 @@ export const tablesHandlers = [
 
   http.put(
     `${BASE_URL}/games/:gameID/rounds/:roundNumber/tables/:tableNumber/scores`,
-    () => new HttpResponse(null, { status: 204 }),
+    async ({ params, request }) => {
+      const roundNumber = Number(params.roundNumber);
+      const tableNumber = Number(params.tableNumber);
+      const tableID = roundNumber * 10 + tableNumber;
+      const body = (await request.json()) as {
+        scores: { playerID: number; score: number }[];
+      };
+
+      const response: TableResponse = {
+        table: {
+          id: tableID,
+          tableNumber,
+          roundID: roundNumber,
+          players: [],
+          scores: body.scores.map((s, index) => ({
+            id: index + 1,
+            playerID: s.playerID,
+            tableID,
+            score: s.score,
+          })),
+        },
+      };
+
+      return HttpResponse.json(response);
+    },
   ),
 ];

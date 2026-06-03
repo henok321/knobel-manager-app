@@ -23,8 +23,6 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
     teams: {},
     players: {},
     rounds: {},
-    tables: {},
-    scores: {},
   };
 
   for (const apiGame of apiData.games) {
@@ -54,25 +52,12 @@ const normalizeGameData = (apiData: GamesResponse): NormalizedData => {
     }
 
     for (const round of apiGame.rounds ?? []) {
-      const roundID = round.id;
-      normalizedData.rounds[roundID] = {
+      normalizedData.rounds[round.id] = {
         id: round.id,
         roundNumber: round.roundNumber,
         gameID: apiGame.id,
-        status: apiGame.status,
-        tables: round.tables?.map((table) => table.id) || [],
+        status: round.status,
       };
-
-      for (const table of round.tables ?? []) {
-        const tableId = table.id;
-        normalizedData.tables[tableId] = {
-          ...table,
-          roundNumber: round.roundNumber,
-        };
-        for (const score of table.scores ?? []) {
-          normalizedData.scores[score.id] = score;
-        }
-      }
     }
   }
 

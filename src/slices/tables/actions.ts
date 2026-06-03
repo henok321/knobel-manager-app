@@ -48,7 +48,7 @@ export const fetchAllTablesForGame = createAsyncThunk<
 });
 
 export const updateScoresForTable = createAsyncThunk<
-  Table[],
+  Table,
   {
     gameID: number;
     roundNumber: number;
@@ -58,23 +58,14 @@ export const updateScoresForTable = createAsyncThunk<
 >(
   'tables/updateScores',
   async ({ gameID, roundNumber, tableNumber, scores }) => {
-    await updateScores({
+    const response = await updateScores({
       path: { gameID: gameID, roundNumber, tableNumber },
       body: { scores },
-      client,
-    });
-
-    const response = await getTables({
-      path: { gameID: gameID, roundNumber },
       client,
     });
     if (!response.data) {
       throw new Error('API returned empty response data');
     }
-    return response.data.tables.map((table) => ({
-      ...table,
-      roundNumber,
-      gameID: gameID,
-    }));
+    return { ...response.data.table, roundNumber, gameID: gameID };
   },
 );

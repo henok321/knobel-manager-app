@@ -6,7 +6,7 @@ import type {
 } from '../generated';
 import type { Game, Team } from './types';
 
-export const normalizeGame = (apiGame: ApiGame): Game => ({
+const normalizeGame = (apiGame: ApiGame): Game => ({
   id: apiGame.id,
   name: apiGame.name,
   teamSize: apiGame.teamSize,

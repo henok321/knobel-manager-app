@@ -52,7 +52,7 @@ const tablesSlice = createSlice({
       })
       .addCase(updateScoresForTable.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        tablesAdapter.upsertMany(state, action.payload);
+        tablesAdapter.upsertOne(state, action.payload);
       })
       .addCase(updateScoresForTable.rejected, (state, action) => {
         state.status = 'failed';

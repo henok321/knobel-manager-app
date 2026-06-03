@@ -165,7 +165,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
             placeholder={t('gameDetail:rounds.searchPlayers')}
             style={{ width: 250 }}
             value={searchQuery}
-            disabled={filteredAndSortedTables.length === 0}
             onChange={(e) => setSearchQuery(e.currentTarget.value)}
           />
           <Select

@@ -9,6 +9,7 @@ import { createTestStore } from '../test/setup/store';
 import { fetchAll } from './actions';
 import { selectAllGames } from './games/slice';
 import { selectAllPlayers } from './players/slice';
+import { selectAllTables } from './tables/slice';
 import { createTeamAction } from './teams/actions';
 import { selectAllTeams } from './teams/slice';
 
@@ -63,6 +64,14 @@ describe('Cross-Slice Integration Tests', () => {
       expect(players[2]?.id).toBe(3);
       expect(players[2]?.name).toBe('Player 3');
       expect(players[2]?.teamID).toBe(2);
+    });
+
+    it('should not hydrate the tables slice (tables load lazily per round)', async () => {
+      const store = createTestStore();
+
+      await store.dispatch(fetchAll());
+
+      expect(selectAllTables(store.getState())).toHaveLength(0);
     });
 
     it('should handle API error and set status to failed', async () => {
