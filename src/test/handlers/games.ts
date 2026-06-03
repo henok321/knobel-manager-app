@@ -37,21 +37,6 @@ export const gamesHandlers = [
             {
               id: 1,
               roundNumber: 1,
-              tables: [
-                {
-                  id: 1,
-                  tableNumber: 1,
-                  roundID: 1,
-                  players: [
-                    { id: 1, name: 'Player 1', teamID: 1 },
-                    { id: 3, name: 'Player 3', teamID: 2 },
-                  ],
-                  scores: [
-                    { id: 1, playerID: 1, tableID: 1, score: 10 },
-                    { id: 2, playerID: 3, tableID: 1, score: 20 },
-                  ],
-                },
-              ],
               gameID: 1,
               status: 'in_progress',
             },
@@ -158,7 +143,6 @@ export const gamesHandlers = [
             roundNumber: 1,
             gameID,
             status: 'in_progress',
-            tables: [],
           },
         ],
       },

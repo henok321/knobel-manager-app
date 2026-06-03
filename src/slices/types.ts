@@ -30,7 +30,6 @@ type Round = {
   roundNumber: number;
   gameID: number;
   status: string;
-  tables: number[];
 };
 
 export type Table = {
@@ -55,6 +54,4 @@ export interface NormalizedData {
   teams: Record<number, Team>;
   players: Record<number, Player>;
   rounds: Record<number, Round>;
-  tables: Record<number, Table>;
-  scores: Record<number, Score>;
 }
