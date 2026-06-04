@@ -4,11 +4,13 @@ import type { ConfigFile } from '@rtk-query/codegen-openapi';
 // src/store/generatedApi.ts, injected onto the baseApi. Tag/cache behavior
 // is added separately in src/store/api.ts (enhanceEndpoints).
 //
-// For local development against the in-progress backend, point schemaFile at
-// the sibling repo's spec. In CI/prod this should target the deployed spec
-// (https://api.knobel-manager.de/openapi.yaml).
+// The generated output is committed (like the backend's gen/ directory), so
+// CI does not regenerate it. Run `pnpm api:gen` locally after the backend
+// spec changes and commit the result. schemaFile targets the deployed spec so
+// regeneration is environment-independent; when working against unreleased
+// backend changes, point it at a local spec temporarily.
 const config: ConfigFile = {
-  schemaFile: '../knobel-manager-service/openapi/openapi.yaml',
+  schemaFile: 'https://api.knobel-manager.de/openapi.yaml',
   apiFile: './src/store/baseApi.ts',
   apiImport: 'baseApi',
   outputFile: './src/store/generatedApi.ts',

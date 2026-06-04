@@ -1,5 +1,5 @@
 name: 'Setup Project'
-description: 'Initialize project: checkout, setup Node.js, install dependencies and generate client from OpenAPI spec'
+description: 'Initialize project: checkout, setup Node.js, install dependencies'
 
 runs:
   using: 'composite'
@@ -16,7 +16,3 @@ runs:
     - name: Install dependencies
       shell: bash
       run: pnpm install --frozen-lockfile
-
-    - name: Generate api client from OpenAPI spec
-      shell: bash
-      run: pnpm api:gen
