@@ -66,9 +66,34 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+  validate-client:
+    name: Validate API client
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup project
+        uses: ./.github/actions/setup-project
+
+      - name: Regenerate client from backend spec
+        run: pnpm api:gen
+
+      - name: Apply formatting
+        run: pnpm fix
+
+      - name: Fail if generated client is out of sync with the spec
+        run: |
+          if ! git diff --quiet -- src/store/generatedApi.ts; then
+            echo "::error::src/store/generatedApi.ts is out of sync with the backend OpenAPI spec. Run 'pnpm api:gen && pnpm fix' and commit the result."
+            git --no-pager diff -- src/store/generatedApi.ts
+            exit 1
+          fi
+
   deploy:
     name: Deploy
-    needs: [lint, test, audit]
+    needs: [lint, test, audit, validate-client]
     runs-on: ubuntu-latest
     environment:
       name: production
