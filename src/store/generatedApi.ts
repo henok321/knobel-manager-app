@@ -1,5 +1,4 @@
-import { baseApi as api } from './baseApi';
-
+import { baseApi as api } from "./baseApi";
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     livenessCheck: build.query<LivenessCheckApiResponse, LivenessCheckApiArg>({
@@ -17,7 +16,7 @@ const injectedRtkApi = api.injectEndpoints({
     createGame: build.mutation<CreateGameApiResponse, CreateGameApiArg>({
       query: (queryArg) => ({
         url: `/games`,
-        method: 'POST',
+        method: "POST",
         body: queryArg.gameCreateRequest,
       }),
     }),
@@ -27,60 +26,60 @@ const injectedRtkApi = api.injectEndpoints({
     updateGame: build.mutation<UpdateGameApiResponse, UpdateGameApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}`,
-        method: 'PUT',
+        method: "PUT",
         body: queryArg.gameUpdateRequest,
       }),
     }),
     deleteGame: build.mutation<DeleteGameApiResponse, DeleteGameApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
     }),
     setupGame: build.mutation<SetupGameApiResponse, SetupGameApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}/setup`,
-        method: 'POST',
+        method: "POST",
       }),
     }),
     createTeam: build.mutation<CreateTeamApiResponse, CreateTeamApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}/teams`,
-        method: 'POST',
+        method: "POST",
         body: queryArg.teamsRequest,
       }),
     }),
     updateTeam: build.mutation<UpdateTeamApiResponse, UpdateTeamApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}/teams/${queryArg.teamId}`,
-        method: 'PUT',
+        method: "PUT",
         body: queryArg.teamsRequest,
       }),
     }),
     deleteTeam: build.mutation<DeleteTeamApiResponse, DeleteTeamApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}/teams/${queryArg.teamId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
     }),
     createPlayer: build.mutation<CreatePlayerApiResponse, CreatePlayerApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}/teams/${queryArg.teamId}/players`,
-        method: 'POST',
+        method: "POST",
         body: queryArg.playersRequest,
       }),
     }),
     updatePlayer: build.mutation<UpdatePlayerApiResponse, UpdatePlayerApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}/teams/${queryArg.teamId}/players/${queryArg.playerId}`,
-        method: 'PUT',
+        method: "PUT",
         body: queryArg.playersRequest,
       }),
     }),
     deletePlayer: build.mutation<DeletePlayerApiResponse, DeletePlayerApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}/teams/${queryArg.teamId}/players/${queryArg.playerId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
     }),
     getGameTables: build.query<GetGameTablesApiResponse, GetGameTablesApiArg>({
@@ -99,32 +98,32 @@ const injectedRtkApi = api.injectEndpoints({
     updateScores: build.mutation<UpdateScoresApiResponse, UpdateScoresApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}/rounds/${queryArg.roundNumber}/tables/${queryArg.tableNumber}/scores`,
-        method: 'PUT',
+        method: "PUT",
         body: queryArg.scoresRequest,
       }),
     }),
   }),
   overrideExisting: false,
 });
-
 export { injectedRtkApi as generatedApi };
 export type LivenessCheckApiResponse =
   /** status 200 Process is alive */ HealthCheckResponse;
-export type LivenessCheckApiArg = undefined;
+export type LivenessCheckApiArg = void;
 export type ReadinessCheckApiResponse =
   /** status 200 Service is ready to serve traffic (status "pass") */ HealthCheckDetailedResponse;
-export type ReadinessCheckApiArg = undefined;
-export type GetGamesApiResponse = GamesResponse;
-export type GetGamesApiArg = undefined;
-export type CreateGameApiResponse = GameResponse;
+export type ReadinessCheckApiArg = void;
+export type GetGamesApiResponse =
+  /** status 200 Games list (can be empty) */ GamesResponse;
+export type GetGamesApiArg = void;
+export type CreateGameApiResponse = /** status 201 Game created */ GameResponse;
 export type CreateGameApiArg = {
   gameCreateRequest: GameCreateRequest;
 };
-export type GetGameApiResponse = GameResponse;
+export type GetGameApiResponse = /** status 200 Game found */ GameResponse;
 export type GetGameApiArg = {
   gameId: number;
 };
-export type UpdateGameApiResponse = GameResponse;
+export type UpdateGameApiResponse = /** status 200 Game updated */ GameResponse;
 export type UpdateGameApiArg = {
   gameId: number;
   gameUpdateRequest: GameUpdateRequest;
@@ -137,12 +136,12 @@ export type SetupGameApiResponse = unknown;
 export type SetupGameApiArg = {
   gameId: number;
 };
-export type CreateTeamApiResponse = TeamResponse;
+export type CreateTeamApiResponse = /** status 201 Team created */ TeamResponse;
 export type CreateTeamApiArg = {
   gameId: number;
   teamsRequest: TeamsRequest;
 };
-export type UpdateTeamApiResponse = TeamResponse;
+export type UpdateTeamApiResponse = /** status 200 Team updated */ TeamResponse;
 export type UpdateTeamApiArg = {
   gameId: number;
   teamId: number;
@@ -153,13 +152,15 @@ export type DeleteTeamApiArg = {
   gameId: number;
   teamId: number;
 };
-export type CreatePlayerApiResponse = PlayersResponse;
+export type CreatePlayerApiResponse =
+  /** status 201 Player created */ PlayersResponse;
 export type CreatePlayerApiArg = {
   gameId: number;
   teamId: number;
   playersRequest: PlayersRequest;
 };
-export type UpdatePlayerApiResponse = PlayersResponse;
+export type UpdatePlayerApiResponse =
+  /** status 200 Player updated */ PlayersResponse;
 export type UpdatePlayerApiArg = {
   gameId: number;
   teamId: number;
@@ -172,22 +173,25 @@ export type DeletePlayerApiArg = {
   teamId: number;
   playerId: number;
 };
-export type GetGameTablesApiResponse = TablesResponse;
+export type GetGameTablesApiResponse =
+  /** status 200 Tables found */ TablesResponse;
 export type GetGameTablesApiArg = {
   gameId: number;
 };
-export type GetTablesApiResponse = TablesResponse;
+export type GetTablesApiResponse =
+  /** status 200 Tables found */ TablesResponse;
 export type GetTablesApiArg = {
   gameId: number;
   roundNumber: number;
 };
-export type GetTableApiResponse = TableResponse;
+export type GetTableApiResponse = /** status 200 Table found */ TableResponse;
 export type GetTableApiArg = {
   gameId: number;
   roundNumber: number;
   tableNumber: number;
 };
-export type UpdateScoresApiResponse = TableResponse;
+export type UpdateScoresApiResponse =
+  /** status 200 Updated table with new scores */ TableResponse;
 export type UpdateScoresApiArg = {
   gameId: number;
   roundNumber: number;
@@ -198,15 +202,15 @@ export type HealthCheckResponse = {
   status: string;
 };
 export type HealthCheckDetailedResponse = {
-  status: 'pass' | 'fail';
+  status: "pass" | "fail";
   checks?: {
     [key: string]: {
-      status: 'pass' | 'fail';
+      status: "pass" | "fail";
       message?: string;
     };
   };
 };
-export type GameStatus = 'setup' | 'in_progress' | 'completed';
+export type GameStatus = "setup" | "in_progress" | "completed";
 export type GameOwner = {
   gameID: number;
   ownerSub: string;
@@ -222,7 +226,7 @@ export type Team = {
   gameID: number;
   players?: Player[];
 };
-export type RoundStatus = 'setup' | 'in_progress' | 'completed';
+export type RoundStatus = "setup" | "in_progress" | "completed";
 export type GameRound = {
   id: number;
   gameID: number;

@@ -12,7 +12,8 @@
       "!coverage",
       "!src/generated",
       "!**/*.d.ts",
-      "!**/*.min.*"
+      "!**/*.min.*",
+      "!src/store/generatedApi.ts"
     ]
   },
   "formatter": {
