@@ -5,7 +5,7 @@ import type {
   Player,
   Table as TableType,
   Team,
-} from '../../../../slices/types';
+} from '../../../../store/generatedApi.ts';
 
 interface TeamHandoutCardProps {
   team: Team;
@@ -25,8 +25,10 @@ const TeamHandoutCard = ({
   const { t } = useTranslation();
   const rounds = Array.from({ length: numberOfRounds }, (_, i) => i + 1);
 
-  const teamPlayers = team.players
-    .map((playerID: number) => players.find((p) => p.id === playerID))
+  const teamPlayerIds = new Set((team.players ?? []).map((p) => p.id));
+
+  const teamPlayers = (team.players ?? [])
+    .map((teamPlayer) => players.find((p) => p.id === teamPlayer.id))
     .filter((player): player is Player => player !== undefined);
 
   const playerAssignments: Record<
@@ -40,7 +42,7 @@ const TeamHandoutCard = ({
     }
 
     for (const player of table.players || []) {
-      if (team.players.includes(player.id)) {
+      if (teamPlayerIds.has(player.id)) {
         playerAssignments[player.id] ??= {};
         playerAssignments[player.id]![table.roundNumber!] = {
           tableNumber: table.tableNumber,

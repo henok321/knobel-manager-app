@@ -54,11 +54,6 @@ jest.mock('./src/auth/firebaseConfig', () => ({
   },
 }));
 
-const { server } = require('./src/test/setup/msw');
-
-beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }));
 afterEach(() => {
-  server.resetHandlers();
   localStorage.clear();
 });
-afterAll(() => server.close());

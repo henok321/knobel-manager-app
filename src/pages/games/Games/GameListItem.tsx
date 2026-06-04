@@ -13,9 +13,8 @@ import { IconTrash } from '@tabler/icons-react';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
 import Icon from '../../../shared/Icon';
-import type { Game } from '../../../slices/types';
+import type { Game } from '../../../store/generatedApi.ts';
 import {
   statusColor,
   translateGameStatus,
@@ -82,7 +81,8 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
                   {translateGameStatus(t, game.status)}
                 </Badge>
                 <Text c="dimmed" size="xs">
-                  {game.teams.length} {t('games:picker.teams').toLowerCase()} •{' '}
+                  {game.teams?.length ?? 0}{' '}
+                  {t('games:picker.teams').toLowerCase()} •{' '}
                   {game.numberOfRounds}{' '}
                   {t('gameDetail:rounds.round').toLowerCase()}
                 </Text>
@@ -142,7 +142,7 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
               {t('games:card.details.teams')}
             </Text>
             <Text fw={600} size="sm">
-              {game.teams.length}
+              {game.teams?.length ?? 0}
             </Text>
           </div>
         </Group>

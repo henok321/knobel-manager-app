@@ -1,14 +1,10 @@
 import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
-import { usePlayersByGameId } from '../../../../slices/players/hooks.ts';
-import useTables, {
-  useTablesByRound,
-} from '../../../../slices/tables/hooks.ts';
-import { useTeamsByIds } from '../../../../slices/teams/hooks.ts';
-import type { Game } from '../../../../slices/types';
+import { useGetGameTablesQuery } from '../../../../store/api.ts';
+import type { Game } from '../../../../store/generatedApi.ts';
 import { buildRoundOptions } from '../roundOptions.ts';
 import { PlayerRankingRow, TeamRankingRow } from './RankingRow';
 import {
@@ -25,20 +21,35 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const { t } = useTranslation();
   const [selectedRound, setSelectedRound] = useState<string>('total');
 
-  const players = usePlayersByGameId(game.id);
+  const teams = useMemo(() => game.teams ?? [], [game.teams]);
+  const players = useMemo(
+    () => teams.flatMap((team) => team.players ?? []),
+    [teams],
+  );
 
-  const teams = useTeamsByIds(game.teams);
+  const roundNumberByRoundId = useMemo(
+    () => new Map((game.rounds ?? []).map((r) => [r.id, r.roundNumber])),
+    [game.rounds],
+  );
 
   const roundOptions = buildRoundOptions(t, game.numberOfRounds, {
     includeTotal: true,
   });
 
-  const { status } = useTables();
+  const { data: allTablesData, isLoading: loading } = useGetGameTablesQuery({
+    gameId: game.id,
+  });
+  const allTables = allTablesData?.tables ?? [];
 
-  const filteredTables = useTablesByRound(
-    game.id,
-    selectedRound === 'total' ? null : Number(selectedRound),
-  );
+  const filteredTables = useMemo(() => {
+    if (selectedRound === 'total') {
+      return allTables;
+    }
+    const round = Number(selectedRound);
+    return allTables.filter(
+      (table) => roundNumberByRoundId.get(table.roundID) === round,
+    );
+  }, [allTables, selectedRound, roundNumberByRoundId]);
 
   const allScores = aggregateScoresFromTables(filteredTables);
 
@@ -47,8 +58,6 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const playerRankings = mapPlayersToRankings(teams, players, allScores);
 
   const teamRankings = mapTeamsToRankings(teams, playerRankings);
-
-  const loading = status === 'pending';
 
   if (loading) {
     return (

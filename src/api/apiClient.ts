@@ -1,7 +1,4 @@
-import { auth as firebaseAuth } from '../auth/firebaseConfig';
-import { createClient, createConfig } from '../generated/client';
-
-const getBaseUrl = () => {
+export const getBaseUrl = () => {
   if (import.meta.env.PROD) {
     return import.meta.env.VITE_API_URL as string;
   }
@@ -10,11 +7,3 @@ const getBaseUrl = () => {
   }
   return '/api';
 };
-
-export const client = createClient(
-  createConfig({
-    auth: () => firebaseAuth.currentUser?.getIdToken(),
-    baseUrl: getBaseUrl(),
-    throwOnError: true,
-  }),
-);

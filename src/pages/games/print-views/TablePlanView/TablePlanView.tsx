@@ -1,7 +1,11 @@
 import { Stack, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type { Game, Table as TableType, Team } from '../../../../slices/types';
+import type {
+  Game,
+  Table as TableType,
+  Team,
+} from '../../../../store/generatedApi.ts';
 import RoundSection from './RoundSection';
 
 interface TablePlanViewProps {

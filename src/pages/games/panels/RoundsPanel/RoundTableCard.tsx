@@ -9,9 +9,8 @@ import {
 } from '@mantine/core';
 import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-
 import Icon from '../../../../shared/Icon';
-import type { Table, Team } from '../../../../slices/types';
+import type { Table, Team } from '../../../../store/generatedApi.ts';
 import { PlayerScoreRow } from './PlayerScoreRow';
 
 interface RoundTableCardProps {

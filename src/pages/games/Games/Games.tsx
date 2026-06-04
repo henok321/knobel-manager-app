@@ -12,31 +12,31 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CenterLoader from '../../../shared/CenterLoader';
 import Icon from '../../../shared/Icon';
 import Layout from '../../../shared/layout/Layout.tsx';
-import useGames from '../../../slices/games/hooks';
-import type { Game } from '../../../slices/types.ts';
+import {
+  useCreateGameMutation,
+  useDeleteGameMutation,
+  useGetGamesQuery,
+} from '../../../store/api.ts';
+import type { Game } from '../../../store/generatedApi.ts';
 import { assertNever } from '../../../utils/assertNever';
 import GameForm from './GameForm';
 import GameListItem from './GameListItem';
 
 const Games = () => {
-  const { status, error, allGames, createGame, deleteGame, fetchGames } =
-    useGames();
+  const { data, isLoading, isError, error } = useGetGamesQuery(undefined);
+  const allGames = data?.games ?? [];
+  const [createGame] = useCreateGameMutation();
+  const [deleteGame] = useDeleteGameMutation();
 
   const [gameModalActive, setGameModalActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
-
-  useEffect(() => {
-    if (status === 'idle') {
-      fetchGames();
-    }
-  }, [status, fetchGames]);
 
   const filtered = allGames.filter((game) =>
     game.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -68,26 +68,23 @@ const Games = () => {
       },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        deleteGame(gameID);
+        void deleteGame({ gameId: gameID });
       },
     });
   };
-
-  const isLoading = status === 'idle' || status === 'pending';
-  const hasError = status === 'failed' && error;
 
   if (isLoading) {
     return <CenterLoader />;
   }
 
-  if (hasError) {
+  if (isError) {
     return (
       <Center h="100vh">
         <Stack align="center" gap="xs">
           <Text c="red" size="xl">
             {t('common:actions.errorOccurred')}
           </Text>
-          <Text c="red">{error}</Text>
+          {error != null && <Text c="red">{JSON.stringify(error)}</Text>}
         </Stack>
       </Center>
     );
@@ -172,7 +169,7 @@ const Games = () => {
       </Container>
 
       <GameForm
-        createGame={createGame}
+        createGame={(game) => createGame({ gameCreateRequest: game })}
         isOpen={gameModalActive}
         onClose={() => setGameModalActive(false)}
       />
