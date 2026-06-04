@@ -95,6 +95,8 @@ const Login = (props: PaperProps) => {
         <Stack>
           <TextInput
             required
+            type="email"
+            autoComplete={'username'}
             disabled={submitting}
             error={
               form.errors.email &&
@@ -111,6 +113,8 @@ const Login = (props: PaperProps) => {
 
           <PasswordInput
             required
+            type="password"
+            autoComplete={'current-password'}
             disabled={submitting}
             error={
               form.errors.password &&

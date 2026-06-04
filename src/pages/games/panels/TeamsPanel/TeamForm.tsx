@@ -81,6 +81,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
           <TextInput
             autoFocus
             required
+            autoComplete={'off'}
             id="team-name"
             label={t('games:team.form.label.name')}
             name="team-name"
@@ -97,6 +98,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
                 <Group key={index} gap="xs">
                   <TextInput
                     required
+                    autoComplete={'off'}
                     id={`player-${index}`}
                     name={`player-${index}`}
                     style={{ flex: 1 }}

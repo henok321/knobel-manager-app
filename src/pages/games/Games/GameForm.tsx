@@ -61,6 +61,10 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
         <Stack gap="md">
           <TextInput
             autoFocus
+            autoComplete={'off'}
+            data-1p-ignore
+            data-form-type="other"
+            data-lpignore="true"
             required
             id="name"
             label={t('games:form.label.name')}
