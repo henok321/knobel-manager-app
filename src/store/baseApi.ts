@@ -1,7 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { getBaseUrl } from '../api/apiClient.ts';
 import { auth as firebaseAuth } from '../auth/firebaseConfig.ts';
+
+const getBaseUrl = () => {
+  if (import.meta.env.PROD) {
+    return import.meta.env.VITE_API_URL as string;
+  }
+  if (typeof window === 'undefined') {
+    return 'http://localhost/api';
+  }
+  return '/api';
+};
 
 export const baseApi = createApi({
   reducerPath: 'api',

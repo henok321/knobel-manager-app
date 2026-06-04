@@ -110,22 +110,21 @@ const injectedRtkApi = api.injectEndpoints({
 export { injectedRtkApi as generatedApi };
 export type LivenessCheckApiResponse =
   /** status 200 Process is alive */ HealthCheckResponse;
-export type LivenessCheckApiArg = void;
+export type LivenessCheckApiArg = undefined;
 export type ReadinessCheckApiResponse =
   /** status 200 Service is ready to serve traffic (status "pass") */ HealthCheckDetailedResponse;
-export type ReadinessCheckApiArg = void;
-export type GetGamesApiResponse =
-  /** status 200 Games list (can be empty) */ GamesResponse;
-export type GetGamesApiArg = void;
-export type CreateGameApiResponse = /** status 201 Game created */ GameResponse;
+export type ReadinessCheckApiArg = undefined;
+export type GetGamesApiResponse = GamesResponse;
+export type GetGamesApiArg = undefined;
+export type CreateGameApiResponse = GameResponse;
 export type CreateGameApiArg = {
   gameCreateRequest: GameCreateRequest;
 };
-export type GetGameApiResponse = /** status 200 Game found */ GameResponse;
+export type GetGameApiResponse = GameResponse;
 export type GetGameApiArg = {
   gameId: number;
 };
-export type UpdateGameApiResponse = /** status 200 Game updated */ GameResponse;
+export type UpdateGameApiResponse = GameResponse;
 export type UpdateGameApiArg = {
   gameId: number;
   gameUpdateRequest: GameUpdateRequest;
@@ -138,12 +137,12 @@ export type SetupGameApiResponse = unknown;
 export type SetupGameApiArg = {
   gameId: number;
 };
-export type CreateTeamApiResponse = /** status 201 Team created */ TeamResponse;
+export type CreateTeamApiResponse = TeamResponse;
 export type CreateTeamApiArg = {
   gameId: number;
   teamsRequest: TeamsRequest;
 };
-export type UpdateTeamApiResponse = /** status 200 Team updated */ TeamResponse;
+export type UpdateTeamApiResponse = TeamResponse;
 export type UpdateTeamApiArg = {
   gameId: number;
   teamId: number;
@@ -154,15 +153,13 @@ export type DeleteTeamApiArg = {
   gameId: number;
   teamId: number;
 };
-export type CreatePlayerApiResponse =
-  /** status 201 Player created */ PlayersResponse;
+export type CreatePlayerApiResponse = PlayersResponse;
 export type CreatePlayerApiArg = {
   gameId: number;
   teamId: number;
   playersRequest: PlayersRequest;
 };
-export type UpdatePlayerApiResponse =
-  /** status 200 Player updated */ PlayersResponse;
+export type UpdatePlayerApiResponse = PlayersResponse;
 export type UpdatePlayerApiArg = {
   gameId: number;
   teamId: number;
@@ -175,25 +172,22 @@ export type DeletePlayerApiArg = {
   teamId: number;
   playerId: number;
 };
-export type GetGameTablesApiResponse =
-  /** status 200 Tables found */ TablesResponse;
+export type GetGameTablesApiResponse = TablesResponse;
 export type GetGameTablesApiArg = {
   gameId: number;
 };
-export type GetTablesApiResponse =
-  /** status 200 Tables found */ TablesResponse;
+export type GetTablesApiResponse = TablesResponse;
 export type GetTablesApiArg = {
   gameId: number;
   roundNumber: number;
 };
-export type GetTableApiResponse = /** status 200 Table found */ TableResponse;
+export type GetTableApiResponse = TableResponse;
 export type GetTableApiArg = {
   gameId: number;
   roundNumber: number;
   tableNumber: number;
 };
-export type UpdateScoresApiResponse =
-  /** status 200 Updated table with new scores */ TableResponse;
+export type UpdateScoresApiResponse = TableResponse;
 export type UpdateScoresApiArg = {
   gameId: number;
   roundNumber: number;
