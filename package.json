@@ -11,7 +11,7 @@
   "scripts": {
     "prod": "vite --mode production",
     "local": "vite --mode development",
-    "api:gen": "rtk-query-codegen-openapi openapi-config.ts",
+    "api:gen": "rtk-query-codegen-openapi src/store/openapi-config.ts",
     "build": "tsc -b && vite build --mode production",
     "check": "tsc --noEmit && biome ci . && i18next-cli status && i18next-cli lint && i18next-cli extract --ci",
     "fix": "biome check --write .",

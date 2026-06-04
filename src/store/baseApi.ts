@@ -14,6 +14,8 @@ const getBaseUrl = () => {
 
 export const baseApi = createApi({
   reducerPath: 'api',
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
   baseQuery: fetchBaseQuery({
     baseUrl: getBaseUrl(),
     prepareHeaders: async (headers) => {

@@ -5,7 +5,7 @@
     "dist/**",
     "build/**",
     "src/store/generatedApi.ts",
-    "openapi-config.ts",
+    "src/store/openapi-config.ts",
     "playwright.config.ts",
     "vite.config.ts",
     ".pnp.*",
