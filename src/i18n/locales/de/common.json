@@ -6,7 +6,7 @@
     "errorOccurred": "Ein Fehler ist aufgetreten",
     "loading": "Lädt...",
     "save": "Speichern",
-    "success": "Erfolg"
+    "success": "Erledigt"
   },
   "errorBoundary": {
     "componentStack": "Komponenten-Stack",
