@@ -120,14 +120,12 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     players: { id: number; name: string }[],
   ) => {
     if (editingTeamId) {
-      // Update team name
       void updateTeam({
         gameId: game.id,
         teamId: editingTeamId,
         teamsRequest: { name: teamName },
       });
 
-      // Update all player names
       for (const player of players) {
         void updatePlayer({
           gameId: game.id,

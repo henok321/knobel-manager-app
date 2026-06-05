@@ -1,6 +1,6 @@
 import { generatedApi } from './generatedApi.ts';
 
-const tablesTag = (gameId: number, roundNumber: number) =>
+const roundTablesTag = (gameId: number, roundNumber: number) =>
   `${gameId}:${roundNumber}`;
 const gameTablesTag = (gameId: number) => `game:${gameId}`;
 
@@ -22,12 +22,7 @@ export const api = generatedApi.enhanceEndpoints({
     },
     getTables: {
       providesTags: (_result, _error, arg) => [
-        { type: 'Tables', id: tablesTag(arg.gameId, arg.roundNumber) },
-      ],
-    },
-    getTable: {
-      providesTags: (_result, _error, arg) => [
-        { type: 'Tables', id: tablesTag(arg.gameId, arg.roundNumber) },
+        { type: 'Tables', id: roundTablesTag(arg.gameId, arg.roundNumber) },
       ],
     },
     getGameTables: {
@@ -53,7 +48,7 @@ export const api = generatedApi.enhanceEndpoints({
     setupGame: {
       invalidatesTags: (_result, _error, arg) => [
         { type: 'Game', id: arg.gameId },
-        { type: 'Tables' },
+        { type: 'Tables', id: gameTablesTag(arg.gameId) },
       ],
     },
     createTeam: {
@@ -88,7 +83,7 @@ export const api = generatedApi.enhanceEndpoints({
     },
     updateScores: {
       invalidatesTags: (_result, _error, arg) => [
-        { type: 'Tables', id: tablesTag(arg.gameId, arg.roundNumber) },
+        { type: 'Tables', id: roundTablesTag(arg.gameId, arg.roundNumber) },
         { type: 'Tables', id: gameTablesTag(arg.gameId) },
       ],
     },

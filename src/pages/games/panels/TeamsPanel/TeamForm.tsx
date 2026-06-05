@@ -23,7 +23,6 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
   const [players, setPlayers] = useState(['']);
 
   const handleClose = () => {
-    // Reset form when closing
     setTeamName('');
     setPlayers(['']);
     onClose();

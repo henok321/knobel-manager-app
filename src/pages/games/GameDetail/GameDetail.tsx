@@ -23,7 +23,6 @@ const GameDetail = () => {
 
   const hasRounds = (game?.rounds?.length ?? 0) > 0;
 
-  // Warm the tables cache for the game once it is known to have rounds.
   useGetGameTablesQuery(
     { gameId },
     {
