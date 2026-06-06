@@ -1,7 +1,7 @@
 import type {
   Player,
   Score,
-  Table as TableModel,
+  Table,
   Team,
 } from '../../../../store/generatedApi.ts';
 import {
@@ -23,7 +23,7 @@ const score = (id: number, playerID: number, value: number): Score => ({
   score: value,
 });
 
-const table = (id: number, roundID: number, scores: Score[]): TableModel => ({
+const table = (id: number, roundID: number, scores: Score[]): Table => ({
   id,
   tableNumber: id,
   roundID,
@@ -40,7 +40,7 @@ const team = (id: number, name: string, players: Player[]): Team => ({
 describe('aggregateScoresFromTables', () => {
   type Case = {
     name: string;
-    tables: TableModel[];
+    tables: Table[];
     expected: Record<number, number>;
   };
 

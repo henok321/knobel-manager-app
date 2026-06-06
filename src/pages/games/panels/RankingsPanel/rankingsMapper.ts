@@ -1,7 +1,7 @@
 import type {
   Player,
   Score,
-  Table as TableModel,
+  Table,
   Team,
 } from '../../../../store/generatedApi.ts';
 
@@ -64,9 +64,7 @@ const mapTeamsToRankings = (
   return rankings.sort((a, b) => b.totalScore - a.totalScore);
 };
 
-const aggregateScoresFromTables = (
-  tables: TableModel[],
-): Record<number, number> => {
+const aggregateScoresFromTables = (tables: Table[]): Record<number, number> => {
   const allScores: Record<number, number> = {};
 
   for (const table of tables) {
