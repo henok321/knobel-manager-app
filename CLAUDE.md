@@ -207,7 +207,9 @@ package scripts must shell out via `pnpm` (e.g. `pnpm exec ...`).
 
 - Single responsibility, composition over inheritance.
 - Heavy logic belongs in hooks or utilities, not components.
-- `React.memo` for expensive pure components; `useCallback`/`useMemo` only when re-render churn is real.
+- React Compiler is enabled (`babel-plugin-react-compiler` via `reactCompilerPreset()` in `vite.config.ts`) — it
+  auto-memoizes. **Don't** add `React.memo`/`useMemo`/`useCallback`; the codebase has none. Write plain derivations and
+  let the compiler handle memoization.
 - Keep `useEffect` dependency arrays correct — stale closures are a recurring class of bug here.
 
 ### Type safety
@@ -232,7 +234,8 @@ When reviewing or writing non-trivial changes, apply three lenses:
 1. **Frontend / UX** — component boundaries respect SRP; Mantine layout primitives (Grid, Card, breakpoints) used
    correctly; empty states have clear CTAs; status badges consistent; primary card actions full-width; server data only
    via RTK Query hooks (`src/store/api.ts`); user-friendly errors with graceful 404 handling.
-2. **React patterns** — hooks + typed props + composition; no prop drilling (use Redux/Context); correct effect deps;
-   memoization where churn is evident; keyboard / ARIA accessibility; route params typed; protected routes wrapped.
-3. **TypeScript** — zero `any`; explicit `undefined` handling; discriminated unions; selectors typed and memoized;
-   event handlers typed; invalid states made unrepresentable.
+2. **React patterns** — hooks + typed props + composition; no prop drilling (use RTK Query/Context); correct effect
+   deps; no manual memoization (React Compiler handles it — flag stray `useMemo`/`useCallback`/`React.memo` as
+   removable); keyboard / ARIA accessibility; route params typed; protected routes wrapped.
+3. **TypeScript** — zero `any`; explicit `undefined` handling; discriminated unions; exhaustive `switch` +
+   `assertNever`; event handlers typed; invalid states made unrepresentable.

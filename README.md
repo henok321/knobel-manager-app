@@ -22,10 +22,11 @@ graph LR
 
 - **React 19**: UI framework with modern hooks and concurrent features
 - **TypeScript**: Type-safe JavaScript with strict mode enabled
-- **Redux + Redux Toolkit**: State management with normalized entity adapters
+- **Redux Toolkit (RTK Query)**: Server-state management; endpoints and types generated from the backend OpenAPI spec
 - **Mantine UI v9**: Component library with built-in theming
 - **Firebase v12**: Hosting and authentication with JWT tokens
 - **Vite**: Build tool and dev server
+- **React Compiler**: Automatic memoization — no manual `React.memo`/`useMemo`/`useCallback`
 
 ## Setup
 
