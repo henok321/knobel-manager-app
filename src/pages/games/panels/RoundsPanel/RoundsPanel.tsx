@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import {
@@ -53,7 +53,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
   const [setupGame, { isLoading: settingUp }] = useSetupGameMutation();
   const [updateScores] = useUpdateScoresMutation();
-  const teams = useMemo(() => game.teams ?? [], [game.teams]);
+  const teams = game.teams ?? [];
   const { data: allTablesData } = useGetGameTablesQuery({ gameId: game.id });
   const allTables = allTablesData?.tables ?? [];
 
@@ -99,17 +99,17 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   );
   const roundTables = roundTablesData?.tables ?? [];
 
-  const filteredAndSortedTables = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    const filtered = query
-      ? roundTables.filter((table) =>
-          (table.players ?? []).some((player) =>
-            player.name.toLowerCase().includes(query),
-          ),
-        )
-      : roundTables;
-    return [...filtered].sort((a, b) => a.tableNumber - b.tableNumber);
-  }, [roundTables, searchQuery]);
+  const query = searchQuery.trim().toLowerCase();
+  const filtered = query
+    ? roundTables.filter((table) =>
+        (table.players ?? []).some((player) =>
+          player.name.toLowerCase().includes(query),
+        ),
+      )
+    : roundTables;
+  const filteredAndSortedTables = [...filtered].sort(
+    (a, b) => a.tableNumber - b.tableNumber,
+  );
 
   const handleSetupGame = async () => {
     setError(null);

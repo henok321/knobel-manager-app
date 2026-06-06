@@ -1,6 +1,5 @@
 import { Button, Container, Group, Stack, Text } from '@mantine/core';
 import { IconArrowLeft, IconPrinter } from '@tabler/icons-react';
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
@@ -34,21 +33,16 @@ const PrintView = () => {
   );
   const rawTables = rawTablesData?.tables ?? [];
 
-  const teams = useMemo(() => game?.teams ?? [], [game]);
-  const players = useMemo(
-    () => teams.flatMap((team) => team.players ?? []),
-    [teams],
-  );
+  const teams = game?.teams ?? [];
+  const players = teams.flatMap((team) => team.players ?? []);
 
-  const tables = useMemo(() => {
-    const roundNumberByRoundId = new Map(
-      (game?.rounds ?? []).map((r) => [r.id, r.roundNumber]),
-    );
-    return rawTables.map((table) => ({
-      ...table,
-      roundNumber: roundNumberByRoundId.get(table.roundID),
-    }));
-  }, [rawTables, game]);
+  const roundNumberByRoundId = new Map(
+    (game?.rounds ?? []).map((r) => [r.id, r.roundNumber]),
+  );
+  const tables = rawTables.map((table) => ({
+    ...table,
+    roundNumber: roundNumberByRoundId.get(table.roundID),
+  }));
 
   const viewType = searchParams.get('type') || 'tablePlan';
   const roundNumber = searchParams.get('round');

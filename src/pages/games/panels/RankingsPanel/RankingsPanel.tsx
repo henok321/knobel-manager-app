@@ -1,5 +1,5 @@
 import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
@@ -21,15 +21,11 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const { t } = useTranslation();
   const [selectedRound, setSelectedRound] = useState<string>('total');
 
-  const teams = useMemo(() => game.teams ?? [], [game.teams]);
-  const players = useMemo(
-    () => teams.flatMap((team) => team.players ?? []),
-    [teams],
-  );
+  const teams = game.teams ?? [];
+  const players = teams.flatMap((team) => team.players ?? []);
 
-  const roundNumberByRoundId = useMemo(
-    () => new Map((game.rounds ?? []).map((r) => [r.id, r.roundNumber])),
-    [game.rounds],
+  const roundNumberByRoundId = new Map(
+    (game.rounds ?? []).map((r) => [r.id, r.roundNumber]),
   );
 
   const roundOptions = buildRoundOptions(t, game.numberOfRounds, {
@@ -41,15 +37,13 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   });
   const allTables = allTablesData?.tables ?? [];
 
-  const filteredTables = useMemo(() => {
-    if (selectedRound === 'total') {
-      return allTables;
-    }
-    const round = Number(selectedRound);
-    return allTables.filter(
-      (table) => roundNumberByRoundId.get(table.roundID) === round,
-    );
-  }, [allTables, selectedRound, roundNumberByRoundId]);
+  const filteredTables =
+    selectedRound === 'total'
+      ? allTables
+      : allTables.filter(
+          (table) =>
+            roundNumberByRoundId.get(table.roundID) === Number(selectedRound),
+        );
 
   const allScores = aggregateScoresFromTables(filteredTables);
 

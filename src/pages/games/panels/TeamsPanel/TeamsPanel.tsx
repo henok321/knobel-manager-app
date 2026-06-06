@@ -1,7 +1,7 @@
 import { Button, Group, Stack, Text, TextInput, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from '../../../../shared/Icon';
 import {
@@ -54,18 +54,14 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const allTeams = useMemo(() => game.teams ?? [], [game.teams]);
-  const teams = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) {
-      return allTeams;
-    }
-    return allTeams.filter((team) => team.name.toLowerCase().includes(query));
-  }, [allTeams, searchQuery]);
+  const allTeams = game.teams ?? [];
+  const query = searchQuery.trim().toLowerCase();
+  const teams = query
+    ? allTeams.filter((team) => team.name.toLowerCase().includes(query))
+    : allTeams;
 
-  const roundNumberByRoundId = useMemo(
-    () => new Map((game.rounds ?? []).map((r) => [r.id, r.roundNumber])),
-    [game.rounds],
+  const roundNumberByRoundId = new Map(
+    (game.rounds ?? []).map((r) => [r.id, r.roundNumber]),
   );
 
   const { canAddDelete, canEdit, isCompleted } = getTeamsPermissions(
