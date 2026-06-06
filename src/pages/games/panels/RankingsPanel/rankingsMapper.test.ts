@@ -165,31 +165,22 @@ describe('mapTeamsToRankings', () => {
   const teamC = team(3, 'Gamma', [player(300, 3, 'Dan')]);
 
   it('sums player scores per team and sorts descending', () => {
-    const playerRankings = mapPlayersToRankings([teamA, teamB], [], {
-      100: 4,
-      101: 3,
-      200: 10,
-    });
-
-    expect(mapTeamsToRankings([teamA, teamB], playerRankings)).toEqual([
+    expect(
+      mapTeamsToRankings([teamA, teamB], { 100: 4, 101: 3, 200: 10 }),
+    ).toEqual([
       { teamID: 2, teamName: 'Beta', totalScore: 10 },
       { teamID: 1, teamName: 'Alpha', totalScore: 7 },
     ]);
   });
 
   it('includes teams with zero score (no scored players)', () => {
-    const playerRankings = mapPlayersToRankings([teamA, teamC], [], {
-      100: 5,
-      101: 2,
-    });
-
-    expect(mapTeamsToRankings([teamA, teamC], playerRankings)).toEqual([
+    expect(mapTeamsToRankings([teamA, teamC], { 100: 5, 101: 2 })).toEqual([
       { teamID: 1, teamName: 'Alpha', totalScore: 7 },
       { teamID: 3, teamName: 'Gamma', totalScore: 0 },
     ]);
   });
 
   it('returns an empty list when there are no teams', () => {
-    expect(mapTeamsToRankings([], [])).toEqual([]);
+    expect(mapTeamsToRankings([], {})).toEqual([]);
   });
 });

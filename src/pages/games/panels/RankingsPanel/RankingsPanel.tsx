@@ -57,7 +57,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
 
   const playerRankings = mapPlayersToRankings(teams, players, allScores);
 
-  const teamRankings = mapTeamsToRankings(teams, playerRankings);
+  const teamRankings = mapTeamsToRankings(teams, allScores);
 
   if (loading) {
     return (

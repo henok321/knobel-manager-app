@@ -50,32 +50,16 @@ const mapPlayersToRankings = (
 
 const mapTeamsToRankings = (
   teams: Team[],
-  playerRankings: PlayerRanking[],
+  scoresByPlayer: Record<number, number>,
 ): TeamRanking[] => {
-  const teamScores: Record<number, number> = {};
-
-  for (const team of teams) {
-    if (team) {
-      teamScores[team.id] = 0;
-    }
-  }
-
-  for (const playerRank of playerRankings) {
-    teamScores[playerRank.teamID] =
-      (teamScores[playerRank.teamID] || 0) + playerRank.totalScore;
-  }
-
-  const rankings: TeamRanking[] = Object.entries(teamScores).map(
-    ([teamIDStr, totalScore]) => {
-      const teamID = Number(teamIDStr);
-      const team = teams.find((t) => t?.id === teamID);
-      return {
-        teamID,
-        teamName: team?.name || 'Unknown',
-        totalScore,
-      };
-    },
-  );
+  const rankings: TeamRanking[] = teams.map((team) => ({
+    teamID: team.id,
+    teamName: team.name,
+    totalScore: (team.players ?? []).reduce(
+      (sum, teamPlayer) => sum + (scoresByPlayer[teamPlayer.id] || 0),
+      0,
+    ),
+  }));
 
   return rankings.sort((a, b) => b.totalScore - a.totalScore);
 };
