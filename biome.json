@@ -63,6 +63,16 @@
       "linter": {
         "rules": {
           "complexity": {
+            "noImportantStyles": "on"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/print.css"],
+      "linter": {
+        "rules": {
+          "complexity": {
             "noImportantStyles": "off"
           }
         }
