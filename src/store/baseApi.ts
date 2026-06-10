@@ -3,13 +3,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { auth as firebaseAuth } from '../auth/firebaseConfig.ts';
 
 const getBaseUrl = () => {
-  if (import.meta.env.PROD) {
-    return import.meta.env.VITE_API_URL as string;
+  const useLocalProxy = !import.meta.env.PROD;
+  if (useLocalProxy) {
+    return '/api';
   }
-  if (typeof window === 'undefined') {
-    return 'http://localhost/api';
-  }
-  return '/api';
+  return import.meta.env.VITE_API_URL as string;
 };
 
 export const baseApi = createApi({
