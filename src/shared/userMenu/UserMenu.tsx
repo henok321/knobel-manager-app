@@ -28,8 +28,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
   const theme = useMantineTheme();
 
   const userInitial = user?.email?.charAt(0).toUpperCase() || 'U';
-  const userDisplayName =
-    user?.displayName || user?.email?.split('@')[0] || 'User';
+  const userDisplayName = user?.displayName || user?.email || 'User';
 
   const buttonStyle: CSSProperties = {
     padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
