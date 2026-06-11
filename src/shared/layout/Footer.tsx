@@ -8,6 +8,7 @@ import Logo from '../Logo.tsx';
 
 const GITHUB_URL = 'https://github.com/henok321/knobel-manager-app';
 const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
+const AUTHOR = 'Hendrik Brinkmann';
 
 const Footer: React.FC = () => {
   const { t } = useTranslation();
@@ -27,7 +28,10 @@ const Footer: React.FC = () => {
         <Group gap="xs">
           <Logo size={14} variant="mark" />
           <Text c="dimmed" size="xs">
-            © 2024–{new Date().getFullYear()}
+            {t('footer:copyright', {
+              year: new Date().getFullYear(),
+              author: AUTHOR,
+            })}
           </Text>
         </Group>
 

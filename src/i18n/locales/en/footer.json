@@ -1,4 +1,5 @@
 {
+  "copyright": "© 2024–{{year}} {{author}}",
   "links": {
     "github": "Source Code",
     "license": "MIT License"
