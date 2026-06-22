@@ -1,22 +1,15 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
   "ignore": [
-    "coverage/**",
-    "dist/**",
-    "build/**",
     "src/store/generatedApi.ts",
     "src/store/openapi-config.ts",
-    "playwright.config.ts",
-    "vite.config.ts",
-    ".pnp.*",
-    ".pnp.*",
     "i18next.config.ts"
   ],
-  "ignoreDependencies": ["redux"],
+  "ignoreBinaries": ["firebase"],
+  "ignoreDependencies": ["esbuild-runner"],
   "vitest": false,
-  "vite": false,
   "jest": {
     "config": ["jest.config.js"],
-    "entry": ["jest.setup.js"]
+    "entry": ["jest.setup.js", "__mocks__/**"]
   }
 }

@@ -28,7 +28,7 @@ pnpm prod                # vite --mode production (talks to deployed API)
 pnpm fix                 # biome check --write .  (auto-fix lint + format)
 pnpm check               # tsc --noEmit && biome ci . && i18next-cli status && i18next-cli lint && i18next-cli extract --ci
 pnpm test                # jest (single file: pnpm test <path>;   watch: pnpm test --watch)
-pnpm knip                # unused-files/deps audit (--strict)
+pnpm knip                # unused files/exports/deps audit — full mode, incl. devDependencies (not --strict)
 pnpm knip:fix            # knip --fix --format (auto-remove unused exports/files)
 
 # Build & deploy
@@ -163,7 +163,9 @@ graceful failure boundaries.
 
 ## Testing
 
-Jest + ts-jest + jsdom. Setup: `jest.setup.js` mocks the Firebase auth module (so `getIdToken()` returns a stub token)
+Jest + babel-jest + jsdom. TypeScript is transformed by `babel-jest` via `@babel/preset-typescript` (see
+`babel.config.cjs`); type-checking is handled separately by `tsc`, not Jest. Setup: `jest.setup.js` mocks the Firebase
+auth module (so `getIdToken()` returns a stub token)
 plus browser globals (`localStorage`, `BroadcastChannel`, `TextEncoder`). Test files: `*.test.{ts,tsx}` /
 `*.spec.{ts,tsx}` co-located with the code under test. CSS imports map to `identity-obj-proxy`; static assets to
 `__mocks__/fileMock.js`. The suite is currently light and focused on pure logic (e.g.
@@ -182,6 +184,12 @@ If the local backend isn't reachable at `http://localhost:8080/health`, fall bac
 
 **pnpm only** (`packageManager` is pinned in `package.json`, enforced by `engines`). Never use `npm` or `yarn`;
 package scripts must shell out via `pnpm` (e.g. `pnpm exec ...`).
+
+pnpm settings live in **`pnpm-workspace.yaml`**, not `package.json` (pnpm 11 stopped reading the `pnpm` key there).
+That file holds `allowBuilds` (postinstall allowlist) and `overrides` — the latter is the established remedy when a
+transitive release is broken upstream (e.g. `browserslist` was pinned to a working version after a published release
+shipped an unparseable file; `minimatch` likewise). If a dependency crash traces to a single bad transitive version,
+pin it here rather than reinstalling — the lockfile faithfully reproduces the broken artifact.
 
 ## Development Guidelines
 

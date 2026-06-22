@@ -1,6 +1,5 @@
 /** @type {import('jest').Config} */
 export default {
-  preset: 'ts-jest',
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testMatch: [
@@ -15,8 +14,5 @@ export default {
   transform: {
     '^.+\\.(ts|tsx|js|jsx|mjs)$': 'babel-jest',
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(.pnpm|msw|@mswjs|@bundled-es-modules|until-async|rettime|@open-draft)/)',
-  ],
   testPathIgnorePatterns: ['/node_modules/', '/.claude/'],
 };
