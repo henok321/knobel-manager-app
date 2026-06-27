@@ -9,7 +9,6 @@ import {
 } from '@mantine/core';
 import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import Icon from '../../../../shared/Icon';
 import type { Table, Team } from '../../../../store/generatedApi.ts';
 import { PlayerScoreRow } from './PlayerScoreRow';
 
@@ -40,7 +39,7 @@ const RoundTableCard = ({
             {hasScores ? (
               <Badge
                 color="green"
-                leftSection={<Icon icon={IconCheck} size={14} />}
+                leftSection={<IconCheck size={14} stroke={1.5} />}
                 variant="light"
               >
                 {t('gameDetail:rounds.scoresEntered')}
@@ -48,7 +47,7 @@ const RoundTableCard = ({
             ) : (
               <Badge
                 color="gray"
-                leftSection={<Icon icon={IconClock} size={14} />}
+                leftSection={<IconClock size={14} stroke={1.5} />}
                 variant="light"
               >
                 {t('gameDetail:rounds.scoresPending')}

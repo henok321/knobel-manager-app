@@ -1,13 +1,7 @@
 import { Badge, rem, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-export interface PlayerRanking {
-  playerID: number;
-  playerName: string;
-  teamID: number;
-  teamName: string;
-  totalScore: number;
-}
+import type { PlayerRanking } from '../../panels/RankingsPanel/rankingsMapper.ts';
 
 interface PlayerRankingsSectionProps {
   rankings: PlayerRanking[];

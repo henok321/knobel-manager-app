@@ -15,7 +15,6 @@ import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '../../auth/useAuth.ts';
-import Icon from '../Icon';
 import SettingsSection from './SettingsSection.tsx';
 
 interface UserMenuProps {
@@ -64,7 +63,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
               </Text>
             </Box>
             <span style={{ opacity: 0.6, display: 'inline-flex' }}>
-              <Icon icon={IconChevronDown} size={16} />
+              <IconChevronDown size={16} stroke={1.5} />
             </span>
           </Group>
         </UnstyledButton>
@@ -86,7 +85,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
 
           <Menu.Item
             color="red"
-            leftSection={<Icon icon={IconLogout} size={16} />}
+            leftSection={<IconLogout size={16} stroke={1.5} />}
             onClick={onLogout}
           >
             {t('common:header.logout')}

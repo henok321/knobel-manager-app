@@ -3,7 +3,6 @@ import { IconBrandGithub, IconLicense } from '@tabler/icons-react';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Icon from '../Icon';
 import Logo from '../Logo.tsx';
 
 const GITHUB_URL = 'https://github.com/henok321/knobel-manager-app';
@@ -44,7 +43,7 @@ const Footer: React.FC = () => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <Icon icon={IconBrandGithub} size={16} />
+              <IconBrandGithub size={16} stroke={1.5} />
             </ActionIcon>
           </Tooltip>
           <Tooltip label={t('footer:links.license')}>
@@ -55,7 +54,7 @@ const Footer: React.FC = () => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <Icon icon={IconLicense} size={16} />
+              <IconLicense size={16} stroke={1.5} />
             </ActionIcon>
           </Tooltip>
         </Group>

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import Breadcrumbs from '../../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../../shared/CenterLoader';
 import Layout from '../../../shared/layout/Layout.tsx';
-import { useGetGameQuery, useGetGameTablesQuery } from '../../../store/api.ts';
+import { useGetGameQuery } from '../../../store/api.ts';
 import GameViewContent from './GameViewContent';
 
 const GameDetail = () => {
@@ -20,15 +20,6 @@ const GameDetail = () => {
     },
   );
   const game = data?.game;
-
-  const hasRounds = (game?.rounds?.length ?? 0) > 0;
-
-  useGetGameTablesQuery(
-    { gameId },
-    {
-      skip: Number.isNaN(gameId) || !hasRounds,
-    },
-  );
 
   if (isLoading) {
     return <CenterLoader />;

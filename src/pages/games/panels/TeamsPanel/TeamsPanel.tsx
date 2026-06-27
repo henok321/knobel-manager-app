@@ -3,7 +3,6 @@ import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Icon from '../../../../shared/Icon';
 import {
   useCreateTeamMutation,
   useDeleteTeamMutation,
@@ -92,11 +91,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     }
   }
 
-  const getPlayersForTeam = (teamID: number) => {
-    const team = allTeams.find((t) => t.id === teamID);
-    return team?.players ?? [];
-  };
-
   const handleCreateTeam = (teamData: TeamFormData) => {
     const teamsRequest = {
       name: teamData.name,
@@ -163,7 +157,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         />
         {canAddDelete ? (
           <Button
-            leftSection={<Icon icon={IconPlus} size={20} />}
+            leftSection={<IconPlus size={20} stroke={1.5} />}
             style={{ alignSelf: 'flex-start' }}
             onClick={() => setIsTeamFormOpen(true)}
           >
@@ -173,7 +167,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
           <Tooltip label={t('gameDetail:teams.cannotAddTeamsAfterStart')}>
             <Button
               disabled
-              leftSection={<Icon icon={IconPlus} size={20} />}
+              leftSection={<IconPlus size={20} stroke={1.5} />}
               style={{ alignSelf: 'flex-start' }}
             >
               {t('gameDetail:teams.addTeam')}
@@ -203,7 +197,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
               canEdit={canEdit}
               isCompleted={isCompleted}
               numberOfRounds={game.numberOfRounds}
-              players={getPlayersForTeam(team.id)}
+              players={team.players ?? []}
               playerTableAssignments={playerTableAssignments}
               showTableAssignments={showTableAssignments}
               team={team}
@@ -224,7 +218,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       {editingTeamId && (
         <EditTeamDialog
           isOpen={editTeamDialogOpen}
-          players={getPlayersForTeam(editingTeamId)}
+          players={allTeams.find((t) => t.id === editingTeamId)?.players ?? []}
           teamName={teams.find((t) => t?.id === editingTeamId)?.name || ''}
           onClose={() => {
             setEditTeamDialogOpen(false);

@@ -16,7 +16,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CenterLoader from '../../../shared/CenterLoader';
-import Icon from '../../../shared/Icon';
 import Layout from '../../../shared/layout/Layout.tsx';
 import {
   useCreateGameMutation,
@@ -107,7 +106,7 @@ const Games = () => {
               </Text>
             </div>
             <Button
-              leftSection={<Icon icon={IconPlus} size={20} />}
+              leftSection={<IconPlus size={20} stroke={1.5} />}
               size="lg"
               onClick={() => setGameModalActive(true)}
             >

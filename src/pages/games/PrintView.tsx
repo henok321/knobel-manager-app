@@ -90,7 +90,6 @@ const PrintView = () => {
         return (
           <RankingsView
             game={game}
-            players={players}
             roundNumber={roundNumber ? Number(roundNumber) : undefined}
             tables={tables}
             teams={teams}

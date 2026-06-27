@@ -4,7 +4,6 @@ import {
   Flex,
   Group,
   Paper,
-  type PaperProps,
   PasswordInput,
   Stack,
   Text,
@@ -23,7 +22,7 @@ import CenterLoader from '../shared/CenterLoader';
 import Layout from '../shared/layout/Layout.tsx';
 import { assertNever } from '../utils/assertNever.ts';
 
-const Login = (props: PaperProps) => {
+const Login = () => {
   const { user, loading, loginAction } = useAuth();
   const [loginError, setLoginError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -62,11 +61,6 @@ const Login = (props: PaperProps) => {
         default:
           assertNever(loginResult.code);
       }
-      if (loginResult.code === 'INVALID_CREDENTIALS') {
-        setLoginError(t('common:login.error.invalidCredentials'));
-      } else {
-        setLoginError(t('common:login.error.unknown'));
-      }
     } else {
       setLoginError(null);
     }
@@ -98,10 +92,7 @@ const Login = (props: PaperProps) => {
             type="email"
             autoComplete={'username'}
             disabled={submitting}
-            error={
-              form.errors.email &&
-              t('common:login.fields.email.validationMessage')
-            }
+            error={form.errors.email}
             label={t('common:login.fields.email.label')}
             placeholder={t('common:login.fields.email.placeholder')}
             radius="md"
@@ -116,10 +107,7 @@ const Login = (props: PaperProps) => {
             type="password"
             autoComplete={'current-password'}
             disabled={submitting}
-            error={
-              form.errors.password &&
-              t('common:login.fields.password.validationMessage')
-            }
+            error={form.errors.password}
             label={t('common:login.fields.password.label')}
             placeholder={t('common:login.fields.password.placeholder')}
             radius="md"
@@ -160,13 +148,7 @@ const Login = (props: PaperProps) => {
         </Flex>
       ) : (
         <Flex align="center" h="80vh" justify="center">
-          <Paper
-            withBorder
-            p="lg"
-            radius="md"
-            w={{ md: '40rem', lg: '50rem' }}
-            {...props}
-          >
+          <Paper withBorder p="lg" radius="md" w={{ md: '40rem', lg: '50rem' }}>
             {renderLoginForm()}
           </Paper>{' '}
         </Flex>

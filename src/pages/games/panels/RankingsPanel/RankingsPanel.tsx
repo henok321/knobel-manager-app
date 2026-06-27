@@ -22,7 +22,6 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const [selectedRound, setSelectedRound] = useState<string>('total');
 
   const teams = game.teams ?? [];
-  const players = teams.flatMap((team) => team.players ?? []);
 
   const roundNumberByRoundId = new Map(
     (game.rounds ?? []).map((r) => [r.id, r.roundNumber]),
@@ -49,7 +48,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
 
   const hasNoScores = Object.keys(allScores).length === 0;
 
-  const playerRankings = mapPlayersToRankings(teams, players, allScores);
+  const playerRankings = mapPlayersToRankings(teams, allScores);
 
   const teamRankings = mapTeamsToRankings(teams, allScores);
 
