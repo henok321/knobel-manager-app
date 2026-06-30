@@ -1,7 +1,6 @@
 import { ActionIcon, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import Icon from '../../../../shared/Icon';
 import type { Player } from '../../../../store/generatedApi.ts';
 import TeamAssignmentMatrix, {
   type RoundTableAssignment,
@@ -43,7 +42,7 @@ const TeamCard = ({
             <Group gap="xs">
               {canEdit && (
                 <ActionIcon variant="subtle" onClick={() => onEdit(team.id)}>
-                  <Icon icon={IconPencil} size={16} />
+                  <IconPencil size={16} stroke={1.5} />
                 </ActionIcon>
               )}
               {canAddDelete && (
@@ -52,7 +51,7 @@ const TeamCard = ({
                   variant="subtle"
                   onClick={() => onDelete(team.id)}
                 >
-                  <Icon icon={IconTrash} size={16} />
+                  <IconTrash size={16} stroke={1.5} />
                 </ActionIcon>
               )}
             </Group>

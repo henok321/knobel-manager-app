@@ -13,7 +13,6 @@ import { IconTrash } from '@tabler/icons-react';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import Icon from '../../../shared/Icon';
 import type { Game } from '../../../store/generatedApi.ts';
 import {
   statusColor,
@@ -106,7 +105,7 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
               size="lg"
               onClick={handleDelete}
             >
-              <Icon icon={IconTrash} size={20} />
+              <IconTrash size={20} stroke={1.5} />
             </ActionIcon>
           </Group>
         </Group>

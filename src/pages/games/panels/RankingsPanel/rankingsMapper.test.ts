@@ -96,7 +96,7 @@ describe('mapPlayersToRankings', () => {
   const teamB = team(2, 'Beta', [player(200, 2, 'Cara')]);
 
   it('builds one ranking per team player with scores resolved (default 0) and sorted descending', () => {
-    const result = mapPlayersToRankings([teamA, teamB], [], {
+    const result = mapPlayersToRankings([teamA, teamB], {
       100: 8,
       200: 12,
     });
@@ -127,32 +127,12 @@ describe('mapPlayersToRankings', () => {
   });
 
   it('returns an empty list when there are no teams', () => {
-    expect(mapPlayersToRankings([], [], {})).toEqual([]);
+    expect(mapPlayersToRankings([], {})).toEqual([]);
   });
 
   it('skips teams with no players', () => {
     const emptyTeam = team(3, 'Empty', []);
-    expect(mapPlayersToRankings([emptyTeam], [], {})).toEqual([]);
-  });
-
-  it('prefers the canonical player from the players list over the embedded team player', () => {
-    const embedded = player(100, 1, 'Stale Name');
-    const canonical = player(100, 1, 'Fresh Name');
-    const teamWithStale = team(1, 'Alpha', [embedded]);
-
-    const result = mapPlayersToRankings([teamWithStale], [canonical], {
-      100: 5,
-    });
-
-    expect(result).toEqual([
-      {
-        playerID: 100,
-        playerName: 'Fresh Name',
-        teamID: 1,
-        teamName: 'Alpha',
-        totalScore: 5,
-      },
-    ]);
+    expect(mapPlayersToRankings([emptyTeam], {})).toEqual([]);
   });
 });
 

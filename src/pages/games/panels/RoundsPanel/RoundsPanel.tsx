@@ -170,12 +170,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   return (
     <Stack gap="md">
-      <style>{`
-        .rounds-table tbody tr > td:nth-child(2),
-        .rounds-table thead tr > th:nth-child(2) { text-align: center; }
-        .rounds-table tbody tr > td:nth-child(3),
-        .rounds-table thead tr > th:nth-child(3) { text-align: right; }
-      `}</style>
       {(!isSetupMode || game.status === 'in_progress') && (
         <Group align="flex-end" justify="space-between" wrap="wrap">
           {' '}

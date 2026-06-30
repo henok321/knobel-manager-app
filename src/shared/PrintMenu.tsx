@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import type { Game } from '../store/generatedApi.ts';
-import Icon from './Icon';
 
 interface PrintMenuProps {
   game: Game;
@@ -33,7 +32,7 @@ const PrintMenu = ({
     <Menu shadow="md" width={250}>
       <Menu.Target>
         <Button
-          leftSection={<Icon icon={IconPrinter} size={16} />}
+          leftSection={<IconPrinter size={16} stroke={1.5} />}
           size={size}
           variant={variant}
         >

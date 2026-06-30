@@ -1,9 +1,4 @@
-import type {
-  Player,
-  Score,
-  Table,
-  Team,
-} from '../../../../store/generatedApi.ts';
+import type { Score, Table, Team } from '../../../../store/generatedApi.ts';
 
 interface PlayerRanking {
   playerID: number;
@@ -21,11 +16,9 @@ interface TeamRanking {
 
 const mapPlayersToRankings = (
   teams: Team[],
-  players: Player[],
   scoresByPlayer: Record<number, number>,
 ): PlayerRanking[] => {
   const rankings: PlayerRanking[] = [];
-  const playersById = new Map(players.map((player) => [player.id, player]));
 
   for (const team of teams) {
     if (!team) {
@@ -33,14 +26,12 @@ const mapPlayersToRankings = (
     }
 
     for (const teamPlayer of team.players ?? []) {
-      const player = playersById.get(teamPlayer.id) ?? teamPlayer;
-
       rankings.push({
-        playerID: player.id,
-        playerName: player.name,
+        playerID: teamPlayer.id,
+        playerName: teamPlayer.name,
         teamID: team.id,
         teamName: team.name,
-        totalScore: scoresByPlayer[player.id] || 0,
+        totalScore: scoresByPlayer[teamPlayer.id] || 0,
       });
     }
   }

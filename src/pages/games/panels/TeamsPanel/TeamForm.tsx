@@ -3,7 +3,6 @@ import { notifications } from '@mantine/notifications';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { type ChangeEvent, type SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Icon from '../../../../shared/Icon';
 
 export interface TeamFormData {
   name: string;
@@ -113,7 +112,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
                     variant="subtle"
                     onClick={() => removePlayer(index)}
                   >
-                    <Icon icon={IconTrash} size={20} />
+                    <IconTrash size={20} stroke={1.5} />
                   </Button>
                 </Group>
               ))}
@@ -121,7 +120,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
                 aria-label={t('games:team.form.addPlayer')}
                 color="green"
                 disabled={players.length >= teamSize}
-                leftSection={<Icon icon={IconPlus} size={20} />}
+                leftSection={<IconPlus size={20} stroke={1.5} />}
                 mt="xs"
                 size="xs"
                 type="button"
