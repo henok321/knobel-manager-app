@@ -68,10 +68,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return null;
   };
 
-  const logOut = () => {
+  const logOut = async () => {
+    await void signOut(firebaseAuth);
     localStorage.clear();
     store.dispatch(api.util.resetApiState());
-    void signOut(firebaseAuth);
   };
 
   const contextValue: AuthContextValue = {
