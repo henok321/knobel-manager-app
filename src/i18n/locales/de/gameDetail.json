@@ -13,25 +13,27 @@
     "startGameWarning2": "Tischzuweisungen werden generiert",
     "startGameWarning3": "Du kannst mit dem Eintragen der Punkte beginnen"
   },
+  "administration": {
+    "admins": {
+      "add": "Admin hinzufügen",
+      "added": "Admin hinzugefügt",
+      "cancel": "Abbrechen",
+      "description": "Admins können dieses Spiel bearbeiten und Ergebnisse eintragen. Füge einen weiteren Admin über seine E-Mail-Adresse hinzu.",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "name@example.com",
+      "errorAlreadyAdmin": "Diese Person ist bereits Admin.",
+      "errorGeneric": "Admins konnten nicht aktualisiert werden. Bitte versuche es erneut.",
+      "errorUserNotFound": "Kein Benutzer mit dieser E-Mail-Adresse gefunden.",
+      "remove": "Entfernen",
+      "removeConfirmMessage": "{{email}} als Admin dieses Spiels entfernen?",
+      "removeConfirmTitle": "Admin entfernen",
+      "removed": "Admin entfernt",
+      "title": "Admins",
+      "you": "Du"
+    }
+  },
   "notFound": "Spiel nicht gefunden",
   "numberOfRounds": "Anzahl der Runden",
-  "owners": {
-    "add": "Admin hinzufügen",
-    "added": "Admin hinzugefügt",
-    "cancel": "Abbrechen",
-    "description": "Admins können dieses Spiel bearbeiten und Ergebnisse eintragen. Füge einen weiteren Admin über seine E-Mail-Adresse hinzu.",
-    "emailLabel": "E-Mail-Adresse",
-    "emailPlaceholder": "name@example.com",
-    "errorAlreadyOwner": "Diese Person ist bereits Admin.",
-    "errorGeneric": "Admins konnten nicht aktualisiert werden. Bitte versuche es erneut.",
-    "errorUserNotFound": "Kein Benutzer mit dieser E-Mail-Adresse gefunden.",
-    "remove": "Entfernen",
-    "removeConfirmMessage": "{{email}} als Admin dieses Spiels entfernen?",
-    "removeConfirmTitle": "Admin entfernen",
-    "removed": "Admin entfernt",
-    "title": "Admins",
-    "you": "Du"
-  },
   "printMenu": {
     "label": "Druckoptionen",
     "rankingsAll": "Alle Runden (Gesamt)",
@@ -93,7 +95,7 @@
   },
   "tableSize": "Tischgröße",
   "tabs": {
-    "owners": "Admins",
+    "administration": "Administration",
     "rankings": "Rangliste",
     "rounds": "Runden",
     "teams": "Teams"
