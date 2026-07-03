@@ -15,6 +15,23 @@
   },
   "notFound": "Game not found",
   "numberOfRounds": "Number of Rounds",
+  "owners": {
+    "add": "Add owner",
+    "added": "Owner added",
+    "cancel": "Cancel",
+    "description": "Owners can manage this game. Add a co-owner by their email address.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "name@example.com",
+    "errorAlreadyOwner": "This person is already an owner.",
+    "errorGeneric": "Could not update owners. Please try again.",
+    "errorUserNotFound": "No user found with that email address.",
+    "remove": "Remove",
+    "removeConfirmMessage": "Remove {{email}} as an owner of this game?",
+    "removeConfirmTitle": "Remove owner",
+    "removed": "Owner removed",
+    "title": "Owners",
+    "you": "You"
+  },
   "printMenu": {
     "label": "Print Options",
     "rankingsAll": "All Rounds (Total)",
@@ -76,6 +93,7 @@
   },
   "tableSize": "Table Size",
   "tabs": {
+    "owners": "Owners",
     "rankings": "Rankings",
     "rounds": "Rounds",
     "teams": "Teams"

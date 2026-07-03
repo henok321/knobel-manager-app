@@ -51,6 +51,16 @@ export const api = generatedApi.enhanceEndpoints({
         { type: 'Tables', id: gameTablesTag(arg.gameId) },
       ],
     },
+    addOwner: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+      ],
+    },
+    removeOwner: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+      ],
+    },
     createTeam: {
       invalidatesTags: (_result, _error, arg) => [
         { type: 'Game', id: arg.gameId },
@@ -104,4 +114,6 @@ export const {
   useDeleteTeamMutation,
   useUpdatePlayerMutation,
   useUpdateScoresMutation,
+  useAddOwnerMutation,
+  useRemoveOwnerMutation,
 } = api;

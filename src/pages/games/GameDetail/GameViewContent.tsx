@@ -28,6 +28,7 @@ import {
   statusColor,
   translateGameStatus,
 } from '../../../utils/gameStatusHelpers';
+import OwnersPanel from '../panels/OwnersPanel/OwnersPanel';
 import RankingsPanel from '../panels/RankingsPanel/RankingsPanel';
 import RoundsPanel from '../panels/RoundsPanel/RoundsPanel';
 import TeamsPanel from '../panels/TeamsPanel/TeamsPanel';
@@ -38,7 +39,7 @@ interface GameViewContentProps {
   game: Game;
 }
 
-const GAME_TYPES = ['teams', 'rounds', 'rankings'] as const;
+const GAME_TYPES = ['teams', 'rounds', 'rankings', 'owners'] as const;
 
 type GameTab = (typeof GAME_TYPES)[number];
 
@@ -237,6 +238,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
           <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
           <Tabs.Tab value="rankings">{t('gameDetail:tabs.rankings')}</Tabs.Tab>
+          <Tabs.Tab value="owners">{t('gameDetail:tabs.owners')}</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel pt="md" value="teams">
@@ -249,6 +251,10 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
         <Tabs.Panel pt="md" value="rankings">
           <RankingsPanel game={game} />
+        </Tabs.Panel>
+
+        <Tabs.Panel pt="md" value="owners">
+          <OwnersPanel game={game} />
         </Tabs.Panel>
       </Tabs>
     </Stack>

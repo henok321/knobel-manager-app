@@ -42,6 +42,19 @@ const injectedRtkApi = api.injectEndpoints({
         method: "POST",
       }),
     }),
+    addOwner: build.mutation<AddOwnerApiResponse, AddOwnerApiArg>({
+      query: (queryArg) => ({
+        url: `/games/${queryArg.gameId}/owners`,
+        method: "POST",
+        body: queryArg.addOwnerRequest,
+      }),
+    }),
+    removeOwner: build.mutation<RemoveOwnerApiResponse, RemoveOwnerApiArg>({
+      query: (queryArg) => ({
+        url: `/games/${queryArg.gameId}/owners/${queryArg.ownerSub}`,
+        method: "DELETE",
+      }),
+    }),
     createTeam: build.mutation<CreateTeamApiResponse, CreateTeamApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}/teams`,
@@ -136,6 +149,18 @@ export type SetupGameApiResponse = unknown;
 export type SetupGameApiArg = {
   gameId: number;
 };
+export type AddOwnerApiResponse =
+  /** status 200 Owner added; updated game returned */ GameResponse;
+export type AddOwnerApiArg = {
+  gameId: number;
+  addOwnerRequest: AddOwnerRequest;
+};
+export type RemoveOwnerApiResponse =
+  /** status 200 Owner removed; updated game returned */ GameResponse;
+export type RemoveOwnerApiArg = {
+  gameId: number;
+  ownerSub: string;
+};
 export type CreateTeamApiResponse = /** status 201 Team created */ TeamResponse;
 export type CreateTeamApiArg = {
   gameId: number;
@@ -214,6 +239,8 @@ export type GameStatus = "setup" | "in_progress" | "completed";
 export type GameOwner = {
   gameID: number;
   ownerSub: string;
+  /** Resolved live from Firebase; absent if the user cannot be resolved. */
+  email?: string;
 };
 export type Player = {
   id: number;
@@ -266,6 +293,9 @@ export type GameUpdateRequest = {
   tableSize: number;
   status: GameStatus;
 };
+export type AddOwnerRequest = {
+  email: string;
+};
 export type TeamResponse = {
   team: Team;
 };
@@ -313,6 +343,8 @@ export const {
   useUpdateGameMutation,
   useDeleteGameMutation,
   useSetupGameMutation,
+  useAddOwnerMutation,
+  useRemoveOwnerMutation,
   useCreateTeamMutation,
   useUpdateTeamMutation,
   useDeleteTeamMutation,
