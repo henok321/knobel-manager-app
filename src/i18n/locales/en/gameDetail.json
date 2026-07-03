@@ -13,6 +13,25 @@
     "startGameWarning2": "Table assignments will be generated",
     "startGameWarning3": "You can begin entering scores"
   },
+  "administration": {
+    "admins": {
+      "add": "Add admin",
+      "added": "Admin added",
+      "cancel": "Cancel",
+      "description": "Admins can edit this game and enter results. Add another admin by their email address.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "name@example.com",
+      "errorAlreadyAdmin": "This person is already an admin.",
+      "errorGeneric": "Could not update admins. Please try again.",
+      "errorUserNotFound": "No user found with that email address.",
+      "remove": "Remove",
+      "removeConfirmMessage": "Remove {{email}} as an admin of this game?",
+      "removeConfirmTitle": "Remove admin",
+      "removed": "Admin removed",
+      "title": "Admins",
+      "you": "You"
+    }
+  },
   "notFound": "Game not found",
   "numberOfRounds": "Number of Rounds",
   "printMenu": {
@@ -76,6 +95,7 @@
   },
   "tableSize": "Table Size",
   "tabs": {
+    "administration": "Administration",
     "rankings": "Rankings",
     "rounds": "Rounds",
     "teams": "Teams"
