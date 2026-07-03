@@ -102,59 +102,56 @@ const AdministrationPanel = ({ game }: AdministrationPanelProps) => {
   };
 
   return (
-    <Stack gap="xl">
-      {/* Admins section — first of potentially several administration sections */}
-      <Stack gap="md">
-        <div>
-          <Text fw={600}>{t('gameDetail:administration.admins.title')}</Text>
-          <Text c="dimmed" size="sm">
-            {t('gameDetail:administration.admins.description')}
-          </Text>
-        </div>
+    <Stack gap="md">
+      <div>
+        <Text fw={600}>{t('gameDetail:administration.admins.title')}</Text>
+        <Text c="dimmed" size="sm">
+          {t('gameDetail:administration.admins.description')}
+        </Text>
+      </div>
 
-        <Stack gap="xs">
-          {game.owners.map((owner) => {
-            const isSelf = owner.ownerSub === user?.uid;
-            return (
-              <Card key={owner.ownerSub} padding="sm" withBorder>
-                <Group justify="space-between">
-                  <Group gap="xs">
-                    <Text size="sm">{owner.email ?? owner.ownerSub}</Text>
-                    {isSelf && (
-                      <Badge color="cobalt" size="sm">
-                        {t('gameDetail:administration.admins.you')}
-                      </Badge>
-                    )}
-                  </Group>
-                  <ActionIcon
-                    aria-label={t('gameDetail:administration.admins.remove')}
-                    color="red"
-                    disabled={singleAdmin}
-                    onClick={() => confirmRemove(owner)}
-                    variant="subtle"
-                  >
-                    <IconTrash size={16} stroke={1.5} />
-                  </ActionIcon>
+      <Stack gap="xs">
+        {game.owners.map((owner) => {
+          const isSelf = owner.ownerSub === user?.uid;
+          return (
+            <Card key={owner.ownerSub} padding="sm" withBorder>
+              <Group justify="space-between">
+                <Group gap="xs">
+                  <Text size="sm">{owner.email ?? owner.ownerSub}</Text>
+                  {isSelf && (
+                    <Badge color="cobalt" size="sm">
+                      {t('gameDetail:administration.admins.you')}
+                    </Badge>
+                  )}
                 </Group>
-              </Card>
-            );
-          })}
-        </Stack>
-
-        <Group align="flex-end" gap="sm">
-          <TextInput
-            flex={1}
-            label={t('gameDetail:administration.admins.emailLabel')}
-            onChange={(event) => setEmail(event.currentTarget.value)}
-            placeholder={t('gameDetail:administration.admins.emailPlaceholder')}
-            type="email"
-            value={email}
-          />
-          <Button loading={isAdding} onClick={() => void handleAdd()}>
-            {t('gameDetail:administration.admins.add')}
-          </Button>
-        </Group>
+                <ActionIcon
+                  aria-label={t('gameDetail:administration.admins.remove')}
+                  color="red"
+                  disabled={singleAdmin}
+                  onClick={() => confirmRemove(owner)}
+                  variant="subtle"
+                >
+                  <IconTrash size={16} stroke={1.5} />
+                </ActionIcon>
+              </Group>
+            </Card>
+          );
+        })}
       </Stack>
+
+      <Group align="flex-end" gap="sm">
+        <TextInput
+          flex={1}
+          label={t('gameDetail:administration.admins.emailLabel')}
+          onChange={(event) => setEmail(event.currentTarget.value)}
+          placeholder={t('gameDetail:administration.admins.emailPlaceholder')}
+          type="email"
+          value={email}
+        />
+        <Button loading={isAdding} onClick={() => void handleAdd()}>
+          {t('gameDetail:administration.admins.add')}
+        </Button>
+      </Group>
     </Stack>
   );
 };
