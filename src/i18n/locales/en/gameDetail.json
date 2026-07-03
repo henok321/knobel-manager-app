@@ -16,20 +16,20 @@
   "notFound": "Game not found",
   "numberOfRounds": "Number of Rounds",
   "owners": {
-    "add": "Add owner",
-    "added": "Owner added",
+    "add": "Add manager",
+    "added": "Manager added",
     "cancel": "Cancel",
-    "description": "Owners can manage this game. Add a co-owner by their email address.",
+    "description": "Managers can edit this game and enter results. Add another manager by their email address.",
     "emailLabel": "Email address",
     "emailPlaceholder": "name@example.com",
-    "errorAlreadyOwner": "This person is already an owner.",
-    "errorGeneric": "Could not update owners. Please try again.",
+    "errorAlreadyOwner": "This person is already a manager.",
+    "errorGeneric": "Could not update managers. Please try again.",
     "errorUserNotFound": "No user found with that email address.",
     "remove": "Remove",
-    "removeConfirmMessage": "Remove {{email}} as an owner of this game?",
-    "removeConfirmTitle": "Remove owner",
-    "removed": "Owner removed",
-    "title": "Owners",
+    "removeConfirmMessage": "Remove {{email}} as a manager of this game?",
+    "removeConfirmTitle": "Remove manager",
+    "removed": "Manager removed",
+    "title": "Managers",
     "you": "You"
   },
   "printMenu": {
@@ -93,7 +93,7 @@
   },
   "tableSize": "Table Size",
   "tabs": {
-    "owners": "Owners",
+    "owners": "Managers",
     "rankings": "Rankings",
     "rounds": "Rounds",
     "teams": "Teams"

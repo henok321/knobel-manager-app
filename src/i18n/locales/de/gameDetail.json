@@ -16,20 +16,20 @@
   "notFound": "Spiel nicht gefunden",
   "numberOfRounds": "Anzahl der Runden",
   "owners": {
-    "add": "Besitzer hinzufügen",
-    "added": "Besitzer hinzugefügt",
+    "add": "Verwalter hinzufügen",
+    "added": "Verwalter hinzugefügt",
     "cancel": "Abbrechen",
-    "description": "Besitzer können dieses Spiel verwalten. Füge einen Mitbesitzer über seine E-Mail-Adresse hinzu.",
+    "description": "Verwalter können dieses Spiel bearbeiten und Ergebnisse eintragen. Füge einen weiteren Verwalter über seine E-Mail-Adresse hinzu.",
     "emailLabel": "E-Mail-Adresse",
     "emailPlaceholder": "name@example.com",
-    "errorAlreadyOwner": "Diese Person ist bereits Besitzer.",
-    "errorGeneric": "Besitzer konnten nicht aktualisiert werden. Bitte versuche es erneut.",
+    "errorAlreadyOwner": "Diese Person ist bereits Verwalter.",
+    "errorGeneric": "Verwalter konnten nicht aktualisiert werden. Bitte versuche es erneut.",
     "errorUserNotFound": "Kein Benutzer mit dieser E-Mail-Adresse gefunden.",
     "remove": "Entfernen",
-    "removeConfirmMessage": "{{email}} als Besitzer dieses Spiels entfernen?",
-    "removeConfirmTitle": "Besitzer entfernen",
-    "removed": "Besitzer entfernt",
-    "title": "Besitzer",
+    "removeConfirmMessage": "{{email}} als Verwalter dieses Spiels entfernen?",
+    "removeConfirmTitle": "Verwalter entfernen",
+    "removed": "Verwalter entfernt",
+    "title": "Verwalter",
     "you": "Du"
   },
   "printMenu": {
@@ -93,7 +93,7 @@
   },
   "tableSize": "Tischgröße",
   "tabs": {
-    "owners": "Besitzer",
+    "owners": "Verwalter",
     "rankings": "Rangliste",
     "rounds": "Runden",
     "teams": "Teams"
