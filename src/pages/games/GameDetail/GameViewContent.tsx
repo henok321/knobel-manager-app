@@ -39,12 +39,12 @@ interface GameViewContentProps {
   game: Game;
 }
 
-const GAME_TYPES = ['teams', 'rounds', 'rankings', 'administration'] as const;
+const GAME_TABS = ['teams', 'rounds', 'rankings', 'administration'] as const;
 
-type GameTab = (typeof GAME_TYPES)[number];
+type GameTab = (typeof GAME_TABS)[number];
 
 const isGameTab = (tab: string): tab is GameTab =>
-  (GAME_TYPES as readonly string[]).includes(tab);
+  (GAME_TABS as readonly string[]).includes(tab);
 
 const getDefaultTab = (status: GameStatus): GameTab => {
   switch (status) {
