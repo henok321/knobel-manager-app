@@ -26,7 +26,10 @@ const Footer: React.FC = () => {
       <Group gap="md" justify="space-between" wrap="wrap">
         <Group gap="xs">
           <Logo size={14} variant="mark" />
-          <Text c="dimmed" size="xs">
+          <Text
+            c="light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1))"
+            size="xs"
+          >
             {t('footer:copyright', {
               year: new Date().getFullYear(),
               author: AUTHOR,
