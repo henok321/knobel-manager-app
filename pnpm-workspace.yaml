@@ -8,7 +8,7 @@ minimumReleaseAge: 0
 overrides:
   minimatch: '>=10.2.1'
   # 4.28.3 shipped a broken node.js (unterminated regex, fails `node --check`); 4.28.4 is the upstream fix.
-  browserslist: '4.28.4'
+  browserslist: '4.28.5'
 
 allowBuilds:
   '@firebase/util': true
