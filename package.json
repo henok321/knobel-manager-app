@@ -55,7 +55,7 @@
     "@biomejs/biome": "^2.5.5",
     "@rolldown/plugin-babel": "^0.2.3",
     "@rtk-query/codegen-openapi": "^2.2.0",
-    "@testing-library/jest-dom": "^6.10.0",
+    "@testing-library/jest-dom": "^7.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
