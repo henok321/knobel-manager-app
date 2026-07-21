@@ -1,17 +1,5 @@
 import { Group, Select, Text } from '@mantine/core';
-import type React from 'react';
-import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
-
-interface LanguagePickerProps {
-  currentLanguage?: string;
-  onLanguageChange?: (language: string) => void;
-}
-
-interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  label: string;
-  value: string;
-}
 
 const getFlag = (lang: string) => {
   switch (lang) {
@@ -24,35 +12,14 @@ const getFlag = (lang: string) => {
   }
 };
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-  ({ label, value, ...others }, ref) => (
-    <div ref={ref} {...others}>
-      <Group gap="xs">
-        <Text size="lg">{getFlag(value)}</Text>
-        <Text size="sm">{label}</Text>
-      </Group>
-    </div>
-  ),
-);
-
-SelectItem.displayName = 'SelectItem';
-
-const LanguagePicker: React.FC<LanguagePickerProps> = ({
-  currentLanguage,
-  onLanguageChange,
-}) => {
+const LanguagePicker = () => {
   const { i18n, t } = useTranslation();
 
   const handleLanguageChange = (value: string | null) => {
     if (value) {
       void i18n.changeLanguage(value);
-      if (onLanguageChange) {
-        onLanguageChange(value);
-      }
     }
   };
-
-  const currentLang = currentLanguage || i18n.language;
 
   return (
     <Select
@@ -61,12 +28,15 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({
         { value: 'en', label: t('common:header.nav.languages.english') },
         { value: 'de', label: t('common:header.nav.languages.german') },
       ]}
-      leftSection={<Text size="lg">{getFlag(currentLang)}</Text>}
+      leftSection={<Text size="lg">{getFlag(i18n.language)}</Text>}
       renderOption={({ option }) => (
-        <SelectItem label={option.label} value={option.value} />
+        <Group gap="xs">
+          <Text size="lg">{getFlag(option.value)}</Text>
+          <Text size="sm">{option.label}</Text>
+        </Group>
       )}
       size="sm"
-      value={currentLang}
+      value={i18n.language}
       onChange={handleLanguageChange}
     />
   );

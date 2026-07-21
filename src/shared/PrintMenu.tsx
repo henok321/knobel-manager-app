@@ -7,15 +7,9 @@ import type { Game } from '../store/generatedApi.ts';
 
 interface PrintMenuProps {
   game: Game;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'filled' | 'light' | 'outline' | 'subtle' | 'default';
 }
 
-const PrintMenu = ({
-  game,
-  size = 'sm',
-  variant = 'light',
-}: PrintMenuProps) => {
+const PrintMenu = ({ game }: PrintMenuProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -33,8 +27,8 @@ const PrintMenu = ({
       <Menu.Target>
         <Button
           leftSection={<IconPrinter size={16} stroke={1.5} />}
-          size={size}
-          variant={variant}
+          size="sm"
+          variant="light"
         >
           {t('gameDetail:actions.printView')}
         </Button>

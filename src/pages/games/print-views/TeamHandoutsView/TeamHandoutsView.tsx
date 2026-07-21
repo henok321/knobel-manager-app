@@ -1,18 +1,17 @@
-import { Stack, Text, Title } from '@mantine/core';
+import { Stack, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import type {
   Game,
-  Player,
   Table as TableType,
   Team,
 } from '../../../../store/generatedApi.ts';
+import PrintHeader from '../PrintHeader';
 import TeamHandoutCard from './TeamHandoutCard';
 
 interface TeamHandoutsViewProps {
   game: Game;
   tables: (TableType & { roundNumber?: number })[];
-  players: Player[];
   teams: Team[];
   teamID?: number;
 }
@@ -20,7 +19,6 @@ interface TeamHandoutsViewProps {
 const TeamHandoutsView = ({
   game,
   tables,
-  players,
   teams,
   teamID,
 }: TeamHandoutsViewProps) => {
@@ -32,24 +30,19 @@ const TeamHandoutsView = ({
 
   return (
     <Stack gap="md">
-      <div className="print-header">
-        <Title order={1}>{game.name}</Title>
-        <Title c="dimmed" fw={400} order={2}>
-          {t('pdf:teamHandout.title')}
-        </Title>
+      <PrintHeader subtitle={t('pdf:teamHandout.title')} title={game.name}>
         <Text c="dimmed" size="sm">
           {teamID
             ? t('pdf:teamHandout.subtitleSingle')
             : t('pdf:teamHandout.subtitle')}
         </Text>
-      </div>
+      </PrintHeader>
 
       {filteredTeams.map((team) => (
         <TeamHandoutCard
           key={team.id}
           gameName={game.name}
           numberOfRounds={game.numberOfRounds}
-          players={players}
           tables={tables}
           team={team}
         />

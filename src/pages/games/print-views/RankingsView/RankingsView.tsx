@@ -1,4 +1,4 @@
-import { Badge, Stack, Title } from '@mantine/core';
+import { Badge, Stack } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import type {
@@ -11,8 +11,8 @@ import {
   mapPlayersToRankings,
   mapTeamsToRankings,
 } from '../../panels/RankingsPanel/rankingsMapper.ts';
-import PlayerRankingsSection from './PlayerRankingsSection';
-import TeamRankingsSection from './TeamRankingsSection';
+import PrintHeader from '../PrintHeader';
+import RankingsTable from './RankingsTable';
 
 interface RankingsViewProps {
   game: Game;
@@ -45,18 +45,32 @@ const RankingsView = ({
 
   return (
     <Stack gap="md">
-      <div className="print-header">
-        <Title order={1}>{game.name}</Title>
-        <Title c="dimmed" fw={400} order={2}>
-          {t('pdf:rankings.title')}
-        </Title>
+      <PrintHeader subtitle={t('pdf:rankings.title')} title={game.name}>
         <Badge color="blue" size="sm" variant="light">
           {roundLabel}
         </Badge>
-      </div>
+      </PrintHeader>
 
-      <TeamRankingsSection rankings={teamRankings} />
-      <PlayerRankingsSection rankings={playerRankings} />
+      <RankingsTable
+        nameLabel={t('pdf:rankings.team')}
+        rankings={teamRankings.map((r) => ({
+          id: r.teamID,
+          name: r.teamName,
+          totalScore: r.totalScore,
+        }))}
+        title={t('pdf:rankings.teamRankings')}
+      />
+      <RankingsTable
+        showTeamColumn
+        nameLabel={t('pdf:rankings.player')}
+        rankings={playerRankings.map((r) => ({
+          id: r.playerID,
+          name: r.playerName,
+          teamName: r.teamName,
+          totalScore: r.totalScore,
+        }))}
+        title={t('pdf:rankings.playerRankings')}
+      />
     </Stack>
   );
 };
