@@ -69,7 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const logOut = async () => {
-    await void signOut(firebaseAuth);
+    await signOut(firebaseAuth);
     localStorage.clear();
     store.dispatch(api.util.resetApiState());
   };

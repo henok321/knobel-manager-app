@@ -104,7 +104,6 @@ const Login = () => {
 
           <PasswordInput
             required
-            type="password"
             autoComplete={'current-password'}
             disabled={submitting}
             error={form.errors.password}
@@ -150,7 +149,7 @@ const Login = () => {
         <Flex align="center" h="80vh" justify="center">
           <Paper withBorder p="lg" radius="md" w={{ md: '40rem', lg: '50rem' }}>
             {renderLoginForm()}
-          </Paper>{' '}
+          </Paper>
         </Flex>
       )}
     </Layout>

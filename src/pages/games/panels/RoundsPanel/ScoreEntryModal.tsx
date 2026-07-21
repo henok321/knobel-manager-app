@@ -3,7 +3,7 @@ import { notifications } from '@mantine/notifications';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { Player, Table, Team } from '../../../../store/generatedApi.ts';
+import type { Table, Team } from '../../../../store/generatedApi.ts';
 
 interface ScoreEntryModalProps {
   isOpen: boolean;
@@ -38,7 +38,7 @@ const ScoreEntryModal = ({
   }
 
   const handleSubmit = async () => {
-    const scoresArray = players.map((player: Player) => ({
+    const scoresArray = players.map((player) => ({
       playerID: player.id,
       score: scores[player.id] ?? initialScores[player.id] ?? 0,
     }));
@@ -75,7 +75,7 @@ const ScoreEntryModal = ({
           {t('gameDetail:rounds.round')} {roundNumber}
         </Text>
 
-        {players.map((player: Player) => {
+        {players.map((player) => {
           const teamName = teams.find((t) => t.id === player.teamID)?.name;
           return (
             <NumberInput

@@ -154,16 +154,9 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     try {
       await setupGame({ gameId: game.id }).unwrap();
     } catch (err) {
-      const errorMessage =
-        (
-          err as {
-            response?: { data?: { message?: string } };
-            message?: string;
-          }
-        )?.response?.data?.message ||
-        (err as Error).message ||
-        t('gameDetail:rounds.error');
-      setError(errorMessage);
+      setError(
+        err instanceof Error ? err.message : t('gameDetail:rounds.error'),
+      );
     }
   };
 
@@ -290,7 +283,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     <Stack gap="md">
       {(!isSetupMode || game.status === 'in_progress') && (
         <Group align="flex-end" justify="space-between" wrap="wrap">
-          {' '}
           <TextInput
             placeholder={t('gameDetail:rounds.searchPlayers')}
             style={{ width: 250 }}

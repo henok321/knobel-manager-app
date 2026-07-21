@@ -219,7 +219,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         <EditTeamDialog
           isOpen={editTeamDialogOpen}
           players={allTeams.find((t) => t.id === editingTeamId)?.players ?? []}
-          teamName={teams.find((t) => t?.id === editingTeamId)?.name || ''}
+          teamName={teams.find((t) => t.id === editingTeamId)?.name || ''}
           onClose={() => {
             setEditTeamDialogOpen(false);
             setEditingTeamId(null);

@@ -46,8 +46,6 @@ const EditTeamDialogContent = ({
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSave();
-    } else if (e.key === 'Escape') {
-      onClose();
     }
   };
 
