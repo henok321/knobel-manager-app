@@ -1,18 +1,31 @@
 import { Badge, rem, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type { PlayerRanking } from '../../panels/RankingsPanel/rankingsMapper.ts';
-
-interface PlayerRankingsSectionProps {
-  rankings: PlayerRanking[];
+interface RankingsTableRow {
+  id: number;
+  name: string;
+  teamName?: string;
+  totalScore: number;
 }
 
-const PlayerRankingsSection = ({ rankings }: PlayerRankingsSectionProps) => {
+interface RankingsTableProps {
+  title: string;
+  nameLabel: string;
+  rankings: RankingsTableRow[];
+  showTeamColumn?: boolean;
+}
+
+const RankingsTable = ({
+  title,
+  nameLabel,
+  rankings,
+  showTeamColumn = false,
+}: RankingsTableProps) => {
   const { t } = useTranslation();
 
   return (
     <Stack gap="xs">
-      <Title order={3}>{t('pdf:rankings.playerRankings')}</Title>
+      <Title order={3}>{title}</Title>
 
       {rankings.length === 0 ? (
         <Text c="dimmed" fs="italic">
@@ -25,8 +38,8 @@ const PlayerRankingsSection = ({ rankings }: PlayerRankingsSectionProps) => {
               <Table.Th style={{ width: rem(60), textAlign: 'center' }}>
                 {t('pdf:rankings.rank')}
               </Table.Th>
-              <Table.Th>{t('pdf:rankings.player')}</Table.Th>
-              <Table.Th>{t('pdf:rankings.team')}</Table.Th>
+              <Table.Th>{nameLabel}</Table.Th>
+              {showTeamColumn && <Table.Th>{t('pdf:rankings.team')}</Table.Th>}
               <Table.Th style={{ width: rem(100), textAlign: 'right' }}>
                 {t('pdf:rankings.totalScore')}
               </Table.Th>
@@ -34,7 +47,7 @@ const PlayerRankingsSection = ({ rankings }: PlayerRankingsSectionProps) => {
           </Table.Thead>
           <Table.Tbody>
             {rankings.map((ranking, index) => (
-              <Table.Tr key={ranking.playerID}>
+              <Table.Tr key={ranking.id}>
                 <Table.Td style={{ textAlign: 'center' }}>
                   <Badge
                     color={index === 0 ? 'yellow' : 'blue'}
@@ -45,11 +58,13 @@ const PlayerRankingsSection = ({ rankings }: PlayerRankingsSectionProps) => {
                   </Badge>
                 </Table.Td>
                 <Table.Td>
-                  <Text fw={index === 0 ? 700 : 500}>{ranking.playerName}</Text>
+                  <Text fw={index === 0 ? 700 : 500}>{ranking.name}</Text>
                 </Table.Td>
-                <Table.Td>
-                  <Text c="dimmed">{ranking.teamName}</Text>
-                </Table.Td>
+                {showTeamColumn && (
+                  <Table.Td>
+                    <Text c="dimmed">{ranking.teamName}</Text>
+                  </Table.Td>
+                )}
                 <Table.Td style={{ textAlign: 'right' }}>
                   <Text fw={index === 0 ? 700 : 400}>{ranking.totalScore}</Text>
                 </Table.Td>
@@ -62,4 +77,4 @@ const PlayerRankingsSection = ({ rankings }: PlayerRankingsSectionProps) => {
   );
 };
 
-export default PlayerRankingsSection;
+export default RankingsTable;

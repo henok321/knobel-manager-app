@@ -34,7 +34,6 @@ const PrintView = () => {
   const rawTables = rawTablesData?.tables ?? [];
 
   const teams = game?.teams ?? [];
-  const players = teams.flatMap((team) => team.players ?? []);
 
   const roundNumberByRoundId = new Map(
     (game?.rounds ?? []).map((r) => [r.id, r.roundNumber]),
@@ -80,7 +79,6 @@ const PrintView = () => {
         return (
           <TeamHandoutsView
             game={game}
-            players={players}
             tables={tables}
             teamID={teamID ? Number(teamID) : undefined}
             teams={teams}

@@ -2,7 +2,6 @@ import { Box, Group } from '@mantine/core';
 import type React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../../auth/useAuth.ts';
 import Logo from '../Logo.tsx';
 import UserMenu from '../userMenu/UserMenu.tsx';
 
@@ -12,7 +11,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
   const navigate = useNavigate();
-  const { logOut } = useAuth();
 
   return (
     <Box
@@ -42,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
 
         {navbarActive && (
           <Group gap="xs">
-            <UserMenu onLogout={logOut} />
+            <UserMenu />
           </Group>
         )}
       </Group>
