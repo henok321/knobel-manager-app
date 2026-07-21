@@ -49,6 +49,43 @@ const getRoundsPermissions = (status: GameStatus): RoundsPermissions => {
   }
 };
 
+type RoundsView =
+  | 'loading'
+  | 'setup'
+  | 'setup-unavailable'
+  | 'empty'
+  | 'no-results'
+  | 'tables'
+  | 'none';
+
+interface RoundsViewInput {
+  loading: boolean;
+  settingUp: boolean;
+  isSetupMode: boolean;
+  canSetupMatchmaking: boolean;
+  hasError: boolean;
+  roundTablesCount: number;
+  filteredCount: number;
+  hasSearchQuery: boolean;
+}
+
+const getRoundsView = ({
+  loading,
+  settingUp,
+  isSetupMode,
+  canSetupMatchmaking,
+  hasError,
+  roundTablesCount,
+  filteredCount,
+  hasSearchQuery,
+}: RoundsViewInput): RoundsView => {
+  if (loading || settingUp) return 'loading';
+  if (isSetupMode) return canSetupMatchmaking ? 'setup' : 'setup-unavailable';
+  if (roundTablesCount === 0) return hasError ? 'none' : 'empty';
+  if (filteredCount === 0 && hasSearchQuery) return 'no-results';
+  return 'tables';
+};
+
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
   const [setupGame, { isLoading: settingUp }] = useSetupGameMutation();
@@ -168,6 +205,87 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     error ||
     (roundTablesIsError && !isNotFound ? t('gameDetail:rounds.error') : null);
 
+  const view = getRoundsView({
+    loading,
+    settingUp,
+    isSetupMode,
+    canSetupMatchmaking,
+    hasError: Boolean(displayError),
+    roundTablesCount: roundTables.length,
+    filteredCount: filteredAndSortedTables.length,
+    hasSearchQuery: Boolean(searchQuery.trim()),
+  });
+
+  const renderContent = () => {
+    switch (view) {
+      case 'loading':
+        return (
+          <Text c="dimmed" ta="center">
+            {settingUp
+              ? t('gameDetail:rounds.generatingTables')
+              : t('common:actions.loading')}
+          </Text>
+        );
+      case 'setup':
+        return (
+          <EmptyStateCard
+            description={t('gameDetail:rounds.setupDescription')}
+            title={t('gameDetail:rounds.setupRequired')}
+          >
+            <Button
+              loading={settingUp}
+              disabled={!sufficientTeams}
+              size="lg"
+              onClick={() => void handleSetupGame()}
+            >
+              {t('gameDetail:rounds.setupMatchmaking')}
+            </Button>
+          </EmptyStateCard>
+        );
+      case 'setup-unavailable':
+        return (
+          <EmptyStateCard
+            description={t('gameDetail:rounds.setupNotAvailableDescription')}
+            title={t('gameDetail:rounds.setupNotAvailable')}
+          />
+        );
+      case 'empty':
+        return (
+          <Card withBorder padding="lg" radius="md" shadow="sm">
+            <Text c="dimmed" ta="center">
+              {t('gameDetail:rounds.noTables')}
+            </Text>
+          </Card>
+        );
+      case 'no-results':
+        return (
+          <Card withBorder padding="lg" radius="md" shadow="sm">
+            <Text c="dimmed" ta="center">
+              {t('gameDetail:rounds.noSearchResults')}
+            </Text>
+          </Card>
+        );
+      case 'tables':
+        return (
+          <Stack gap="md">
+            {filteredAndSortedTables.map((table) => (
+              <RoundTableCard
+                key={table.id}
+                canEditScores={canEditScores}
+                table={table}
+                teams={teams}
+                onEditScores={handleOpenScoreEntry}
+              />
+            ))}
+          </Stack>
+        );
+      case 'none':
+        return null;
+      default:
+        return assertNever(view);
+    }
+  };
+
   return (
     <Stack gap="md">
       {(!isSetupMode || game.status === 'in_progress') && (
@@ -206,75 +324,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         </Alert>
       )}
 
-      {isSetupMode && !loading && !settingUp && canSetupMatchmaking && (
-        <EmptyStateCard
-          description={t('gameDetail:rounds.setupDescription')}
-          title={t('gameDetail:rounds.setupRequired')}
-        >
-          <Button
-            loading={settingUp}
-            disabled={!sufficientTeams}
-            size="lg"
-            onClick={() => void handleSetupGame()}
-          >
-            {t('gameDetail:rounds.setupMatchmaking')}
-          </Button>
-        </EmptyStateCard>
-      )}
-
-      {isSetupMode && !loading && !settingUp && !canSetupMatchmaking && (
-        <EmptyStateCard
-          description={t('gameDetail:rounds.setupNotAvailableDescription')}
-          title={t('gameDetail:rounds.setupNotAvailable')}
-        />
-      )}
-
-      {(loading || settingUp) && (
-        <Text c="dimmed" ta="center">
-          {settingUp
-            ? t('gameDetail:rounds.generatingTables')
-            : t('common:actions.loading')}
-        </Text>
-      )}
-
-      {!loading &&
-        !isSetupMode &&
-        !settingUp &&
-        roundTables.length === 0 &&
-        !displayError && (
-          <Card withBorder padding="lg" radius="md" shadow="sm">
-            <Text c="dimmed" ta="center">
-              {t('gameDetail:rounds.noTables')}
-            </Text>
-          </Card>
-        )}
-
-      {!loading &&
-        !isSetupMode &&
-        !settingUp &&
-        roundTables.length > 0 &&
-        filteredAndSortedTables.length === 0 &&
-        searchQuery.trim() && (
-          <Card withBorder padding="lg" radius="md" shadow="sm">
-            <Text c="dimmed" ta="center">
-              {t('gameDetail:rounds.noSearchResults')}
-            </Text>
-          </Card>
-        )}
-
-      {!loading && !settingUp && filteredAndSortedTables.length > 0 && (
-        <Stack gap="md">
-          {filteredAndSortedTables.map((table) => (
-            <RoundTableCard
-              key={table.id}
-              canEditScores={canEditScores}
-              table={table}
-              teams={teams}
-              onEditScores={handleOpenScoreEntry}
-            />
-          ))}
-        </Stack>
-      )}
+      {renderContent()}
 
       <ScoreEntryModal
         isOpen={scoreModalOpen}
