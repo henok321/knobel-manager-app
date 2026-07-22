@@ -31,6 +31,19 @@ interface RoundsPanelProps {
   game: Game;
 }
 
+const getBackendErrorMessage = (err: unknown): string | undefined => {
+  if (typeof err === 'object' && err !== null && 'data' in err) {
+    const { data } = err as { data?: unknown };
+    if (typeof data === 'object' && data !== null && 'error' in data) {
+      const { error } = data as { error?: unknown };
+      if (typeof error === 'string') {
+        return error;
+      }
+    }
+  }
+  return err instanceof Error ? err.message : undefined;
+};
+
 interface RoundsPermissions {
   canEditScores: boolean;
   canSetupMatchmaking: boolean;
@@ -154,9 +167,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     try {
       await setupGame({ gameId: game.id }).unwrap();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : t('gameDetail:rounds.error'),
-      );
+      setError(getBackendErrorMessage(err) ?? t('gameDetail:rounds.error'));
     }
   };
 
@@ -182,7 +193,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       }).unwrap();
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : t('common:actions.errorOccurred'),
+        getBackendErrorMessage(err) ?? t('common:actions.errorOccurred'),
       );
       throw err;
     }
@@ -196,7 +207,10 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     roundTablesError.status === 404;
   const displayError =
     error ||
-    (roundTablesIsError && !isNotFound ? t('gameDetail:rounds.error') : null);
+    (roundTablesIsError && !isNotFound
+      ? (getBackendErrorMessage(roundTablesError) ??
+        t('gameDetail:rounds.error'))
+      : null);
 
   const view = getRoundsView({
     loading,

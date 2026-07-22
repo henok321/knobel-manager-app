@@ -23,14 +23,14 @@ export interface AuthContextValue {
   user: User | null;
   loading: boolean;
   loginAction: (loginData: LoginData) => Promise<AuthErrorCode | null>;
-  logOut: () => void;
+  logOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   loading: false,
   loginAction: () => Promise.resolve(null),
-  logOut: () => {},
+  logOut: () => Promise.resolve(),
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -67,9 +67,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const logOut = async () => {
-    await signOut(firebaseAuth);
-    localStorage.clear();
-    store.dispatch(api.util.resetApiState());
+    try {
+      await signOut(firebaseAuth);
+    } finally {
+      localStorage.clear();
+      store.dispatch(api.util.resetApiState());
+    }
   };
 
   const contextValue: AuthContextValue = {
