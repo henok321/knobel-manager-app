@@ -10,20 +10,15 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { IconChevronDown, IconLogout } from '@tabler/icons-react';
-import type React from 'react';
 import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '../../auth/useAuth.ts';
 import SettingsSection from './SettingsSection.tsx';
 
-interface UserMenuProps {
-  onLogout: () => void;
-}
-
-const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
+const UserMenu = () => {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, logOut } = useAuth();
   const theme = useMantineTheme();
 
   const userInitial = user?.email?.charAt(0).toUpperCase() || 'U';
@@ -86,7 +81,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout }) => {
           <Menu.Item
             color="red"
             leftSection={<IconLogout size={16} stroke={1.5} />}
-            onClick={onLogout}
+            onClick={logOut}
           >
             {t('common:header.logout')}
           </Menu.Item>

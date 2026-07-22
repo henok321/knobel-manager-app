@@ -51,7 +51,7 @@ const Login = () => {
     const loginResult = await loginAction(formData);
 
     if (loginResult) {
-      switch (loginResult.code) {
+      switch (loginResult) {
         case 'INVALID_CREDENTIALS':
           setLoginError(t('common:login.error.invalidCredentials'));
           break;
@@ -59,7 +59,7 @@ const Login = () => {
           setLoginError(t('common:login.error.unknown'));
           break;
         default:
-          assertNever(loginResult.code);
+          assertNever(loginResult);
       }
     } else {
       setLoginError(null);
@@ -88,33 +88,24 @@ const Login = () => {
       >
         <Stack>
           <TextInput
+            {...form.getInputProps('email')}
             required
             type="email"
             autoComplete={'username'}
             disabled={submitting}
-            error={form.errors.email}
             label={t('common:login.fields.email.label')}
             placeholder={t('common:login.fields.email.placeholder')}
             radius="md"
-            value={form.values.email}
-            onChange={(event) =>
-              form.setFieldValue('email', event.currentTarget.value)
-            }
           />
 
           <PasswordInput
+            {...form.getInputProps('password')}
             required
-            type="password"
             autoComplete={'current-password'}
             disabled={submitting}
-            error={form.errors.password}
             label={t('common:login.fields.password.label')}
             placeholder={t('common:login.fields.password.placeholder')}
             radius="md"
-            value={form.values.password}
-            onChange={(event) =>
-              form.setFieldValue('password', event.currentTarget.value)
-            }
           />
         </Stack>
 
@@ -150,7 +141,7 @@ const Login = () => {
         <Flex align="center" h="80vh" justify="center">
           <Paper withBorder p="lg" radius="md" w={{ md: '40rem', lg: '50rem' }}>
             {renderLoginForm()}
-          </Paper>{' '}
+          </Paper>
         </Flex>
       )}
     </Layout>

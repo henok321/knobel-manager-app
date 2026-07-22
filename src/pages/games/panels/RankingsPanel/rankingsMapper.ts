@@ -1,4 +1,4 @@
-import type { Score, Table, Team } from '../../../../store/generatedApi.ts';
+import type { Table, Team } from '../../../../store/generatedApi.ts';
 
 interface PlayerRanking {
   playerID: number;
@@ -21,10 +21,6 @@ const mapPlayersToRankings = (
   const rankings: PlayerRanking[] = [];
 
   for (const team of teams) {
-    if (!team) {
-      continue;
-    }
-
     for (const teamPlayer of team.players ?? []) {
       rankings.push({
         playerID: teamPlayer.id,
@@ -59,8 +55,8 @@ const aggregateScoresFromTables = (tables: Table[]): Record<number, number> => {
   const allScores: Record<number, number> = {};
 
   for (const table of tables) {
-    if (table.scores && Array.isArray(table.scores)) {
-      for (const score of table.scores as Score[]) {
+    if (table.scores) {
+      for (const score of table.scores) {
         const playerID = score.playerID;
         const scoreValue = score.score || 0;
         allScores[playerID] = (allScores[playerID] || 0) + scoreValue;

@@ -17,22 +17,20 @@ type LoginData = {
   password: string;
 };
 
-type AuthError = {
-  code: 'UNKNOWN_ERROR' | 'INVALID_CREDENTIALS';
-};
+type AuthErrorCode = 'UNKNOWN_ERROR' | 'INVALID_CREDENTIALS';
 
 export interface AuthContextValue {
   user: User | null;
   loading: boolean;
-  loginAction: (loginData: LoginData) => Promise<AuthError | null>;
-  logOut: () => void;
+  loginAction: (loginData: LoginData) => Promise<AuthErrorCode | null>;
+  logOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   loading: false,
   loginAction: () => Promise.resolve(null),
-  logOut: () => {},
+  logOut: () => Promise.resolve(),
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -53,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const loginAction = async ({
     email,
     password,
-  }: LoginData): Promise<AuthError | null> => {
+  }: LoginData): Promise<AuthErrorCode | null> => {
     try {
       await signInWithEmailAndPassword(firebaseAuth, email, password);
     } catch (error: unknown) {
@@ -61,17 +59,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         error instanceof FirebaseError &&
         error.code === 'auth/invalid-credential'
       ) {
-        return { code: 'INVALID_CREDENTIALS' };
+        return 'INVALID_CREDENTIALS';
       }
-      return { code: 'UNKNOWN_ERROR' };
+      return 'UNKNOWN_ERROR';
     }
     return null;
   };
 
   const logOut = async () => {
-    await void signOut(firebaseAuth);
-    localStorage.clear();
-    store.dispatch(api.util.resetApiState());
+    try {
+      await signOut(firebaseAuth);
+    } finally {
+      localStorage.clear();
+      store.dispatch(api.util.resetApiState());
+    }
   };
 
   const contextValue: AuthContextValue = {

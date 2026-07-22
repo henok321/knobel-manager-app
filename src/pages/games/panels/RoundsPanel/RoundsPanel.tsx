@@ -31,6 +31,12 @@ interface RoundsPanelProps {
   game: Game;
 }
 
+const getBackendErrorMessage = (err: unknown): string | undefined => {
+  const data = (err as { data?: { error?: unknown } })?.data;
+  if (typeof data?.error === 'string') return data.error;
+  return err instanceof Error ? err.message : undefined;
+};
+
 interface RoundsPermissions {
   canEditScores: boolean;
   canSetupMatchmaking: boolean;
@@ -154,16 +160,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     try {
       await setupGame({ gameId: game.id }).unwrap();
     } catch (err) {
-      const errorMessage =
-        (
-          err as {
-            response?: { data?: { message?: string } };
-            message?: string;
-          }
-        )?.response?.data?.message ||
-        (err as Error).message ||
-        t('gameDetail:rounds.error');
-      setError(errorMessage);
+      setError(getBackendErrorMessage(err) ?? t('gameDetail:rounds.error'));
     }
   };
 
@@ -189,7 +186,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       }).unwrap();
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : t('common:actions.errorOccurred'),
+        getBackendErrorMessage(err) ?? t('common:actions.errorOccurred'),
       );
       throw err;
     }
@@ -203,7 +200,10 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     roundTablesError.status === 404;
   const displayError =
     error ||
-    (roundTablesIsError && !isNotFound ? t('gameDetail:rounds.error') : null);
+    (roundTablesIsError && !isNotFound
+      ? (getBackendErrorMessage(roundTablesError) ??
+        t('gameDetail:rounds.error'))
+      : null);
 
   const view = getRoundsView({
     loading,
@@ -290,7 +290,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     <Stack gap="md">
       {(!isSetupMode || game.status === 'in_progress') && (
         <Group align="flex-end" justify="space-between" wrap="wrap">
-          {' '}
           <TextInput
             placeholder={t('gameDetail:rounds.searchPlayers')}
             style={{ width: 250 }}

@@ -8,7 +8,6 @@ const firebaseConfig = {
   storageBucket: 'knobel-manager-webapp.appspot.com',
   messagingSenderId: '655697004246',
   appId: '1:655697004246:web:f8481adef76e3ab91a6b77',
-  measurementId: 'G-446E4RMJCV',
 };
 
 const app = initializeApp(firebaseConfig);

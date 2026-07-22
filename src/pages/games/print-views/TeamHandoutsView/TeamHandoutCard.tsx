@@ -2,14 +2,12 @@ import { Badge, Paper, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import type {
-  Player,
   Table as TableType,
   Team,
 } from '../../../../store/generatedApi.ts';
 
 interface TeamHandoutCardProps {
   team: Team;
-  players: Player[];
   tables: (TableType & { roundNumber?: number })[];
   gameName: string;
   numberOfRounds: number;
@@ -17,7 +15,6 @@ interface TeamHandoutCardProps {
 
 const TeamHandoutCard = ({
   team,
-  players,
   tables,
   gameName,
   numberOfRounds,
@@ -25,16 +22,10 @@ const TeamHandoutCard = ({
   const { t } = useTranslation();
   const rounds = Array.from({ length: numberOfRounds }, (_, i) => i + 1);
 
-  const teamPlayerIds = new Set((team.players ?? []).map((p) => p.id));
+  const teamPlayers = team.players ?? [];
+  const teamPlayerIds = new Set(teamPlayers.map((p) => p.id));
 
-  const teamPlayers = (team.players ?? [])
-    .map((teamPlayer) => players.find((p) => p.id === teamPlayer.id))
-    .filter((player): player is Player => player !== undefined);
-
-  const playerAssignments: Record<
-    number,
-    Record<number, { tableNumber: number; roundNumber: number }>
-  > = {};
+  const playerAssignments: Record<number, Record<number, number>> = {};
 
   for (const table of tables) {
     if (!table.roundNumber) {
@@ -44,10 +35,7 @@ const TeamHandoutCard = ({
     for (const player of table.players || []) {
       if (teamPlayerIds.has(player.id)) {
         playerAssignments[player.id] ??= {};
-        playerAssignments[player.id]![table.roundNumber!] = {
-          tableNumber: table.tableNumber,
-          roundNumber: table.roundNumber!,
-        };
+        playerAssignments[player.id]![table.roundNumber!] = table.tableNumber;
       }
     }
   }
@@ -92,10 +80,9 @@ const TeamHandoutCard = ({
                     const assignment = assignments[roundNum];
                     return (
                       <Table.Td key={roundNum} style={{ textAlign: 'center' }}>
-                        {assignment ? (
+                        {assignment !== undefined ? (
                           <Badge color="blue" size="sm" variant="light">
-                            {t('pdf:teamHandout.table')}{' '}
-                            {assignment.tableNumber}
+                            {t('pdf:teamHandout.table')} {assignment}
                           </Badge>
                         ) : (
                           <Text c="dimmed" fs="italic" size="sm">

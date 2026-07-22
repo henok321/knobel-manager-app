@@ -1,18 +1,8 @@
 import { Group, Table, Text } from '@mantine/core';
 import type { PlayerRanking, TeamRanking } from './rankingsMapper.ts';
 
-const getMedalEmoji = (rank: number) => {
-  switch (rank) {
-    case 1:
-      return '🥇';
-    case 2:
-      return '🥈';
-    case 3:
-      return '🥉';
-    default:
-      return null;
-  }
-};
+const MEDALS: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
+const getMedalEmoji = (rank: number) => MEDALS[rank] ?? null;
 
 interface PlayerRankingRowProps {
   ranking: PlayerRanking;
@@ -20,15 +10,15 @@ interface PlayerRankingRowProps {
   isTopRank?: boolean;
 }
 
-export const PlayerRankingRow = function PlayerRankingRow({
+export const PlayerRankingRow = ({
   ranking,
   rank,
   isTopRank = false,
-}: PlayerRankingRowProps) {
+}: PlayerRankingRowProps) => {
   const medal = getMedalEmoji(rank);
 
   return (
-    <Table.Tr key={ranking.playerID}>
+    <Table.Tr>
       <Table.Td>
         <Group gap="xs">
           <Text fw={isTopRank ? 700 : 400} size="lg">
@@ -58,15 +48,15 @@ interface TeamRankingRowProps {
   isTopRank?: boolean;
 }
 
-export const TeamRankingRow = function TeamRankingRow({
+export const TeamRankingRow = ({
   ranking,
   rank,
   isTopRank = false,
-}: TeamRankingRowProps) {
+}: TeamRankingRowProps) => {
   const medal = getMedalEmoji(rank);
 
   return (
-    <Table.Tr key={ranking.teamID}>
+    <Table.Tr>
       <Table.Td>
         <Group gap="xs">
           <Text fw={isTopRank ? 700 : 400} size="lg">

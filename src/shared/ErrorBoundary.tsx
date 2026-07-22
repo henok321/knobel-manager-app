@@ -104,14 +104,7 @@ class ErrorBoundaryComponent extends Component<
               {t('common:errorBoundary.tryAgain')}
             </Button>
 
-            <Button
-              component="a"
-              href="/"
-              variant="subtle"
-              onClick={() => {
-                window.location.href = '/';
-              }}
-            >
+            <Button component="a" href="/" variant="subtle">
               {t('common:errorBoundary.goToHomePage')}
             </Button>
           </Stack>

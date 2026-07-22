@@ -1,4 +1,4 @@
-import { Stack, Text, Title } from '@mantine/core';
+import { Stack, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import type {
@@ -6,6 +6,7 @@ import type {
   Table as TableType,
   Team,
 } from '../../../../store/generatedApi.ts';
+import PrintHeader from '../PrintHeader';
 import RoundSection from './RoundSection';
 
 interface TablePlanViewProps {
@@ -29,15 +30,11 @@ const TablePlanView = ({ game, tables, teams }: TablePlanViewProps) => {
 
   return (
     <Stack gap="xl">
-      <div className="print-header">
-        <Title order={1}>{game.name}</Title>
-        <Title c="dimmed" fw={400} order={2}>
-          {t('pdf:tablePlan.title')}
-        </Title>
+      <PrintHeader subtitle={t('pdf:tablePlan.title')} title={game.name}>
         <Text c="dimmed" size="sm">
           {t('pdf:tablePlan.subtitle')}
         </Text>
-      </div>
+      </PrintHeader>
 
       {Array.from({ length: game.numberOfRounds }, (_, i) => i + 1).map(
         (roundNumber) => (
