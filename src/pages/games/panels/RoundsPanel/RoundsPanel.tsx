@@ -32,15 +32,8 @@ interface RoundsPanelProps {
 }
 
 const getBackendErrorMessage = (err: unknown): string | undefined => {
-  if (typeof err === 'object' && err !== null && 'data' in err) {
-    const { data } = err as { data?: unknown };
-    if (typeof data === 'object' && data !== null && 'error' in data) {
-      const { error } = data as { error?: unknown };
-      if (typeof error === 'string') {
-        return error;
-      }
-    }
-  }
+  const data = (err as { data?: { error?: unknown } })?.data;
+  if (typeof data?.error === 'string') return data.error;
   return err instanceof Error ? err.message : undefined;
 };
 
