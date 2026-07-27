@@ -138,9 +138,7 @@ const Games = () => {
 
           {activeAndInProgressGames.length > 0 && (
             <Stack gap="md">
-              <Title order={3}>
-                {t('games:filters.active')} & {t('games:filters.setup')}
-              </Title>
+              <Title order={3}>{t('games:activeGamesHeading')}</Title>
               {activeAndInProgressGames.map((game) => (
                 <GameListItem
                   key={game.id}

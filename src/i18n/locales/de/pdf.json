@@ -11,12 +11,11 @@
     "totalScore": "Gesamtpunktzahl"
   },
   "scoreSheets": {
+    "heading": "Runde {{round}} – Tisch {{table}}",
     "instructions": "Der Tischsieger bekommt 4 Punkte + verbleibende Leben, der Zweitplatzierte bekommt 3 Punkte usw. Sobald das Spiel beendet wurde, gibt der Zweitplatzierte diesen Punktebogen bei der Turnierleitung ab.",
     "notes": "Notizen",
     "player": "Spieler",
-    "round": "Runde",
     "score": "Punktzahl",
-    "table": "Tisch",
     "team": "Team",
     "title": "Punktebögen"
   },

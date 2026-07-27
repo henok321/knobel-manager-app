@@ -64,8 +64,9 @@ const ScoreEntryModal = ({
       size="md"
       title={
         <Text fw={600} size="xl">
-          {t('gameDetail:rounds.enterScores')} - {t('gameDetail:rounds.table')}{' '}
-          {table.tableNumber}
+          {t('gameDetail:rounds.enterScoresTitle', {
+            table: table.tableNumber,
+          })}
         </Text>
       }
       onClose={onClose}

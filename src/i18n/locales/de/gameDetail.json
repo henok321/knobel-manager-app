@@ -65,6 +65,7 @@
   "rounds": {
     "editScores": "Punkte bearbeiten",
     "enterScores": "Punkte eintragen",
+    "enterScoresTitle": "Punkte eintragen - Tisch {{table}}",
     "error": "Fehler beim Einrichten der Spielpaarungen. Bitte versuche es erneut.",
     "generatingTables": "Generiere Tische und Spielpaarungen...",
     "noSearchResults": "Keine Tische entsprechen deiner Suche.",

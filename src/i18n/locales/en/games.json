@@ -1,4 +1,5 @@
 {
+  "activeGamesHeading": "Active & Setup",
   "card": {
     "details": {
       "numberOfRounds": "Rounds",
@@ -14,10 +15,6 @@
   "createFirstGame": "Create Your First Game",
   "createGameButton": "Create game",
   "deleteGame": "Delete Game",
-  "filters": {
-    "active": "Active",
-    "setup": "Setup"
-  },
   "form": {
     "heading": "Create game",
     "label": {

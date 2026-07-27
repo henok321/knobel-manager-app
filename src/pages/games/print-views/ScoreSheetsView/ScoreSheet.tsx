@@ -21,9 +21,10 @@ const ScoreSheet = ({ table, teams, gameName }: ScoreSheetProps) => {
       <Stack gap="xs">
         <div>
           <Title order={3}>
-            {t('pdf:scoreSheets.round')} {table.roundNumber}
-            {' – '}
-            {t('pdf:scoreSheets.table')} {table.tableNumber}
+            {t('pdf:scoreSheets.heading', {
+              round: table.roundNumber,
+              table: table.tableNumber,
+            })}
           </Title>
           <Text c="dimmed" size="xs">
             {gameName}

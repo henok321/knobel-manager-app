@@ -65,6 +65,7 @@
   "rounds": {
     "editScores": "Edit Scores",
     "enterScores": "Enter Scores",
+    "enterScoresTitle": "Enter Scores - Table {{table}}",
     "error": "Failed to setup matchmaking. Please try again.",
     "generatingTables": "Generating tables and matchmaking...",
     "noSearchResults": "No tables match your search.",
