@@ -81,6 +81,6 @@
     "vite-plugin-mkcert": "^2.1.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.62.2"
+    "@rollup/rollup-linux-x64-gnu": "^4.62.3"
   }
 }
