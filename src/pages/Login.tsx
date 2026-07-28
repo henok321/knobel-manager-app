@@ -14,7 +14,7 @@ import { useForm } from '@mantine/form';
 import { upperFirst, useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 
 import type { LoginData } from '../auth/AuthContext';
 import { useAuth } from '../auth/useAuth';

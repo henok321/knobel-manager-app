@@ -1,7 +1,7 @@
 import { Button, Container, Group, Stack, Text } from '@mantine/core';
 import { IconArrowLeft, IconPrinter } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
 
 import CenterLoader from '../../shared/CenterLoader';
 import { useGetGameQuery, useGetGameTablesQuery } from '../../store/api.ts';

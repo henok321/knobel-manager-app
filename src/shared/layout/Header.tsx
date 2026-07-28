@@ -1,6 +1,6 @@
 import { Box, Group } from '@mantine/core';
 import type React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import Logo from '../Logo.tsx';
 import UserMenu from '../userMenu/UserMenu.tsx';

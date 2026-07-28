@@ -1,5 +1,5 @@
 import { Anchor, Breadcrumbs as MantineBreadcrumbs } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 interface BreadcrumbItem {
   label: string;

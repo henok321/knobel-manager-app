@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router';
 
 import CenterLoader from '../shared/CenterLoader.tsx';
 import { useAuth } from './useAuth.ts';

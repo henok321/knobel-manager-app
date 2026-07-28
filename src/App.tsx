@@ -4,7 +4,7 @@ import { Notifications } from '@mantine/notifications';
 import { lazy, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 
 import { AuthProvider } from './auth/AuthContext.tsx';
 import ProtectedRoute from './auth/ProtectedRoute.tsx';

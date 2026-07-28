@@ -81,7 +81,7 @@ Firebase Auth (`src/auth/`):
   (`Authorization: Bearer <token>` from `auth.currentUser.getIdToken()`). All server data goes through RTK Query —
   don't add a separate HTTP client.
 
-### Routing (React Router v7)
+### Routing (React Router v8)
 
 `/login` (public), `/` → `/games`, `/games`, `/games/:gameID`, `/games/:gameID/print`. Everything except `/login` is
 gated by `<ProtectedRoute>` (see `src/App.tsx`). Page components are lazy-loaded with `React.lazy`.
