@@ -1,3 +1,5 @@
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import type {
   Player,
   Score,
@@ -83,9 +85,11 @@ describe('aggregateScoresFromTables', () => {
     },
   ];
 
-  it.each(cases)('$name', ({ tables, expected }) => {
-    expect(aggregateScoresFromTables(tables)).toEqual(expected);
-  });
+  for (const { name, tables, expected } of cases) {
+    it(name, () => {
+      assert.deepStrictEqual(aggregateScoresFromTables(tables), expected);
+    });
+  }
 });
 
 describe('mapPlayersToRankings', () => {
@@ -101,7 +105,7 @@ describe('mapPlayersToRankings', () => {
       200: 12,
     });
 
-    expect(result).toEqual([
+    assert.deepStrictEqual(result, [
       {
         playerID: 200,
         playerName: 'Cara',
@@ -127,12 +131,12 @@ describe('mapPlayersToRankings', () => {
   });
 
   it('returns an empty list when there are no teams', () => {
-    expect(mapPlayersToRankings([], {})).toEqual([]);
+    assert.deepStrictEqual(mapPlayersToRankings([], {}), []);
   });
 
   it('skips teams with no players', () => {
     const emptyTeam = team(3, 'Empty', []);
-    expect(mapPlayersToRankings([emptyTeam], {})).toEqual([]);
+    assert.deepStrictEqual(mapPlayersToRankings([emptyTeam], {}), []);
   });
 });
 
@@ -145,22 +149,26 @@ describe('mapTeamsToRankings', () => {
   const teamC = team(3, 'Gamma', [player(300, 3, 'Dan')]);
 
   it('sums player scores per team and sorts descending', () => {
-    expect(
+    assert.deepStrictEqual(
       mapTeamsToRankings([teamA, teamB], { 100: 4, 101: 3, 200: 10 }),
-    ).toEqual([
-      { teamID: 2, teamName: 'Beta', totalScore: 10 },
-      { teamID: 1, teamName: 'Alpha', totalScore: 7 },
-    ]);
+      [
+        { teamID: 2, teamName: 'Beta', totalScore: 10 },
+        { teamID: 1, teamName: 'Alpha', totalScore: 7 },
+      ],
+    );
   });
 
   it('includes teams with zero score (no scored players)', () => {
-    expect(mapTeamsToRankings([teamA, teamC], { 100: 5, 101: 2 })).toEqual([
-      { teamID: 1, teamName: 'Alpha', totalScore: 7 },
-      { teamID: 3, teamName: 'Gamma', totalScore: 0 },
-    ]);
+    assert.deepStrictEqual(
+      mapTeamsToRankings([teamA, teamC], { 100: 5, 101: 2 }),
+      [
+        { teamID: 1, teamName: 'Alpha', totalScore: 7 },
+        { teamID: 3, teamName: 'Gamma', totalScore: 0 },
+      ],
+    );
   });
 
   it('returns an empty list when there are no teams', () => {
-    expect(mapTeamsToRankings([], {})).toEqual([]);
+    assert.deepStrictEqual(mapTeamsToRankings([], {}), []);
   });
 });

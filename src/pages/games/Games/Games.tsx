@@ -22,13 +22,11 @@ import {
   useDeleteGameMutation,
   useGetGamesQuery,
 } from '../../../store/api.ts';
-import type { Game } from '../../../store/generatedApi.ts';
-import { assertNever } from '../../../utils/assertNever';
 import GameForm from './GameForm';
 import GameListItem from './GameListItem';
 
 const Games = () => {
-  const { data, isLoading, isError, error } = useGetGamesQuery(undefined);
+  const { data, isLoading, isError } = useGetGamesQuery(undefined);
   const allGames = data?.games ?? [];
   const [createGame] = useCreateGameMutation();
   const [deleteGame] = useDeleteGameMutation();
@@ -41,21 +39,10 @@ const Games = () => {
     game.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const activeAndInProgressGames: Game[] = [];
-  const completedGames: Game[] = [];
-  for (const game of filtered) {
-    switch (game.status) {
-      case 'setup':
-      case 'in_progress':
-        activeAndInProgressGames.push(game);
-        break;
-      case 'completed':
-        completedGames.push(game);
-        break;
-      default:
-        assertNever(game.status);
-    }
-  }
+  const activeAndInProgressGames = filtered.filter(
+    (game) => game.status !== 'completed',
+  );
+  const completedGames = filtered.filter((game) => game.status === 'completed');
 
   const handleDeleteGame = (gameID: number) => {
     modals.openConfirmModal({
@@ -79,12 +66,9 @@ const Games = () => {
   if (isError) {
     return (
       <Center h="100vh">
-        <Stack align="center" gap="xs">
-          <Text c="red" size="xl">
-            {t('common:actions.errorOccurred')}
-          </Text>
-          {error != null && <Text c="red">{JSON.stringify(error)}</Text>}
-        </Stack>
+        <Text c="red" size="xl">
+          {t('common:actions.errorOccurred')}
+        </Text>
       </Center>
     );
   }
@@ -93,7 +77,7 @@ const Games = () => {
     activeAndInProgressGames.length > 0 || completedGames.length > 0;
 
   return (
-    <Layout navbarActive={true}>
+    <Layout>
       <Container py="xl" size="xl">
         <Stack gap="xl">
           <Group align="center" justify="space-between">
@@ -122,7 +106,7 @@ const Games = () => {
           />
 
           {!hasGames && (
-            <Card withBorder p="xl" radius="md">
+            <Card p="xl">
               <Stack align="center" gap="md">
                 <Text c="dimmed" size="lg" ta="center">
                   {searchQuery ? t('games:noResults') : t('games:noGames')}

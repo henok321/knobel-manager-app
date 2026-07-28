@@ -1,8 +1,7 @@
-import { Container, Stack, Text } from '@mantine/core';
+import { Anchor, Breadcrumbs, Container, Stack, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 
-import Breadcrumbs from '../../../shared/Breadcrumbs.tsx';
 import CenterLoader from '../../../shared/CenterLoader';
 import Layout from '../../../shared/layout/Layout.tsx';
 import { useGetGameQuery } from '../../../store/api.ts';
@@ -27,7 +26,7 @@ const GameDetail = () => {
 
   if (!game) {
     return (
-      <Layout navbarActive={true}>
+      <Layout>
         <Container py="md">
           <Text c="red" size="xl">
             {t('gameDetail:notFound')}
@@ -37,16 +36,16 @@ const GameDetail = () => {
     );
   }
 
-  const breadcrumbItems = [
-    { label: t('common:header.nav.games'), path: '/games' },
-    { label: game.name },
-  ];
-
   return (
-    <Layout navbarActive={true}>
+    <Layout>
       <Container py="md" size="xl">
         <Stack gap="lg">
-          <Breadcrumbs items={breadcrumbItems} />
+          <Breadcrumbs>
+            <Anchor component={Link} to="/games">
+              {t('common:header.nav.games')}
+            </Anchor>
+            <Text c="dimmed">{game.name}</Text>
+          </Breadcrumbs>
           <GameViewContent game={game} />
         </Stack>
       </Container>

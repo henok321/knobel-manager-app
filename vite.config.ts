@@ -1,32 +1,23 @@
 import babel from '@rolldown/plugin-babel';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
-  const apiUrl = env.VITE_API_URL || 'http://localhost:8080';
-
-  return {
-    plugins: [
-      react(),
-      babel({
-        presets: [reactCompilerPreset()],
-      }),
-      mkcert({
-        hosts: ['localhost', '127.0.0.1'],
-        keyFileName: 'knobel-manager-app.key.pem',
-        certFileName: 'knobel-manager-app.cert.pem',
-      }),
-    ],
-    server: {
-      proxy: {
-        '/api': {
-          target: apiUrl,
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
-        },
+export default defineConfig({
+  plugins: [
+    react(),
+    babel({
+      presets: [reactCompilerPreset()],
+    }),
+    mkcert(),
+  ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
-  };
+  },
 });

@@ -1,8 +1,4 @@
-shamefullyHoist: false
-strictPeerDependencies: false
-autoInstallPeers: true
-enablePrePostScripts: true
-
+# opt-out: a stricter global minimumReleaseAge policy rejects fresh releases otherwise
 minimumReleaseAge: 0
 
 overrides:
@@ -14,6 +10,5 @@ allowBuilds:
   '@firebase/util': true
   '@swc/core': true
   esbuild: true
-  msw: true
   protobufjs: true
   unrs-resolver: true

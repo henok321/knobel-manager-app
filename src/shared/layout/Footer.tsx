@@ -1,15 +1,13 @@
 import { ActionIcon, Container, Group, Text, Tooltip } from '@mantine/core';
 import { IconBrandGithub, IconLicense } from '@tabler/icons-react';
-import type React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Logo from '../Logo.tsx';
 
 const GITHUB_URL = 'https://github.com/henok321/knobel-manager-app';
 const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
-const AUTHOR = 'Hendrik Brinkmann';
 
-const Footer: React.FC = () => {
+const Footer = () => {
   const { t } = useTranslation();
 
   return (
@@ -25,14 +23,14 @@ const Footer: React.FC = () => {
     >
       <Group gap="md" justify="space-between" wrap="wrap">
         <Group gap="xs">
-          <Logo size={14} variant="mark" />
+          <Logo variant="mark" />
           <Text
             c="light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1))"
             size="xs"
           >
             {t('footer:copyright', {
               year: new Date().getFullYear(),
-              author: AUTHOR,
+              author: 'Hendrik Brinkmann',
             })}
           </Text>
         </Group>

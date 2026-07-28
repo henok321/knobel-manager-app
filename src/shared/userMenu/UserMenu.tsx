@@ -7,43 +7,33 @@ import {
   Stack,
   Text,
   UnstyledButton,
-  useMantineTheme,
 } from '@mantine/core';
-import { IconChevronDown, IconLogout } from '@tabler/icons-react';
-import type { CSSProperties } from 'react';
+import {
+  IconChevronDown,
+  IconLanguage,
+  IconLogout,
+  IconPalette,
+} from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '../../auth/useAuth.ts';
-import SettingsSection from './SettingsSection.tsx';
+import ColorSchemeToggle from './ColorSchemeToggle.tsx';
+import LanguagePicker from './LanguagePicker.tsx';
 
 const UserMenu = () => {
   const { t } = useTranslation();
   const { user, logOut } = useAuth();
-  const theme = useMantineTheme();
 
   const userInitial = user?.email?.charAt(0).toUpperCase() || 'U';
   const userDisplayName = user?.displayName || user?.email || 'User';
-
-  const buttonStyle: CSSProperties = {
-    padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
-    borderRadius: theme.radius.sm,
-    transition: 'background-color 150ms ease',
-    backgroundColor: 'transparent',
-  };
 
   return (
     <Menu position="bottom-end" shadow="md" width={360}>
       <Menu.Target>
         <UnstyledButton
-          style={buttonStyle}
-          styles={{
-            root: {
-              '&:hover': {
-                backgroundColor:
-                  'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))',
-              },
-            },
-          }}
+          px="sm"
+          py="xs"
+          style={{ borderRadius: 'var(--mantine-radius-sm)' }}
         >
           <Group gap="xs" wrap="nowrap">
             <Avatar color="blue" radius="xl" size="sm">
@@ -73,7 +63,27 @@ const UserMenu = () => {
           </Box>
 
           <Box p="md" pt="xs">
-            <SettingsSection />
+            <Stack gap="sm">
+              <div>
+                <Group gap="xs" mb={6}>
+                  <IconPalette opacity={0.6} size={14} />
+                  <Text c="dimmed" fw={500} size="xs">
+                    {t('common:header.nav.colorScheme')}
+                  </Text>
+                </Group>
+                <ColorSchemeToggle />
+              </div>
+
+              <div>
+                <Group gap="xs" mb={6}>
+                  <IconLanguage opacity={0.6} size={14} />
+                  <Text c="dimmed" fw={500} size="xs">
+                    {t('common:header.nav.language')}
+                  </Text>
+                </Group>
+                <LanguagePicker />
+              </div>
+            </Stack>
           </Box>
 
           <Divider />

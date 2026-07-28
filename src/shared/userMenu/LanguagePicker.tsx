@@ -1,16 +1,8 @@
 import { Group, Select, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-const getFlag = (lang: string) => {
-  switch (lang) {
-    case 'en':
-      return '🇬🇧';
-    case 'de':
-      return '🇩🇪';
-    default:
-      return '🌐';
-  }
-};
+const FLAGS: Record<string, string> = { en: '🇬🇧', de: '🇩🇪' };
+const getFlag = (lang: string) => FLAGS[lang] ?? '🌐';
 
 const LanguagePicker = () => {
   const { i18n, t } = useTranslation();

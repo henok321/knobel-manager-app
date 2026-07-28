@@ -80,9 +80,6 @@ jobs:
       - name: Regenerate client from backend spec
         run: pnpm api:gen
 
-      - name: Apply formatting
-        run: pnpm fix
-
       - name: Fail if generated client is out of sync with the spec
         run: |
           if ! git diff --quiet -- src/store/generatedApi.ts; then

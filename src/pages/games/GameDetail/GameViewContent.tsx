@@ -2,7 +2,6 @@ import {
   Badge,
   Button,
   Group,
-  Skeleton,
   Stack,
   Tabs,
   Text,
@@ -11,9 +10,9 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
+import PrintMenu from '../../../shared/PrintMenu.tsx';
 import {
   useGetGameTablesQuery,
   useUpdateGameMutation,
@@ -32,8 +31,6 @@ import AdministrationPanel from '../panels/AdministrationPanel/AdministrationPan
 import RankingsPanel from '../panels/RankingsPanel/RankingsPanel';
 import RoundsPanel from '../panels/RoundsPanel/RoundsPanel';
 import TeamsPanel from '../panels/TeamsPanel/TeamsPanel';
-
-const PrintMenu = lazy(() => import('../../../shared/PrintMenu.tsx'));
 
 interface GameViewContentProps {
   game: Game;
@@ -65,48 +62,26 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
   const tables = tablesData?.tables ?? [];
 
-  const getPersistedTab = (): GameTab => {
-    const stored = localStorage.getItem(`selected_tab_for_game_${game.id}`);
-    return !stored || !isGameTab(stored) ? getDefaultTab(game.status) : stored;
+  const tabStorageKey = `selected_tab_for_game_${game.id}`;
+  const [activeTab, setActiveTab] = useState<GameTab>(() => {
+    const stored = localStorage.getItem(tabStorageKey);
+    return stored && isGameTab(stored) ? stored : getDefaultTab(game.status);
+  });
+
+  const selectTab = (tab: GameTab) => {
+    setActiveTab(tab);
+    localStorage.setItem(tabStorageKey, tab);
   };
 
-  const [activeTab, setActiveTab] = useState<GameTab | null>(getPersistedTab());
-
-  useEffect(() => {
-    if (activeTab) {
-      localStorage.setItem(`selected_tab_for_game_${game.id}`, activeTab);
-    }
-  }, [activeTab, game.id]);
-
-  const computeScoreProgress = () => {
-    if (game?.status !== 'in_progress') {
-      return { canComplete: false, completed: 0, total: 0 };
-    }
-
-    const totalTables = tables.length;
-
-    const completedTables = tables.reduce((acc, table) => {
-      if (!table.players || table.players.length === 0) {
-        return acc;
-      }
-
-      const totalTableScore =
-        table.scores?.reduce((scoreAcc, score) => scoreAcc + score.score, 0) ||
-        0;
-
-      return totalTableScore > 0 ? acc + 1 : acc;
-    }, 0);
-
-    return {
-      canComplete: completedTables === totalTables && totalTables > 0,
-      completed: completedTables,
-      total: totalTables,
-    };
-  };
-
-  const scoreProgress = computeScoreProgress();
-
-  const canComplete = scoreProgress.canComplete;
+  const completedTables = tables.filter(
+    (table) =>
+      table.players?.length &&
+      (table.scores?.reduce((sum, score) => sum + score.score, 0) ?? 0) > 0,
+  ).length;
+  const canComplete =
+    game.status === 'in_progress' &&
+    completedTables > 0 &&
+    completedTables === tables.length;
 
   const sufficientTeams = game.teamSize <= (game.teams?.length ?? 0);
   const sufficientRounds = (game.rounds?.length ?? 0) === game.numberOfRounds;
@@ -142,7 +117,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       confirmProps: { color: 'cobalt' },
       onConfirm: () => {
         handleStatusTransition('in_progress');
-        setActiveTab('rounds');
+        selectTab('rounds');
         notifications.show({
           title: t('gameDetail:actions.gameStartedNotification'),
           message: t('gameDetail:actions.gameStartedMessage'),
@@ -204,8 +179,8 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
                 canComplete
                   ? undefined
                   : t('gameDetail:actions.scoreProgress', {
-                      completed: scoreProgress.completed,
-                      total: scoreProgress.total,
+                      completed: completedTables,
+                      total: tables.length,
                     })
               }
             >
@@ -219,19 +194,16 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
               </Button>
             </Tooltip>
           )}
-          <Suspense fallback={<Skeleton height={36} width={120} />}>
-            <PrintMenu game={game} />
-          </Suspense>
+          <PrintMenu game={game} />
         </Group>
       </Group>
 
       <Tabs
         value={activeTab}
         onChange={(value) => {
-          if (!(value && isGameTab(value))) {
-            return;
+          if (value && isGameTab(value)) {
+            selectTab(value);
           }
-          setActiveTab(value);
         }}
       >
         <Tabs.List>

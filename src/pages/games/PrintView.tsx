@@ -45,7 +45,6 @@ const PrintView = () => {
 
   const viewType = searchParams.get('type') || 'tablePlan';
   const roundNumber = searchParams.get('round');
-  const teamID = searchParams.get('teamID');
 
   if (isLoading) {
     return <CenterLoader />;
@@ -61,14 +60,6 @@ const PrintView = () => {
     );
   }
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const handleBack = () => {
-    void navigate(`/games/${gameID}`);
-  };
-
   const renderView = () => {
     switch (viewType) {
       case 'tablePlan':
@@ -76,14 +67,7 @@ const PrintView = () => {
       case 'scoreSheets':
         return <ScoreSheetsView game={game} tables={tables} teams={teams} />;
       case 'teamHandouts':
-        return (
-          <TeamHandoutsView
-            game={game}
-            tables={tables}
-            teamID={teamID ? Number(teamID) : undefined}
-            teams={teams}
-          />
-        );
+        return <TeamHandoutsView game={game} tables={tables} teams={teams} />;
       case 'rankings':
         return (
           <RankingsView
@@ -106,13 +90,13 @@ const PrintView = () => {
             <Button
               leftSection={<IconArrowLeft size={16} />}
               variant="default"
-              onClick={handleBack}
+              onClick={() => void navigate(`/games/${gameID}`)}
             >
               {t('gameDetail:printView.back')}
             </Button>
             <Button
               leftSection={<IconPrinter size={16} />}
-              onClick={handlePrint}
+              onClick={() => window.print()}
             >
               {t('gameDetail:printView.print')}
             </Button>

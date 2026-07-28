@@ -5,8 +5,7 @@ import {
   signOut,
   type User,
 } from 'firebase/auth';
-import type React from 'react';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, type ReactNode, useEffect, useState } from 'react';
 
 import { api } from '../store/api.ts';
 import store from '../store/store.ts';
@@ -33,9 +32,7 @@ const AuthContext = createContext<AuthContextValue>({
   logOut: () => Promise.resolve(),
 });
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -75,15 +72,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const contextValue: AuthContextValue = {
-    user,
-    loading,
-    loginAction,
-    logOut,
-  };
-
   return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, loading, loginAction, logOut }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

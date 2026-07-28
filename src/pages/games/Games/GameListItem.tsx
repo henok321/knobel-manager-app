@@ -8,7 +8,6 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import { modals } from '@mantine/modals';
 import { IconTrash } from '@tabler/icons-react';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,18 +29,7 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    modals.openConfirmModal({
-      title: t('games:deleteGame'),
-      children: <Text size="sm">{t('games:confirmDelete')}</Text>,
-      labels: {
-        confirm: t('common:actions.delete'),
-        cancel: t('common:actions.cancel'),
-      },
-      confirmProps: { color: 'red' },
-      onConfirm: () => {
-        onDelete(game.id);
-      },
-    });
+    onDelete(game.id);
   };
 
   const handleOpen = () => {

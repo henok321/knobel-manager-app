@@ -29,15 +29,13 @@ const RankingsView = ({
 }: RankingsViewProps) => {
   const { t } = useTranslation();
 
-  const gameTeams = teams.filter((team) => team.gameID === game.id);
-
   const relevantTables = roundNumber
     ? tables.filter((table) => table.roundNumber === roundNumber)
     : tables;
 
   const scoresByPlayer = aggregateScoresFromTables(relevantTables);
-  const playerRankings = mapPlayersToRankings(gameTeams, scoresByPlayer);
-  const teamRankings = mapTeamsToRankings(gameTeams, scoresByPlayer);
+  const playerRankings = mapPlayersToRankings(teams, scoresByPlayer);
+  const teamRankings = mapTeamsToRankings(teams, scoresByPlayer);
 
   const roundLabel = roundNumber
     ? `${t('pdf:teamHandout.round')} ${roundNumber}`

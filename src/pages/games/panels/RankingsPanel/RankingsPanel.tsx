@@ -82,7 +82,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
         onChange={(value) => setSelectedRound(value || 'total')}
       />
 
-      <Card withBorder padding="lg" radius="md" shadow="sm">
+      <Card padding="lg">
         <Stack gap="md">
           <Title order={3}>{t('gameDetail:rankings.teamRankings')}</Title>
           <Table>
@@ -106,7 +106,6 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
                 teamRankings.map((ranking, index) => (
                   <TeamRankingRow
                     key={ranking.teamID}
-                    isTopRank={index === 0}
                     rank={index + 1}
                     ranking={ranking}
                   />
@@ -117,7 +116,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
         </Stack>
       </Card>
 
-      <Card withBorder padding="lg" radius="md" shadow="sm">
+      <Card padding="lg">
         <Stack gap="md">
           <Title order={3}>{t('gameDetail:rankings.playerRankings')}</Title>
           <Table>
@@ -142,7 +141,6 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
                 playerRankings.map((ranking, index) => (
                   <PlayerRankingRow
                     key={ranking.playerID}
-                    isTopRank={index === 0}
                     rank={index + 1}
                     ranking={ranking}
                   />
