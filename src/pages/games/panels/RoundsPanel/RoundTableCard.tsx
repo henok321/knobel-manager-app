@@ -10,7 +10,6 @@ import {
 import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import type { Table, Team } from '../../../../store/generatedApi.ts';
-import { PlayerScoreRow } from './PlayerScoreRow';
 
 interface RoundTableCardProps {
   table: Table;
@@ -29,7 +28,7 @@ const RoundTableCard = ({
   const hasScores = (table.scores?.length ?? 0) > 0;
 
   return (
-    <Card withBorder padding="lg" radius="md" shadow="sm">
+    <Card padding="lg">
       <Stack gap="md">
         <Group align="center" justify="space-between">
           <Group gap="xs">
@@ -88,16 +87,15 @@ const RoundTableCard = ({
               const playerScore = table.scores?.find(
                 (s) => s.playerID === player.id,
               );
-              const team = player.teamID
-                ? teams.find((tm) => tm.id === player.teamID)
-                : undefined;
+              const team = teams.find((tm) => tm.id === player.teamID);
               return (
-                <PlayerScoreRow
-                  key={player.id}
-                  player={player}
-                  score={playerScore}
-                  team={team}
-                />
+                <MantineTable.Tr key={player.id}>
+                  <MantineTable.Td>{player.name}</MantineTable.Td>
+                  <MantineTable.Td>{team ? team.name : '-'}</MantineTable.Td>
+                  <MantineTable.Td>
+                    {playerScore ? playerScore.score : '-'}
+                  </MantineTable.Td>
+                </MantineTable.Tr>
               );
             })}
           </MantineTable.Tbody>

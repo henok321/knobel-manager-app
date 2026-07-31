@@ -76,17 +76,7 @@ export const api = generatedApi.enhanceEndpoints({
         { type: 'Game', id: arg.gameId },
       ],
     },
-    createPlayer: {
-      invalidatesTags: (_result, _error, arg) => [
-        { type: 'Game', id: arg.gameId },
-      ],
-    },
     updatePlayer: {
-      invalidatesTags: (_result, _error, arg) => [
-        { type: 'Game', id: arg.gameId },
-      ],
-    },
-    deletePlayer: {
       invalidatesTags: (_result, _error, arg) => [
         { type: 'Game', id: arg.gameId },
       ],

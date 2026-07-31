@@ -10,12 +10,12 @@
   },
   "scripts": {
     "prod": "vite --mode production",
-    "local": "vite --mode development",
-    "api:gen": "rtk-query-codegen-openapi src/store/openapi-config.ts",
+    "local": "vite",
+    "api:gen": "rtk-query-codegen-openapi src/store/openapi-config.cjs",
     "build": "tsc -b && vite build --mode production",
     "check": "tsc --noEmit && biome ci . && i18next-cli status && i18next-cli lint && i18next-cli extract --ci",
     "fix": "biome check --write .",
-    "test": "jest",
+    "test": "node --test 'src/**/*.test.ts'",
     "knip": "knip",
     "knip:fix": "knip --fix --format",
     "preview": "vite preview",
@@ -24,10 +24,6 @@
     "deploy": "pnpm build && firebase deploy --only hosting"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "bash -c 'tsc --noEmit'",
-      "bash -c 'pnpm exec i18next-cli lint'"
-    ],
     "*": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
   },
   "dependencies": {
@@ -45,42 +41,24 @@
     "react-dom": "^19.2.8",
     "react-i18next": "^17.0.11",
     "react-redux": "^9.3.0",
-    "react-router": "^8.3.0",
-    "redux": "^5.0.1"
+    "react-router": "^8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
-    "@babel/preset-env": "^8.0.2",
-    "@babel/preset-typescript": "^8.0.1",
     "@biomejs/biome": "^2.5.6",
     "@rolldown/plugin-babel": "^0.2.3",
     "@rtk-query/codegen-openapi": "^2.2.0",
-    "@testing-library/jest-dom": "^7.0.0",
-    "@types/jest": "^30.0.0",
     "@types/node": "^26.1.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
-    "babel-jest": "^30.4.1",
     "babel-plugin-react-compiler": "^1.0.0",
-    "babel-plugin-transform-vite-meta-env": "^1.0.3",
-    "esbuild": "^0.28.1",
-    "esbuild-runner": "^2.2.2",
     "husky": "^9.1.7",
     "i18next-cli": "^1.67.3",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^30.4.2",
-    "jest-environment-jsdom": "^30.4.1",
     "knip": "^6.29.0",
     "lint-staged": "^17.2.0",
-    "postcss": "^8.5.24",
-    "postcss-preset-mantine": "^1.18.0",
-    "postcss-simple-vars": "^7.0.1",
     "typescript": "^7.0.2",
     "vite": "^8.1.5",
     "vite-plugin-mkcert": "^2.1.0"
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.62.3"
   }
 }

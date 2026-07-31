@@ -33,7 +33,6 @@
     "player": "Player",
     "round": "Round",
     "subtitle": "Complete Tournament Schedule for All Teams",
-    "subtitleSingle": "Tournament Schedule for Selected Team",
     "summary": "{{players}} players across {{rounds}} rounds",
     "table": "Table",
     "title": "Team Handout"

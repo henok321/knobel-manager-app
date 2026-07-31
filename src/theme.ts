@@ -13,24 +13,15 @@ const cobalt: MantineColorsTuple = [
   '#172554',
 ];
 
-const systemSans =
-  '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
-const systemMono = 'ui-monospace, "SF Mono", Menlo, Consolas, monospace';
-
 export const theme = createTheme({
   primaryColor: 'cobalt',
   colors: { cobalt },
-  defaultRadius: 'md',
-  fontFamily: systemSans,
-  fontFamilyMonospace: systemMono,
   headings: {
-    fontFamily: systemSans,
     fontWeight: '600',
   },
   components: {
     Card: {
       defaultProps: {
-        radius: 'md',
         shadow: 'sm',
         withBorder: true,
       },
@@ -46,11 +37,6 @@ export const theme = createTheme({
         variant: 'dot',
         size: 'sm',
         radius: 'sm',
-      },
-    },
-    Button: {
-      defaultProps: {
-        radius: 'md',
       },
     },
     ActionIcon: {

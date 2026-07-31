@@ -24,14 +24,11 @@ class ErrorBoundaryComponent extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    };
-  }
+  override state: ErrorBoundaryState = {
+    hasError: false,
+    error: null,
+    errorInfo: null,
+  };
 
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return {
@@ -41,13 +38,9 @@ class ErrorBoundaryComponent extends Component<
   }
 
   override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    this.setState({
-      error,
-      errorInfo,
-    });
+    this.setState({ errorInfo });
 
-    if (import.meta.env.MODE === 'development') {
-      // eslint-disable-next-line no-console
+    if (import.meta.env.DEV) {
       console.error('ErrorBoundary caught an error:', error, errorInfo);
     }
   }
@@ -80,7 +73,7 @@ class ErrorBoundaryComponent extends Component<
               </Text>
             </Alert>
 
-            {import.meta.env.MODE === 'development' && this.state.errorInfo && (
+            {import.meta.env.DEV && this.state.errorInfo && (
               <Alert
                 color="yellow"
                 title={t('common:errorBoundary.componentStack')}

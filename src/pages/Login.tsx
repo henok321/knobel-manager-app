@@ -1,6 +1,5 @@
 import {
   Button,
-  Container,
   Flex,
   Group,
   Paper,
@@ -10,7 +9,7 @@ import {
   TextInput,
   useMantineTheme,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { hasLength, isEmail, useForm } from '@mantine/form';
 import { upperFirst, useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -37,12 +36,11 @@ const Login = () => {
     },
 
     validate: {
-      email: (val) =>
-        /^\S+@\S+$/.test(val)
-          ? null
-          : t('common:login.fields.email.validationMessage'),
-      password: (val) =>
-        val.length <= 6 ? t('login.fields.password.validationMessage') : null,
+      email: isEmail(t('common:login.fields.email.validationMessage')),
+      password: hasLength(
+        { min: 7 },
+        t('common:login.fields.password.validationMessage'),
+      ),
     },
   });
 
@@ -75,75 +73,61 @@ const Login = () => {
     return <Navigate replace to="/" />;
   }
 
-  const renderLoginForm = () => (
-    <>
-      <Text fw={500} pb="md" size="lg">
-        {t('common:login.heading')}
-      </Text>
-
-      <form
-        onSubmit={form.onSubmit(async (formData) => {
-          await handleSubmit(formData);
-        })}
-      >
-        <Stack>
-          <TextInput
-            {...form.getInputProps('email')}
-            required
-            type="email"
-            autoComplete={'username'}
-            disabled={submitting}
-            label={t('common:login.fields.email.label')}
-            placeholder={t('common:login.fields.email.placeholder')}
-            radius="md"
-          />
-
-          <PasswordInput
-            {...form.getInputProps('password')}
-            required
-            autoComplete={'current-password'}
-            disabled={submitting}
-            label={t('common:login.fields.password.label')}
-            placeholder={t('common:login.fields.password.placeholder')}
-            radius="md"
-          />
-        </Stack>
-
-        {loginError && (
-          <Text c="red" mt="md">
-            {loginError}
-          </Text>
-        )}
-
-        <Group justify="space-between" mt="xl">
-          <Button
-            disabled={submitting}
-            loading={submitting}
-            radius="xl"
-            type="submit"
-          >
-            {upperFirst(t('common:login.submit'))}
-          </Button>
-        </Group>
-      </form>
-    </>
-  );
-
   return (
-    <Layout navbarActive={false}>
-      {isMobile ? (
-        <Flex align="center" h="40vh" justify="center">
-          <Container size="md" style={{ width: theme.breakpoints.md }}>
-            {renderLoginForm()}
-          </Container>
-        </Flex>
-      ) : (
-        <Flex align="center" h="80vh" justify="center">
-          <Paper withBorder p="lg" radius="md" w={{ md: '40rem', lg: '50rem' }}>
-            {renderLoginForm()}
-          </Paper>
-        </Flex>
-      )}
+    <Layout>
+      <Flex align="center" h={{ base: '40vh', md: '80vh' }} justify="center">
+        <Paper
+          p="lg"
+          w={{ base: '100%', md: '40rem', lg: '50rem' }}
+          withBorder={!isMobile}
+        >
+          <Text fw={500} pb="md" size="lg">
+            {t('common:login.heading')}
+          </Text>
+
+          <form onSubmit={form.onSubmit(handleSubmit)}>
+            <Stack>
+              <TextInput
+                {...form.getInputProps('email')}
+                required
+                type="email"
+                autoComplete={'username'}
+                disabled={submitting}
+                label={t('common:login.fields.email.label')}
+                placeholder={t('common:login.fields.email.placeholder')}
+                radius="md"
+              />
+
+              <PasswordInput
+                {...form.getInputProps('password')}
+                required
+                autoComplete={'current-password'}
+                disabled={submitting}
+                label={t('common:login.fields.password.label')}
+                placeholder={t('common:login.fields.password.placeholder')}
+                radius="md"
+              />
+            </Stack>
+
+            {loginError && (
+              <Text c="red" mt="md">
+                {loginError}
+              </Text>
+            )}
+
+            <Group justify="space-between" mt="xl">
+              <Button
+                disabled={submitting}
+                loading={submitting}
+                radius="xl"
+                type="submit"
+              >
+                {upperFirst(t('common:login.submit'))}
+              </Button>
+            </Group>
+          </form>
+        </Paper>
+      </Flex>
     </Layout>
   );
 };

@@ -38,10 +38,6 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
     handleClose();
   };
 
-  const handleChangeTeamName = (e: ChangeEvent<HTMLInputElement>) => {
-    setTeamName(e.target.value);
-  };
-
   const handleChangePlayer = (
     index: number,
     e: ChangeEvent<HTMLInputElement>,
@@ -52,15 +48,11 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
   };
 
   const removePlayer = (index: number) => {
-    if (players.length > 1) {
-      setPlayers(players.filter((_, i) => i !== index));
-    }
+    setPlayers(players.filter((_, i) => i !== index));
   };
 
   const addPlayer = () => {
-    if (players.length < teamSize) {
-      setPlayers([...players, '']);
-    }
+    setPlayers([...players, '']);
   };
 
   return (
@@ -84,7 +76,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
             label={t('games:team.form.label.name')}
             name="team-name"
             value={teamName}
-            onChange={handleChangeTeamName}
+            onChange={(e) => setTeamName(e.currentTarget.value)}
           />
 
           <div>

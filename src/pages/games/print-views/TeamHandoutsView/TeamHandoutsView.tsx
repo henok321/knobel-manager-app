@@ -13,32 +13,20 @@ interface TeamHandoutsViewProps {
   game: Game;
   tables: (TableType & { roundNumber?: number })[];
   teams: Team[];
-  teamID?: number;
 }
 
-const TeamHandoutsView = ({
-  game,
-  tables,
-  teams,
-  teamID,
-}: TeamHandoutsViewProps) => {
+const TeamHandoutsView = ({ game, tables, teams }: TeamHandoutsViewProps) => {
   const { t } = useTranslation();
-
-  const filteredTeams = teamID
-    ? teams.filter((team) => team.id === teamID)
-    : teams;
 
   return (
     <Stack gap="md">
       <PrintHeader subtitle={t('pdf:teamHandout.title')} title={game.name}>
         <Text c="dimmed" size="sm">
-          {teamID
-            ? t('pdf:teamHandout.subtitleSingle')
-            : t('pdf:teamHandout.subtitle')}
+          {t('pdf:teamHandout.subtitle')}
         </Text>
       </PrintHeader>
 
-      {filteredTeams.map((team) => (
+      {teams.map((team) => (
         <TeamHandoutCard
           key={team.id}
           gameName={game.name}

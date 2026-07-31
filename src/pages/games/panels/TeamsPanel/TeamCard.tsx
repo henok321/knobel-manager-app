@@ -1,44 +1,41 @@
 import { ActionIcon, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import type { Player } from '../../../../store/generatedApi.ts';
+import type { Team } from '../../../../store/generatedApi.ts';
 import TeamAssignmentMatrix, {
   type RoundTableAssignment,
 } from './TeamAssignmentMatrix.tsx';
 
 interface TeamCardProps {
-  team: { id: number; name: string };
-  players: Player[];
+  team: Team;
   numberOfRounds: number;
   playerTableAssignments: Record<number, RoundTableAssignment[]>;
   showTableAssignments: boolean;
   canEdit: boolean;
   canAddDelete: boolean;
-  isCompleted: boolean;
   onEdit: (teamID: number) => void;
   onDelete: (teamID: number) => void;
 }
 
 const TeamCard = ({
   team,
-  players,
   numberOfRounds,
   playerTableAssignments,
   showTableAssignments,
   canEdit,
   canAddDelete,
-  isCompleted,
   onEdit,
   onDelete,
 }: TeamCardProps) => {
   const { t } = useTranslation();
+  const players = team.players ?? [];
 
   return (
-    <Card withBorder padding="lg" radius="md" shadow="sm">
+    <Card padding="lg">
       <Stack gap="md">
         <Group align="center" justify="space-between">
           <Title order={3}>{team.name}</Title>
-          {!isCompleted && (
+          {(canEdit || canAddDelete) && (
             <Group gap="xs">
               {canEdit && (
                 <ActionIcon variant="subtle" onClick={() => onEdit(team.id)}>

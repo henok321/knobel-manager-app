@@ -18,12 +18,11 @@ interface ScoreSheetsViewProps {
 const ScoreSheetsView = ({ game, tables, teams }: ScoreSheetsViewProps) => {
   const { t } = useTranslation();
 
-  const sortedTables = [...tables].sort((a, b) => {
-    if (a.roundNumber && b.roundNumber && a.roundNumber !== b.roundNumber) {
-      return a.roundNumber - b.roundNumber;
-    }
-    return a.tableNumber - b.tableNumber;
-  });
+  const sortedTables = [...tables].sort(
+    (a, b) =>
+      (a.roundNumber ?? 0) - (b.roundNumber ?? 0) ||
+      a.tableNumber - b.tableNumber,
+  );
 
   return (
     <Stack gap={0}>

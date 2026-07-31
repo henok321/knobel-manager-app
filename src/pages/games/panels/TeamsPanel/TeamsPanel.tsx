@@ -10,8 +10,7 @@ import {
   useUpdatePlayerMutation,
   useUpdateTeamMutation,
 } from '../../../../store/api';
-import type { Game, GameStatus } from '../../../../store/generatedApi.ts';
-import { assertNever } from '../../../../utils/assertNever';
+import type { Game } from '../../../../store/generatedApi.ts';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
 import TeamForm, { type TeamFormData } from './TeamForm';
@@ -19,25 +18,6 @@ import TeamForm, { type TeamFormData } from './TeamForm';
 interface TeamsPanelProps {
   game: Game;
 }
-
-interface TeamsPermissions {
-  canAddDelete: boolean;
-  canEdit: boolean;
-  isCompleted: boolean;
-}
-
-const getTeamsPermissions = (status: GameStatus): TeamsPermissions => {
-  switch (status) {
-    case 'setup':
-      return { canAddDelete: true, canEdit: true, isCompleted: false };
-    case 'in_progress':
-      return { canAddDelete: false, canEdit: true, isCompleted: false };
-    case 'completed':
-      return { canAddDelete: false, canEdit: false, isCompleted: true };
-    default:
-      return assertNever(status);
-  }
-};
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
@@ -48,7 +28,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
   const tables = tablesData?.tables ?? [];
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
-  const [editTeamDialogOpen, setEditTeamDialogOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -63,9 +42,8 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     (game.rounds ?? []).map((r) => [r.id, r.roundNumber]),
   );
 
-  const { canAddDelete, canEdit, isCompleted } = getTeamsPermissions(
-    game.status,
-  );
+  const canAddDelete = game.status === 'setup';
+  const canEdit = game.status !== 'completed';
 
   const showTableAssignments = tables.length > 0;
 
@@ -102,7 +80,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const handleStartEditTeam = (teamID: number) => {
     setEditingTeamId(teamID);
-    setEditTeamDialogOpen(true);
   };
 
   const handleSaveTeam = (
@@ -125,7 +102,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         });
       }
     }
-    setEditTeamDialogOpen(false);
     setEditingTeamId(null);
   };
 
@@ -195,9 +171,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
               key={team.id}
               canAddDelete={canAddDelete}
               canEdit={canEdit}
-              isCompleted={isCompleted}
               numberOfRounds={game.numberOfRounds}
-              players={team.players ?? []}
               playerTableAssignments={playerTableAssignments}
               showTableAssignments={showTableAssignments}
               team={team}
@@ -217,13 +191,9 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
       {editingTeamId && (
         <EditTeamDialog
-          isOpen={editTeamDialogOpen}
           players={allTeams.find((t) => t.id === editingTeamId)?.players ?? []}
-          teamName={teams.find((t) => t.id === editingTeamId)?.name || ''}
-          onClose={() => {
-            setEditTeamDialogOpen(false);
-            setEditingTeamId(null);
-          }}
+          teamName={allTeams.find((t) => t.id === editingTeamId)?.name || ''}
+          onClose={() => setEditingTeamId(null)}
           onSave={handleSaveTeam}
         />
       )}

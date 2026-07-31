@@ -1,16 +1,12 @@
-import { Box, Group } from '@mantine/core';
-import type React from 'react';
-import { useNavigate } from 'react-router';
+import { Anchor, Box, Group } from '@mantine/core';
+import { Link } from 'react-router';
 
+import { useAuth } from '../../auth/useAuth.ts';
 import Logo from '../Logo.tsx';
 import UserMenu from '../userMenu/UserMenu.tsx';
 
-interface HeaderProps {
-  navbarActive?: boolean;
-}
-
-const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
-  const navigate = useNavigate();
+const Header = () => {
+  const { user } = useAuth();
 
   return (
     <Box
@@ -29,20 +25,11 @@ const Header: React.FC<HeaderProps> = ({ navbarActive }) => {
         px="xl"
         wrap="nowrap"
       >
-        <Box
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            void navigate('/');
-          }}
-        >
-          <Logo size={16} variant="full" />
-        </Box>
+        <Anchor component={Link} to="/" underline="never">
+          <Logo variant="full" />
+        </Anchor>
 
-        {navbarActive && (
-          <Group gap="xs">
-            <UserMenu />
-          </Group>
-        )}
+        {user && <UserMenu />}
       </Group>
     </Box>
   );

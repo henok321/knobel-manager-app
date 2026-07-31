@@ -33,7 +33,6 @@
     "player": "Spieler",
     "round": "Runde",
     "subtitle": "Vollständiger Turnierplan für alle Teams",
-    "subtitleSingle": "Turnierplan für ausgewähltes Team",
     "summary": "{{players}} Spieler über {{rounds}} Runden",
     "table": "Tisch",
     "title": "Team-Handout"

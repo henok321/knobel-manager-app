@@ -2,14 +2,8 @@
   "$schema": "https://unpkg.com/knip@latest/schema.json",
   "ignore": [
     "src/store/generatedApi.ts",
-    "src/store/openapi-config.ts",
+    "src/store/openapi-config.cjs",
     "i18next.config.ts"
   ],
-  "ignoreBinaries": ["firebase"],
-  "ignoreDependencies": ["esbuild-runner"],
-  "vitest": false,
-  "jest": {
-    "config": ["jest.config.js"],
-    "entry": ["jest.setup.js", "__mocks__/**"]
-  }
+  "ignoreBinaries": ["firebase"]
 }

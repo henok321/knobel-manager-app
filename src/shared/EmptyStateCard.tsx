@@ -12,15 +12,10 @@ const EmptyStateCard = ({
   description,
   children,
 }: EmptyStateCardProps) => {
-  const lines =
-    description == null
-      ? []
-      : Array.isArray(description)
-        ? description
-        : [description];
+  const lines = [description ?? []].flat();
 
   return (
-    <Card withBorder padding="xl" radius="md">
+    <Card padding="xl">
       <Stack align="center" gap="md">
         <Title order={4}>{title}</Title>
         {lines.map((line) => (
