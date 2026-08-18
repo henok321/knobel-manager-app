@@ -42,6 +42,12 @@ pnpm api:gen             # @rtk-query/codegen-openapi; spec pulled from the serv
 `pnpm fix` covers everything Biome handles. `pnpm check` is the gate that mirrors CI — run it before declaring work
 done. lint-staged runs `biome check --write` on commit (Husky `pre-commit`); `pnpm check` runs on push (`pre-push`).
 
+CI (`.github/workflows/pipeline.yml`) runs `pnpm check`, `pnpm knip`, `pnpm test`,
+`pnpm audit --prod --audit-level=high`, and a `validate-client` job that re-runs `pnpm api:gen` against the live
+backend spec and fails if `src/store/generatedApi.ts` differs — so the generated client is committed and must stay in
+sync: run `pnpm api:gen && pnpm fix` and commit the result. Push to `main` deploys to Firebase hosting; PRs get a
+preview channel.
+
 ## Architecture
 
 ### State management — RTK Query
@@ -143,8 +149,13 @@ covers all configured locales automatically. Type augmentation doesn't change (s
 `src/App.tsx` is the composition root. The persistent shell is `src/shared/layout/Layout.tsx` (wraps `Header` + page
 content + `Footer`); `src/shared/userMenu/` holds the language picker, color-scheme toggle, and user menu. Page entry
 points are under `src/pages/` — `Login.tsx` and `games/{Games,GameDetail,PrintView}` plus subdirs `panels/` and
-`print-views/` for the game-detail interior. Shared utilities sit at `src/utils/` (currently `assertNever.ts`,
-`gameStatusHelpers.ts`).
+`print-views/` for the game-detail interior. Shared utilities sit at `src/utils/`: `assertNever.ts`,
+`gameStatusHelpers.ts`, and `notifyError.ts` — use `notifyError()` for failure toasts instead of a raw
+`notifications.show`, it carries the translated title and red color.
+
+Styling: Mantine theme overrides in `src/theme.ts`, app-wide CSS in `src/shared/global.css`, print rules in
+`src/pages/games/print-views/print.css` — the only file where Biome allows `!important` (per the override in
+`biome.json`).
 
 Reusable presentational components live directly under `src/shared/`: `CenterLoader`, `EmptyStateCard`, `Logo`,
 `PrintMenu`, `ErrorBoundary`. Prefer these over re-implementing equivalents inside pages — especially `EmptyStateCard`
