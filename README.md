@@ -39,8 +39,8 @@ pnpm install
 ## Development
 
 ```bash
-pnpm local  # Dev server with local API (requires backend at localhost:8080)
-pnpm prod   # Dev server with production API
+pnpm local         # Dev server, /api → localhost:8080 (requires a local backend)
+pnpm local:remote  # Dev server, /api → the deployed API (VITE_API_URL)
 ```
 
 ## Build & Deploy

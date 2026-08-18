@@ -22,7 +22,7 @@ pnpm install
 ```bash
 # Dev servers
 pnpm local               # vite dev server (proxies /api → http://localhost:8080)
-pnpm prod                # vite --mode production (talks to deployed API)
+pnpm local:remote        # same, but proxies /api → VITE_API_URL (i.e. the deployed API)
 
 # Quality (one entry point each — there are no separate `lint`/`format` scripts)
 pnpm fix                 # biome check --write .  (auto-fix lint + format)
@@ -89,8 +89,11 @@ gated by `<ProtectedRoute>` (see `src/App.tsx`). Page components are lazy-loaded
 ### Backend API access
 
 `src/store/baseApi.ts` is the single HTTP entry point (RTK Query `fetchBaseQuery`). Its base URL is a one-line ternary:
-in production it's `VITE_API_URL`; otherwise it's `/api`, which Vite proxies to `http://localhost:8080` with a path
-rewrite (`/api/games` → `/games`, see `vite.config.ts`).
+in production *builds* it's `VITE_API_URL`; on every dev server it's `/api`, which Vite proxies with a path rewrite
+(`/api/games` → `/games`). `import.meta.env.PROD` tracks `NODE_ENV`, so it is false on any dev server regardless of
+`--mode`. The proxy target comes from `loadEnv(mode)`: `VITE_API_URL` when the dev server runs under
+`--mode production` (`pnpm local:remote`), else `http://localhost:8080`. `.env.production` is therefore the single
+source of truth for the deployed URL — for both builds and the dev proxy.
 
 Endpoints and request/response types are generated into `src/store/generatedApi.ts` by `pnpm api:gen`
 (`@rtk-query/codegen-openapi`, spec pulled from the service repo — see `src/store/openapi-config.cjs`). **Never edit
@@ -169,10 +172,13 @@ tested modules must carry the `.ts` extension (they already do, repo-wide).
 
 ## Environment
 
-`.env.production` provides `VITE_API_URL` (`https://api.knobel-manager.de`). In dev the app always calls `/api`, which
-`vite.config.ts` proxies to `http://localhost:8080` — there is no `.env.development`.
+`.env.production` provides `VITE_API_URL` (`https://api.knobel-manager.de`) — the single source for the deployed URL,
+read by production builds (baked into the bundle) and by `pnpm local:remote` (as the dev proxy target). It is tracked in
+git on purpose: the CI pipeline passes no env vars, so `pnpm build` there depends on the file. In dev the app always
+calls `/api`; there is no `.env.development`.
 
-If the local backend isn't reachable at `http://localhost:8080/health`, fall back to `pnpm prod` (deployed API).
+If the local backend isn't reachable at `http://localhost:8080/health/live` (or `/health/ready` for dependency
+health), use `pnpm local:remote` — `--mode production` makes `loadEnv` point the proxy at the deployed API.
 
 ## Package manager
 
