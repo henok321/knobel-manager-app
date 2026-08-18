@@ -11,6 +11,7 @@ import {
   useUpdateTeamMutation,
 } from '../../../../store/api';
 import type { Game } from '../../../../store/generatedApi.ts';
+import { notifyError } from '../../../../utils/notifyError';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
 import TeamForm, { type TeamFormData } from './TeamForm';
@@ -74,34 +75,36 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       name: teamData.name,
       players: teamData.members.map((name) => ({ name })),
     };
-    void createTeam({ gameId: game.id, teamsRequest });
-    setIsTeamFormOpen(false);
+    return createTeam({ gameId: game.id, teamsRequest }).unwrap();
   };
 
   const handleStartEditTeam = (teamID: number) => {
     setEditingTeamId(teamID);
   };
 
-  const handleSaveTeam = (
+  const handleSaveTeam = async (
     teamName: string,
     players: { id: number; name: string }[],
   ) => {
-    if (editingTeamId) {
-      void updateTeam({
+    const teamId = editingTeamId;
+    if (!teamId) {
+      return;
+    }
+    await Promise.all([
+      updateTeam({
         gameId: game.id,
-        teamId: editingTeamId,
+        teamId,
         teamsRequest: { name: teamName },
-      });
-
-      for (const player of players) {
-        void updatePlayer({
+      }).unwrap(),
+      ...players.map((player) =>
+        updatePlayer({
           gameId: game.id,
-          teamId: editingTeamId,
+          teamId,
           playerId: player.id,
           playersRequest: { name: player.name },
-        });
-      }
-    }
+        }).unwrap(),
+      ),
+    ]);
     setEditingTeamId(null);
   };
 
@@ -116,8 +119,12 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         cancel: t('common:actions.cancel'),
       },
       confirmProps: { color: 'red' },
-      onConfirm: () => {
-        void deleteTeam({ gameId: game.id, teamId: teamID });
+      onConfirm: async () => {
+        try {
+          await deleteTeam({ gameId: game.id, teamId: teamID }).unwrap();
+        } catch {
+          notifyError();
+        }
       },
     });
   };

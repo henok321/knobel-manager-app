@@ -1,6 +1,7 @@
 import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
 import { type KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { notifyError } from '../../../../utils/notifyError';
 
 interface Player {
   id: number;
@@ -11,7 +12,10 @@ interface EditTeamDialogProps {
   teamName: string;
   players: Player[];
   onClose: () => void;
-  onSave: (teamName: string, players: { id: number; name: string }[]) => void;
+  onSave: (
+    teamName: string,
+    players: { id: number; name: string }[],
+  ) => Promise<unknown>;
 }
 
 const EditTeamDialog = ({
@@ -31,20 +35,26 @@ const EditTeamDialog = ({
   const [playerNames, setPlayerNames] =
     useState<Record<number, string>>(initialPlayerNames);
 
-  const handleSave = () => {
-    if (name.trim()) {
-      const updatedPlayers = players.map((p) => ({
-        id: p.id,
-        name: (playerNames[p.id] || p.name).trim(),
-      }));
-      onSave(name.trim(), updatedPlayers);
-      onClose();
+  const handleSave = async () => {
+    if (!name.trim()) {
+      return;
     }
+    const updatedPlayers = players.map((p) => ({
+      id: p.id,
+      name: (playerNames[p.id] || p.name).trim(),
+    }));
+    try {
+      await onSave(name.trim(), updatedPlayers);
+    } catch {
+      notifyError();
+      return;
+    }
+    onClose();
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      handleSave();
+      void handleSave();
     }
   };
 
@@ -97,7 +107,7 @@ const EditTeamDialog = ({
           <Button variant="subtle" onClick={onClose}>
             {t('common:actions.cancel')}
           </Button>
-          <Button disabled={!name.trim()} onClick={handleSave}>
+          <Button disabled={!name.trim()} onClick={() => void handleSave()}>
             {t('common:actions.save')}
           </Button>
         </Group>

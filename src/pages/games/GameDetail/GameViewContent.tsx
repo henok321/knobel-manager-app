@@ -27,6 +27,7 @@ import {
   statusColor,
   translateGameStatus,
 } from '../../../utils/gameStatusHelpers';
+import { notifyError } from '../../../utils/notifyError';
 import AdministrationPanel from '../panels/AdministrationPanel/AdministrationPanel';
 import RankingsPanel from '../panels/RankingsPanel/RankingsPanel';
 import RoundsPanel from '../panels/RoundsPanel/RoundsPanel';
@@ -86,7 +87,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   const sufficientTeams = game.teamSize <= (game.teams?.length ?? 0);
   const sufficientRounds = (game.rounds?.length ?? 0) === game.numberOfRounds;
 
-  const handleStatusTransition = (newStatus: GameStatus) => {
+  const handleStatusTransition = async (newStatus: GameStatus) => {
     const gameRequest: GameUpdateRequest = {
       name: game.name,
       numberOfRounds: game.numberOfRounds,
@@ -94,7 +95,16 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       tableSize: game.tableSize,
       status: newStatus,
     };
-    void updateGame({ gameId: game.id, gameUpdateRequest: gameRequest });
+    try {
+      await updateGame({
+        gameId: game.id,
+        gameUpdateRequest: gameRequest,
+      }).unwrap();
+      return true;
+    } catch {
+      notifyError();
+      return false;
+    }
   };
 
   const confirmStartGame = () => {
@@ -115,8 +125,10 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         cancel: t('gameDetail:actions.cancel'),
       },
       confirmProps: { color: 'cobalt' },
-      onConfirm: () => {
-        handleStatusTransition('in_progress');
+      onConfirm: async () => {
+        if (!(await handleStatusTransition('in_progress'))) {
+          return;
+        }
         selectTab('rounds');
         notifications.show({
           title: t('gameDetail:actions.gameStartedNotification'),
@@ -140,7 +152,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         cancel: t('gameDetail:actions.cancel'),
       },
       confirmProps: { color: 'red' },
-      onConfirm: () => handleStatusTransition('completed'),
+      onConfirm: () => void handleStatusTransition('completed'),
     });
   };
 

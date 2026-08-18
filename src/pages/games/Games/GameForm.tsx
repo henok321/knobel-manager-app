@@ -10,6 +10,7 @@ import {
 import { notifications } from '@mantine/notifications';
 import type { SubmitEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { notifyError } from '../../../utils/notifyError';
 
 interface GameFormData {
   name: string;
@@ -21,13 +22,13 @@ interface GameFormData {
 interface GameFormProps {
   isOpen: boolean;
   onClose: () => void;
-  createGame: (game: GameFormData) => void;
+  createGame: (game: GameFormData) => Promise<unknown>;
 }
 
 const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
   const { t } = useTranslation();
 
-  const submit = (event: SubmitEvent<HTMLFormElement>) => {
+  const submit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -37,7 +38,12 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
       tableSize: Number(formData.get('tableSize')),
       numberOfRounds: Number(formData.get('numberOfRounds')),
     };
-    createGame(game);
+    try {
+      await createGame(game);
+    } catch {
+      notifyError();
+      return;
+    }
     notifications.show({
       title: t('common:actions.success'),
       message: t('games:card.gameCreated', { name: game.name }),
@@ -57,7 +63,7 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
       }
       onClose={onClose}
     >
-      <form onSubmit={submit}>
+      <form onSubmit={(event) => void submit(event)}>
         <Stack gap="md">
           <TextInput
             autoFocus

@@ -3,6 +3,7 @@ import { notifications } from '@mantine/notifications';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { type ChangeEvent, type SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { notifyError } from '../../../../utils/notifyError';
 
 export interface TeamFormData {
   name: string;
@@ -13,7 +14,7 @@ interface TeamFormProps {
   teamSize: number;
   isOpen: boolean;
   onClose: () => void;
-  createTeam: (team: TeamFormData) => void;
+  createTeam: (team: TeamFormData) => Promise<unknown>;
 }
 
 const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
@@ -27,9 +28,14 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
     onClose();
   };
 
-  const submit = (e: SubmitEvent<HTMLFormElement>) => {
+  const submit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createTeam({ name: teamName, members: players });
+    try {
+      await createTeam({ name: teamName, members: players });
+    } catch {
+      notifyError();
+      return;
+    }
     notifications.show({
       title: t('common:actions.success'),
       message: t('games:card.teamAdded', { name: teamName }),
@@ -66,7 +72,7 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
       }
       onClose={handleClose}
     >
-      <form onSubmit={submit}>
+      <form onSubmit={(e) => void submit(e)}>
         <Stack gap="md">
           <TextInput
             autoFocus

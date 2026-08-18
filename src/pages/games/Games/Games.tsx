@@ -22,6 +22,7 @@ import {
   useDeleteGameMutation,
   useGetGamesQuery,
 } from '../../../store/api.ts';
+import { notifyError } from '../../../utils/notifyError';
 import GameForm from './GameForm';
 import GameListItem from './GameListItem';
 
@@ -53,8 +54,12 @@ const Games = () => {
         cancel: t('common:actions.cancel'),
       },
       confirmProps: { color: 'red' },
-      onConfirm: () => {
-        void deleteGame({ gameId: gameID });
+      onConfirm: async () => {
+        try {
+          await deleteGame({ gameId: gameID }).unwrap();
+        } catch {
+          notifyError();
+        }
       },
     });
   };
@@ -150,7 +155,9 @@ const Games = () => {
       </Container>
 
       <GameForm
-        createGame={(game) => createGame({ gameCreateRequest: game })}
+        createGame={(game) => {
+          return createGame({ gameCreateRequest: game }).unwrap();
+        }}
         isOpen={gameModalActive}
         onClose={() => setGameModalActive(false)}
       />
