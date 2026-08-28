@@ -32,6 +32,43 @@
       "you": "You"
     }
   },
+  "audit": {
+    "actions": {
+      "create": "Created",
+      "delete": "Deleted",
+      "setup": "Tables assigned",
+      "update": "Changed"
+    },
+    "columns": {
+      "action": "Action",
+      "changes": "Changes",
+      "what": "Entity",
+      "when": "When",
+      "who": "Who"
+    },
+    "empty": "—",
+    "emptyDescription": "Changes to teams, players and scores will appear here.",
+    "emptyTitle": "No changes recorded yet",
+    "entities": {
+      "game": "Game",
+      "owner": "Owner",
+      "player": "Player",
+      "score": "Score",
+      "team": "Team"
+    },
+    "fields": {
+      "name": "Name",
+      "numberOfRounds": "Number of rounds",
+      "playerId": "Player",
+      "score": "Score",
+      "status": "Status",
+      "tableId": "Table",
+      "tableSize": "Table size",
+      "teamId": "Team",
+      "teamSize": "Team size"
+    },
+    "loadError": "The audit log could not be loaded."
+  },
   "notFound": "Game not found",
   "numberOfRounds": "Number of Rounds",
   "printMenu": {
@@ -97,6 +134,7 @@
   "tableSize": "Table Size",
   "tabs": {
     "administration": "Administration",
+    "audit": "Audit log",
     "rankings": "Rankings",
     "rounds": "Rounds",
     "teams": "Teams"

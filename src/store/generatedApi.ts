@@ -115,6 +115,9 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.scoresRequest,
       }),
     }),
+    getAuditLog: build.query<GetAuditLogApiResponse, GetAuditLogApiArg>({
+      query: (queryArg) => ({ url: `/games/${queryArg.gameId}/audit` }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -222,6 +225,11 @@ export type UpdateScoresApiArg = {
   roundNumber: number;
   tableNumber: number;
   scoresRequest: ScoresRequest;
+};
+export type GetAuditLogApiResponse =
+  /** status 200 Audit events found */ AuditResponse;
+export type GetAuditLogApiArg = {
+  gameId: number;
 };
 export type HealthCheckResponse = {
   status: string;
@@ -334,6 +342,30 @@ export type ScoresRequest = {
     score: number;
   }[];
 };
+export type AuditActor = {
+  sub: string;
+  email: string;
+};
+export type AuditAction = "create" | "update" | "delete" | "setup";
+export type AuditEntity = "game" | "owner" | "team" | "player" | "score";
+export type AuditChange = {
+  field: string;
+  from: string | null;
+  to: string | null;
+};
+export type AuditEvent = {
+  id: number;
+  timestamp: string;
+  requestID: string;
+  actor: AuditActor;
+  action: AuditAction;
+  entity: AuditEntity;
+  entityID: string;
+  changes: AuditChange[];
+};
+export type AuditResponse = {
+  events: AuditEvent[];
+};
 export const {
   useLivenessCheckQuery,
   useReadinessCheckQuery,
@@ -355,4 +387,5 @@ export const {
   useGetTablesQuery,
   useGetTableQuery,
   useUpdateScoresMutation,
+  useGetAuditLogQuery,
 } = injectedRtkApi;

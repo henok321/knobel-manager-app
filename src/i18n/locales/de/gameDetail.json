@@ -32,6 +32,43 @@
       "you": "Du"
     }
   },
+  "audit": {
+    "actions": {
+      "create": "Erstellt",
+      "delete": "Gelöscht",
+      "setup": "Tische zugewiesen",
+      "update": "Geändert"
+    },
+    "columns": {
+      "action": "Aktion",
+      "changes": "Änderungen",
+      "what": "Objekt",
+      "when": "Wann",
+      "who": "Wer"
+    },
+    "empty": "—",
+    "emptyDescription": "Änderungen an Teams, Spielern und Punkten erscheinen hier.",
+    "emptyTitle": "Noch keine Änderungen aufgezeichnet",
+    "entities": {
+      "game": "Spiel",
+      "owner": "Besitzer",
+      "player": "Spieler",
+      "score": "Punkte",
+      "team": "Team"
+    },
+    "fields": {
+      "name": "Name",
+      "numberOfRounds": "Anzahl Runden",
+      "playerId": "Spieler",
+      "score": "Punkte",
+      "status": "Status",
+      "tableId": "Tisch",
+      "tableSize": "Tischgröße",
+      "teamId": "Team",
+      "teamSize": "Teamgröße"
+    },
+    "loadError": "Das Änderungsprotokoll konnte nicht geladen werden."
+  },
   "notFound": "Spiel nicht gefunden",
   "numberOfRounds": "Anzahl der Runden",
   "printMenu": {
@@ -97,6 +134,7 @@
   "tableSize": "Tischgröße",
   "tabs": {
     "administration": "Administration",
+    "audit": "Protokoll",
     "rankings": "Rangliste",
     "rounds": "Runden",
     "teams": "Teams"
