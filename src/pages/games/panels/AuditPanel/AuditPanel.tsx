@@ -3,9 +3,12 @@ import { useTranslation } from 'react-i18next';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import { useGetAuditLogQuery } from '../../../../store/api.ts';
 import type { AuditChange, Game } from '../../../../store/generatedApi.ts';
+import type { GameDirectory } from './auditLabels.ts';
 import {
   actionColor,
-  formatEntityRef,
+  buildGameDirectory,
+  describeAuditEntity,
+  formatChangeValue,
   formatTimestamp,
   translateAuditAction,
   translateAuditField,
@@ -15,7 +18,12 @@ interface AuditPanelProps {
   game: Game;
 }
 
-const ChangeList = ({ changes }: { changes: AuditChange[] }) => {
+interface ChangeListProps {
+  changes: AuditChange[];
+  directory: GameDirectory;
+}
+
+const ChangeList = ({ changes, directory }: ChangeListProps) => {
   const { t } = useTranslation();
 
   if (changes.length === 0) {
@@ -35,11 +43,11 @@ const ChangeList = ({ changes }: { changes: AuditChange[] }) => {
           </Text>
           {': '}
           <Text component="span" c="dimmed">
-            {change.from ?? t('gameDetail:audit.empty')}
+            {formatChangeValue(t, directory, change.field, change.from)}
           </Text>
           {' → '}
           <Text component="span">
-            {change.to ?? t('gameDetail:audit.empty')}
+            {formatChangeValue(t, directory, change.field, change.to)}
           </Text>
         </Text>
       ))}
@@ -68,6 +76,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
   }
 
   const events = data?.events ?? [];
+  const directory = buildGameDirectory(game);
 
   if (events.length === 0) {
     return (
@@ -108,11 +117,11 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
               </Table.Td>
               <Table.Td>
                 <Text size="sm">
-                  {formatEntityRef(t, event.entity, event.entityID)}
+                  {describeAuditEntity(t, directory, event)}
                 </Text>
               </Table.Td>
               <Table.Td>
-                <ChangeList changes={event.changes} />
+                <ChangeList changes={event.changes} directory={directory} />
               </Table.Td>
             </Table.Tr>
           ))}

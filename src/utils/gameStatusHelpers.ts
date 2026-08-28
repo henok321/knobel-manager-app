@@ -1,6 +1,6 @@
 import type { TFunction } from 'i18next';
 import type { GameStatus } from '../store/generatedApi.ts';
-import { assertNever } from './assertNever';
+import { assertNever } from './assertNever.ts';
 
 export const statusColor = (status: GameStatus): string => {
   switch (status) {
