@@ -21,11 +21,17 @@ interface GameFormData {
 
 interface GameFormProps {
   isOpen: boolean;
+  isSubmitting: boolean;
   onClose: () => void;
   createGame: (game: GameFormData) => Promise<unknown>;
 }
 
-const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
+const GameForm = ({
+  isOpen,
+  isSubmitting,
+  onClose,
+  createGame,
+}: GameFormProps) => {
   const { t } = useTranslation();
 
   const submit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -98,7 +104,9 @@ const GameForm = ({ isOpen, onClose, createGame }: GameFormProps) => {
             name="numberOfRounds"
           />
           <Group justify="flex-end" mt="md">
-            <Button type="submit">{t('games:form.submit')}</Button>
+            <Button loading={isSubmitting} type="submit">
+              {t('games:form.submit')}
+            </Button>
           </Group>
         </Stack>
       </form>

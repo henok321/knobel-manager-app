@@ -13,11 +13,18 @@ export interface TeamFormData {
 interface TeamFormProps {
   teamSize: number;
   isOpen: boolean;
+  isSubmitting: boolean;
   onClose: () => void;
   createTeam: (team: TeamFormData) => Promise<unknown>;
 }
 
-const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
+const TeamForm = ({
+  isOpen,
+  isSubmitting,
+  onClose,
+  createTeam,
+  teamSize,
+}: TeamFormProps) => {
   const { t } = useTranslation();
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState(['']);
@@ -131,7 +138,11 @@ const TeamForm = ({ isOpen, onClose, createTeam, teamSize }: TeamFormProps) => {
           </div>
 
           <Group justify="flex-end" mt="md">
-            <Button disabled={players.length !== teamSize} type="submit">
+            <Button
+              disabled={players.length !== teamSize}
+              loading={isSubmitting}
+              type="submit"
+            >
               {t('games:team.form.submit')}
             </Button>
           </Group>

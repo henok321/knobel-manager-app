@@ -29,7 +29,7 @@ import GameListItem from './GameListItem';
 const Games = () => {
   const { data, isLoading, isError } = useGetGamesQuery(undefined);
   const allGames = data?.games ?? [];
-  const [createGame] = useCreateGameMutation();
+  const [createGame, { isLoading: isCreatingGame }] = useCreateGameMutation();
   const [deleteGame] = useDeleteGameMutation();
 
   const [gameModalActive, setGameModalActive] = useState(false);
@@ -159,6 +159,7 @@ const Games = () => {
           return createGame({ gameCreateRequest: game }).unwrap();
         }}
         isOpen={gameModalActive}
+        isSubmitting={isCreatingGame}
         onClose={() => setGameModalActive(false)}
       />
     </Layout>

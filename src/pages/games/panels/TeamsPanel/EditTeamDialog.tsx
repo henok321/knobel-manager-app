@@ -2,20 +2,13 @@ import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
 import { type KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { notifyError } from '../../../../utils/notifyError';
-
-interface Player {
-  id: number;
-  name: string;
-}
+import type { PlayerName } from './teamChanges.ts';
 
 interface EditTeamDialogProps {
   teamName: string;
-  players: Player[];
+  players: PlayerName[];
   onClose: () => void;
-  onSave: (
-    teamName: string,
-    players: { id: number; name: string }[],
-  ) => Promise<unknown>;
+  onSave: (teamName: string, players: PlayerName[]) => Promise<unknown>;
 }
 
 const EditTeamDialog = ({
@@ -35,13 +28,19 @@ const EditTeamDialog = ({
   const [playerNames, setPlayerNames] =
     useState<Record<number, string>>(initialPlayerNames);
 
+  const playerNameFor = (player: PlayerName) =>
+    (playerNames[player.id] ?? player.name).trim();
+
+  const isIncomplete =
+    !name.trim() || players.some((player) => !playerNameFor(player));
+
   const handleSave = async () => {
-    if (!name.trim()) {
+    if (isIncomplete) {
       return;
     }
-    const updatedPlayers = players.map((p) => ({
-      id: p.id,
-      name: (playerNames[p.id] || p.name).trim(),
+    const updatedPlayers = players.map((player) => ({
+      id: player.id,
+      name: playerNameFor(player),
     }));
     try {
       await onSave(name.trim(), updatedPlayers);
@@ -94,7 +93,7 @@ const EditTeamDialog = ({
               key={player.id}
               label={`${t('gameDetail:teams.player')} ${index + 1}`}
               placeholder={t('gameDetail:teams.playerNamePlaceholder')}
-              value={playerNames[player.id] || player.name}
+              value={playerNames[player.id] ?? player.name}
               onChange={(e) =>
                 updatePlayerName(player.id, e.currentTarget.value)
               }
@@ -107,7 +106,7 @@ const EditTeamDialog = ({
           <Button variant="subtle" onClick={onClose}>
             {t('common:actions.cancel')}
           </Button>
-          <Button disabled={!name.trim()} onClick={() => void handleSave()}>
+          <Button disabled={isIncomplete} onClick={() => void handleSave()}>
             {t('common:actions.save')}
           </Button>
         </Group>

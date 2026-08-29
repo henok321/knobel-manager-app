@@ -15,6 +15,7 @@ import { notifyError } from '../../../../utils/notifyError';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
 import TeamForm, { type TeamFormData } from './TeamForm';
+import { type PlayerName, teamChanges } from './teamChanges.ts';
 
 interface TeamsPanelProps {
   game: Game;
@@ -22,7 +23,7 @@ interface TeamsPanelProps {
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
-  const [createTeam] = useCreateTeamMutation();
+  const [createTeam, { isLoading: isCreatingTeam }] = useCreateTeamMutation();
   const [updateTeam] = useUpdateTeamMutation();
   const [deleteTeam] = useDeleteTeamMutation();
   const [updatePlayer] = useUpdatePlayerMutation();
@@ -42,6 +43,8 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const roundNumberByRoundId = new Map(
     (game.rounds ?? []).map((r) => [r.id, r.roundNumber]),
   );
+
+  const editingTeam = allTeams.find((team) => team.id === editingTeamId);
 
   const canAddDelete = game.status === 'setup';
   const canEdit = game.status !== 'completed';
@@ -82,30 +85,35 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     setEditingTeamId(teamID);
   };
 
-  const handleSaveTeam = async (
-    teamName: string,
-    players: { id: number; name: string }[],
-  ) => {
-    const teamId = editingTeamId;
-    if (!teamId) {
+  const handleSaveTeam = async (teamName: string, players: PlayerName[]) => {
+    if (!editingTeam) {
       return;
     }
+    const { nameChanged, renamedPlayers } = teamChanges(
+      editingTeam,
+      teamName,
+      players,
+    );
+
     await Promise.all([
-      updateTeam({
-        gameId: game.id,
-        teamId,
-        teamsRequest: { name: teamName },
-      }).unwrap(),
-      ...players.map((player) =>
+      ...(nameChanged
+        ? [
+            updateTeam({
+              gameId: game.id,
+              teamId: editingTeam.id,
+              teamsRequest: { name: teamName },
+            }).unwrap(),
+          ]
+        : []),
+      ...renamedPlayers.map((player) =>
         updatePlayer({
           gameId: game.id,
-          teamId,
+          teamId: editingTeam.id,
           playerId: player.id,
           playersRequest: { name: player.name },
         }).unwrap(),
       ),
     ]);
-    setEditingTeamId(null);
   };
 
   const handleDeleteTeam = (teamID: number) => {
@@ -192,14 +200,15 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       <TeamForm
         createTeam={handleCreateTeam}
         isOpen={isTeamFormOpen}
+        isSubmitting={isCreatingTeam}
         teamSize={game.teamSize}
         onClose={() => setIsTeamFormOpen(false)}
       />
 
-      {editingTeamId && (
+      {editingTeam && (
         <EditTeamDialog
-          players={allTeams.find((t) => t.id === editingTeamId)?.players ?? []}
-          teamName={allTeams.find((t) => t.id === editingTeamId)?.name || ''}
+          players={editingTeam.players ?? []}
+          teamName={editingTeam.name}
           onClose={() => setEditingTeamId(null)}
           onSave={handleSaveTeam}
         />
