@@ -173,6 +173,22 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
             <Text c="dimmed" size="sm">
               {t('gameDetail:numberOfRounds')}: {game.numberOfRounds}
             </Text>
+            {game.teams?.length && (
+              <>
+                <Text c="dimmed">•</Text>
+                <Text c="dimmed" size="sm">
+                  {t('gameDetail:numberOfTeams')}: {game.teams.length}
+                </Text>
+              </>
+            )}
+            {tables.length > 0 && (
+              <>
+                <Text c="dimmed">•</Text>
+                <Text c="dimmed" size="sm">
+                  {t('gameDetail:numberOfTables')}: {tables.length}
+                </Text>
+              </>
+            )}
           </Group>
         </div>
         <Group gap="sm">

@@ -34,6 +34,8 @@
   },
   "notFound": "Spiel nicht gefunden",
   "numberOfRounds": "Anzahl der Runden",
+  "numberOfTables": "Tische",
+  "numberOfTeams": "Teams",
   "printMenu": {
     "label": "Druckoptionen",
     "rankingsAll": "Alle Runden (Gesamt)",
