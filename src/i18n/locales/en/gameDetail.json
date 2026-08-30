@@ -32,6 +32,33 @@
       "you": "You"
     }
   },
+  "audit": {
+    "action": "Action",
+    "actions": {
+      "delete": "Deleted",
+      "insert": "Created",
+      "update": "Updated"
+    },
+    "actor": "User",
+    "changes": "Changes",
+    "emptyMessage": "Changes to the game, teams, players and scores show up here.",
+    "emptyTitle": "No changes recorded yet",
+    "entities": {
+      "gameOwners": "Admin",
+      "games": "Game",
+      "players": "Player",
+      "scores": "Score",
+      "teams": "Team"
+    },
+    "entity": "Object",
+    "fields": {
+      "name": "Name",
+      "status": "Status"
+    },
+    "round": "Round {{round}}",
+    "table": "Table {{table}}",
+    "time": "Time"
+  },
   "notFound": "Game not found",
   "numberOfRounds": "Number of Rounds",
   "numberOfTables": "Tables",
@@ -99,6 +126,7 @@
   "tableSize": "Table Size",
   "tabs": {
     "administration": "Administration",
+    "audit": "Audit Log",
     "rankings": "Rankings",
     "rounds": "Rounds",
     "teams": "Teams"

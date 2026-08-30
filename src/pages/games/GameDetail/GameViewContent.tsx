@@ -29,6 +29,7 @@ import {
 } from '../../../utils/gameStatusHelpers';
 import { notifyError } from '../../../utils/notifyError';
 import AdministrationPanel from '../panels/AdministrationPanel/AdministrationPanel';
+import AuditPanel from '../panels/AuditPanel/AuditPanel';
 import RankingsPanel from '../panels/RankingsPanel/RankingsPanel';
 import RoundsPanel from '../panels/RoundsPanel/RoundsPanel';
 import TeamsPanel from '../panels/TeamsPanel/TeamsPanel';
@@ -37,7 +38,13 @@ interface GameViewContentProps {
   game: Game;
 }
 
-const GAME_TABS = ['teams', 'rounds', 'rankings', 'administration'] as const;
+const GAME_TABS = [
+  'teams',
+  'rounds',
+  'rankings',
+  'administration',
+  'audit',
+] as const;
 
 type GameTab = (typeof GAME_TABS)[number];
 
@@ -241,6 +248,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           <Tabs.Tab value="administration">
             {t('gameDetail:tabs.administration')}
           </Tabs.Tab>
+          <Tabs.Tab value="audit">{t('gameDetail:tabs.audit')}</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel pt="md" value="teams">
@@ -257,6 +265,10 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
 
         <Tabs.Panel pt="md" value="administration">
           <AdministrationPanel game={game} />
+        </Tabs.Panel>
+
+        <Tabs.Panel pt="md" value="audit">
+          <AuditPanel game={game} />
         </Tabs.Panel>
       </Tabs>
     </Stack>
