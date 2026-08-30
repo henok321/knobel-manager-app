@@ -52,10 +52,7 @@ const formatValue = (
     return '';
   }
 
-  return (
-    referenceLabel(field, value, lookups) ??
-    (typeof value === 'object' ? JSON.stringify(value) : String(value))
-  );
+  return referenceLabel(field, value, lookups) ?? String(value);
 };
 
 const fieldName = (field: string): string => field.replace(/_(id|sub)$/, '');
