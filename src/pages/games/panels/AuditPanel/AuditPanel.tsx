@@ -58,7 +58,6 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
   };
 
   const lookups: AuditLookups = {
-    games: new Map([[game.id, game.name]]),
     teams: new Map(teams.map((team) => [team.id, team.name])),
     players: new Map(
       teams.flatMap((team) =>

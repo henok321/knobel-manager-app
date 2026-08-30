@@ -1,4 +1,5 @@
-const HIDDEN_FIELDS = new Set(['id', 'created_at', 'updated_at']);
+// game_id included: the whole log belongs to one game, so it never carries information.
+const HIDDEN_FIELDS = new Set(['id', 'created_at', 'updated_at', 'game_id']);
 
 const SUBJECT_FIELDS: Record<string, string[]> = {
   scores: ['table_id', 'player_id'],
@@ -6,7 +7,6 @@ const SUBJECT_FIELDS: Record<string, string[]> = {
 };
 
 export interface AuditLookups {
-  games: Map<number, string>;
   teams: Map<number, string>;
   players: Map<number, string>;
   tables: Map<number, string>;
@@ -32,8 +32,6 @@ const referenceLabel = (
   }
 
   switch (field) {
-    case 'game_id':
-      return lookups.games.get(value);
     case 'team_id':
       return lookups.teams.get(value);
     case 'player_id':

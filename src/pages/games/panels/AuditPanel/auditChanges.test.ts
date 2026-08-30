@@ -8,7 +8,6 @@ import {
 } from './auditChanges.ts';
 
 const lookups: AuditLookups = {
-  games: new Map([[1, 'Championship']]),
   teams: new Map([[3, 'Alpha']]),
   players: new Map([[7, 'Anna']]),
   tables: new Map([[12, 'Round 2 · Table 3']]),
@@ -43,10 +42,7 @@ describe('describeChanges', () => {
         null,
         lookups,
       ),
-      [
-        { field: 'game_id', text: 'game: Championship' },
-        { field: 'owner_sub', text: 'owner: owner@example.org' },
-      ],
+      [{ field: 'owner_sub', text: 'owner: owner@example.org' }],
     );
   });
 
