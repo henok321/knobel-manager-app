@@ -6,12 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": [
-      "**",
-      "!**/*.d.ts",
-      "!**/*.min.*",
-      "!src/store/generatedApi.ts"
-    ]
+    "includes": ["**", "!**/*.d.ts", "!**/*.min.*", "!src/store/api.gen.ts"]
   },
   "formatter": {
     "enabled": true,

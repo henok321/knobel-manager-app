@@ -1,4 +1,4 @@
-import { generatedApi } from './generatedApi.ts';
+import { generatedApi } from './api.gen.ts';
 
 const roundTablesTag = (gameId: number, roundNumber: number) =>
   `${gameId}:${roundNumber}`;

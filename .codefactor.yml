@@ -1,2 +1,2 @@
 exclude:
-  - src/store/generatedApi.ts
+  - src/store/api.gen.ts

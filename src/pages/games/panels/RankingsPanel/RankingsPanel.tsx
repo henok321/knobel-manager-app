@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
+import type { Game } from '../../../../store/api.gen.ts';
 import { useGetGameTablesQuery } from '../../../../store/api.ts';
-import type { Game } from '../../../../store/generatedApi.ts';
 import { buildRoundOptions } from '../roundOptions.ts';
 import { PlayerRankingRow, TeamRankingRow } from './RankingRow';
 import {

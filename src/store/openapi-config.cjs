@@ -4,7 +4,7 @@ module.exports = {
     'https://raw.githubusercontent.com/henok321/knobel-manager-service/main/openapi/openapi.yaml',
   apiFile: './baseApi.ts',
   apiImport: 'baseApi',
-  outputFile: './generatedApi.ts',
+  outputFile: './api.gen.ts',
   exportName: 'generatedApi',
   hooks: true,
 };

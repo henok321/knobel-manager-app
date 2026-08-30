@@ -1,7 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
   "ignore": [
-    "src/store/generatedApi.ts",
+    "src/store/api.gen.ts",
     "src/store/openapi-config.cjs",
     "i18next.config.ts"
   ],

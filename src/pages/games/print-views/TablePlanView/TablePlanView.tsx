@@ -5,7 +5,7 @@ import type {
   Game,
   Table as TableType,
   Team,
-} from '../../../../store/generatedApi.ts';
+} from '../../../../store/api.gen.ts';
 import PrintHeader from '../PrintHeader';
 import RoundSection from './RoundSection';
 

@@ -1,4 +1,4 @@
-import type { Team } from '../../../../store/generatedApi.ts';
+import type { Team } from '../../../../store/api.gen.ts';
 
 export interface PlayerName {
   id: number;

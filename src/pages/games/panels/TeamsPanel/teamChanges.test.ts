@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import type { Team } from '../../../../store/generatedApi.ts';
+import type { Team } from '../../../../store/api.gen.ts';
 import { teamChanges } from './teamChanges.ts';
 
 const team: Team = {

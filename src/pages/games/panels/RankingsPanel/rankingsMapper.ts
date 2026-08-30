@@ -1,4 +1,4 @@
-import type { Table, Team } from '../../../../store/generatedApi.ts';
+import type { Table, Team } from '../../../../store/api.gen.ts';
 
 interface PlayerRanking {
   playerID: number;

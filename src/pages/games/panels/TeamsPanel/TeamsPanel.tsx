@@ -10,7 +10,7 @@ import {
   useUpdatePlayerMutation,
   useUpdateTeamMutation,
 } from '../../../../store/api';
-import type { Game } from '../../../../store/generatedApi.ts';
+import type { Game } from '../../../../store/api.gen.ts';
 import { notifyError } from '../../../../utils/notifyError';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';

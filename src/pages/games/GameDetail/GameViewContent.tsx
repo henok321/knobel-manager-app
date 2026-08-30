@@ -13,15 +13,15 @@ import { notifications } from '@mantine/notifications';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PrintMenu from '../../../shared/PrintMenu.tsx';
-import {
-  useGetGameTablesQuery,
-  useUpdateGameMutation,
-} from '../../../store/api.ts';
 import type {
   Game,
   GameStatus,
   GameUpdateRequest,
-} from '../../../store/generatedApi.ts';
+} from '../../../store/api.gen.ts';
+import {
+  useGetGameTablesQuery,
+  useUpdateGameMutation,
+} from '../../../store/api.ts';
 import { assertNever } from '../../../utils/assertNever';
 import {
   statusColor,

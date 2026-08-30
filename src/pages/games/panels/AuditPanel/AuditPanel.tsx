@@ -2,15 +2,15 @@ import { Badge, Stack, Table, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
-import {
-  useGetAuditLogQuery,
-  useGetGameTablesQuery,
-} from '../../../../store/api.ts';
 import type {
   AuditAction,
   Game,
   GameStatus,
-} from '../../../../store/generatedApi.ts';
+} from '../../../../store/api.gen.ts';
+import {
+  useGetAuditLogQuery,
+  useGetGameTablesQuery,
+} from '../../../../store/api.ts';
 import { assertNever } from '../../../../utils/assertNever';
 import { translateGameStatus } from '../../../../utils/gameStatusHelpers';
 import {

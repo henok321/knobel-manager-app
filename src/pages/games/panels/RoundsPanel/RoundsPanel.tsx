@@ -17,7 +17,7 @@ import {
   useSetupGameMutation,
   useUpdateScoresMutation,
 } from '../../../../store/api';
-import type { Game, Table } from '../../../../store/generatedApi.ts';
+import type { Game, Table } from '../../../../store/api.gen.ts';
 import { buildRoundOptions } from '../roundOptions.ts';
 import RoundTableCard from './RoundTableCard';
 import ScoreEntryModal from './ScoreEntryModal';

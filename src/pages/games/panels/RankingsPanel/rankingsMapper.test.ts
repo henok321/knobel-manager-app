@@ -1,11 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import type {
-  Player,
-  Score,
-  Table,
-  Team,
-} from '../../../../store/generatedApi.ts';
+import type { Player, Score, Table, Team } from '../../../../store/api.gen.ts';
 import {
   aggregateScoresFromTables,
   mapPlayersToRankings,

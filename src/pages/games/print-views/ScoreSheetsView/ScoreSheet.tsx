@@ -1,10 +1,7 @@
 import { Paper, rem, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type {
-  Table as TableType,
-  Team,
-} from '../../../../store/generatedApi.ts';
+import type { Table as TableType, Team } from '../../../../store/api.gen.ts';
 
 interface ScoreSheetProps {
   table: TableType & { roundNumber?: number };

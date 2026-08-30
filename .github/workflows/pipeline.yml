@@ -82,9 +82,9 @@ jobs:
 
       - name: Fail if generated client is out of sync with the spec
         run: |
-          if ! git diff --quiet -- src/store/generatedApi.ts; then
-            echo "::error::src/store/generatedApi.ts is out of sync with the backend OpenAPI spec. Run 'pnpm api:gen && pnpm fix' and commit the result."
-            git --no-pager diff -- src/store/generatedApi.ts
+          if ! git diff --quiet -- src/store/api.gen.ts; then
+            echo "::error::src/store/api.gen.ts is out of sync with the backend OpenAPI spec. Run 'pnpm api:gen && pnpm fix' and commit the result."
+            git --no-pager diff -- src/store/api.gen.ts
             exit 1
           fi
 

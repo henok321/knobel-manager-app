@@ -19,7 +19,7 @@ import {
   useAddOwnerMutation,
   useRemoveOwnerMutation,
 } from '../../../../store/api';
-import type { Game, GameOwner } from '../../../../store/generatedApi.ts';
+import type { Game, GameOwner } from '../../../../store/api.gen.ts';
 
 interface AdministrationPanelProps {
   game: Game;
