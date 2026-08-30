@@ -64,12 +64,16 @@ export const describeChanges = (
 ): AuditChange[] => {
   const wholeRow = before === null || after === null;
   const subjectFields = new Set(SUBJECT_FIELDS[entity] ?? []);
+  // Once an owner is removed they are gone from the game, so the sub can only ever render
+  // as a raw Firebase UID.
+  const removedOwner = entity === 'game_owners' && after === null;
 
   return [
     ...new Set([...Object.keys(before ?? {}), ...Object.keys(after ?? {})]),
   ]
     .filter((field) => !HIDDEN_FIELDS.has(field))
     .filter((field) => !(wholeRow && subjectFields.has(field)))
+    .filter((field) => !(removedOwner && field === 'owner_sub'))
     .filter((field) => (before?.[field] ?? null) !== (after?.[field] ?? null))
     .sort()
     .map((field) => ({

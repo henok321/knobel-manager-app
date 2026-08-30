@@ -52,8 +52,12 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
     gameId: game.id,
   });
 
-  // A 404 means the game is gone and the caller never owned it — nothing to show, same as no events.
-  const isNotFound = !!error && 'status' in error && error.status === 404;
+  // 403 (not an owner) and 404 (game gone, never owned) both mean the caller cannot see this
+  // trail — nothing to show, which is not the same as something going wrong.
+  const isInaccessible =
+    !!error &&
+    'status' in error &&
+    (error.status === 403 || error.status === 404);
 
   const teams = game.teams ?? [];
   const roundNumbers = new Map(
@@ -169,7 +173,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
     );
   }
 
-  if (isError && !isNotFound) {
+  if (isError && !isInaccessible) {
     return (
       <Text c="red" ta="center">
         {t('common:actions.errorOccurred')}
@@ -177,7 +181,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
     );
   }
 
-  const events = isNotFound ? [] : (data?.events ?? []);
+  const events = isInaccessible ? [] : (data?.events ?? []);
 
   if (events.length === 0) {
     return (

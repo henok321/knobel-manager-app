@@ -57,15 +57,27 @@ describe('describeChanges', () => {
     );
   });
 
-  it('resolves a removed admin to the email of the sub', () => {
+  it('names the admin that was added', () => {
     assert.deepEqual(
       describeChanges(
         'game_owners',
+        null,
         { game_id: 1, owner_sub: 'sub-1' },
+        lookups,
+      ),
+      [{ field: 'owner_sub', from: '', to: 'owner@example.org' }],
+    );
+  });
+
+  it('drops the sub of a removed admin, which no longer resolves', () => {
+    assert.deepEqual(
+      describeChanges(
+        'game_owners',
+        { game_id: 1, owner_sub: 'sub-gone' },
         null,
         lookups,
       ),
-      [{ field: 'owner_sub', from: 'owner@example.org', to: '' }],
+      [],
     );
   });
 
