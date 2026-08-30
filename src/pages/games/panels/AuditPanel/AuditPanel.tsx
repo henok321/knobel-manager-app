@@ -27,10 +27,13 @@ const actionColor = (action: AuditAction) => {
 const AuditPanel = ({ game }: AuditPanelProps) => {
   const { t, i18n } = useTranslation();
   // No cache tag: every domain mutation would have to invalidate it, so refetch on mount instead.
-  const { data, isLoading, isError } = useGetAuditLogQuery(
+  const { data, isLoading, isError, error } = useGetAuditLogQuery(
     { gameId: game.id },
     { refetchOnMountOrArgChange: true },
   );
+
+  // A 404 means the game is gone or was never the caller's — nothing to show, same as no events.
+  const isNotFound = !!error && 'status' in error && error.status === 404;
 
   const actionLabel = (action: AuditAction) => {
     switch (action) {
@@ -70,7 +73,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
     );
   }
 
-  if (isError) {
+  if (isError && !isNotFound) {
     return (
       <Text c="red" ta="center">
         {t('common:actions.errorOccurred')}
