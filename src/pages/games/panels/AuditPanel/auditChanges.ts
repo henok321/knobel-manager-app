@@ -1,4 +1,3 @@
-// game_id included: the whole log belongs to one game, so it never carries information.
 const HIDDEN_FIELDS = new Set(['id', 'created_at', 'updated_at', 'game_id']);
 
 const SUBJECT_FIELDS: Record<string, string[]> = {
@@ -64,8 +63,6 @@ export const describeChanges = (
 ): AuditChange[] => {
   const wholeRow = before === null || after === null;
   const subjectFields = new Set(SUBJECT_FIELDS[entity] ?? []);
-  // Once an owner is removed they are gone from the game, so the sub can only ever render
-  // as a raw Firebase UID.
   const removedOwner = entity === 'game_owners' && after === null;
 
   return [
@@ -83,8 +80,6 @@ export const describeChanges = (
     }));
 };
 
-// An updated score only diffs the score itself, so the row it belongs to has to be named
-// separately — the same holds for a renamed player and its team.
 export const describeSubject = (
   entity: string,
   row: Record<string, unknown> | null,
