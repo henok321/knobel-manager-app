@@ -115,6 +115,9 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.scoresRequest,
       }),
     }),
+    getAuditLog: build.query<GetAuditLogApiResponse, GetAuditLogApiArg>({
+      query: (queryArg) => ({ url: `/games/${queryArg.gameId}/audit` }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -222,6 +225,11 @@ export type UpdateScoresApiArg = {
   roundNumber: number;
   tableNumber: number;
   scoresRequest: ScoresRequest;
+};
+export type GetAuditLogApiResponse =
+  /** status 200 Audit events found */ AuditResponse;
+export type GetAuditLogApiArg = {
+  gameId: number;
 };
 export type HealthCheckResponse = {
   status: string;
@@ -334,6 +342,30 @@ export type ScoresRequest = {
     score: number;
   }[];
 };
+export type AuditAction = "insert" | "update" | "delete";
+export type AuditEvent = {
+  id: number;
+  /** Name of the changed database table. */
+  entity: string;
+  entityID: string;
+  action: AuditAction;
+  /** Firebase UID of the actor, or "system" for changes made outside a request. */
+  actorSub: string;
+  /** Actor email as it was when the change was made, not resolved live. */
+  actorEmail: string;
+  createdAt: string;
+  /** The row before the change; null on insert. */
+  old: {
+    [key: string]: any;
+  } | null;
+  /** The row after the change; null on delete. */
+  new: {
+    [key: string]: any;
+  } | null;
+};
+export type AuditResponse = {
+  events: AuditEvent[];
+};
 export const {
   useLivenessCheckQuery,
   useReadinessCheckQuery,
@@ -355,4 +387,5 @@ export const {
   useGetTablesQuery,
   useGetTableQuery,
   useUpdateScoresMutation,
+  useGetAuditLogQuery,
 } = injectedRtkApi;

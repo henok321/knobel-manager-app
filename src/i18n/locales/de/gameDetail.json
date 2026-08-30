@@ -32,6 +32,27 @@
       "you": "Du"
     }
   },
+  "audit": {
+    "action": "Aktion",
+    "actions": {
+      "delete": "Gelöscht",
+      "insert": "Erstellt",
+      "update": "Geändert"
+    },
+    "actor": "Benutzer",
+    "changes": "Änderungen",
+    "emptyMessage": "Änderungen am Spiel, an Teams, Spielern und Punkten erscheinen hier.",
+    "emptyTitle": "Noch keine Änderungen aufgezeichnet",
+    "entities": {
+      "gameOwners": "Admin",
+      "games": "Spiel",
+      "players": "Spieler",
+      "scores": "Punkte",
+      "teams": "Team"
+    },
+    "entity": "Objekt",
+    "time": "Zeitpunkt"
+  },
   "notFound": "Spiel nicht gefunden",
   "numberOfRounds": "Anzahl der Runden",
   "numberOfTables": "Tische",
@@ -99,6 +120,7 @@
   "tableSize": "Tischgröße",
   "tabs": {
     "administration": "Administration",
+    "audit": "Änderungsprotokoll",
     "rankings": "Rangliste",
     "rounds": "Runden",
     "teams": "Teams"

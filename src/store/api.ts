@@ -106,4 +106,5 @@ export const {
   useUpdateScoresMutation,
   useAddOwnerMutation,
   useRemoveOwnerMutation,
+  useGetAuditLogQuery,
 } = api;
