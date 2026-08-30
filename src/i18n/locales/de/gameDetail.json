@@ -51,6 +51,8 @@
       "teams": "Team"
     },
     "entity": "Objekt",
+    "round": "Runde {{round}}",
+    "table": "Tisch {{table}}",
     "time": "Zeitpunkt"
   },
   "notFound": "Spiel nicht gefunden",

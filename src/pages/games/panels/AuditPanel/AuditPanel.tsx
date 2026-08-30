@@ -2,10 +2,17 @@ import { Badge, Stack, Table, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
-import { useGetAuditLogQuery } from '../../../../store/api.ts';
+import {
+  useGetAuditLogQuery,
+  useGetGameTablesQuery,
+} from '../../../../store/api.ts';
 import type { AuditAction, Game } from '../../../../store/generatedApi.ts';
 import { assertNever } from '../../../../utils/assertNever';
-import { describeChanges } from './auditChanges.ts';
+import {
+  type AuditLookups,
+  describeChanges,
+  describeSubject,
+} from './auditChanges.ts';
 
 interface AuditPanelProps {
   game: Game;
@@ -32,8 +39,45 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
     { refetchOnMountOrArgChange: true },
   );
 
+  const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
+
   // A 404 means the game is gone or was never the caller's — nothing to show, same as no events.
   const isNotFound = !!error && 'status' in error && error.status === 404;
+
+  const teams = game.teams ?? [];
+  const roundNumbers = new Map(
+    (game.rounds ?? []).map((round) => [round.id, round.roundNumber]),
+  );
+
+  const tableLabel = (tableNumber: number, roundID: number) => {
+    const roundNumber = roundNumbers.get(roundID);
+    const table = t('gameDetail:audit.table', { table: tableNumber });
+    return roundNumber === undefined
+      ? table
+      : `${t('gameDetail:audit.round', { round: roundNumber })} · ${table}`;
+  };
+
+  const lookups: AuditLookups = {
+    games: new Map([[game.id, game.name]]),
+    teams: new Map(teams.map((team) => [team.id, team.name])),
+    players: new Map(
+      teams.flatMap((team) =>
+        (team.players ?? []).map((player) => [player.id, player.name] as const),
+      ),
+    ),
+    tables: new Map(
+      (tablesData?.tables ?? []).map((table) => [
+        table.id,
+        tableLabel(table.tableNumber, table.roundID),
+      ]),
+    ),
+    owners: new Map(
+      game.owners.map((owner) => [
+        owner.ownerSub,
+        owner.email ?? owner.ownerSub,
+      ]),
+    ),
+  };
 
   const actionLabel = (action: AuditAction) => {
     switch (action) {
@@ -111,7 +155,18 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
                 {new Date(event.createdAt).toLocaleString(i18n.language)}
               </Table.Td>
               <Table.Td>{event.actorEmail || event.actorSub}</Table.Td>
-              <Table.Td>{entityLabel(event.entity)}</Table.Td>
+              <Table.Td>
+                {entityLabel(event.entity)}
+                {describeSubject(
+                  event.entity,
+                  event.new ?? event.old,
+                  lookups,
+                ).map((label) => (
+                  <Text key={label} c="dimmed" size="xs">
+                    {label}
+                  </Text>
+                ))}
+              </Table.Td>
               <Table.Td>
                 <Badge
                   color={actionColor(event.action)}
@@ -123,7 +178,12 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
               </Table.Td>
               <Table.Td>
                 <Stack gap={2}>
-                  {describeChanges(event.old, event.new).map((change) => (
+                  {describeChanges(
+                    event.entity,
+                    event.old,
+                    event.new,
+                    lookups,
+                  ).map((change) => (
                     <Text key={change.field} size="xs">
                       {change.text}
                     </Text>

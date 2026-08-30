@@ -51,6 +51,8 @@
       "teams": "Team"
     },
     "entity": "Object",
+    "round": "Round {{round}}",
+    "table": "Table {{table}}",
     "time": "Time"
   },
   "notFound": "Game not found",
