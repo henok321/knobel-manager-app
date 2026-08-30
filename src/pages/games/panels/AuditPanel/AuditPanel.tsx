@@ -204,7 +204,9 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
           {events.map((event) => (
             <Table.Tr key={event.id}>
               <Table.Td style={{ whiteSpace: 'nowrap' }}>
-                {new Date(event.createdAt).toLocaleString(i18n.language)}
+                {new Date(event.createdAt).toLocaleString(
+                  i18n.resolvedLanguage,
+                )}
               </Table.Td>
               <Table.Td>{event.actorEmail || event.actorSub}</Table.Td>
               <Table.Td>
