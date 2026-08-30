@@ -51,6 +51,10 @@
       "teams": "Team"
     },
     "entity": "Object",
+    "fields": {
+      "name": "Name",
+      "status": "Status"
+    },
     "round": "Round {{round}}",
     "table": "Table {{table}}",
     "time": "Time"

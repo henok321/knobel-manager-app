@@ -6,9 +6,15 @@ import {
   useGetAuditLogQuery,
   useGetGameTablesQuery,
 } from '../../../../store/api.ts';
-import type { AuditAction, Game } from '../../../../store/generatedApi.ts';
+import type {
+  AuditAction,
+  Game,
+  GameStatus,
+} from '../../../../store/generatedApi.ts';
 import { assertNever } from '../../../../utils/assertNever';
+import { translateGameStatus } from '../../../../utils/gameStatusHelpers';
 import {
+  type AuditChange,
   type AuditLookups,
   describeChanges,
   describeSubject,
@@ -17,6 +23,11 @@ import {
 interface AuditPanelProps {
   game: Game;
 }
+
+const GAME_STATUSES: readonly string[] = ['setup', 'in_progress', 'completed'];
+
+const isGameStatus = (value: string): value is GameStatus =>
+  GAME_STATUSES.includes(value);
 
 const actionColor = (action: AuditAction) => {
   switch (action) {
@@ -37,9 +48,11 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
     gameId: game.id,
   });
 
-  const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
+  const { data: tablesData, isLoading: tablesLoading } = useGetGameTablesQuery({
+    gameId: game.id,
+  });
 
-  // A 404 means the game is gone or was never the caller's — nothing to show, same as no events.
+  // A 404 means the game is gone and the caller never owned it — nothing to show, same as no events.
   const isNotFound = !!error && 'status' in error && error.status === 404;
 
   const teams = game.teams ?? [];
@@ -89,6 +102,48 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
     }
   };
 
+  const fieldLabel = (field: string) => {
+    switch (field) {
+      case 'game_name':
+      case 'team_name':
+      case 'player_name':
+        return t('gameDetail:audit.fields.name');
+      case 'status':
+        return t('gameDetail:audit.fields.status');
+      case 'team_size':
+        return t('gameDetail:teamSize');
+      case 'table_size':
+        return t('gameDetail:tableSize');
+      case 'number_of_rounds':
+        return t('gameDetail:numberOfRounds');
+      case 'score':
+        return t('gameDetail:rounds.score');
+      case 'team_id':
+        return t('gameDetail:audit.entities.teams');
+      case 'player_id':
+        return t('gameDetail:audit.entities.players');
+      case 'table_id':
+        return t('gameDetail:rounds.table');
+      case 'owner_sub':
+        return t('gameDetail:audit.entities.gameOwners');
+      default:
+        return field;
+    }
+  };
+
+  const valueLabel = (field: string, value: string) =>
+    field === 'status' && isGameStatus(value)
+      ? translateGameStatus(t, value)
+      : value;
+
+  const changeText = ({ field, from, to }: AuditChange) => {
+    const before = valueLabel(field, from);
+    const after = valueLabel(field, to);
+    return before && after
+      ? `${fieldLabel(field)}: ${before} → ${after}`
+      : `${fieldLabel(field)}: ${before || after}`;
+  };
+
   const entityLabel = (entity: string) => {
     switch (entity) {
       case 'games':
@@ -106,7 +161,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || tablesLoading) {
     return (
       <Text c="dimmed" ta="center">
         {t('common:actions.loading')}
@@ -122,7 +177,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
     );
   }
 
-  const events = data?.events ?? [];
+  const events = isNotFound ? [] : (data?.events ?? []);
 
   if (events.length === 0) {
     return (
@@ -182,7 +237,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
                     lookups,
                   ).map((change) => (
                     <Text key={change.field} size="xs">
-                      {change.text}
+                      {changeText(change)}
                     </Text>
                   ))}
                 </Stack>

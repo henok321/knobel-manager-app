@@ -8,33 +8,56 @@ import {
 } from './auditChanges.ts';
 
 const lookups: AuditLookups = {
-  teams: new Map([[3, 'Alpha']]),
+  teams: new Map([
+    [3, 'Team A'],
+    [4, 'Team A'],
+  ]),
   players: new Map([[7, 'Anna']]),
   tables: new Map([[12, 'Round 2 · Table 3']]),
   owners: new Map([['sub-1', 'owner@example.org']]),
 };
 
 describe('describeChanges', () => {
-  it('lists the values of an inserted row', () => {
-    assert.deepEqual(
-      describeChanges('players', null, { id: 7, player_name: 'Anna' }, lookups),
-      [{ field: 'player_name', text: 'player_name: Anna' }],
-    );
-  });
-
-  it('lists only fields that actually changed', () => {
+  it('lists every column of a created game', () => {
     assert.deepEqual(
       describeChanges(
-        'scores',
-        { player_name: 'Anna', score: 12, updated_at: 'then' },
-        { player_name: 'Anna', score: 15, updated_at: 'now' },
+        'games',
+        null,
+        {
+          id: 1,
+          game_name: 'Sommerturnier',
+          team_size: 4,
+          table_size: 4,
+          number_of_rounds: 2,
+          status: 'setup',
+          created_at: 'now',
+          updated_at: 'now',
+        },
         lookups,
       ),
-      [{ field: 'score', text: 'score: 12 → 15' }],
+      [
+        { field: 'game_name', from: '', to: 'Sommerturnier' },
+        { field: 'number_of_rounds', from: '', to: '2' },
+        { field: 'status', from: '', to: 'setup' },
+        { field: 'table_size', from: '', to: '4' },
+        { field: 'team_size', from: '', to: '4' },
+      ],
     );
   });
 
-  it('lists the values of a deleted row', () => {
+  it('lists only the column that changed', () => {
+    assert.deepEqual(
+      describeChanges(
+        'games',
+        { status: 'setup', game_name: 'Sommer', updated_at: 'then' },
+        { status: 'in_progress', game_name: 'Sommer', updated_at: 'now' },
+        lookups,
+      ),
+      [{ field: 'status', from: 'setup', to: 'in_progress' }],
+    );
+  });
+
+  it('resolves a removed admin to the email of the sub', () => {
     assert.deepEqual(
       describeChanges(
         'game_owners',
@@ -42,39 +65,31 @@ describe('describeChanges', () => {
         null,
         lookups,
       ),
-      [{ field: 'owner_sub', text: 'owner: owner@example.org' }],
+      [{ field: 'owner_sub', from: 'owner@example.org', to: '' }],
     );
   });
 
-  it('falls back to the raw value when a reference is unknown', () => {
-    assert.deepEqual(describeChanges('teams', null, { team_id: 99 }, lookups), [
-      { field: 'team_id', text: 'team: 99' },
-    ]);
+  it('keeps a move between two teams that share a name', () => {
+    assert.deepEqual(
+      describeChanges(
+        'players',
+        { id: 7, player_name: 'Anna', team_id: 3 },
+        { id: 7, player_name: 'Anna', team_id: 4 },
+        lookups,
+      ),
+      [{ field: 'team_id', from: 'Team A', to: 'Team A' }],
+    );
   });
 
-  it('drops parent references the subject line already names', () => {
+  it('leaves the parent references to the subject line on insert', () => {
     assert.deepEqual(
       describeChanges(
         'scores',
         null,
-        { player_id: 7, table_id: 12, score: 12 },
+        { id: 5, player_id: 7, table_id: 12, score: 12 },
         lookups,
       ),
-      [{ field: 'score', text: 'score: 12' }],
-    );
-  });
-
-  it('keeps a parent reference that actually changed', () => {
-    assert.deepEqual(
-      describeChanges('players', { team_id: 3 }, { team_id: 99 }, lookups),
-      [{ field: 'team_id', text: 'team: Alpha → 99' }],
-    );
-  });
-
-  it('treats null and missing as empty', () => {
-    assert.deepEqual(
-      describeChanges('teams', { email: null }, { email: undefined }, lookups),
-      [],
+      [{ field: 'score', from: '', to: '12' }],
     );
   });
 });
@@ -91,14 +106,27 @@ describe('describeSubject', () => {
     );
   });
 
+  it('falls back to the raw id when the table is gone', () => {
+    assert.deepEqual(
+      describeSubject(
+        'scores',
+        { player_id: 7, table_id: 99, score: 15 },
+        lookups,
+      ),
+      ['99', 'Anna'],
+    );
+  });
+
   it('names the team behind a player', () => {
     assert.deepEqual(describeSubject('players', { team_id: 3 }, lookups), [
-      'Alpha',
+      'Team A',
     ]);
   });
 
-  it('skips unknown references and unrelated entities', () => {
-    assert.deepEqual(describeSubject('scores', { table_id: 99 }, lookups), []);
-    assert.deepEqual(describeSubject('games', { game_name: 'x' }, lookups), []);
+  it('has nothing to add for a game', () => {
+    assert.deepEqual(
+      describeSubject('games', { game_name: 'Sommerturnier' }, lookups),
+      [],
+    );
   });
 });

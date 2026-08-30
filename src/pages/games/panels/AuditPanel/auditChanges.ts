@@ -15,7 +15,8 @@ export interface AuditLookups {
 
 export interface AuditChange {
   field: string;
-  text: string;
+  from: string;
+  to: string;
 }
 
 const referenceLabel = (
@@ -55,38 +56,27 @@ const formatValue = (
   return referenceLabel(field, value, lookups) ?? String(value);
 };
 
-const fieldName = (field: string): string => field.replace(/_(id|sub)$/, '');
-
 export const describeChanges = (
   entity: string,
   before: Record<string, unknown> | null,
   after: Record<string, unknown> | null,
   lookups: AuditLookups,
 ): AuditChange[] => {
+  const wholeRow = before === null || after === null;
   const subjectFields = new Set(SUBJECT_FIELDS[entity] ?? []);
 
-  return (
-    [...new Set([...Object.keys(before ?? {}), ...Object.keys(after ?? {})])]
-      .filter((field) => !HIDDEN_FIELDS.has(field))
-      .sort()
-      .map((field) => ({
-        field,
-        from: formatValue(field, before?.[field], lookups),
-        to: formatValue(field, after?.[field], lookups),
-      }))
-      .filter(({ from, to }) => from !== to)
-      // On insert and delete the subject line already names the parents; a genuine move keeps them.
-      .filter(
-        ({ field, from, to }) => !(subjectFields.has(field) && (!from || !to)),
-      )
-      .map(({ field, from, to }) => ({
-        field,
-        text:
-          from && to
-            ? `${fieldName(field)}: ${from} → ${to}`
-            : `${fieldName(field)}: ${from || to}`,
-      }))
-  );
+  return [
+    ...new Set([...Object.keys(before ?? {}), ...Object.keys(after ?? {})]),
+  ]
+    .filter((field) => !HIDDEN_FIELDS.has(field))
+    .filter((field) => !(wholeRow && subjectFields.has(field)))
+    .filter((field) => (before?.[field] ?? null) !== (after?.[field] ?? null))
+    .sort()
+    .map((field) => ({
+      field,
+      from: formatValue(field, before?.[field], lookups),
+      to: formatValue(field, after?.[field], lookups),
+    }));
 };
 
 // An updated score only diffs the score itself, so the row it belongs to has to be named
@@ -97,5 +87,5 @@ export const describeSubject = (
   lookups: AuditLookups,
 ): string[] =>
   (SUBJECT_FIELDS[entity] ?? [])
-    .map((field) => referenceLabel(field, row?.[field], lookups))
-    .filter((label) => label !== undefined);
+    .map((field) => formatValue(field, row?.[field], lookups))
+    .filter((label) => label !== '');
