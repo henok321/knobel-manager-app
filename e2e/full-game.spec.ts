@@ -399,8 +399,9 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
 
     for (let i = 0; i < totalTables; i++) {
       await page.getByRole('button', { name: 'Enter Scores' }).first().click();
-      const { entries } = await readScoreModal(page);
+      const { entries, title } = await readScoreModal(page);
       expect(entries).toHaveLength(TABLE_SIZE);
+      expect(title).toContain('Enter Scores');
       const d = dialog(page);
       for (const [index, entry] of entries.entries()) {
         counter += 1;
@@ -461,6 +462,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
       .getByRole('button')
       .click();
     const before = await readScoreModal(page);
+    expect(before.title).toContain('Edit Scores');
 
     for (const [index, entry] of before.entries.entries()) {
       expect(Number(before.values[index]), `prefill for ${entry.player}`).toBe(

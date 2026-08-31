@@ -85,6 +85,7 @@
   "rounds": {
     "confirmResetMatchmaking": "This discards the table assignment of every round, including any scores entered at those tables. The teams stay untouched and you can run matchmaking again afterwards.",
     "editScores": "Edit Scores",
+    "editScoresTitle": "Edit Scores - Table {{table}}",
     "enterScores": "Enter Scores",
     "enterScoresTitle": "Enter Scores - Table {{table}}",
     "error": "Failed to setup matchmaking. Please try again.",

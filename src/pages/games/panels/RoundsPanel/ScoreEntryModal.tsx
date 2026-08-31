@@ -35,6 +35,11 @@ const ScoreEntryModal = ({
     return null;
   }
 
+  const hasScores = (table.scores?.length ?? 0) > 0;
+  const title = hasScores
+    ? t('gameDetail:rounds.editScoresTitle', { table: table.tableNumber })
+    : t('gameDetail:rounds.enterScoresTitle', { table: table.tableNumber });
+
   const handleSubmit = async () => {
     const scoresArray = players.map((player) => ({
       playerID: player.id,
@@ -62,9 +67,7 @@ const ScoreEntryModal = ({
       size="md"
       title={
         <Text fw={600} size="xl">
-          {t('gameDetail:rounds.enterScoresTitle', {
-            table: table.tableNumber,
-          })}
+          {title}
         </Text>
       }
       onClose={onClose}

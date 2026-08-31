@@ -85,6 +85,7 @@
   "rounds": {
     "confirmResetMatchmaking": "Damit wird die Tischverteilung aller Runden verworfen, inklusive der an diesen Tischen eingetragenen Punkte. Die Teams bleiben unverändert und die Spielpaarungen können danach neu berechnet werden.",
     "editScores": "Punkte bearbeiten",
+    "editScoresTitle": "Punkte bearbeiten - Tisch {{table}}",
     "enterScores": "Punkte eintragen",
     "enterScoresTitle": "Punkte eintragen - Tisch {{table}}",
     "error": "Fehler beim Einrichten der Spielpaarungen. Bitte versuche es erneut.",
