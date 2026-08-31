@@ -5,6 +5,13 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
  *
  *   E2E_EMAIL=... E2E_PASSWORD=... pnpm test:e2e
  *
+ * Structure: the first test is the mutating spine — create, rename, matchmaking
+ * conflict, start, every score, score edit — because each of those steps needs
+ * the state the previous one left behind. It publishes the finished tournament,
+ * and the checks that only *read* it (rankings, audit log, print) are separate
+ * tests so one broken view does not hide the others. They skip, rather than
+ * cascade, if the spine never finished building.
+ *
  * Determinism notes, because both matchmaking and the backend's row order are
  * outside our control:
  *  - Matchmaking assigns players to tables randomly, so nothing is asserted
@@ -87,6 +94,23 @@ const teamTotals = (record: ScoreRecord, rounds: number[]) => {
   return totals;
 };
 
+/** What the spine builds and the read-only tests consume. */
+interface Tournament {
+  gameId: string;
+  gameName: string;
+  record: ScoreRecord;
+  totalTables: number;
+}
+
+let built: Tournament | null = null;
+
+const tournament = (): Tournament => {
+  if (!built) {
+    throw new Error('the lifecycle test did not publish a tournament');
+  }
+  return built;
+};
+
 const dialog = (page: Page) => page.getByRole('dialog');
 
 const cardByHeading = (panel: Locator, page: Page, heading: string) =>
@@ -114,6 +138,19 @@ const openTab = async (page: Page, name: string) => {
   const panel = panelFor(page, name);
   await expect(panel).toBeVisible();
   return panel;
+};
+
+/** Every context starts unauthenticated, so this also covers the protected-route redirect. */
+const login = async (page: Page) => {
+  await page.goto('/games');
+  await expect(page).toHaveURL(/\/login$/);
+  await page.getByRole('textbox', { name: 'Email' }).fill(EMAIL as string);
+  await page
+    .getByRole('textbox', { name: 'Password' })
+    .fill(PASSWORD as string);
+  await page.getByRole('button', { name: 'Login' }).click();
+  await expect(page).toHaveURL(/\/games$/);
+  await expect(page.getByRole('button', { name: 'Create game' })).toBeVisible();
 };
 
 /** Reads the score modal: player names, the team shown for each, and prefilled values. */
@@ -157,12 +194,59 @@ const createTeam = async (page: Page, teamName: string) => {
   return names;
 };
 
+/**
+ * Player name -> score, for the round currently shown in the Rounds panel.
+ * Read as a map because the API's row order is not stable.
+ */
+const scoreRowsFor = async (page: Page, expectedTables: number) => {
+  const panel = panelFor(page, 'Rounds');
+  // Saving scores invalidates the round query; wait for the table cards to come
+  // back before reading them in one shot.
+  await expect(panel.getByRole('button', { name: 'Edit Scores' })).toHaveCount(
+    expectedTables,
+  );
+
+  const rows = await panel
+    .locator('tbody tr')
+    .evaluateAll((trs) =>
+      trs.map((tr) =>
+        [...tr.querySelectorAll('td')].map((cell) =>
+          (cell as HTMLElement).innerText.trim(),
+        ),
+      ),
+    );
+  const scores = new Map<string, number>();
+  for (const row of rows) {
+    if (row.length === 3 && row[2] !== '-') {
+      scores.set(row[0] as string, Number(row[2]));
+    }
+  }
+  return scores;
+};
+
+/** Rank / name / score rows, split by column count: 3 = team, 4 = player. */
+const readRankingRows = async (panel: Locator) => {
+  const rows = await panel
+    .locator('tbody tr')
+    .evaluateAll((trs) =>
+      trs.map((tr) =>
+        [...tr.querySelectorAll('td,th')].map((cell) =>
+          (cell as HTMLElement).innerText.trim(),
+        ),
+      ),
+    );
+  return {
+    teamRows: rows.filter((r) => r.length === 3),
+    playerRows: rows.filter((r) => r.length === 4),
+  };
+};
+
 test.skip(
   !EMAIL || !PASSWORD,
   'Set E2E_EMAIL and E2E_PASSWORD to run the tournament playbook.',
 );
 
-test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, print, finalize', async ({
+test('tournament lifecycle: create, rename, matchmaking conflict, every score, score edit', async ({
   page,
 }) => {
   const consoleErrors: string[] = [];
@@ -176,21 +260,8 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
   const record = newRecord();
   let gameId = '';
 
-  await test.step('protected routes redirect to login', async () => {
-    await page.goto('/games');
-    await expect(page).toHaveURL(/\/login$/);
-  });
-
-  await test.step('login', async () => {
-    await page.getByRole('textbox', { name: 'Email' }).fill(EMAIL as string);
-    await page
-      .getByRole('textbox', { name: 'Password' })
-      .fill(PASSWORD as string);
-    await page.getByRole('button', { name: 'Login' }).click();
-    await expect(page).toHaveURL(/\/games$/);
-    await expect(
-      page.getByRole('button', { name: 'Create game' }),
-    ).toBeVisible();
+  await test.step('login, and /games redirects there when signed out', async () => {
+    await login(page);
   });
 
   await test.step('create the game', async () => {
@@ -377,9 +448,6 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
       ).toHaveCount(totalTables - i - 1);
     }
 
-    await expect(
-      page.getByRole('button', { name: 'Enter Scores' }),
-    ).toHaveCount(0);
     await expect(page.getByRole('button', { name: 'Edit Scores' })).toHaveCount(
       totalTables,
     );
@@ -469,7 +537,33 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
     }
   });
 
-  await test.step('rankings match the scores that were entered', async () => {
+  await test.step('no unexpected console errors', async () => {
+    // The 409 from the deliberate add-team-after-matchmaking conflict is expected.
+    const unexpected = consoleErrors.filter((line) => !line.includes('409'));
+    expect(unexpected, unexpected.join('\n')).toHaveLength(0);
+  });
+
+  built = { gameId, gameName, record, totalTables };
+});
+
+/**
+ * These only read the finished tournament, so they are separate tests: a broken
+ * print view must not hide a broken ranking. Playwright runs them in declaration
+ * order (workers: 1, fullyParallel: false) and they are deliberately NOT serial,
+ * so each reports its own verdict.
+ */
+test.describe('a finished tournament', () => {
+  test.beforeEach(async ({ page }) => {
+    test.skip(
+      !built,
+      'the lifecycle test did not finish building a tournament',
+    );
+    await login(page);
+    await page.goto(`/games/${tournament().gameId}`);
+  });
+
+  test('rankings match the scores that were entered', async ({ page }) => {
+    const { record } = tournament();
     const panel = await openTab(page, 'Rankings');
     const combo = panel.getByRole('combobox');
 
@@ -491,17 +585,7 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
         expectedTeams.size + expectedPlayers.size,
       );
 
-      const rows = await panel
-        .locator('tbody tr')
-        .evaluateAll((trs) =>
-          trs.map((tr) =>
-            [...tr.querySelectorAll('td,th')].map((cell) =>
-              (cell as HTMLElement).innerText.trim(),
-            ),
-          ),
-        );
-      const teamRows = rows.filter((r) => r.length === 3);
-      const playerRows = rows.filter((r) => r.length === 4);
+      const { teamRows, playerRows } = await readRankingRows(panel);
 
       expect(teamRows, `${view.label}: one row per team`).toHaveLength(
         TEAM_NAMES.length + 1,
@@ -541,11 +625,11 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
     }
   });
 
-  await test.step('the audit log records the whole history', async () => {
+  test('the audit log records the whole history', async ({ page }) => {
+    const { gameName } = tournament();
     const panel = await openTab(page, 'Audit Log');
     await expect(panel).toContainText(gameName);
     const text = await panel.innerText();
-    expect(text).toContain(gameName);
     expect(text).toContain(EMAIL as string);
     for (const marker of [
       'CREATED',
@@ -563,7 +647,8 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
     expect(text).toContain('Score: ');
   });
 
-  await test.step('every print view renders', async () => {
+  test('every print view renders', async ({ page }) => {
+    const { gameId, gameName } = tournament();
     const printViews = [
       'tablePlan',
       'scoreSheets',
@@ -593,7 +678,8 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
     }
   });
 
-  await test.step('the table plan prints two cards per row', async () => {
+  test('the table plan prints two cards per row', async ({ page }) => {
+    const { gameId, totalTables } = tournament();
     await page.goto(`/games/${gameId}/print?type=tablePlan`);
     await expect(page.locator('.table-card')).toHaveCount(totalTables * ROUNDS);
     await expect(page.locator('.print-page-break')).toHaveCount(ROUNDS);
@@ -610,8 +696,11 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
     await page.emulateMedia({ media: null });
   });
 
-  await test.step('finalize locks the tournament', async () => {
-    await page.goto(`/games/${gameId}`);
+  // Mutating, and it locks the tournament — so it runs last.
+  test('finalizing locks the tournament without changing a result', async ({
+    page,
+  }) => {
+    const { record } = tournament();
     await page.getByRole('button', { name: 'Finalize Game' }).click();
     await dialog(page).getByRole('button', { name: 'Finalize Game' }).click();
     await expect(dialog(page)).toBeHidden();
@@ -633,65 +722,17 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
       0,
     );
 
-    // Finalizing must not alter any result.
     const panel = await openTab(page, 'Rankings');
     await selectOption(page, panel.getByRole('combobox'), 'Total (All Rounds)');
     const expectedTeams = teamTotals(record, [1, 2]);
     await expect(panel.locator('tbody tr')).toHaveCount(
       expectedTeams.size + playerTotals(record, [1, 2]).size,
     );
-    const teamRows = await panel
-      .locator('tbody tr')
-      .evaluateAll((trs) =>
-        trs
-          .map((tr) =>
-            [...tr.querySelectorAll('td,th')].map((cell) =>
-              (cell as HTMLElement).innerText.trim(),
-            ),
-          )
-          .filter((r) => r.length === 3),
-      );
+    const { teamRows } = await readRankingRows(panel);
     for (const [, team, score] of teamRows as [string, string, string][]) {
       expect(Number(score), `finalized total for ${team}`).toBe(
         expectedTeams.get(team),
       );
     }
   });
-
-  await test.step('no unexpected console errors', async () => {
-    // The 409 from the deliberate add-team-after-matchmaking conflict is expected.
-    const unexpected = consoleErrors.filter((line) => !line.includes('409'));
-    expect(unexpected, unexpected.join('\n')).toHaveLength(0);
-  });
 });
-
-/**
- * Player name -> score, for the round currently shown in the Rounds panel.
- * Read as a map because the API's row order is not stable.
- */
-async function scoreRowsFor(page: Page, expectedTables: number) {
-  const panel = panelFor(page, 'Rounds');
-  // Saving scores invalidates the round query, and RoundsPanel gates on
-  // isFetching, so the whole table list is replaced by a loading line until the
-  // refetch lands. Wait for the cards to come back before reading them.
-  await expect(panel.getByRole('button', { name: 'Edit Scores' })).toHaveCount(
-    expectedTables,
-  );
-
-  const rows = await panel
-    .locator('tbody tr')
-    .evaluateAll((trs) =>
-      trs.map((tr) =>
-        [...tr.querySelectorAll('td')].map((cell) =>
-          (cell as HTMLElement).innerText.trim(),
-        ),
-      ),
-    );
-  const scores = new Map<string, number>();
-  for (const row of rows) {
-    if (row.length === 3 && row[2] !== '-') {
-      scores.set(row[0] as string, Number(row[2]));
-    }
-  }
-  return scores;
-}
