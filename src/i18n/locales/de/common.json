@@ -16,6 +16,13 @@
     "tryAgain": "Erneut versuchen",
     "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten"
   },
+  "footer": {
+    "copyright": "© 2024–{{year}} • {{author}}",
+    "links": {
+      "github": "Quellcode",
+      "license": "MIT-Lizenz"
+    }
+  },
   "header": {
     "heading": "Knobel Manager",
     "logout": "Abmelden",
@@ -43,16 +50,23 @@
     "fields": {
       "email": {
         "label": "E-Mail",
-        "placeholder": "mail@beispiel.de",
-        "validationMessage": "Ungültige E-Mail-Adresse"
+        "placeholder": "mail@beispiel.de"
       },
       "password": {
         "label": "Passwort",
-        "placeholder": "Dein Passwort",
-        "validationMessage": "Passwort muss mindestens 6 Zeichen lang sein"
+        "placeholder": "Dein Passwort"
       }
     },
     "heading": "Anmelden bei Knobel Manager",
     "submit": "Anmelden"
+  },
+  "rankings": {
+    "noData": "Noch keine Punkte eingetragen",
+    "player": "Spieler",
+    "playerRankings": "Spieler-Rangliste",
+    "rank": "Rang",
+    "team": "Team",
+    "teamRankings": "Team-Rangliste",
+    "totalScore": "Gesamtpunktzahl"
   }
 }

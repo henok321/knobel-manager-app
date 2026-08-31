@@ -2,45 +2,26 @@ import { Badge, Stack, Table, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
-import type {
-  AuditAction,
-  Game,
-  GameStatus,
-} from '../../../../store/api.gen.ts';
+import type { Game } from '../../../../store/api.gen.ts';
 import {
   useGetAuditLogQuery,
   useGetGameTablesQuery,
 } from '../../../../store/api.ts';
-import { assertNever } from '../../../../utils/assertNever';
-import { translateGameStatus } from '../../../../utils/gameStatusHelpers';
+import { httpStatus } from '../../../../utils/apiError.ts';
+import { roundNumberById } from '../../../../utils/rounds.ts';
 import {
-  type AuditChange,
   type AuditLookups,
+  actionColor,
+  actionLabel,
+  changeLabel,
   describeChanges,
   describeSubject,
+  entityLabel,
 } from './auditChanges.ts';
 
 interface AuditPanelProps {
   game: Game;
 }
-
-const GAME_STATUSES: readonly string[] = ['setup', 'in_progress', 'completed'];
-
-const isGameStatus = (value: string): value is GameStatus =>
-  GAME_STATUSES.includes(value);
-
-const actionColor = (action: AuditAction) => {
-  switch (action) {
-    case 'insert':
-      return 'green';
-    case 'update':
-      return 'cobalt';
-    case 'delete':
-      return 'red';
-    default:
-      return assertNever(action);
-  }
-};
 
 const AuditPanel = ({ game }: AuditPanelProps) => {
   const { t, i18n } = useTranslation();
@@ -54,15 +35,11 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
 
   // 403 (not an owner) and 404 (game gone, never owned) both mean the caller cannot see this
   // trail — nothing to show, which is not the same as something going wrong.
-  const isInaccessible =
-    !!error &&
-    'status' in error &&
-    (error.status === 403 || error.status === 404);
+  const status = httpStatus(error);
+  const isInaccessible = status === 403 || status === 404;
 
   const teams = game.teams ?? [];
-  const roundNumbers = new Map(
-    (game.rounds ?? []).map((round) => [round.id, round.roundNumber]),
-  );
+  const roundNumbers = roundNumberById(game.rounds);
 
   const tableLabel = (tableNumber: number, roundID: number) => {
     const roundNumber = roundNumbers.get(roundID);
@@ -91,78 +68,6 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
         owner.email ?? owner.ownerSub,
       ]),
     ),
-  };
-
-  const actionLabel = (action: AuditAction) => {
-    switch (action) {
-      case 'insert':
-        return t('gameDetail:audit.actions.insert');
-      case 'update':
-        return t('gameDetail:audit.actions.update');
-      case 'delete':
-        return t('gameDetail:audit.actions.delete');
-      default:
-        return assertNever(action);
-    }
-  };
-
-  const fieldLabel = (field: string) => {
-    switch (field) {
-      case 'game_name':
-      case 'team_name':
-      case 'player_name':
-        return t('gameDetail:audit.fields.name');
-      case 'status':
-        return t('gameDetail:audit.fields.status');
-      case 'team_size':
-        return t('gameDetail:teamSize');
-      case 'table_size':
-        return t('gameDetail:tableSize');
-      case 'number_of_rounds':
-        return t('gameDetail:numberOfRounds');
-      case 'score':
-        return t('gameDetail:rounds.score');
-      case 'team_id':
-        return t('gameDetail:audit.entities.teams');
-      case 'player_id':
-        return t('gameDetail:audit.entities.players');
-      case 'table_id':
-        return t('gameDetail:rounds.table');
-      case 'owner_sub':
-        return t('gameDetail:audit.entities.gameOwners');
-      default:
-        return field;
-    }
-  };
-
-  const valueLabel = (field: string, value: string) =>
-    field === 'status' && isGameStatus(value)
-      ? translateGameStatus(t, value)
-      : value;
-
-  const changeText = ({ field, from, to }: AuditChange) => {
-    const before = valueLabel(field, from);
-    const after = valueLabel(field, to);
-    return before && after
-      ? `${fieldLabel(field)}: ${before} → ${after}`
-      : `${fieldLabel(field)}: ${before || after}`;
-  };
-
-  const entityLabel = (entity: string) => {
-    switch (entity) {
-      case 'games':
-        return t('gameDetail:audit.entities.games');
-      case 'game_owners':
-        return t('gameDetail:audit.entities.gameOwners');
-      case 'teams':
-        return t('gameDetail:audit.entities.teams');
-      case 'players':
-        return t('gameDetail:audit.entities.players');
-      case 'scores':
-        return t('gameDetail:audit.entities.scores');
-      default:
-        return entity;
-    }
   };
 
   if (isLoading || tablesLoading) {
@@ -214,7 +119,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
               </Table.Td>
               <Table.Td>{event.actorEmail || event.actorSub}</Table.Td>
               <Table.Td>
-                {entityLabel(event.entity)}
+                {entityLabel(t, event.entity)}
                 {describeSubject(
                   event.entity,
                   event.new ?? event.old,
@@ -231,7 +136,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
                   size="sm"
                   variant="light"
                 >
-                  {actionLabel(event.action)}
+                  {actionLabel(t, event.action)}
                 </Badge>
               </Table.Td>
               <Table.Td>
@@ -243,7 +148,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
                     lookups,
                   ).map((change) => (
                     <Text key={change.field} size="xs">
-                      {changeText(change)}
+                      {changeLabel(t, change)}
                     </Text>
                   ))}
                 </Stack>

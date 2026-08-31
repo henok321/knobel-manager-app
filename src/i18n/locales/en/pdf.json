@@ -1,14 +1,7 @@
 {
   "rankings": {
-    "noData": "No ranking data available",
-    "player": "Player",
-    "playerRankings": "Player Rankings",
-    "rank": "Rank",
-    "team": "Team",
-    "teamRankings": "Team Rankings",
     "title": "Rankings",
-    "total": "Total (All Rounds)",
-    "totalScore": "Total Score"
+    "total": "Total (All Rounds)"
   },
   "scoreSheets": {
     "heading": "Round {{round}} – Table {{table}}",

@@ -5,10 +5,11 @@ import { useNavigate, useParams, useSearchParams } from 'react-router';
 
 import CenterLoader from '../../shared/CenterLoader';
 import { useGetGameQuery, useGetGameTablesQuery } from '../../store/api.ts';
-import RankingsView from './print-views/RankingsView/RankingsView';
-import ScoreSheetsView from './print-views/ScoreSheetsView/ScoreSheetsView';
-import TablePlanView from './print-views/TablePlanView/TablePlanView';
-import TeamHandoutsView from './print-views/TeamHandoutsView/TeamHandoutsView';
+import { roundNumberById } from '../../utils/rounds.ts';
+import RankingsView from './print-views/RankingsView';
+import ScoreSheetsView from './print-views/ScoreSheetsView';
+import TablePlanView from './print-views/TablePlanView';
+import TeamHandoutsView from './print-views/TeamHandoutsView';
 import './print-views/print.css';
 
 const PrintView = () => {
@@ -17,30 +18,23 @@ const PrintView = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const numericGameId = Number(gameID);
+  const skip = Number.isNaN(numericGameId);
 
   const { data: gameData, isLoading } = useGetGameQuery(
     { gameId: numericGameId },
-    {
-      skip: Number.isNaN(numericGameId),
-    },
+    { skip },
   );
   const game = gameData?.game;
   const { data: rawTablesData } = useGetGameTablesQuery(
     { gameId: numericGameId },
-    {
-      skip: Number.isNaN(numericGameId),
-    },
+    { skip },
   );
-  const rawTables = rawTablesData?.tables ?? [];
 
   const teams = game?.teams ?? [];
-
-  const roundNumberByRoundId = new Map(
-    (game?.rounds ?? []).map((r) => [r.id, r.roundNumber]),
-  );
-  const tables = rawTables.map((table) => ({
+  const roundNumbers = roundNumberById(game?.rounds);
+  const tables = (rawTablesData?.tables ?? []).map((table) => ({
     ...table,
-    roundNumber: roundNumberByRoundId.get(table.roundID),
+    roundNumber: roundNumbers.get(table.roundID),
   }));
 
   const viewType = searchParams.get('type') || 'tablePlan';

@@ -16,6 +16,13 @@
     "tryAgain": "Try Again",
     "unexpectedError": "An unexpected error occurred"
   },
+  "footer": {
+    "copyright": "© 2024–{{year}} • {{author}}",
+    "links": {
+      "github": "Source Code",
+      "license": "MIT License"
+    }
+  },
   "header": {
     "heading": "Knobel Manager",
     "logout": "Logout",
@@ -43,16 +50,23 @@
     "fields": {
       "email": {
         "label": "Email",
-        "placeholder": "mail@example.com",
-        "validationMessage": "Invalid email address"
+        "placeholder": "mail@example.com"
       },
       "password": {
         "label": "Password",
-        "placeholder": "Your password",
-        "validationMessage": "Password must be at least 6 characters long"
+        "placeholder": "Your password"
       }
     },
     "heading": "Login to your account",
     "submit": "Login"
+  },
+  "rankings": {
+    "noData": "No scores entered yet",
+    "player": "Player",
+    "playerRankings": "Player Rankings",
+    "rank": "Rank",
+    "team": "Team",
+    "teamRankings": "Team Rankings",
+    "totalScore": "Total Score"
   }
 }

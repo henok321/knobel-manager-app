@@ -1,3 +1,12 @@
+import type { TFunction } from 'i18next';
+
+import type { AuditAction } from '../../../../store/api.gen.ts';
+import { assertNever } from '../../../../utils/assertNever.ts';
+import {
+  isGameStatus,
+  translateGameStatus,
+} from '../../../../utils/gameStatusHelpers.ts';
+
 const HIDDEN_FIELDS = new Set(['id', 'created_at', 'updated_at', 'game_id']);
 
 const SUBJECT_FIELDS: Record<string, string[]> = {
@@ -88,3 +97,92 @@ export const describeSubject = (
   (SUBJECT_FIELDS[entity] ?? [])
     .map((field) => formatValue(field, row?.[field], lookups))
     .filter((label) => label !== '');
+
+export const actionColor = (action: AuditAction): string => {
+  switch (action) {
+    case 'insert':
+      return 'green';
+    case 'update':
+      return 'cobalt';
+    case 'delete':
+      return 'red';
+    default:
+      return assertNever(action);
+  }
+};
+
+export const actionLabel = (t: TFunction, action: AuditAction): string => {
+  switch (action) {
+    case 'insert':
+      return t('gameDetail:audit.actions.insert');
+    case 'update':
+      return t('gameDetail:audit.actions.update');
+    case 'delete':
+      return t('gameDetail:audit.actions.delete');
+    default:
+      return assertNever(action);
+  }
+};
+
+export const entityLabel = (t: TFunction, entity: string): string => {
+  switch (entity) {
+    case 'games':
+      return t('gameDetail:audit.entities.games');
+    case 'game_owners':
+      return t('gameDetail:audit.entities.gameOwners');
+    case 'teams':
+      return t('gameDetail:audit.entities.teams');
+    case 'players':
+      return t('gameDetail:audit.entities.players');
+    case 'scores':
+      return t('gameDetail:audit.entities.scores');
+    default:
+      return entity;
+  }
+};
+
+const fieldLabel = (t: TFunction, field: string): string => {
+  switch (field) {
+    case 'game_name':
+    case 'team_name':
+    case 'player_name':
+      return t('gameDetail:audit.fields.name');
+    case 'status':
+      return t('gameDetail:audit.fields.status');
+    case 'team_size':
+      return t('gameDetail:teamSize');
+    case 'table_size':
+      return t('gameDetail:tableSize');
+    case 'number_of_rounds':
+      return t('gameDetail:numberOfRounds');
+    case 'score':
+      return t('gameDetail:rounds.score');
+    case 'team_id':
+      return t('gameDetail:audit.entities.teams');
+    case 'player_id':
+      return t('gameDetail:audit.entities.players');
+    case 'table_id':
+      return t('gameDetail:rounds.table');
+    case 'owner_sub':
+      return t('gameDetail:audit.entities.gameOwners');
+    default:
+      return field;
+  }
+};
+
+const valueLabel = (t: TFunction, field: string, value: string): string =>
+  field === 'status' && isGameStatus(value)
+    ? translateGameStatus(t, value)
+    : value;
+
+export const changeLabel = (
+  t: TFunction,
+  { field, from, to }: AuditChange,
+): string => {
+  const before = valueLabel(t, field, from);
+  const after = valueLabel(t, field, to);
+
+  return before && after
+    ? `${fieldLabel(t, field)}: ${before} → ${after}`
+    : `${fieldLabel(t, field)}: ${before || after}`;
+};

@@ -19,14 +19,8 @@ const EditTeamDialog = ({
 }: EditTeamDialogProps) => {
   const { t } = useTranslation();
 
-  const initialPlayerNames: Record<number, string> = {};
-  for (const p of players) {
-    initialPlayerNames[p.id] = p.name;
-  }
-
   const [name, setName] = useState(teamName);
-  const [playerNames, setPlayerNames] =
-    useState<Record<number, string>>(initialPlayerNames);
+  const [playerNames, setPlayerNames] = useState<Record<number, string>>({});
 
   const playerNameFor = (player: PlayerName) =>
     (playerNames[player.id] ?? player.name).trim();

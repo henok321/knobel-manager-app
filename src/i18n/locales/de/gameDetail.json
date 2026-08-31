@@ -1,6 +1,5 @@
 {
   "actions": {
-    "cancel": "Abbrechen",
     "completeGame": "Spiel abschließen",
     "completeGameConfirmation": "Bist du sicher, dass du dieses Turnier abschließen möchtest? Alle Punkte und Ranglisten werden dauerhaft gesperrt und können nicht geändert werden.",
     "gameStartedMessage": "Richte die Spielpaarungen im Runden-Tab ein, um zu beginnen",
@@ -17,7 +16,6 @@
     "admins": {
       "add": "Admin hinzufügen",
       "added": "Admin hinzugefügt",
-      "cancel": "Abbrechen",
       "description": "Admins können dieses Spiel bearbeiten und Ergebnisse eintragen. Füge einen weiteren Admin über seine E-Mail-Adresse hinzu.",
       "emailLabel": "E-Mail-Adresse",
       "emailPlaceholder": "name@example.com",
@@ -79,17 +77,10 @@
   },
   "rankings": {
     "filterByRound": "Nach Runde filtern",
-    "noData": "Noch keine Punkte eingetragen",
     "noScoresInstructions": "Beginne mit der Einrichtung der Spielpaarungen und trage dann Punkte für jeden Tisch ein.",
     "noScoresMessage": "Ranglisten werden hier angezeigt, sobald du Punkte im Runden-Tab einträgst.",
     "noScoresYet": "Noch keine Punkte",
-    "player": "Spieler",
-    "playerRankings": "Spieler-Rangliste",
-    "rank": "Rang",
-    "team": "Team",
-    "teamRankings": "Team-Rangliste",
-    "totalRanking": "Gesamt (Alle Runden)",
-    "totalScore": "Gesamtpunktzahl"
+    "totalRanking": "Gesamt (Alle Runden)"
   },
   "rounds": {
     "confirmResetMatchmaking": "Damit wird die Tischverteilung aller Runden verworfen, inklusive der an diesen Tischen eingetragenen Punkte. Die Teams bleiben unverändert und die Spielpaarungen können danach neu berechnet werden.",

@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import type { Player, Score, Table, Team } from '../../../../store/api.gen.ts';
+import type { Player, Score, Table, Team } from '../store/api.gen.ts';
 import {
   aggregateScoresFromTables,
   mapPlayersToRankings,
   mapTeamsToRankings,
-} from './rankingsMapper.ts';
+} from './rankings.ts';
 
 const player = (id: number, teamID: number, name: string): Player => ({
   id,
@@ -101,27 +101,9 @@ describe('mapPlayersToRankings', () => {
     });
 
     assert.deepStrictEqual(result, [
-      {
-        playerID: 200,
-        playerName: 'Cara',
-        teamID: 2,
-        teamName: 'Beta',
-        totalScore: 12,
-      },
-      {
-        playerID: 100,
-        playerName: 'Ann',
-        teamID: 1,
-        teamName: 'Alpha',
-        totalScore: 8,
-      },
-      {
-        playerID: 101,
-        playerName: 'Bob',
-        teamID: 1,
-        teamName: 'Alpha',
-        totalScore: 0,
-      },
+      { id: 200, name: 'Cara', teamName: 'Beta', totalScore: 12 },
+      { id: 100, name: 'Ann', teamName: 'Alpha', totalScore: 8 },
+      { id: 101, name: 'Bob', teamName: 'Alpha', totalScore: 0 },
     ]);
   });
 
@@ -147,8 +129,8 @@ describe('mapTeamsToRankings', () => {
     assert.deepStrictEqual(
       mapTeamsToRankings([teamA, teamB], { 100: 4, 101: 3, 200: 10 }),
       [
-        { teamID: 2, teamName: 'Beta', totalScore: 10 },
-        { teamID: 1, teamName: 'Alpha', totalScore: 7 },
+        { id: 2, name: 'Beta', totalScore: 10 },
+        { id: 1, name: 'Alpha', totalScore: 7 },
       ],
     );
   });
@@ -157,8 +139,8 @@ describe('mapTeamsToRankings', () => {
     assert.deepStrictEqual(
       mapTeamsToRankings([teamA, teamC], { 100: 5, 101: 2 }),
       [
-        { teamID: 1, teamName: 'Alpha', totalScore: 7 },
-        { teamID: 3, teamName: 'Gamma', totalScore: 0 },
+        { id: 1, name: 'Alpha', totalScore: 7 },
+        { id: 3, name: 'Gamma', totalScore: 0 },
       ],
     );
   });

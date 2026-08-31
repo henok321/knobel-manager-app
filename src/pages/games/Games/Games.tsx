@@ -10,12 +10,12 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { modals } from '@mantine/modals';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CenterLoader from '../../../shared/CenterLoader';
+import { openConfirmDialog } from '../../../shared/confirmModal.tsx';
 import Layout from '../../../shared/layout/Layout.tsx';
 import {
   useCreateGameMutation,
@@ -45,15 +45,11 @@ const Games = () => {
   );
   const completedGames = filtered.filter((game) => game.status === 'completed');
 
-  const handleDeleteGame = (gameID: number) => {
-    modals.openConfirmModal({
+  const handleDeleteGame = (gameID: number) =>
+    openConfirmDialog({
       title: t('games:deleteGame'),
-      children: <Text size="sm">{t('games:confirmDelete')}</Text>,
-      labels: {
-        confirm: t('common:actions.delete'),
-        cancel: t('common:actions.cancel'),
-      },
-      confirmProps: { color: 'red' },
+      message: t('games:confirmDelete'),
+      confirmLabel: t('common:actions.delete'),
       onConfirm: async () => {
         try {
           await deleteGame({ gameId: gameID }).unwrap();
@@ -62,7 +58,6 @@ const Games = () => {
         }
       },
     });
-  };
 
   if (isLoading) {
     return <CenterLoader />;

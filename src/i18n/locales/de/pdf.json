@@ -1,14 +1,7 @@
 {
   "rankings": {
-    "noData": "Keine Ranglistendaten verfügbar",
-    "player": "Spieler",
-    "playerRankings": "Spieler-Rangliste",
-    "rank": "Rang",
-    "team": "Team",
-    "teamRankings": "Team-Rangliste",
     "title": "Ranglisten",
-    "total": "Gesamt (Alle Runden)",
-    "totalScore": "Gesamtpunktzahl"
+    "total": "Gesamt (Alle Runden)"
   },
   "scoreSheets": {
     "heading": "Runde {{round}} – Tisch {{table}}",
