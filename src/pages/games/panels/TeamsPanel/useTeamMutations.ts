@@ -1,7 +1,3 @@
-import { Text } from '@mantine/core';
-import { modals } from '@mantine/modals';
-import { notifications } from '@mantine/notifications';
-import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import {
   api,
@@ -17,8 +13,15 @@ import { isConflictError } from '../../../../utils/isConflictError.ts';
 import { notifyError } from '../../../../utils/notifyError';
 import { type PlayerName, teamChanges } from './teamChanges.ts';
 
-export const useTeamMutations = (game: Game, onTeamCreated: () => void) => {
-  const { t } = useTranslation();
+interface TeamMutationHandlers {
+  onTeamCreated: (teamName: string) => void;
+  confirmSetupReset: (onConfirm: () => void) => void;
+}
+
+export const useTeamMutations = (
+  game: Game,
+  { onTeamCreated, confirmSetupReset }: TeamMutationHandlers,
+) => {
   const [createTeam, { isLoading: isCreatingTeam }] = useCreateTeamMutation();
   const [updateTeam] = useUpdateTeamMutation();
   const [deleteTeam] = useDeleteTeamMutation();
@@ -26,7 +29,7 @@ export const useTeamMutations = (game: Game, onTeamCreated: () => void) => {
   const [resetSetup, { isLoading: isResetting }] = useResetGameSetupMutation();
   const dispatch = useDispatch();
 
-  const resetThen = async (afterReset: () => void | Promise<void>) => {
+  const resetThen = async (afterReset: () => Promise<void>) => {
     try {
       await resetSetup({ gameId: game.id }).unwrap();
       await afterReset();
@@ -34,21 +37,6 @@ export const useTeamMutations = (game: Game, onTeamCreated: () => void) => {
       notifyError(backendErrorMessage(error));
     }
   };
-
-  const offerSetupReset = (afterReset: () => void | Promise<void>) =>
-    modals.openConfirmModal({
-      modalId: 'reset-matchmaking',
-      title: t('gameDetail:rounds.resetMatchmaking'),
-      children: (
-        <Text size="sm">{t('gameDetail:teams.resetToChangeTeams')}</Text>
-      ),
-      labels: {
-        confirm: t('gameDetail:rounds.resetMatchmaking'),
-        cancel: t('common:actions.cancel'),
-      },
-      confirmProps: { color: 'red' },
-      onConfirm: () => void resetThen(afterReset),
-    });
 
   // A 409 means either "tables are assigned" or "the game already started",
   // and a stale panel cannot tell them apart - so refetch the game and let the
@@ -69,7 +57,7 @@ export const useTeamMutations = (game: Game, onTeamCreated: () => void) => {
       return;
     }
 
-    offerSetupReset(retry);
+    confirmSetupReset(() => void resetThen(retry));
   };
 
   const submitTeam = async (teamsRequest: TeamsRequest, mayReset = true) => {
@@ -84,12 +72,7 @@ export const useTeamMutations = (game: Game, onTeamCreated: () => void) => {
       return;
     }
 
-    notifications.show({
-      title: t('common:actions.success'),
-      message: t('games:card.teamAdded', { name: teamsRequest.name }),
-      color: 'green',
-    });
-    onTeamCreated();
+    onTeamCreated(teamsRequest.name);
   };
 
   const saveTeam = async (
@@ -135,24 +118,9 @@ export const useTeamMutations = (game: Game, onTeamCreated: () => void) => {
     }
   };
 
-  const confirmDeleteTeam = (teamID: number) => {
-    modals.openConfirmModal({
-      title: t('gameDetail:teams.deleteTeam'),
-      children: (
-        <Text size="sm">{t('gameDetail:teams.confirmDeleteTeam')}</Text>
-      ),
-      labels: {
-        confirm: t('common:actions.delete'),
-        cancel: t('common:actions.cancel'),
-      },
-      confirmProps: { color: 'red' },
-      onConfirm: () => void removeTeam(teamID),
-    });
-  };
-
   return {
-    confirmDeleteTeam,
     isSubmitting: isCreatingTeam || isResetting,
+    removeTeam,
     saveTeam,
     submitTeam,
   };

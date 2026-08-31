@@ -1,4 +1,13 @@
-import { Alert, Button, Group, Select, Stack, TextInput } from '@mantine/core';
+import {
+  Alert,
+  Button,
+  Group,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+} from '@mantine/core';
+import { modals } from '@mantine/modals';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -30,8 +39,23 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { settingUp, resetting, startMatchmaking, confirmReset } =
-    useMatchmaking(game.id, setError);
+  const { settingUp, resetting, startMatchmaking, resetMatchmaking } =
+    useMatchmaking(game.id, setError, t('gameDetail:rounds.error'));
+
+  const confirmReset = () =>
+    modals.openConfirmModal({
+      modalId: 'reset-matchmaking',
+      title: t('gameDetail:rounds.resetMatchmaking'),
+      children: (
+        <Text size="sm">{t('gameDetail:rounds.confirmResetMatchmaking')}</Text>
+      ),
+      labels: {
+        confirm: t('gameDetail:rounds.resetMatchmaking'),
+        cancel: t('common:actions.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm: resetMatchmaking,
+    });
 
   const canEditScores = game.status === 'in_progress';
   const canSetupMatchmaking = game.status === 'setup';

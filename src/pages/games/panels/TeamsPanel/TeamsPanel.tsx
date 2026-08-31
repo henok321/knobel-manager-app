@@ -1,4 +1,6 @@
 import { Button, Group, Stack, Text, TextInput, Tooltip } from '@mantine/core';
+import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +10,7 @@ import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
 import TeamForm from './TeamForm';
 import { tableAssignmentsByPlayer } from './tableAssignments.ts';
-import { useTeamMutations } from './useTeamMutations.tsx';
+import { useTeamMutations } from './useTeamMutations.ts';
 
 interface TeamsPanelProps {
   game: Game;
@@ -24,8 +26,48 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const closeTeamForm = () => setIsTeamFormOpen(false);
 
-  const { confirmDeleteTeam, isSubmitting, saveTeam, submitTeam } =
-    useTeamMutations(game, closeTeamForm);
+  const announceTeamCreated = (teamName: string) => {
+    notifications.show({
+      title: t('common:actions.success'),
+      message: t('games:card.teamAdded', { name: teamName }),
+      color: 'green',
+    });
+    closeTeamForm();
+  };
+
+  const confirmSetupReset = (onConfirm: () => void) =>
+    modals.openConfirmModal({
+      modalId: 'reset-matchmaking',
+      title: t('gameDetail:rounds.resetMatchmaking'),
+      children: (
+        <Text size="sm">{t('gameDetail:teams.resetToChangeTeams')}</Text>
+      ),
+      labels: {
+        confirm: t('gameDetail:rounds.resetMatchmaking'),
+        cancel: t('common:actions.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm,
+    });
+
+  const { isSubmitting, removeTeam, saveTeam, submitTeam } = useTeamMutations(
+    game,
+    { onTeamCreated: announceTeamCreated, confirmSetupReset },
+  );
+
+  const confirmDeleteTeam = (teamID: number) =>
+    modals.openConfirmModal({
+      title: t('gameDetail:teams.deleteTeam'),
+      children: (
+        <Text size="sm">{t('gameDetail:teams.confirmDeleteTeam')}</Text>
+      ),
+      labels: {
+        confirm: t('common:actions.delete'),
+        cancel: t('common:actions.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm: () => void removeTeam(teamID),
+    });
 
   const allTeams = game.teams ?? [];
   const query = searchQuery.trim().toLowerCase();
