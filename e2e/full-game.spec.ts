@@ -219,10 +219,14 @@ const readRankingRows = async (panel: Locator) => {
   };
 };
 
-test.skip(
-  !EMAIL || !PASSWORD,
-  'Set E2E_EMAIL and E2E_PASSWORD to run the tournament playbook.',
-);
+// Fails rather than skips: a run that silently verified nothing looks like a pass.
+test.beforeAll(() => {
+  if (!EMAIL || !PASSWORD) {
+    throw new Error(
+      'Set E2E_EMAIL and E2E_PASSWORD, or create .env.e2e, to run the playbook.',
+    );
+  }
+});
 
 test('tournament lifecycle: create, rename, matchmaking conflict, every score, score edit', async ({
   page,
