@@ -439,6 +439,14 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
     await dialog(page).getByRole('button', { name: 'Save Scores' }).click();
     await expect(dialog(page)).toBeHidden();
 
+    // Every table already has scores here, so the pending-table count cannot act
+    // as a barrier. Assert the cell itself, which retries until the invalidated
+    // round query lands.
+    const editedRow = roundsPanel
+      .locator('tbody tr')
+      .filter({ has: page.getByText(edited, { exact: true }) });
+    await expect(editedRow.locator('td').nth(2)).toHaveText(String(newScore));
+
     const rows = await scoreRowsFor(page, totalTables);
     expect(rows.get(edited)).toBe(newScore);
     remember(
@@ -474,6 +482,15 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
     for (const view of views) {
       await selectOption(page, combo, view.label);
 
+      const expectedTeams = teamTotals(record, view.rounds);
+      const expectedPlayers = playerTotals(record, view.rounds);
+
+      // Switching the view refetches, so wait for this view's rows before
+      // reading them in one shot.
+      await expect(panel.locator('tbody tr')).toHaveCount(
+        expectedTeams.size + expectedPlayers.size,
+      );
+
       const rows = await panel
         .locator('tbody tr')
         .evaluateAll((trs) =>
@@ -485,9 +502,6 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
         );
       const teamRows = rows.filter((r) => r.length === 3);
       const playerRows = rows.filter((r) => r.length === 4);
-
-      const expectedTeams = teamTotals(record, view.rounds);
-      const expectedPlayers = playerTotals(record, view.rounds);
 
       expect(teamRows, `${view.label}: one row per team`).toHaveLength(
         TEAM_NAMES.length + 1,
@@ -529,6 +543,7 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
 
   await test.step('the audit log records the whole history', async () => {
     const panel = await openTab(page, 'Audit Log');
+    await expect(panel).toContainText(gameName);
     const text = await panel.innerText();
     expect(text).toContain(gameName);
     expect(text).toContain(EMAIL as string);
@@ -622,6 +637,9 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
     const panel = await openTab(page, 'Rankings');
     await selectOption(page, panel.getByRole('combobox'), 'Total (All Rounds)');
     const expectedTeams = teamTotals(record, [1, 2]);
+    await expect(panel.locator('tbody tr')).toHaveCount(
+      expectedTeams.size + playerTotals(record, [1, 2]).size,
+    );
     const teamRows = await panel
       .locator('tbody tr')
       .evaluateAll((trs) =>
