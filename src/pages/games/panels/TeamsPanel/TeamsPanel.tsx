@@ -83,7 +83,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     setTeamFormKey((key) => key + 1);
   };
 
-  const offerSetupReset = (retry: () => unknown) =>
+  const offerSetupReset = (afterReset: () => unknown) =>
     modals.openConfirmModal({
       title: t('gameDetail:rounds.resetMatchmaking'),
       children: (
@@ -97,7 +97,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       onConfirm: async () => {
         try {
           await resetSetup({ gameId: game.id }).unwrap();
-          await retry();
+          await afterReset();
         } catch {
           notifyError();
         }
