@@ -20,6 +20,7 @@ import {
   useUpdateScoresMutation,
 } from '../../../../store/api';
 import type { Game, Table } from '../../../../store/api.gen.ts';
+import { backendErrorMessage } from '../../../../utils/backendErrorMessage.ts';
 import { buildRoundOptions } from '../roundOptions.ts';
 import RoundTableCard from './RoundTableCard';
 import ScoreEntryModal from './ScoreEntryModal';
@@ -27,12 +28,6 @@ import ScoreEntryModal from './ScoreEntryModal';
 interface RoundsPanelProps {
   game: Game;
 }
-
-const getBackendErrorMessage = (err: unknown): string | undefined => {
-  const data = (err as { data?: { error?: unknown } })?.data;
-  if (typeof data?.error === 'string') return data.error;
-  return err instanceof Error ? err.message : undefined;
-};
 
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
@@ -91,12 +86,23 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     try {
       await setupGame({ gameId: game.id }).unwrap();
     } catch (err) {
-      setError(getBackendErrorMessage(err) ?? t('gameDetail:rounds.error'));
+      setError(backendErrorMessage(err) ?? t('gameDetail:rounds.error'));
+    }
+  };
+
+  const resetSetupNow = async () => {
+    setError(null);
+
+    try {
+      await resetSetup({ gameId: game.id }).unwrap();
+    } catch (err) {
+      setError(backendErrorMessage(err) ?? t('gameDetail:rounds.error'));
     }
   };
 
   const handleResetSetup = () =>
     modals.openConfirmModal({
+      modalId: 'reset-matchmaking',
       title: t('gameDetail:rounds.resetMatchmaking'),
       children: (
         <Text size="sm">{t('gameDetail:rounds.confirmResetMatchmaking')}</Text>
@@ -106,15 +112,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         cancel: t('common:actions.cancel'),
       },
       confirmProps: { color: 'red' },
-      onConfirm: async () => {
-        setError(null);
-
-        try {
-          await resetSetup({ gameId: game.id }).unwrap();
-        } catch (err) {
-          setError(getBackendErrorMessage(err) ?? t('gameDetail:rounds.error'));
-        }
-      },
+      onConfirm: () => void resetSetupNow(),
     });
 
   const handleOpenScoreEntry = (table: Table) => {
@@ -138,9 +136,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         scoresRequest: { scores },
       }).unwrap();
     } catch (err) {
-      setError(
-        getBackendErrorMessage(err) ?? t('common:actions.errorOccurred'),
-      );
+      setError(backendErrorMessage(err) ?? t('common:actions.errorOccurred'));
       throw err;
     }
   };
@@ -152,8 +148,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const displayError =
     error ||
     (roundTablesIsError && !isNotFound
-      ? (getBackendErrorMessage(roundTablesError) ??
-        t('gameDetail:rounds.error'))
+      ? (backendErrorMessage(roundTablesError) ?? t('gameDetail:rounds.error'))
       : null);
 
   const renderContent = () => {
@@ -247,7 +242,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
               <Button
                 loading={settingUp}
                 size="md"
-                disabled={!sufficientTeams}
+                disabled={!sufficientTeams || resetting}
                 variant="light"
                 onClick={() => void handleSetupGame()}
               >
@@ -255,6 +250,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
               </Button>
               <Button
                 color="red"
+                disabled={settingUp}
                 loading={resetting}
                 size="md"
                 variant="light"

@@ -4,7 +4,9 @@ import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import {
+  api,
   useCreateTeamMutation,
   useDeleteTeamMutation,
   useGetGameTablesQuery,
@@ -13,11 +15,12 @@ import {
   useUpdateTeamMutation,
 } from '../../../../store/api';
 import type { Game, TeamsRequest } from '../../../../store/api.gen.ts';
+import { backendErrorMessage } from '../../../../utils/backendErrorMessage.ts';
 import { isConflictError } from '../../../../utils/isConflictError.ts';
 import { notifyError } from '../../../../utils/notifyError';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
-import TeamForm, { type TeamFormData } from './TeamForm';
+import TeamForm from './TeamForm';
 import { type PlayerName, teamChanges } from './teamChanges.ts';
 
 interface TeamsPanelProps {
@@ -30,7 +33,8 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const [updateTeam] = useUpdateTeamMutation();
   const [deleteTeam] = useDeleteTeamMutation();
   const [updatePlayer] = useUpdatePlayerMutation();
-  const [resetSetup] = useResetGameSetupMutation();
+  const [resetSetup, { isLoading: isResetting }] = useResetGameSetupMutation();
+  const dispatch = useDispatch();
   const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
   const tables = tablesData?.tables ?? [];
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
@@ -79,8 +83,18 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
   const closeTeamForm = () => setIsTeamFormOpen(false);
 
-  const offerSetupReset = (afterReset: () => unknown) =>
+  const resetThen = async (afterReset: () => void | Promise<void>) => {
+    try {
+      await resetSetup({ gameId: game.id }).unwrap();
+      await afterReset();
+    } catch (error) {
+      notifyError(backendErrorMessage(error));
+    }
+  };
+
+  const offerSetupReset = (afterReset: () => void | Promise<void>) =>
     modals.openConfirmModal({
+      modalId: 'reset-matchmaking',
       title: t('gameDetail:rounds.resetMatchmaking'),
       children: (
         <Text size="sm">{t('gameDetail:teams.resetToChangeTeams')}</Text>
@@ -90,25 +104,39 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         cancel: t('common:actions.cancel'),
       },
       confirmProps: { color: 'red' },
-      onConfirm: async () => {
-        try {
-          await resetSetup({ gameId: game.id }).unwrap();
-          await afterReset();
-        } catch {
-          notifyError();
-        }
-      },
+      onConfirm: () => void resetThen(afterReset),
     });
 
-  const submitTeam = async (teamsRequest: TeamsRequest) => {
+  // A 409 means either "tables are assigned" or "the game already started",
+  // and a stale panel cannot tell them apart - so refetch the game and let the
+  // reset itself report which one it was.
+  const reportMutationError = (
+    error: unknown,
+    retry: (() => Promise<void>) | null,
+  ) => {
+    if (!isConflictError(error)) {
+      notifyError(backendErrorMessage(error));
+      return;
+    }
+
+    dispatch(api.util.invalidateTags([{ type: 'Game', id: game.id }]));
+
+    if (!retry) {
+      notifyError(backendErrorMessage(error));
+      return;
+    }
+
+    offerSetupReset(retry);
+  };
+
+  const submitTeam = async (teamsRequest: TeamsRequest, mayReset = true) => {
     try {
       await createTeam({ gameId: game.id, teamsRequest }).unwrap();
     } catch (error) {
-      if (isConflictError(error)) {
-        offerSetupReset(() => submitTeam(teamsRequest));
-      } else {
-        notifyError();
-      }
+      reportMutationError(
+        error,
+        mayReset ? () => submitTeam(teamsRequest, false) : null,
+      );
 
       return;
     }
@@ -119,20 +147,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       color: 'green',
     });
     closeTeamForm();
-  };
-
-  const handleCreateTeam = (teamData: TeamFormData) =>
-    submitTeam({
-      name: teamData.name,
-      players: teamData.members.map((name) => ({ name })),
-    });
-
-  const handleAddTeam = () => {
-    if (tables.length > 0) {
-      offerSetupReset(() => setIsTeamFormOpen(true));
-      return;
-    }
-    setIsTeamFormOpen(true);
   };
 
   const handleStartEditTeam = (teamID: number) => {
@@ -170,15 +184,14 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     ]);
   };
 
-  const removeTeam = async (teamID: number) => {
+  const removeTeam = async (teamID: number, mayReset = true) => {
     try {
       await deleteTeam({ gameId: game.id, teamId: teamID }).unwrap();
     } catch (error) {
-      if (isConflictError(error)) {
-        offerSetupReset(() => removeTeam(teamID));
-      } else {
-        notifyError();
-      }
+      reportMutationError(
+        error,
+        mayReset ? () => removeTeam(teamID, false) : null,
+      );
     }
   };
 
@@ -210,7 +223,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
           <Button
             leftSection={<IconPlus size={20} stroke={1.5} />}
             style={{ alignSelf: 'flex-start' }}
-            onClick={handleAddTeam}
+            onClick={() => setIsTeamFormOpen(true)}
           >
             {t('gameDetail:teams.addTeam')}
           </Button>
@@ -259,8 +272,8 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
 
       {isTeamFormOpen && (
         <TeamForm
-          createTeam={handleCreateTeam}
-          isSubmitting={isCreatingTeam}
+          createTeam={(teamsRequest) => void submitTeam(teamsRequest)}
+          isSubmitting={isCreatingTeam || isResetting}
           teamSize={game.teamSize}
           onClose={closeTeamForm}
         />

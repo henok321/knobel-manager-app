@@ -2,17 +2,13 @@ import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { type ChangeEvent, type SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-export interface TeamFormData {
-  name: string;
-  members: string[];
-}
+import type { TeamsRequest } from '../../../../store/api.gen.ts';
 
 interface TeamFormProps {
   teamSize: number;
   isSubmitting: boolean;
   onClose: () => void;
-  createTeam: (team: TeamFormData) => Promise<unknown>;
+  createTeam: (team: TeamsRequest) => void;
 }
 
 const TeamForm = ({
@@ -27,7 +23,10 @@ const TeamForm = ({
 
   const submit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    void createTeam({ name: teamName, members: players });
+    createTeam({
+      name: teamName,
+      players: players.map((name) => ({ name })),
+    });
   };
 
   const handleChangePlayer = (
