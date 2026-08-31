@@ -1,7 +1,7 @@
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import type { Table } from '../../../../store/api.gen.ts';
-import { backendErrorMessage } from '../../../../utils/backendErrorMessage.ts';
+import { backendErrorMessage, httpStatus } from '../../../../utils/apiError.ts';
 
 export const filterAndSortTables = (
   tables: Table[],
@@ -20,13 +20,9 @@ export const filterAndSortTables = (
 };
 
 export const roundTablesErrorMessage = (
-  isError: boolean,
   error: FetchBaseQueryError | SerializedError | undefined,
   fallback: string,
-): string | null => {
-  const isNotFound = error != null && 'status' in error && error.status === 404;
-
-  return isError && !isNotFound
-    ? (backendErrorMessage(error) ?? fallback)
-    : null;
-};
+): string | null =>
+  error == null || httpStatus(error) === 404
+    ? null
+    : (backendErrorMessage(error) ?? fallback);

@@ -92,19 +92,12 @@ describe('roundTablesErrorMessage', () => {
   const fallback = 'fallback';
 
   it('returns null while the query has no error', () => {
-    assert.equal(
-      roundTablesErrorMessage(
-        false,
-        { status: 500, data: undefined },
-        fallback,
-      ),
-      null,
-    );
+    assert.equal(roundTablesErrorMessage(undefined, fallback), null);
   });
 
   it('returns null for a missing round (404)', () => {
     assert.equal(
-      roundTablesErrorMessage(true, { status: 404, data: undefined }, fallback),
+      roundTablesErrorMessage({ status: 404, data: undefined }, fallback),
       null,
     );
   });
@@ -112,7 +105,6 @@ describe('roundTablesErrorMessage', () => {
   it('returns the backend message for other failures', () => {
     assert.equal(
       roundTablesErrorMessage(
-        true,
         { status: 500, data: { error: 'boom' } },
         fallback,
       ),
@@ -122,12 +114,12 @@ describe('roundTablesErrorMessage', () => {
 
   it('falls back when the failure carries no readable message', () => {
     assert.equal(
-      roundTablesErrorMessage(true, { message: 'serialized' }, fallback),
+      roundTablesErrorMessage({ message: 'serialized' }, fallback),
       fallback,
     );
   });
 
-  it('falls back when there is no error object at all', () => {
-    assert.equal(roundTablesErrorMessage(true, undefined, fallback), fallback);
+  it('shows nothing when there is no error object at all', () => {
+    assert.equal(roundTablesErrorMessage(undefined, fallback), null);
   });
 });

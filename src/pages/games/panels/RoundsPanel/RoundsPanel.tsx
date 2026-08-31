@@ -18,7 +18,7 @@ import {
   useUpdateScoresMutation,
 } from '../../../../store/api';
 import type { Game, Table } from '../../../../store/api.gen.ts';
-import { backendErrorMessage } from '../../../../utils/backendErrorMessage.ts';
+import { backendErrorMessage } from '../../../../utils/apiError.ts';
 import { buildRoundOptions } from '../roundOptions.ts';
 import RoundsContent from './RoundsContent';
 import { roundTablesErrorMessage } from './roundTables.ts';
@@ -90,7 +90,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const {
     data: roundTablesData,
     isFetching: loading,
-    isError: roundTablesIsError,
     error: roundTablesError,
   } = useGetTablesQuery(
     { gameId: game.id, roundNumber: Number(selectedRound) },
@@ -126,11 +125,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   const displayError =
     error ||
-    roundTablesErrorMessage(
-      roundTablesIsError,
-      roundTablesError,
-      t('gameDetail:rounds.error'),
-    );
+    roundTablesErrorMessage(roundTablesError, t('gameDetail:rounds.error'));
 
   return (
     <Stack gap="md">

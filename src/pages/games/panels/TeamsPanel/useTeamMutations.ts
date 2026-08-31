@@ -8,8 +8,7 @@ import {
   useUpdateTeamMutation,
 } from '../../../../store/api';
 import type { Game, Team, TeamsRequest } from '../../../../store/api.gen.ts';
-import { backendErrorMessage } from '../../../../utils/backendErrorMessage.ts';
-import { isConflictError } from '../../../../utils/isConflictError.ts';
+import { backendErrorMessage, httpStatus } from '../../../../utils/apiError.ts';
 import { notifyError } from '../../../../utils/notifyError';
 import { type PlayerName, teamChanges } from './teamChanges.ts';
 
@@ -45,19 +44,18 @@ export const useTeamMutations = (
     error: unknown,
     retry: (() => Promise<void>) | null,
   ) => {
-    if (!isConflictError(error)) {
-      notifyError(backendErrorMessage(error));
+    const conflict = httpStatus(error) === 409;
+
+    if (conflict) {
+      dispatch(api.util.invalidateTags([{ type: 'Game', id: game.id }]));
+    }
+
+    if (conflict && retry) {
+      confirmSetupReset(() => void resetThen(retry));
       return;
     }
 
-    dispatch(api.util.invalidateTags([{ type: 'Game', id: game.id }]));
-
-    if (!retry) {
-      notifyError(backendErrorMessage(error));
-      return;
-    }
-
-    confirmSetupReset(() => void resetThen(retry));
+    notifyError(backendErrorMessage(error));
   };
 
   const submitTeam = async (teamsRequest: TeamsRequest, mayReset = true) => {
