@@ -1,29 +1,18 @@
-import {
-  Alert,
-  Button,
-  Card,
-  Group,
-  Select,
-  Stack,
-  Text,
-  TextInput,
-} from '@mantine/core';
-import { modals } from '@mantine/modals';
+import { Alert, Button, Group, Select, Stack, TextInput } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import {
   useGetGameTablesQuery,
   useGetTablesQuery,
-  useResetGameSetupMutation,
-  useSetupGameMutation,
   useUpdateScoresMutation,
 } from '../../../../store/api';
 import type { Game, Table } from '../../../../store/api.gen.ts';
 import { backendErrorMessage } from '../../../../utils/backendErrorMessage.ts';
 import { buildRoundOptions } from '../roundOptions.ts';
-import RoundTableCard from './RoundTableCard';
+import RoundsContent from './RoundsContent';
+import { roundTablesErrorMessage } from './roundTables.ts';
 import ScoreEntryModal from './ScoreEntryModal';
+import { useMatchmaking } from './useMatchmaking';
 
 interface RoundsPanelProps {
   game: Game;
@@ -31,8 +20,6 @@ interface RoundsPanelProps {
 
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
-  const [setupGame, { isLoading: settingUp }] = useSetupGameMutation();
-  const [resetSetup, { isLoading: resetting }] = useResetGameSetupMutation();
   const [updateScores] = useUpdateScoresMutation();
   const teams = game.teams ?? [];
   const { data: allTablesData } = useGetGameTablesQuery({ gameId: game.id });
@@ -42,6 +29,9 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const { settingUp, resetting, startMatchmaking, confirmReset } =
+    useMatchmaking(game.id, setError);
 
   const canEditScores = game.status === 'in_progress';
   const canSetupMatchmaking = game.status === 'setup';
@@ -67,53 +57,6 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     { skip: isSetupMode },
   );
   const roundTables = roundTablesData?.tables ?? [];
-
-  const query = searchQuery.trim().toLowerCase();
-  const filtered = query
-    ? roundTables.filter((table) =>
-        (table.players ?? []).some((player) =>
-          player.name.toLowerCase().includes(query),
-        ),
-      )
-    : roundTables;
-  const filteredAndSortedTables = [...filtered].sort(
-    (a, b) => a.tableNumber - b.tableNumber,
-  );
-
-  const handleSetupGame = async () => {
-    setError(null);
-
-    try {
-      await setupGame({ gameId: game.id }).unwrap();
-    } catch (err) {
-      setError(backendErrorMessage(err) ?? t('gameDetail:rounds.error'));
-    }
-  };
-
-  const resetSetupNow = async () => {
-    setError(null);
-
-    try {
-      await resetSetup({ gameId: game.id }).unwrap();
-    } catch (err) {
-      setError(backendErrorMessage(err) ?? t('gameDetail:rounds.error'));
-    }
-  };
-
-  const handleResetSetup = () =>
-    modals.openConfirmModal({
-      modalId: 'reset-matchmaking',
-      title: t('gameDetail:rounds.resetMatchmaking'),
-      children: (
-        <Text size="sm">{t('gameDetail:rounds.confirmResetMatchmaking')}</Text>
-      ),
-      labels: {
-        confirm: t('gameDetail:rounds.resetMatchmaking'),
-        cancel: t('common:actions.cancel'),
-      },
-      confirmProps: { color: 'red' },
-      onConfirm: () => void resetSetupNow(),
-    });
 
   const handleOpenScoreEntry = (table: Table) => {
     setSelectedTable(table);
@@ -141,80 +84,13 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     }
   };
 
-  const isNotFound =
-    roundTablesError != null &&
-    'status' in roundTablesError &&
-    roundTablesError.status === 404;
   const displayError =
     error ||
-    (roundTablesIsError && !isNotFound
-      ? (backendErrorMessage(roundTablesError) ?? t('gameDetail:rounds.error'))
-      : null);
-
-  const renderContent = () => {
-    if (loading || settingUp) {
-      return (
-        <Text c="dimmed" ta="center">
-          {settingUp
-            ? t('gameDetail:rounds.generatingTables')
-            : t('common:actions.loading')}
-        </Text>
-      );
-    }
-    if (isSetupMode) {
-      return canSetupMatchmaking ? (
-        <EmptyStateCard
-          description={t('gameDetail:rounds.setupDescription')}
-          title={t('gameDetail:rounds.setupRequired')}
-        >
-          <Button
-            loading={settingUp}
-            disabled={!sufficientTeams}
-            size="lg"
-            onClick={() => void handleSetupGame()}
-          >
-            {t('gameDetail:rounds.setupMatchmaking')}
-          </Button>
-        </EmptyStateCard>
-      ) : (
-        <EmptyStateCard
-          description={t('gameDetail:rounds.setupNotAvailableDescription')}
-          title={t('gameDetail:rounds.setupNotAvailable')}
-        />
-      );
-    }
-    if (roundTables.length === 0) {
-      return displayError ? null : (
-        <Card padding="lg">
-          <Text c="dimmed" ta="center">
-            {t('gameDetail:rounds.noTables')}
-          </Text>
-        </Card>
-      );
-    }
-    if (filteredAndSortedTables.length === 0) {
-      return (
-        <Card padding="lg">
-          <Text c="dimmed" ta="center">
-            {t('gameDetail:rounds.noSearchResults')}
-          </Text>
-        </Card>
-      );
-    }
-    return (
-      <Stack gap="md">
-        {filteredAndSortedTables.map((table) => (
-          <RoundTableCard
-            key={table.id}
-            canEditScores={canEditScores}
-            table={table}
-            teams={teams}
-            onEditScores={handleOpenScoreEntry}
-          />
-        ))}
-      </Stack>
+    roundTablesErrorMessage(
+      roundTablesIsError,
+      roundTablesError,
+      t('gameDetail:rounds.error'),
     );
-  };
 
   return (
     <Stack gap="md">
@@ -244,7 +120,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                 size="md"
                 disabled={!sufficientTeams || resetting}
                 variant="light"
-                onClick={() => void handleSetupGame()}
+                onClick={startMatchmaking}
               >
                 {t('gameDetail:rounds.rerunMatchmaking')}
               </Button>
@@ -254,7 +130,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
                 loading={resetting}
                 size="md"
                 variant="light"
-                onClick={handleResetSetup}
+                onClick={confirmReset}
               >
                 {t('gameDetail:rounds.resetMatchmaking')}
               </Button>
@@ -269,7 +145,20 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         </Alert>
       )}
 
-      {renderContent()}
+      <RoundsContent
+        canEditScores={canEditScores}
+        canSetupMatchmaking={canSetupMatchmaking}
+        displayError={displayError}
+        isSetupMode={isSetupMode}
+        loading={loading}
+        searchQuery={searchQuery}
+        settingUp={settingUp}
+        sufficientTeams={sufficientTeams}
+        tables={roundTables}
+        teams={teams}
+        onEditScores={handleOpenScoreEntry}
+        onSetupGame={startMatchmaking}
+      />
 
       <ScoreEntryModal
         isOpen={scoreModalOpen}
