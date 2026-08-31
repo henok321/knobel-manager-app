@@ -144,7 +144,7 @@
     "player": "Spieler",
     "playerNamePlaceholder": "Spielername eingeben",
     "players": "Spieler",
-    "resetToChangeTeams": "Die Tische sind bereits verteilt. Wenn du die Spielpaarungen zurücksetzt, wird diese Verteilung verworfen; danach kannst du die Teams ändern und neu berechnen.",
+    "resetToChangeTeams": "Die Tische sind bereits verteilt. Wenn du die Spielpaarungen zurücksetzt, wird diese Verteilung verworfen, danach kannst du die Teams ändern und neu berechnen.",
     "roundColumn": "Runde {{round}}",
     "roundColumnShort": "R{{round}}",
     "searchTeams": "Nach Teamnamen suchen...",
