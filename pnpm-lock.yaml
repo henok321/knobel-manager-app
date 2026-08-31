@@ -100,6 +100,9 @@ importers:
       vite:
         specifier: ^8.2.2
         version: 8.2.2(@types/node@26.4.0)(esbuild@0.28.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.26))(yaml@2.9.0)
+      vite-plugin-mkcert:
+        specifier: ^2.1.0
+        version: 2.1.0(vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.26))(yaml@2.9.0))
 
 packages:
 
@@ -1653,6 +1656,15 @@ packages:
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
+  debug@4.4.3:
+    resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
   detect-libc@2.1.2:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
@@ -2000,6 +2012,9 @@ packages:
     resolution: {integrity: sha512-tEBHqDnIoM/1rXME1zgka9g6Q2lcoCkxHLuc7ODJ5BxbP5d4c2Z5cGgtXAku59200Cx7diuHTOYfSBD8n6mm8A==}
     engines: {node: '>=16 || 14 >=14.17'}
 
+  ms@2.1.3:
+    resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+
   mute-stream@3.0.0:
     resolution: {integrity: sha512-dkEJPVvun4FryqBmZ5KhDo0K9iDXAwn08tMLDinNdRBNPcYEDiWYysLcc6k3mjTMlbP9KyylvRpd4wFtwrT9rw==}
     engines: {node: ^20.17.0 || >=22.9.0}
@@ -2343,6 +2358,10 @@ packages:
     peerDependencies:
       postcss: ^8.3.3
 
+  supports-color@10.2.2:
+    resolution: {integrity: sha512-SS+jx45GF1QjgEXQx4NJZV9ImqmO2NPz5FNsIHrsDjh2YsHnawpan7SNQ1o8NuhrbHZy9AZhIoCUiCeaW/C80g==}
+    engines: {node: '>=18'}
+
   swagger2openapi@7.0.8:
     resolution: {integrity: sha512-upi/0ZGkYgEcLeGieoz8gT74oWHA0E7JivX7aN9mAf+Tc7BQoRBvnIGHoPDw+f9TXTW4s6kGYCZJtauP6OYp7g==}
     hasBin: true
@@ -2393,6 +2412,10 @@ packages:
   undici-types@8.3.0:
     resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
+  undici@8.10.1:
+    resolution: {integrity: sha512-YQ3WlbqjYMmNpdvDH64jAgLjxuAR9+649calDWhbshYaeQGO2bR4nI94ORJmwI3J9YhoKQnpyGOK+0zlWS5N5Q==}
+    engines: {node: '>=22.19.0'}
+
   unicorn-magic@0.3.0:
     resolution: {integrity: sha512-+QBBXBCvifc56fsbuxZQ6Sic3wqqc3WWaqxs58gvJrcOuN83HGTCwz3oS5phzU9LthRNE9VrJCFCLUgHeeFnfA==}
     engines: {node: '>=18'}
@@ -2427,6 +2450,12 @@ packages:
     resolution: {integrity: sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  vite-plugin-mkcert@2.1.0:
+    resolution: {integrity: sha512-UQS5iyknruwCsvqDPsKRyHIVSVfv/iGdRPmUPaM1JRwNJo8wo/MubzJ66ckWwOLxFU4wW90oZq9GviV87nRHsg==}
+    engines: {node: '>=22.19.0'}
+    peerDependencies:
+      vite: '>=3'
 
   vite@8.2.2:
     resolution: {integrity: sha512-cFKLV/PRgAUlIRm5WjMjJ86jrftzpqcgH+Us+DS8mI3CDNiH30Whrz8uHL3+MOLPAgqbMBAqWdAHAphOAM+z/Q==}
@@ -3808,6 +3837,12 @@ snapshots:
 
   csstype@3.2.3: {}
 
+  debug@4.4.3(supports-color@10.2.2):
+    dependencies:
+      ms: 2.1.3
+    optionalDependencies:
+      supports-color: 10.2.2
+
   detect-libc@2.1.2: {}
 
   detect-node-es@1.1.0: {}
@@ -4173,6 +4208,8 @@ snapshots:
   minimist@1.2.8: {}
 
   minipass@7.1.3: {}
+
+  ms@2.1.3: {}
 
   mute-stream@3.0.0: {}
 
@@ -4552,6 +4589,8 @@ snapshots:
       postcss: 8.5.26
     optional: true
 
+  supports-color@10.2.2: {}
+
   swagger2openapi@7.0.8:
     dependencies:
       call-me-maybe: 1.0.2
@@ -4618,6 +4657,8 @@ snapshots:
 
   undici-types@8.3.0: {}
 
+  undici@8.10.1: {}
+
   unicorn-magic@0.3.0: {}
 
   update-browserslist-db@1.3.2(browserslist@4.28.8):
@@ -4644,6 +4685,13 @@ snapshots:
   use-sync-external-store@1.6.0(react@19.2.8):
     dependencies:
       react: 19.2.8
+
+  vite-plugin-mkcert@2.1.0(vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.26))(yaml@2.9.0)):
+    dependencies:
+      debug: 4.4.3(supports-color@10.2.2)
+      supports-color: 10.2.2
+      undici: 8.10.1
+      vite: 8.2.2(@types/node@26.4.0)(esbuild@0.28.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.26))(yaml@2.9.0)
 
   vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.26))(yaml@2.9.0):
     dependencies:

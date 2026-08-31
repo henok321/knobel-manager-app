@@ -23,8 +23,11 @@ export const openConfirmDialog = ({
   modals.openConfirmModal({
     modalId,
     title,
-    children:
-      typeof message === 'string' ? <Text size="sm">{message}</Text> : message,
+    children: (
+      <Text component="div" size="sm">
+        {message}
+      </Text>
+    ),
     labels: { confirm: confirmLabel, cancel: i18n.t('common:actions.cancel') },
     confirmProps: { color },
     onConfirm,

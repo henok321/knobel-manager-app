@@ -11,7 +11,6 @@ import {
 import { useLocalStorage } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { useTranslation } from 'react-i18next';
-import { openConfirmDialog } from '../../../shared/confirmModal.tsx';
 import PrintMenu from '../../../shared/PrintMenu.tsx';
 import type {
   Game,
@@ -23,6 +22,7 @@ import {
   useUpdateGameMutation,
 } from '../../../store/api.ts';
 import { assertNever } from '../../../utils/assertNever';
+import { openConfirmDialog } from '../../../utils/confirmModal.tsx';
 import {
   statusColor,
   translateGameStatus,

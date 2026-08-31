@@ -148,18 +148,35 @@ covers all configured locales automatically. Type augmentation doesn't change (s
 
 `src/App.tsx` is the composition root. The persistent shell is `src/shared/layout/Layout.tsx` (wraps `Header` + page
 content + `Footer`); `src/shared/userMenu/` holds the language picker, color-scheme toggle, and user menu. Page entry
-points are under `src/pages/` — `Login.tsx` and `games/{Games,GameDetail,PrintView}` plus subdirs `panels/` and
-`print-views/` for the game-detail interior. Shared utilities sit at `src/utils/`: `assertNever.ts`,
-`gameStatusHelpers.ts`, and `notifyError.ts` — use `notifyError()` for failure toasts instead of a raw
-`notifications.show`, it carries the translated title and red color.
+points are under `src/pages/` — `Login.tsx` and `games/{Games,GameDetail,PrintView}` plus subdirs `panels/` (one
+directory per game-detail tab) and `print-views/` (flat: one file per view, plus `PrintHeader.tsx` and `print.css`).
+
+Shared utilities sit at `src/utils/`: `apiError.ts` (`httpStatus`, `backendErrorMessage`), `assertNever.ts`,
+`confirmModal.tsx`, `gameStatusHelpers.ts`, `notifyError.ts`, `rankings.ts`, `rounds.ts`, `tableAssignments.ts`. Three
+of them replace patterns you'd otherwise hand-roll:
+
+- `notifyError()` for failure toasts instead of a raw `notifications.show` — it carries the translated title and red
+  color.
+- `openConfirmDialog()` (`confirmModal.tsx`) for confirmations instead of a raw `modals.openConfirmModal` — it fills in
+  the cancel label and defaults to a red confirm button. Stateless confirmations go through it; modals that hold their
+  own state stay declarative components (`GameForm`, `TeamForm`, `EditTeamDialog`, `ScoreEntryModal`).
+- `roundSequence()` / `roundNumberById()` (`rounds.ts`) instead of rebuilding `1..numberOfRounds` lists or
+  round-id→round-number maps inline. `rounds.ts` also owns `buildRoundOptions` and the `RoundTable` type (a `Table`
+  decorated with its `roundNumber`, which `PrintView` resolves once for all print views).
 
 Styling: Mantine theme overrides in `src/theme.ts`, app-wide CSS in `src/shared/global.css`, print rules in
 `src/pages/games/print-views/print.css` — the only file where Biome allows `!important` (per the override in
 `biome.json`).
 
 Reusable presentational components live directly under `src/shared/`: `CenterLoader`, `EmptyStateCard`, `Logo`,
-`PrintMenu`, `ErrorBoundary`. Prefer these over re-implementing equivalents inside pages — especially `EmptyStateCard`
-for empty-with-CTA states (called out in the Code Review Lenses) and `ErrorBoundary` for graceful failure boundaries.
+`PrintMenu`, `RankingsTable`, `ErrorBoundary`. Prefer these over re-implementing equivalents inside pages — especially
+`EmptyStateCard` for empty-with-CTA states (called out in the Code Review Lenses), `RankingsTable` for any ranking
+list (it serves both the screen panel and the print view, fed by `utils/rankings.ts`), and `ErrorBoundary` for
+graceful failure boundaries.
+
+Naming follows the file's kind, not its directory: components are PascalCase, function modules are camelCase (which is
+why `utils/confirmModal.tsx` is lowercase despite the `.tsx` — it exports a function, and is `.tsx` only because it
+builds the modal body).
 
 ## TypeScript
 
@@ -177,7 +194,7 @@ for empty-with-CTA states (called out in the Code Review Lenses) and `ErrorBound
 
 Native Node test runner (`node --test`, Node 26 strips TS types natively — no jest, no babel, no jsdom). Tests use
 `node:test` (`describe`/`it`) + `node:assert/strict` and are co-located with the code under test (`*.test.ts`). The
-suite is focused on pure logic (e.g. `src/pages/games/panels/RankingsPanel/rankingsMapper.test.ts`); components and RTK
+suite is focused on pure logic (e.g. `src/utils/rankings.test.ts`); components and RTK
 Query data fetching aren't unit-tested — there is deliberately no DOM/browser test scaffolding. Relative imports in
 tested modules must carry the `.ts` extension (they already do, repo-wide).
 

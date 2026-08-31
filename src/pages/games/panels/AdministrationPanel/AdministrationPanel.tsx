@@ -14,13 +14,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '../../../../auth/useAuth';
-import { openConfirmDialog } from '../../../../shared/confirmModal.tsx';
 import {
   useAddOwnerMutation,
   useRemoveOwnerMutation,
 } from '../../../../store/api';
 import type { Game, GameOwner } from '../../../../store/api.gen.ts';
 import { httpStatus } from '../../../../utils/apiError.ts';
+import { openConfirmDialog } from '../../../../utils/confirmModal.tsx';
 import { notifyError } from '../../../../utils/notifyError.ts';
 
 interface AdministrationPanelProps {

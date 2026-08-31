@@ -15,13 +15,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CenterLoader from '../../../shared/CenterLoader';
-import { openConfirmDialog } from '../../../shared/confirmModal.tsx';
 import Layout from '../../../shared/layout/Layout.tsx';
 import {
   useCreateGameMutation,
   useDeleteGameMutation,
   useGetGamesQuery,
 } from '../../../store/api.ts';
+import { openConfirmDialog } from '../../../utils/confirmModal.tsx';
 import { notifyError } from '../../../utils/notifyError';
 import GameForm from './GameForm';
 import GameListItem from './GameListItem';

@@ -13,7 +13,6 @@ import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { openConfirmDialog } from '../../../../shared/confirmModal.tsx';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import {
   useGetGameTablesQuery,
@@ -24,6 +23,7 @@ import {
 } from '../../../../store/api';
 import type { Game, Table } from '../../../../store/api.gen.ts';
 import { backendErrorMessage, httpStatus } from '../../../../utils/apiError.ts';
+import { openConfirmDialog } from '../../../../utils/confirmModal.tsx';
 import { buildRoundOptions } from '../../../../utils/rounds.ts';
 import RoundTableCard from './RoundTableCard';
 import ScoreEntryModal from './ScoreEntryModal';

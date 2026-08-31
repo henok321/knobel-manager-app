@@ -1,6 +1,7 @@
 import babel from '@rolldown/plugin-babel';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
+import mkcert from 'vite-plugin-mkcert';
 
 export default defineConfig(({ mode }) => ({
   plugins: [
@@ -8,6 +9,7 @@ export default defineConfig(({ mode }) => ({
     babel({
       presets: [reactCompilerPreset()],
     }),
+    mkcert(),
   ],
   server: {
     proxy: {
