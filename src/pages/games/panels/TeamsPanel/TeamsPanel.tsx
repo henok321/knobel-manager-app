@@ -1,21 +1,16 @@
 import { Button, Group, Stack, Text, TextInput, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  useCreateTeamMutation,
-  useDeleteTeamMutation,
-  useGetGameTablesQuery,
-  useUpdatePlayerMutation,
-  useUpdateTeamMutation,
-} from '../../../../store/api';
+import { useGetGameTablesQuery } from '../../../../store/api';
 import type { Game } from '../../../../store/api.gen.ts';
-import { notifyError } from '../../../../utils/notifyError';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
-import TeamForm, { type TeamFormData } from './TeamForm';
-import { type PlayerName, teamChanges } from './teamChanges.ts';
+import TeamForm from './TeamForm';
+import { tableAssignmentsByPlayer } from './tableAssignments.ts';
+import { useTeamMutations } from './useTeamMutations.ts';
 
 interface TeamsPanelProps {
   game: Game;
@@ -23,100 +18,44 @@ interface TeamsPanelProps {
 
 const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { t } = useTranslation();
-  const [createTeam, { isLoading: isCreatingTeam }] = useCreateTeamMutation();
-  const [updateTeam] = useUpdateTeamMutation();
-  const [deleteTeam] = useDeleteTeamMutation();
-  const [updatePlayer] = useUpdatePlayerMutation();
   const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
   const tables = tablesData?.tables ?? [];
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
-
   const [searchQuery, setSearchQuery] = useState('');
 
-  const allTeams = game.teams ?? [];
-  const query = searchQuery.trim().toLowerCase();
-  const teams = query
-    ? allTeams.filter((team) => team.name.toLowerCase().includes(query))
-    : allTeams;
+  const closeTeamForm = () => setIsTeamFormOpen(false);
 
-  const roundNumberByRoundId = new Map(
-    (game.rounds ?? []).map((r) => [r.id, r.roundNumber]),
+  const announceTeamCreated = (teamName: string) => {
+    notifications.show({
+      title: t('common:actions.success'),
+      message: t('games:card.teamAdded', { name: teamName }),
+      color: 'green',
+    });
+    closeTeamForm();
+  };
+
+  const confirmSetupReset = (onConfirm: () => void) =>
+    modals.openConfirmModal({
+      modalId: 'reset-matchmaking',
+      title: t('gameDetail:rounds.resetMatchmaking'),
+      children: (
+        <Text size="sm">{t('gameDetail:teams.resetToChangeTeams')}</Text>
+      ),
+      labels: {
+        confirm: t('gameDetail:rounds.resetMatchmaking'),
+        cancel: t('common:actions.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm,
+    });
+
+  const { isSubmitting, removeTeam, saveTeam, submitTeam } = useTeamMutations(
+    game,
+    { onTeamCreated: announceTeamCreated, confirmSetupReset },
   );
 
-  const editingTeam = allTeams.find((team) => team.id === editingTeamId);
-
-  const canAddDelete = game.status === 'setup';
-  const canEdit = game.status !== 'completed';
-
-  const showTableAssignments = tables.length > 0;
-
-  const playerTableAssignments: Record<
-    number,
-    { roundNumber: number; tableNumber: number }[]
-  > = {};
-
-  for (const table of tables) {
-    const tablePlayers = table.players;
-    if (!tablePlayers) {
-      continue;
-    }
-    const tableRoundNumber =
-      roundNumberByRoundId.get(table.roundID) ?? table.roundID;
-    for (const player of tablePlayers) {
-      const id = player.id;
-      playerTableAssignments[id] ??= [];
-      playerTableAssignments[id].push({
-        roundNumber: tableRoundNumber,
-        tableNumber: table.tableNumber,
-      });
-    }
-  }
-
-  const handleCreateTeam = (teamData: TeamFormData) => {
-    const teamsRequest = {
-      name: teamData.name,
-      players: teamData.members.map((name) => ({ name })),
-    };
-    return createTeam({ gameId: game.id, teamsRequest }).unwrap();
-  };
-
-  const handleStartEditTeam = (teamID: number) => {
-    setEditingTeamId(teamID);
-  };
-
-  const handleSaveTeam = async (teamName: string, players: PlayerName[]) => {
-    if (!editingTeam) {
-      return;
-    }
-    const { nameChanged, renamedPlayers } = teamChanges(
-      editingTeam,
-      teamName,
-      players,
-    );
-
-    await Promise.all([
-      ...(nameChanged
-        ? [
-            updateTeam({
-              gameId: game.id,
-              teamId: editingTeam.id,
-              teamsRequest: { name: teamName },
-            }).unwrap(),
-          ]
-        : []),
-      ...renamedPlayers.map((player) =>
-        updatePlayer({
-          gameId: game.id,
-          teamId: editingTeam.id,
-          playerId: player.id,
-          playersRequest: { name: player.name },
-        }).unwrap(),
-      ),
-    ]);
-  };
-
-  const handleDeleteTeam = (teamID: number) => {
+  const confirmDeleteTeam = (teamID: number) =>
     modals.openConfirmModal({
       title: t('gameDetail:teams.deleteTeam'),
       children: (
@@ -127,15 +66,22 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         cancel: t('common:actions.cancel'),
       },
       confirmProps: { color: 'red' },
-      onConfirm: async () => {
-        try {
-          await deleteTeam({ gameId: game.id, teamId: teamID }).unwrap();
-        } catch {
-          notifyError();
-        }
-      },
+      onConfirm: () => void removeTeam(teamID),
     });
-  };
+
+  const allTeams = game.teams ?? [];
+  const query = searchQuery.trim().toLowerCase();
+  const teams = query
+    ? allTeams.filter((team) => team.name.toLowerCase().includes(query))
+    : allTeams;
+
+  const editingTeam = allTeams.find((team) => team.id === editingTeamId);
+
+  const canAddDelete = game.status === 'setup';
+  const canEdit = game.status !== 'completed';
+
+  const showTableAssignments = tables.length > 0;
+  const playerTableAssignments = tableAssignmentsByPlayer(tables, game.rounds);
 
   return (
     <Stack gap="md">
@@ -180,37 +126,38 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       )}
 
       <Stack gap="md">
-        {teams.map((team) => {
-          return (
-            <TeamCard
-              key={team.id}
-              canAddDelete={canAddDelete}
-              canEdit={canEdit}
-              numberOfRounds={game.numberOfRounds}
-              playerTableAssignments={playerTableAssignments}
-              showTableAssignments={showTableAssignments}
-              team={team}
-              onDelete={handleDeleteTeam}
-              onEdit={handleStartEditTeam}
-            />
-          );
-        })}
+        {teams.map((team) => (
+          <TeamCard
+            key={team.id}
+            canAddDelete={canAddDelete}
+            canEdit={canEdit}
+            numberOfRounds={game.numberOfRounds}
+            playerTableAssignments={playerTableAssignments}
+            showTableAssignments={showTableAssignments}
+            team={team}
+            onDelete={confirmDeleteTeam}
+            onEdit={setEditingTeamId}
+          />
+        ))}
       </Stack>
 
-      <TeamForm
-        createTeam={handleCreateTeam}
-        isOpen={isTeamFormOpen}
-        isSubmitting={isCreatingTeam}
-        teamSize={game.teamSize}
-        onClose={() => setIsTeamFormOpen(false)}
-      />
+      {isTeamFormOpen && (
+        <TeamForm
+          createTeam={(teamsRequest) => void submitTeam(teamsRequest)}
+          isSubmitting={isSubmitting}
+          teamSize={game.teamSize}
+          onClose={closeTeamForm}
+        />
+      )}
 
       {editingTeam && (
         <EditTeamDialog
           players={editingTeam.players ?? []}
           teamName={editingTeam.name}
           onClose={() => setEditingTeamId(null)}
-          onSave={handleSaveTeam}
+          onSave={(teamName, players) =>
+            saveTeam(editingTeam, teamName, players)
+          }
         />
       )}
     </Stack>

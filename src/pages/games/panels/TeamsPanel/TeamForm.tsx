@@ -1,25 +1,17 @@
 import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { type ChangeEvent, type SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { notifyError } from '../../../../utils/notifyError';
-
-export interface TeamFormData {
-  name: string;
-  members: string[];
-}
+import type { TeamsRequest } from '../../../../store/api.gen.ts';
 
 interface TeamFormProps {
   teamSize: number;
-  isOpen: boolean;
   isSubmitting: boolean;
   onClose: () => void;
-  createTeam: (team: TeamFormData) => Promise<unknown>;
+  createTeam: (team: TeamsRequest) => void;
 }
 
 const TeamForm = ({
-  isOpen,
   isSubmitting,
   onClose,
   createTeam,
@@ -29,26 +21,12 @@ const TeamForm = ({
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState(['']);
 
-  const handleClose = () => {
-    setTeamName('');
-    setPlayers(['']);
-    onClose();
-  };
-
-  const submit = async (e: SubmitEvent<HTMLFormElement>) => {
+  const submit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      await createTeam({ name: teamName, members: players });
-    } catch {
-      notifyError();
-      return;
-    }
-    notifications.show({
-      title: t('common:actions.success'),
-      message: t('games:card.teamAdded', { name: teamName }),
-      color: 'green',
+    createTeam({
+      name: teamName,
+      players: players.map((name) => ({ name })),
     });
-    handleClose();
   };
 
   const handleChangePlayer = (
@@ -71,15 +49,15 @@ const TeamForm = ({
   return (
     <Modal
       centered
-      opened={isOpen}
+      opened
       title={
         <Text fw={600} size="xl">
           {t('games:team.form.heading')}
         </Text>
       }
-      onClose={handleClose}
+      onClose={onClose}
     >
-      <form onSubmit={(e) => void submit(e)}>
+      <form onSubmit={submit}>
         <Stack gap="md">
           <TextInput
             autoFocus
