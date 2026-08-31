@@ -28,6 +28,7 @@ pnpm local:remote        # same, but proxies /api → VITE_API_URL (i.e. the dep
 pnpm fix                 # biome check --write .  (auto-fix lint + format)
 pnpm check               # tsc --noEmit && biome ci . && i18next-cli status && i18next-cli lint && i18next-cli extract --ci
 pnpm test                # node --test (native Node test runner, no jest; single file: node --test <path>)
+pnpm test:e2e            # playwright tournament playbook (needs a running dev server + backend)
 pnpm knip                # unused files/exports/deps audit — full mode, incl. devDependencies (not --strict)
 pnpm knip:fix            # knip --fix --format (auto-remove unused exports/files)
 
@@ -74,6 +75,11 @@ parent `{ type: 'Game', id: gameId }`, and score updates invalidate `Tables` (ke
 per-game aggregate). Tag granularity follows the client's read model, **not** the backend's route/tag taxonomy — which
 is why cache wiring is hand-written in `api.ts` rather than generated (the codegen's `tag` option is intentionally off).
 When you add a mutation, wire its `invalidatesTags` in `api.ts` to whichever aggregate(s) its response affects.
+
+**Setup conflicts.** Mutations that need a clean setup get a 409 once tables are assigned.
+`useTeamMutations.reportMutationError` invalidates the `Game` tag, opens the reset confirmation, and retries the
+original mutation once after the reset (the `mayReset` flag stops a loop); the half-filled dialog stays mounted behind
+the confirmation. Route any new setup-sensitive mutation through the same helper.
 
 ### Auth
 
@@ -195,8 +201,31 @@ builds the modal body).
 Native Node test runner (`node --test`, Node 26 strips TS types natively — no jest, no babel, no jsdom). Tests use
 `node:test` (`describe`/`it`) + `node:assert/strict` and are co-located with the code under test (`*.test.ts`). The
 suite is focused on pure logic (e.g. `src/utils/rankings.test.ts`); components and RTK
-Query data fetching aren't unit-tested — there is deliberately no DOM/browser test scaffolding. Relative imports in
-tested modules must carry the `.ts` extension (they already do, repo-wide).
+Query data fetching aren't unit-tested (no jsdom) — browser coverage lives in the Playwright suite instead. Relative
+imports in tested modules must carry the `.ts` extension (they already do, repo-wide).
+
+### End-to-end (Playwright)
+
+`e2e/full-game.spec.ts` drives a whole tournament through the UI: create, 11 teams, team/player rename, the
+add-team-after-matchmaking 409 + reset, matchmaking re-run, start, all 88 scores, a score edit, rankings, audit log,
+all print views, finalize. Config in `playwright.config.ts`. **Not part of CI** — CI runs `check`, `knip`, `test` and
+`validate-client` only.
+
+First run: `pnpm exec playwright install chromium`. Credentials come from an untracked `.env.e2e` holding `E2E_EMAIL`
+and `E2E_PASSWORD`; the config resolves that file relative to itself, so a missing one can't make every test skip while
+the run still exits 0. Single test: `pnpm test:e2e --grep "audit log"` — but the read-only tests consume a tournament
+the lifecycle test publishes, so a grep that excludes it makes them skip.
+
+**It writes real data** to whatever `/api` proxies to — under `pnpm local:remote` that is the deployed API. Every run
+leaves a game named `E2E Turnier <timestamp>`; there is no cleanup step.
+
+Shape: one mutating spine test builds and publishes the tournament; the checks that only read it (rankings, audit log,
+print) are separate tests so one broken view can't hide another. Deliberately **not** `serial`. Finalizing mutates, so
+it runs last.
+
+Determinism: matchmaking seating is random and the API's row order is unstable, so expected values are computed from
+the scores the test itself types, and rows are compared as sets, never sequences. `TeamCard`'s edit/delete icon buttons
+have no accessible name, which is why that one interaction is located positionally.
 
 ## Environment
 
@@ -247,6 +276,11 @@ pin it here rather than reinstalling — the lockfile faithfully reproduces the 
   auto-memoizes. **Don't** add `React.memo`/`useMemo`/`useCallback`; the codebase has none. Write plain derivations and
   let the compiler handle memoization.
 - Keep `useEffect` dependency arrays correct — stale closures are a recurring class of bug here.
+- `ScoreEntryModal` must stay conditionally rendered (`{scoreModalOpen && …}`). It holds per-player score state; while
+  permanently mounted that state outlived the table and silently wrote a previous table's score on save. The e2e suite
+  guards it.
+- The round-tables query gates on `isLoading`, not `isFetching` — `isFetching` is also true for the refetch after
+  saving scores, which blanked every table card.
 
 ### Type safety
 
