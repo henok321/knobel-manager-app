@@ -224,8 +224,7 @@ print) are separate tests so one broken view can't hide another. Deliberately **
 it runs last.
 
 Determinism: matchmaking seating is random and the API's row order is unstable, so expected values are computed from
-the scores the test itself types, and rows are compared as sets, never sequences. `TeamCard`'s edit/delete icon buttons
-have no accessible name, which is why that one interaction is located positionally.
+the scores the test itself types, and rows are compared as sets, never sequences.
 
 ## Environment
 

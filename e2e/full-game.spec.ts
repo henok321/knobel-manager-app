@@ -291,11 +291,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
 
   await test.step('rename a team and one of its players', async () => {
     const teamsPanel = panelFor(page, 'Teams');
-    // TeamCard's icon buttons have no accessible name; edit is the first.
-    await cardByHeading(teamsPanel, page, 'Team Charlie')
-      .getByRole('button')
-      .first()
-      .click();
+    await teamsPanel.getByRole('button', { name: 'Edit Team Charlie' }).click();
     const d = dialog(page);
     await expect(d.getByRole('textbox', { name: 'Team Name' })).toHaveValue(
       'Team Charlie',

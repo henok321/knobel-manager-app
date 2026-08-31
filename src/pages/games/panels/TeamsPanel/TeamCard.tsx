@@ -37,12 +37,21 @@ const TeamCard = ({
           {(canEdit || canAddDelete) && (
             <Group gap="xs">
               {canEdit && (
-                <ActionIcon variant="subtle" onClick={() => onEdit(team.id)}>
+                <ActionIcon
+                  aria-label={t('gameDetail:teams.editTeamLabel', {
+                    team: team.name,
+                  })}
+                  variant="subtle"
+                  onClick={() => onEdit(team.id)}
+                >
                   <IconPencil size={16} stroke={1.5} />
                 </ActionIcon>
               )}
               {canAddDelete && (
                 <ActionIcon
+                  aria-label={t('gameDetail:teams.deleteTeamLabel', {
+                    team: team.name,
+                  })}
                   color="red"
                   variant="subtle"
                   onClick={() => onDelete(team.id)}
