@@ -1,26 +1,11 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
 /**
- * Full tournament lifecycle against a running `pnpm local` + backend.
- *
+ * Needs a running `pnpm local` + backend:
  *   E2E_EMAIL=... E2E_PASSWORD=... pnpm test:e2e
  *
- * Structure: the first test is the mutating spine — create, rename, matchmaking
- * conflict, start, every score, score edit — because each of those steps needs
- * the state the previous one left behind. It publishes the finished tournament,
- * and the checks that only *read* it (rankings, audit log, print) are separate
- * tests so one broken view does not hide the others. They skip, rather than
- * cascade, if the spine never finished building.
- *
- * Determinism notes, because both matchmaking and the backend's row order are
- * outside our control:
- *  - Matchmaking assigns players to tables randomly, so nothing is asserted
- *    against a fixed seating. Instead every score this test types is recorded,
- *    and the expected rankings are computed from that record.
- *  - The API returns table rows in an unstable order, so rows are always
- *    compared as sets, never as sequences.
- *  - Every run creates a fresh game named with a timestamp; the test never
- *    touches pre-existing games.
+ * Matchmaking seats players randomly and the API's row order is unstable, so
+ * expectations are computed from the scores typed here and rows compared as sets.
  */
 
 const EMAIL = process.env.E2E_EMAIL;
@@ -49,7 +34,6 @@ const RENAMED_PLAYER = 'Charlie Zwei Geaendert';
 const memberNames = (teamName: string) =>
   MEMBER_SUFFIXES.map((suffix) => `${teamName.replace('Team ', '')} ${suffix}`);
 
-/** A score keyed by player name, plus the team the score modal reported for them. */
 interface ScoreRecord {
   perRound: Map<number, Map<string, number>>;
   teamOfPlayer: Map<string, string>;
@@ -94,7 +78,6 @@ const teamTotals = (record: ScoreRecord, rounds: number[]) => {
   return totals;
 };
 
-/** What the spine builds and the read-only tests consume. */
 interface Tournament {
   gameId: string;
   gameName: string;
@@ -153,7 +136,6 @@ const login = async (page: Page) => {
   await expect(page.getByRole('button', { name: 'Create game' })).toBeVisible();
 };
 
-/** Reads the score modal: player names, the team shown for each, and prefilled values. */
 const readScoreModal = async (page: Page) => {
   const d = dialog(page);
   await expect(d).toBeVisible();
@@ -194,14 +176,10 @@ const createTeam = async (page: Page, teamName: string) => {
   return names;
 };
 
-/**
- * Player name -> score, for the round currently shown in the Rounds panel.
- * Read as a map because the API's row order is not stable.
- */
+/** A map, not a list: the API's row order is unstable. */
 const scoreRowsFor = async (page: Page, expectedTables: number) => {
   const panel = panelFor(page, 'Rounds');
-  // Saving scores invalidates the round query; wait for the table cards to come
-  // back before reading them in one shot.
+  // Saving invalidates the round query; wait for the cards to come back.
   await expect(panel.getByRole('button', { name: 'Edit Scores' })).toHaveCount(
     expectedTables,
   );
@@ -313,8 +291,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
 
   await test.step('rename a team and one of its players', async () => {
     const teamsPanel = panelFor(page, 'Teams');
-    // The TeamCard edit/delete icon buttons carry no accessible name, so they can
-    // only be reached positionally: edit is the first button on the card.
+    // TeamCard's icon buttons have no accessible name; edit is the first.
     await cardByHeading(teamsPanel, page, 'Team Charlie')
       .getByRole('button')
       .first()
@@ -347,7 +324,6 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
     await expect(
       roundsPanel.getByRole('heading', { name: /^Table / }),
     ).toHaveCount(expectedTables);
-    // The rename must have propagated into the freshly generated seating.
     await expect(roundsPanel.getByText(RENAMED_TEAM).first()).toBeVisible();
   });
 
@@ -358,8 +334,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
       .getByRole('button', { name: 'Create', exact: true })
       .click();
 
-    // The backend answers 409; the app must offer the reset instead of failing
-    // silently, and must keep the half-filled create-team dialog alive behind it.
+    // The 409 must surface as a reset offer, not a silent failure.
     const resetDialog = page.getByRole('dialog', { name: 'Reset Matchmaking' });
     await expect(resetDialog).toBeVisible();
     await expect(
@@ -375,7 +350,6 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
       .getByRole('button', { name: 'Reset Matchmaking' })
       .click();
 
-    // Reset + retry: the team lands, and the seating is gone.
     const teamsPanel = panelFor(page, 'Teams');
     await expect(
       teamsPanel.getByRole('heading', { exact: true, name: LATE_TEAM }),
@@ -440,9 +414,8 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
       await d.getByRole('button', { name: 'Save Scores' }).click();
       await expect(d).toBeHidden();
 
-      // The saved table keeps its stale "Enter Scores" button until the
-      // invalidated round query lands, so wait for the pending count to drop or
-      // the next iteration re-opens the same table.
+      // Until the refetch lands the saved table keeps its stale button, and
+      // the next iteration would re-open it.
       await expect(
         page.getByRole('button', { name: 'Enter Scores' }),
       ).toHaveCount(totalTables - i - 1);
@@ -457,7 +430,6 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
     await test.step(`enter every score for round ${round}`, async () => {
       await enterAllScoresForRound(round);
 
-      // Every score just typed must be readable back on the round's tables.
       const rows = await scoreRowsFor(page, totalTables);
       for (const [player, score] of record.perRound.get(round) ?? []) {
         expect(rows.get(player), `round ${round} score for ${player}`).toBe(
@@ -494,7 +466,6 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
       .click();
     const before = await readScoreModal(page);
 
-    // The modal must prefill with what is stored for THIS table and round.
     for (const [index, entry] of before.entries.entries()) {
       expect(Number(before.values[index]), `prefill for ${entry.player}`).toBe(
         record.perRound.get(1)?.get(entry.player),
@@ -507,9 +478,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
     await dialog(page).getByRole('button', { name: 'Save Scores' }).click();
     await expect(dialog(page)).toBeHidden();
 
-    // Every table already has scores here, so the pending-table count cannot act
-    // as a barrier. Assert the cell itself, which retries until the invalidated
-    // round query lands.
+    // No count changes here, so retry on the cell instead.
     const editedRow = roundsPanel
       .locator('tbody tr')
       .filter({ has: page.getByText(edited, { exact: true }) });
@@ -525,10 +494,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
       newScore,
     );
 
-    // Regression guard: ScoreEntryModal used to keep its `scores` state across
-    // openings (RoundsPanel never unmounted it) and handleSubmit preferred that
-    // stale map over the current table's values, so a score typed at another
-    // table or round was silently written here instead.
+    // Guard: the modal once submitted scores typed at another table.
     for (const entry of before.entries.slice(1)) {
       expect(
         rows.get(entry.player),
@@ -538,7 +504,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
   });
 
   await test.step('no unexpected console errors', async () => {
-    // The 409 from the deliberate add-team-after-matchmaking conflict is expected.
+    // The deliberate add-team-after-matchmaking 409 is expected.
     const unexpected = consoleErrors.filter((line) => !line.includes('409'));
     expect(unexpected, unexpected.join('\n')).toHaveLength(0);
   });
@@ -546,12 +512,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
   built = { gameId, gameName, record, totalTables };
 });
 
-/**
- * These only read the finished tournament, so they are separate tests: a broken
- * print view must not hide a broken ranking. Playwright runs them in declaration
- * order (workers: 1, fullyParallel: false) and they are deliberately NOT serial,
- * so each reports its own verdict.
- */
+/** Separate, non-serial tests so one broken view cannot hide another. */
 test.describe('a finished tournament', () => {
   test.beforeEach(async ({ page }) => {
     test.skip(
@@ -579,8 +540,7 @@ test.describe('a finished tournament', () => {
       const expectedTeams = teamTotals(record, view.rounds);
       const expectedPlayers = playerTotals(record, view.rounds);
 
-      // Switching the view refetches, so wait for this view's rows before
-      // reading them in one shot.
+      // Switching the view refetches; wait for its rows.
       await expect(panel.locator('tbody tr')).toHaveCount(
         expectedTeams.size + expectedPlayers.size,
       );
@@ -641,7 +601,6 @@ test.describe('a finished tournament', () => {
     ]) {
       expect(text, `audit log mentions ${marker}`).toContain(marker);
     }
-    // The renames and the score edit must be traceable.
     expect(text).toContain(RENAMED_TEAM);
     expect(text).toContain(RENAMED_PLAYER);
     expect(text).toContain('Score: ');
@@ -709,7 +668,6 @@ test.describe('a finished tournament', () => {
     await expect(
       page.getByRole('button', { name: 'Finalize Game' }),
     ).toHaveCount(0);
-    // Print stays available after finalizing.
     await expect(
       page.getByRole('button', { name: 'Print View' }),
     ).toBeVisible();
