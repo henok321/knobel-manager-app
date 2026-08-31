@@ -16,6 +16,7 @@
     "check": "tsc --noEmit && biome ci . && i18next-cli status && i18next-cli lint && i18next-cli extract --ci",
     "fix": "biome check --write .",
     "test": "node --test 'src/**/*.test.ts'",
+    "test:e2e": "playwright test",
     "knip": "knip",
     "knip:fix": "knip --fix --format",
     "preview": "vite preview",
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@babel/core": "^8.0.1",
     "@biomejs/biome": "^2.5.11",
+    "@playwright/test": "^1.62.1",
     "@rolldown/plugin-babel": "^0.2.3",
     "@rtk-query/codegen-openapi": "^2.2.0",
     "@types/node": "^26.4.0",
