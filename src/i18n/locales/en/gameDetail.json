@@ -92,7 +92,7 @@
     "totalScore": "Total Score"
   },
   "rounds": {
-    "confirmResetMatchmaking": "This discards the table assignment of every round, including any scores entered at those tables. The teams stay untouched and you can run matchmaking again afterwards.",
+    "confirmResetMatchmaking": "Resetting discards the table assignment of every round, including any scores entered at those tables. The teams are kept, and you can run matchmaking again afterwards.",
     "editScores": "Edit Scores",
     "enterScores": "Enter Scores",
     "enterScoresTitle": "Enter Scores - Table {{table}}",
@@ -144,7 +144,6 @@
     "player": "Player",
     "playerNamePlaceholder": "Enter player name",
     "players": "Players",
-    "resetToChangeTeams": "The tables are already assigned. Resetting the matchmaking discards that assignment, then you can change the teams and run matchmaking again.",
     "roundColumn": "Round {{round}}",
     "roundColumnShort": "R{{round}}",
     "searchTeams": "Search team by name...",

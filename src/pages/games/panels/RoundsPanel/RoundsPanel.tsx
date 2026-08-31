@@ -8,7 +8,6 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { modals } from '@mantine/modals';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
@@ -20,6 +19,7 @@ import {
   useUpdateScoresMutation,
 } from '../../../../store/api';
 import type { Game, Table } from '../../../../store/api.gen.ts';
+import { openResetMatchmakingModal } from '../resetMatchmakingModal.tsx';
 import { buildRoundOptions } from '../roundOptions.ts';
 import RoundTableCard from './RoundTableCard';
 import ScoreEntryModal from './ScoreEntryModal';
@@ -96,25 +96,14 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   };
 
   const handleResetSetup = () =>
-    modals.openConfirmModal({
-      title: t('gameDetail:rounds.resetMatchmaking'),
-      children: (
-        <Text size="sm">{t('gameDetail:rounds.confirmResetMatchmaking')}</Text>
-      ),
-      labels: {
-        confirm: t('gameDetail:rounds.resetMatchmaking'),
-        cancel: t('common:actions.cancel'),
-      },
-      confirmProps: { color: 'red' },
-      onConfirm: async () => {
-        setError(null);
+    openResetMatchmakingModal(t, async () => {
+      setError(null);
 
-        try {
-          await resetSetup({ gameId: game.id }).unwrap();
-        } catch (err) {
-          setError(getBackendErrorMessage(err) ?? t('gameDetail:rounds.error'));
-        }
-      },
+      try {
+        await resetSetup({ gameId: game.id }).unwrap();
+      } catch (err) {
+        setError(getBackendErrorMessage(err) ?? t('gameDetail:rounds.error'));
+      }
     });
 
   const handleOpenScoreEntry = (table: Table) => {

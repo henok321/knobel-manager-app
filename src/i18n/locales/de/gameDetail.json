@@ -92,7 +92,7 @@
     "totalScore": "Gesamtpunktzahl"
   },
   "rounds": {
-    "confirmResetMatchmaking": "Damit wird die Tischverteilung aller Runden verworfen, inklusive der an diesen Tischen eingetragenen Punkte. Die Teams bleiben unverändert und die Spielpaarungen können danach neu berechnet werden.",
+    "confirmResetMatchmaking": "Beim Zurücksetzen wird die Tischverteilung aller Runden verworfen, inklusive der an diesen Tischen eingetragenen Punkte. Die Teams bleiben erhalten und die Spielpaarungen können danach neu berechnet werden.",
     "editScores": "Punkte bearbeiten",
     "enterScores": "Punkte eintragen",
     "enterScoresTitle": "Punkte eintragen - Tisch {{table}}",
@@ -144,7 +144,6 @@
     "player": "Spieler",
     "playerNamePlaceholder": "Spielername eingeben",
     "players": "Spieler",
-    "resetToChangeTeams": "Die Tische sind bereits verteilt. Wenn du die Spielpaarungen zurücksetzt, wird diese Verteilung verworfen, danach kannst du die Teams ändern und neu berechnen.",
     "roundColumn": "Runde {{round}}",
     "roundColumnShort": "R{{round}}",
     "searchTeams": "Nach Teamnamen suchen...",

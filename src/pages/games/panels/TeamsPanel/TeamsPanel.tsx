@@ -15,6 +15,7 @@ import {
 import type { Game, TeamsRequest } from '../../../../store/api.gen.ts';
 import { isConflictError } from '../../../../utils/isConflictError.ts';
 import { notifyError } from '../../../../utils/notifyError';
+import { openResetMatchmakingModal } from '../resetMatchmakingModal.tsx';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
 import TeamForm, { type TeamFormData } from './TeamForm';
@@ -83,25 +84,14 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     setTeamFormKey((key) => key + 1);
   };
 
-  const offerSetupReset = (retry: () => unknown) =>
-    modals.openConfirmModal({
-      title: t('gameDetail:rounds.resetMatchmaking'),
-      children: (
-        <Text size="sm">{t('gameDetail:teams.resetToChangeTeams')}</Text>
-      ),
-      labels: {
-        confirm: t('gameDetail:rounds.resetMatchmaking'),
-        cancel: t('common:actions.cancel'),
-      },
-      confirmProps: { color: 'red' },
-      onConfirm: async () => {
-        try {
-          await resetSetup({ gameId: game.id }).unwrap();
-          await retry();
-        } catch {
-          notifyError();
-        }
-      },
+  const offerSetupReset = (afterReset: () => unknown) =>
+    openResetMatchmakingModal(t, async () => {
+      try {
+        await resetSetup({ gameId: game.id }).unwrap();
+        await afterReset();
+      } catch {
+        notifyError();
+      }
     });
 
   const submitTeam = async (teamsRequest: TeamsRequest) => {
