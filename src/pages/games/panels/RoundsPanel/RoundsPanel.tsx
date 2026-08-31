@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next';
 import {
   useGetGameTablesQuery,
   useGetTablesQuery,
+  useResetGameSetupMutation,
+  useSetupGameMutation,
   useUpdateScoresMutation,
 } from '../../../../store/api';
 import type { Game, Table } from '../../../../store/api.gen.ts';
@@ -21,7 +23,6 @@ import { buildRoundOptions } from '../roundOptions.ts';
 import RoundsContent from './RoundsContent';
 import { roundTablesErrorMessage } from './roundTables.ts';
 import ScoreEntryModal from './ScoreEntryModal';
-import { useMatchmaking } from './useMatchmaking';
 
 interface RoundsPanelProps {
   game: Game;
@@ -29,6 +30,8 @@ interface RoundsPanelProps {
 
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
+  const [setupGame, { isLoading: settingUp }] = useSetupGameMutation();
+  const [resetSetup, { isLoading: resetting }] = useResetGameSetupMutation();
   const [updateScores] = useUpdateScoresMutation();
   const teams = game.teams ?? [];
   const { data: allTablesData } = useGetGameTablesQuery({ gameId: game.id });
@@ -39,8 +42,21 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { settingUp, resetting, startMatchmaking, resetMatchmaking } =
-    useMatchmaking(game.id, setError, t('gameDetail:rounds.error'));
+  const runMatchmaking = async (mutate: () => Promise<unknown>) => {
+    setError(null);
+
+    try {
+      await mutate();
+    } catch (err) {
+      setError(backendErrorMessage(err) ?? t('gameDetail:rounds.error'));
+    }
+  };
+
+  const startMatchmaking = () =>
+    void runMatchmaking(() => setupGame({ gameId: game.id }).unwrap());
+
+  const resetMatchmaking = () =>
+    void runMatchmaking(() => resetSetup({ gameId: game.id }).unwrap());
 
   const confirmReset = () =>
     modals.openConfirmModal({
