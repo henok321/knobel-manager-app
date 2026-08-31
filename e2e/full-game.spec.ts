@@ -368,6 +368,13 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
       }
       await d.getByRole('button', { name: 'Save Scores' }).click();
       await expect(d).toBeHidden();
+
+      // The saved table keeps its stale "Enter Scores" button until the
+      // invalidated round query lands, so wait for the pending count to drop or
+      // the next iteration re-opens the same table.
+      await expect(
+        page.getByRole('button', { name: 'Enter Scores' }),
+      ).toHaveCount(totalTables - i - 1);
     }
 
     await expect(
@@ -383,7 +390,7 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
       await enterAllScoresForRound(round);
 
       // Every score just typed must be readable back on the round's tables.
-      const rows = await scoreRowsFor(page);
+      const rows = await scoreRowsFor(page, totalTables);
       for (const [player, score] of record.perRound.get(round) ?? []) {
         expect(rows.get(player), `round ${round} score for ${player}`).toBe(
           score,
@@ -432,7 +439,7 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
     await dialog(page).getByRole('button', { name: 'Save Scores' }).click();
     await expect(dialog(page)).toBeHidden();
 
-    const rows = await scoreRowsFor(page);
+    const rows = await scoreRowsFor(page, totalTables);
     expect(rows.get(edited)).toBe(newScore);
     remember(
       record,
@@ -442,14 +449,15 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
       newScore,
     );
 
-    // KNOWN BUG (soft): ScoreEntryModal keeps its `scores` state across openings
-    // because RoundsPanel never unmounts it, and handleSubmit prefers that stale
-    // map over the current table's values. Any player whose id was touched at
-    // another table/round gets that older value written here, silently.
+    // Regression guard: ScoreEntryModal used to keep its `scores` state across
+    // openings (RoundsPanel never unmounted it) and handleSubmit preferred that
+    // stale map over the current table's values, so a score typed at another
+    // table or round was silently written here instead.
     for (const entry of before.entries.slice(1)) {
-      expect
-        .soft(rows.get(entry.player), `untouched score for ${entry.player}`)
-        .toBe(record.perRound.get(1)?.get(entry.player));
+      expect(
+        rows.get(entry.player),
+        `untouched score for ${entry.player}`,
+      ).toBe(record.perRound.get(1)?.get(entry.player));
     }
   });
 
@@ -643,8 +651,16 @@ test('full tournament lifecycle: setup, matchmaking conflict, scores, rankings, 
  * Player name -> score, for the round currently shown in the Rounds panel.
  * Read as a map because the API's row order is not stable.
  */
-async function scoreRowsFor(page: Page) {
-  const rows = await panelFor(page, 'Rounds')
+async function scoreRowsFor(page: Page, expectedTables: number) {
+  const panel = panelFor(page, 'Rounds');
+  // Saving scores invalidates the round query, and RoundsPanel gates on
+  // isFetching, so the whole table list is replaced by a loading line until the
+  // refetch lands. Wait for the cards to come back before reading them.
+  await expect(panel.getByRole('button', { name: 'Edit Scores' })).toHaveCount(
+    expectedTables,
+  );
+
+  const rows = await panel
     .locator('tbody tr')
     .evaluateAll((trs) =>
       trs.map((tr) =>

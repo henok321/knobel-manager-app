@@ -44,3 +44,5 @@ src/generated
 /playwright-report/
 /playwright/.cache/
 /test-results/
+# e2e credentials
+.env.e2e
