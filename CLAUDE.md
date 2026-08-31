@@ -265,8 +265,11 @@ pin it here rather than reinstalling — the lockfile faithfully reproduces the 
 - Senior-engineer standard: clean design, modularity, clear boundaries.
 - Balance DRY with locality — prefer clarity over premature abstraction.
 - Tests live next to the code under test.
-- Comments explain *why* (non-obvious constraints, domain decisions). Don't narrate *what* the code does — let the
-  identifiers carry that.
+- **Clear code over comments.** Default to zero. A comment that narrates *what* the code does is a naming or
+  decomposition problem — rename, extract, split, and the comment disappears with it.
+- When a comment is genuinely unavoidable (non-obvious constraint, external quirk, deliberate deviation), write one
+  brief line saying *why*. Never a multi-line explanatory block, never a restatement of the next statement, never
+  scene-setting prose above a function. Prune generated comment bloat on sight, including your own.
 
 ### Component design
 
