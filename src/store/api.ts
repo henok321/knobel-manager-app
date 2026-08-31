@@ -57,6 +57,12 @@ export const api = generatedApi.enhanceEndpoints({
         { type: 'Tables', id: gameTablesTag(arg.gameId) },
       ],
     },
+    resetGameSetup: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Game', id: arg.gameId },
+        { type: 'Tables', id: gameTablesTag(arg.gameId) },
+      ],
+    },
     addOwner: {
       invalidatesTags: (_result, _error, arg) => [
         { type: 'Game', id: arg.gameId },
@@ -105,6 +111,7 @@ export const {
   useUpdateGameMutation,
   useDeleteGameMutation,
   useSetupGameMutation,
+  useResetGameSetupMutation,
   useCreateTeamMutation,
   useUpdateTeamMutation,
   useDeleteTeamMutation,

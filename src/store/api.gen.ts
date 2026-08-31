@@ -42,6 +42,15 @@ const injectedRtkApi = api.injectEndpoints({
         method: "POST",
       }),
     }),
+    resetGameSetup: build.mutation<
+      ResetGameSetupApiResponse,
+      ResetGameSetupApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/games/${queryArg.gameId}/setup`,
+        method: "DELETE",
+      }),
+    }),
     addOwner: build.mutation<AddOwnerApiResponse, AddOwnerApiArg>({
       query: (queryArg) => ({
         url: `/games/${queryArg.gameId}/owners`,
@@ -150,6 +159,10 @@ export type DeleteGameApiArg = {
 };
 export type SetupGameApiResponse = unknown;
 export type SetupGameApiArg = {
+  gameId: number;
+};
+export type ResetGameSetupApiResponse = unknown;
+export type ResetGameSetupApiArg = {
   gameId: number;
 };
 export type AddOwnerApiResponse =
@@ -299,7 +312,7 @@ export type GameUpdateRequest = {
   numberOfRounds: number;
   teamSize: number;
   tableSize: number;
-  status: GameStatus;
+  status?: GameStatus;
 };
 export type AddOwnerRequest = {
   email: string;
@@ -375,6 +388,7 @@ export const {
   useUpdateGameMutation,
   useDeleteGameMutation,
   useSetupGameMutation,
+  useResetGameSetupMutation,
   useAddOwnerMutation,
   useRemoveOwnerMutation,
   useCreateTeamMutation,

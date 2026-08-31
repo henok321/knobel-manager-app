@@ -1,5 +1,6 @@
 import { Button, Group, Stack, Text, TextInput, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,10 +8,12 @@ import {
   useCreateTeamMutation,
   useDeleteTeamMutation,
   useGetGameTablesQuery,
+  useResetGameSetupMutation,
   useUpdatePlayerMutation,
   useUpdateTeamMutation,
 } from '../../../../store/api';
-import type { Game } from '../../../../store/api.gen.ts';
+import type { Game, TeamsRequest } from '../../../../store/api.gen.ts';
+import { isConflictError } from '../../../../utils/isConflictError.ts';
 import { notifyError } from '../../../../utils/notifyError';
 import EditTeamDialog from './EditTeamDialog';
 import TeamCard from './TeamCard';
@@ -27,9 +30,11 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const [updateTeam] = useUpdateTeamMutation();
   const [deleteTeam] = useDeleteTeamMutation();
   const [updatePlayer] = useUpdatePlayerMutation();
+  const [resetSetup] = useResetGameSetupMutation();
   const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
   const tables = tablesData?.tables ?? [];
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
+  const [teamFormKey, setTeamFormKey] = useState(0);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -73,12 +78,64 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     }
   }
 
-  const handleCreateTeam = (teamData: TeamFormData) => {
-    const teamsRequest = {
+  const closeTeamForm = () => {
+    setIsTeamFormOpen(false);
+    setTeamFormKey((key) => key + 1);
+  };
+
+  const offerSetupReset = (retry: () => unknown) =>
+    modals.openConfirmModal({
+      title: t('gameDetail:rounds.resetMatchmaking'),
+      children: (
+        <Text size="sm">{t('gameDetail:teams.resetToChangeTeams')}</Text>
+      ),
+      labels: {
+        confirm: t('gameDetail:rounds.resetMatchmaking'),
+        cancel: t('common:actions.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm: async () => {
+        try {
+          await resetSetup({ gameId: game.id }).unwrap();
+          await retry();
+        } catch {
+          notifyError();
+        }
+      },
+    });
+
+  const submitTeam = async (teamsRequest: TeamsRequest) => {
+    try {
+      await createTeam({ gameId: game.id, teamsRequest }).unwrap();
+    } catch (error) {
+      if (isConflictError(error)) {
+        offerSetupReset(() => submitTeam(teamsRequest));
+      } else {
+        notifyError();
+      }
+      throw error;
+    }
+
+    notifications.show({
+      title: t('common:actions.success'),
+      message: t('games:card.teamAdded', { name: teamsRequest.name }),
+      color: 'green',
+    });
+    closeTeamForm();
+  };
+
+  const handleCreateTeam = (teamData: TeamFormData) =>
+    submitTeam({
       name: teamData.name,
       players: teamData.members.map((name) => ({ name })),
-    };
-    return createTeam({ gameId: game.id, teamsRequest }).unwrap();
+    });
+
+  const handleAddTeam = () => {
+    if (tables.length > 0) {
+      offerSetupReset(() => setIsTeamFormOpen(true));
+      return;
+    }
+    setIsTeamFormOpen(true);
   };
 
   const handleStartEditTeam = (teamID: number) => {
@@ -116,6 +173,18 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     ]);
   };
 
+  const removeTeam = async (teamID: number) => {
+    try {
+      await deleteTeam({ gameId: game.id, teamId: teamID }).unwrap();
+    } catch (error) {
+      if (isConflictError(error)) {
+        offerSetupReset(() => removeTeam(teamID));
+      } else {
+        notifyError();
+      }
+    }
+  };
+
   const handleDeleteTeam = (teamID: number) => {
     modals.openConfirmModal({
       title: t('gameDetail:teams.deleteTeam'),
@@ -127,13 +196,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         cancel: t('common:actions.cancel'),
       },
       confirmProps: { color: 'red' },
-      onConfirm: async () => {
-        try {
-          await deleteTeam({ gameId: game.id, teamId: teamID }).unwrap();
-        } catch {
-          notifyError();
-        }
-      },
+      onConfirm: () => void removeTeam(teamID),
     });
   };
 
@@ -150,7 +213,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
           <Button
             leftSection={<IconPlus size={20} stroke={1.5} />}
             style={{ alignSelf: 'flex-start' }}
-            onClick={() => setIsTeamFormOpen(true)}
+            onClick={handleAddTeam}
           >
             {t('gameDetail:teams.addTeam')}
           </Button>
@@ -198,11 +261,12 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       </Stack>
 
       <TeamForm
+        key={teamFormKey}
         createTeam={handleCreateTeam}
         isOpen={isTeamFormOpen}
         isSubmitting={isCreatingTeam}
         teamSize={game.teamSize}
-        onClose={() => setIsTeamFormOpen(false)}
+        onClose={closeTeamForm}
       />
 
       {editingTeam && (

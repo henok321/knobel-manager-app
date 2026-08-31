@@ -1,9 +1,7 @@
 import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { type ChangeEvent, type SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { notifyError } from '../../../../utils/notifyError';
 
 export interface TeamFormData {
   name: string;
@@ -40,15 +38,8 @@ const TeamForm = ({
     try {
       await createTeam({ name: teamName, members: players });
     } catch {
-      notifyError();
-      return;
+      // the panel reports the failure and decides whether to offer a setup reset
     }
-    notifications.show({
-      title: t('common:actions.success'),
-      message: t('games:card.teamAdded', { name: teamName }),
-      color: 'green',
-    });
-    handleClose();
   };
 
   const handleChangePlayer = (

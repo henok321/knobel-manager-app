@@ -8,12 +8,14 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import {
   useGetGameTablesQuery,
   useGetTablesQuery,
+  useResetGameSetupMutation,
   useSetupGameMutation,
   useUpdateScoresMutation,
 } from '../../../../store/api';
@@ -35,6 +37,7 @@ const getBackendErrorMessage = (err: unknown): string | undefined => {
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
   const [setupGame, { isLoading: settingUp }] = useSetupGameMutation();
+  const [resetSetup, { isLoading: resetting }] = useResetGameSetupMutation();
   const [updateScores] = useUpdateScoresMutation();
   const teams = game.teams ?? [];
   const { data: allTablesData } = useGetGameTablesQuery({ gameId: game.id });
@@ -91,6 +94,28 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
       setError(getBackendErrorMessage(err) ?? t('gameDetail:rounds.error'));
     }
   };
+
+  const handleResetSetup = () =>
+    modals.openConfirmModal({
+      title: t('gameDetail:rounds.resetMatchmaking'),
+      children: (
+        <Text size="sm">{t('gameDetail:rounds.confirmResetMatchmaking')}</Text>
+      ),
+      labels: {
+        confirm: t('gameDetail:rounds.resetMatchmaking'),
+        cancel: t('common:actions.cancel'),
+      },
+      confirmProps: { color: 'red' },
+      onConfirm: async () => {
+        setError(null);
+
+        try {
+          await resetSetup({ gameId: game.id }).unwrap();
+        } catch (err) {
+          setError(getBackendErrorMessage(err) ?? t('gameDetail:rounds.error'));
+        }
+      },
+    });
 
   const handleOpenScoreEntry = (table: Table) => {
     setSelectedTable(table);
@@ -218,15 +243,26 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
             }}
           />
           {canSetupMatchmaking && (
-            <Button
-              loading={settingUp}
-              size="md"
-              disabled={!sufficientTeams}
-              variant="light"
-              onClick={() => void handleSetupGame()}
-            >
-              {t('gameDetail:rounds.rerunMatchmaking')}
-            </Button>
+            <Group gap="xs">
+              <Button
+                loading={settingUp}
+                size="md"
+                disabled={!sufficientTeams}
+                variant="light"
+                onClick={() => void handleSetupGame()}
+              >
+                {t('gameDetail:rounds.rerunMatchmaking')}
+              </Button>
+              <Button
+                color="red"
+                loading={resetting}
+                size="md"
+                variant="light"
+                onClick={handleResetSetup}
+              >
+                {t('gameDetail:rounds.resetMatchmaking')}
+              </Button>
+            </Group>
           )}
         </Group>
       )}
