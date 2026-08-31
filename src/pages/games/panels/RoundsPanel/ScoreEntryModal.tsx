@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import type { Table, Team } from '../../../../store/api.gen.ts';
 
 interface ScoreEntryModalProps {
-  isOpen: boolean;
   table: Table | null;
   teams: Team[];
   roundNumber: number;
@@ -15,7 +14,6 @@ interface ScoreEntryModalProps {
 }
 
 const ScoreEntryModal = ({
-  isOpen,
   table,
   teams,
   roundNumber,
@@ -60,7 +58,7 @@ const ScoreEntryModal = ({
   return (
     <Modal
       centered
-      opened={isOpen}
+      opened
       size="md"
       title={
         <Text fw={600} size="xl">

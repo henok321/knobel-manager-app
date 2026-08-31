@@ -260,14 +260,15 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
       {roundsContent()}
 
-      <ScoreEntryModal
-        isOpen={scoreModalOpen}
-        roundNumber={selectedRound}
-        table={selectedTable}
-        teams={teams}
-        onClose={() => setScoreModalOpen(false)}
-        onSubmit={handleSubmitScores}
-      />
+      {scoreModalOpen && (
+        <ScoreEntryModal
+          roundNumber={selectedRound}
+          table={selectedTable}
+          teams={teams}
+          onClose={() => setScoreModalOpen(false)}
+          onSubmit={handleSubmitScores}
+        />
+      )}
     </Stack>
   );
 };
