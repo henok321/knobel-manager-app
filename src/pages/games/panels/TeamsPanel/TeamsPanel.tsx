@@ -34,7 +34,6 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
   const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
   const tables = tablesData?.tables ?? [];
   const [isTeamFormOpen, setIsTeamFormOpen] = useState(false);
-  const [teamFormKey, setTeamFormKey] = useState(0);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -78,10 +77,7 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     }
   }
 
-  const closeTeamForm = () => {
-    setIsTeamFormOpen(false);
-    setTeamFormKey((key) => key + 1);
-  };
+  const closeTeamForm = () => setIsTeamFormOpen(false);
 
   const offerSetupReset = (afterReset: () => unknown) =>
     modals.openConfirmModal({
@@ -113,7 +109,8 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
       } else {
         notifyError();
       }
-      throw error;
+
+      return;
     }
 
     notifications.show({
@@ -260,14 +257,14 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
         })}
       </Stack>
 
-      <TeamForm
-        key={teamFormKey}
-        createTeam={handleCreateTeam}
-        isOpen={isTeamFormOpen}
-        isSubmitting={isCreatingTeam}
-        teamSize={game.teamSize}
-        onClose={closeTeamForm}
-      />
+      {isTeamFormOpen && (
+        <TeamForm
+          createTeam={handleCreateTeam}
+          isSubmitting={isCreatingTeam}
+          teamSize={game.teamSize}
+          onClose={closeTeamForm}
+        />
+      )}
 
       {editingTeam && (
         <EditTeamDialog

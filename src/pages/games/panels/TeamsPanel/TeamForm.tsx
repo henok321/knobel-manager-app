@@ -10,14 +10,12 @@ export interface TeamFormData {
 
 interface TeamFormProps {
   teamSize: number;
-  isOpen: boolean;
   isSubmitting: boolean;
   onClose: () => void;
   createTeam: (team: TeamFormData) => Promise<unknown>;
 }
 
 const TeamForm = ({
-  isOpen,
   isSubmitting,
   onClose,
   createTeam,
@@ -27,19 +25,9 @@ const TeamForm = ({
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState(['']);
 
-  const handleClose = () => {
-    setTeamName('');
-    setPlayers(['']);
-    onClose();
-  };
-
-  const submit = async (e: SubmitEvent<HTMLFormElement>) => {
+  const submit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      await createTeam({ name: teamName, members: players });
-    } catch {
-      // the panel reports the failure and decides whether to offer a setup reset
-    }
+    void createTeam({ name: teamName, members: players });
   };
 
   const handleChangePlayer = (
@@ -62,15 +50,15 @@ const TeamForm = ({
   return (
     <Modal
       centered
-      opened={isOpen}
+      opened
       title={
         <Text fw={600} size="xl">
           {t('games:team.form.heading')}
         </Text>
       }
-      onClose={handleClose}
+      onClose={onClose}
     >
-      <form onSubmit={(e) => void submit(e)}>
+      <form onSubmit={submit}>
         <Stack gap="md">
           <TextInput
             autoFocus
