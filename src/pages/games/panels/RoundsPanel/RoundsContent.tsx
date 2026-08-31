@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import type { Table, Team } from '../../../../store/api.gen.ts';
 import RoundTableCard from './RoundTableCard';
-import { filterAndSortTables } from './roundTables.ts';
 
 interface RoundsContentProps {
   canEditScores: boolean;
@@ -19,6 +18,19 @@ interface RoundsContentProps {
   onEditScores: (table: Table) => void;
   onSetupGame: () => void;
 }
+
+const filterAndSortTables = (tables: Table[], searchQuery: string): Table[] => {
+  const query = searchQuery.trim().toLowerCase();
+  const matching = query
+    ? tables.filter((table) =>
+        (table.players ?? []).some((player) =>
+          player.name.toLowerCase().includes(query),
+        ),
+      )
+    : tables;
+
+  return [...matching].sort((a, b) => a.tableNumber - b.tableNumber);
+};
 
 const RoundsContent = ({
   canEditScores,

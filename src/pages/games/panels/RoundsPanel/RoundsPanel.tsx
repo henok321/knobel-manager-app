@@ -8,6 +8,8 @@ import {
   TextInput,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -18,15 +20,22 @@ import {
   useUpdateScoresMutation,
 } from '../../../../store/api';
 import type { Game, Table } from '../../../../store/api.gen.ts';
-import { backendErrorMessage } from '../../../../utils/apiError.ts';
+import { backendErrorMessage, httpStatus } from '../../../../utils/apiError.ts';
 import { buildRoundOptions } from '../roundOptions.ts';
 import RoundsContent from './RoundsContent';
-import { roundTablesErrorMessage } from './roundTables.ts';
 import ScoreEntryModal from './ScoreEntryModal';
 
 interface RoundsPanelProps {
   game: Game;
 }
+
+const roundTablesErrorMessage = (
+  error: FetchBaseQueryError | SerializedError | undefined,
+  fallback: string,
+): string | null =>
+  error == null || httpStatus(error) === 404
+    ? null
+    : (backendErrorMessage(error) ?? fallback);
 
 const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const { t } = useTranslation();
