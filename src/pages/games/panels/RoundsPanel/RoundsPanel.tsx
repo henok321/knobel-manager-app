@@ -103,7 +103,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   const {
     data: roundTablesData,
-    isFetching: loading,
+    isLoading: loading,
     error: roundTablesError,
   } = useGetTablesQuery(
     { gameId: game.id, roundNumber: selectedRound },
