@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 import type { Game } from '../store/api.gen.ts';
+import { roundSequence } from '../utils/rounds.ts';
 
 interface PrintMenuProps {
   game: Game;
@@ -50,20 +51,16 @@ const PrintMenu = ({ game }: PrintMenuProps) => {
         <Menu.Item onClick={() => handlePrintView('rankings')}>
           {t('gameDetail:printMenu.rankingsAll')}
         </Menu.Item>
-        {Array.from({ length: game.numberOfRounds }, (_, i) => i + 1).map(
-          (roundNum) => (
-            <Menu.Item
-              key={roundNum}
-              onClick={() =>
-                handlePrintView('rankings', { round: String(roundNum) })
-              }
-            >
-              {t('gameDetail:printMenu.rankingsRound', {
-                round: roundNum,
-              })}
-            </Menu.Item>
-          ),
-        )}
+        {roundSequence(game.numberOfRounds).map((round) => (
+          <Menu.Item
+            key={round}
+            onClick={() =>
+              handlePrintView('rankings', { round: String(round) })
+            }
+          >
+            {t('gameDetail:printMenu.rankingsRound', { round })}
+          </Menu.Item>
+        ))}
       </Menu.Dropdown>
     </Menu>
   );

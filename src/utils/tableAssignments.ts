@@ -1,13 +1,16 @@
-import type { GameRound, Table } from '../../../../store/api.gen.ts';
-import type { RoundTableAssignment } from './TeamAssignmentMatrix.tsx';
+import type { GameRound, Table } from '../store/api.gen.ts';
+import { roundNumberById } from './rounds.ts';
+
+export type RoundTableAssignment = {
+  roundNumber: number;
+  tableNumber: number;
+};
 
 export const tableAssignmentsByPlayer = (
   tables: Table[],
   rounds: GameRound[] = [],
 ): Record<number, RoundTableAssignment[]> => {
-  const roundNumberByRoundId = new Map(
-    rounds.map((round) => [round.id, round.roundNumber]),
-  );
+  const roundNumbers = roundNumberById(rounds);
   const assignments: Record<number, RoundTableAssignment[]> = {};
 
   for (const table of tables) {
@@ -15,8 +18,7 @@ export const tableAssignmentsByPlayer = (
     if (!tablePlayers) {
       continue;
     }
-    const tableRoundNumber =
-      roundNumberByRoundId.get(table.roundID) ?? table.roundID;
+    const tableRoundNumber = roundNumbers.get(table.roundID) ?? table.roundID;
     for (const player of tablePlayers) {
       const id = player.id;
       assignments[id] ??= [];

@@ -3,12 +3,10 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
 import commonDE from './locales/de/common.json';
-import footerDE from './locales/de/footer.json';
 import gameDetailDE from './locales/de/gameDetail.json';
 import gamesDE from './locales/de/games.json';
 import pdfDE from './locales/de/pdf.json';
 import commonEN from './locales/en/common.json';
-import footerEN from './locales/en/footer.json';
 import gameDetailEN from './locales/en/gameDetail.json';
 import gamesEN from './locales/en/games.json';
 import pdfEN from './locales/en/pdf.json';
@@ -20,7 +18,7 @@ void i18n
     fallbackLng: 'en',
     supportedLngs: ['en', 'de'],
     defaultNS: 'common',
-    ns: ['common', 'footer', 'games', 'gameDetail', 'pdf'],
+    ns: ['common', 'games', 'gameDetail', 'pdf'],
     debug: !import.meta.env.PROD,
     detection: {
       order: ['querystring', 'localStorage', 'cookie', 'navigator'],
@@ -32,14 +30,12 @@ void i18n
     resources: {
       en: {
         common: commonEN,
-        footer: footerEN,
         games: gamesEN,
         gameDetail: gameDetailEN,
         pdf: pdfEN,
       },
       de: {
         common: commonDE,
-        footer: footerDE,
         games: gamesDE,
         gameDetail: gameDetailDE,
         pdf: pdfDE,

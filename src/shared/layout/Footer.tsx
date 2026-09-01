@@ -28,7 +28,7 @@ const Footer = () => {
             c="light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1))"
             size="xs"
           >
-            {t('footer:copyright', {
+            {t('common:footer.copyright', {
               year: new Date().getFullYear(),
               author: 'Hendrik Brinkmann',
             })}
@@ -36,9 +36,9 @@ const Footer = () => {
         </Group>
 
         <Group gap="xs">
-          <Tooltip label={t('footer:links.github')}>
+          <Tooltip label={t('common:footer.links.github')}>
             <ActionIcon
-              aria-label={t('footer:links.github')}
+              aria-label={t('common:footer.links.github')}
               component="a"
               href={GITHUB_URL}
               rel="noopener noreferrer"
@@ -47,9 +47,9 @@ const Footer = () => {
               <IconBrandGithub size={16} stroke={1.5} />
             </ActionIcon>
           </Tooltip>
-          <Tooltip label={t('footer:links.license')}>
+          <Tooltip label={t('common:footer.links.license')}>
             <ActionIcon
-              aria-label={t('footer:links.license')}
+              aria-label={t('common:footer.links.license')}
               component="a"
               href={LICENSE_URL}
               rel="noopener noreferrer"

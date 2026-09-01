@@ -8,7 +8,6 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -20,6 +19,9 @@ import {
   useRemoveOwnerMutation,
 } from '../../../../store/api';
 import type { Game, GameOwner } from '../../../../store/api.gen.ts';
+import { httpStatus } from '../../../../utils/apiError.ts';
+import { openConfirmDialog } from '../../../../utils/confirmModal.tsx';
+import { notifyError } from '../../../../utils/notifyError.ts';
 
 interface AdministrationPanelProps {
   game: Game;
@@ -51,36 +53,24 @@ const AdministrationPanel = ({ game }: AdministrationPanelProps) => {
         color: 'green',
       });
     } catch (error) {
-      const status =
-        error && typeof error === 'object' && 'status' in error
-          ? (error as { status: number }).status
-          : undefined;
-      const message =
+      const status = httpStatus(error);
+      notifyError(
         status === 409
           ? t('gameDetail:administration.admins.errorAlreadyAdmin')
           : status === 422
             ? t('gameDetail:administration.admins.errorUserNotFound')
-            : t('gameDetail:administration.admins.errorGeneric');
-      notifications.show({ message, color: 'red' });
+            : t('gameDetail:administration.admins.errorGeneric'),
+      );
     }
   };
 
-  const confirmRemove = (owner: GameOwner) => {
-    const label = owner.email ?? owner.ownerSub;
-    modals.openConfirmModal({
+  const confirmRemove = (owner: GameOwner) =>
+    openConfirmDialog({
       title: t('gameDetail:administration.admins.removeConfirmTitle'),
-      children: (
-        <Text size="sm">
-          {t('gameDetail:administration.admins.removeConfirmMessage', {
-            email: label,
-          })}
-        </Text>
-      ),
-      labels: {
-        confirm: t('gameDetail:administration.admins.remove'),
-        cancel: t('gameDetail:administration.admins.cancel'),
-      },
-      confirmProps: { color: 'red' },
+      message: t('gameDetail:administration.admins.removeConfirmMessage', {
+        email: owner.email ?? owner.ownerSub,
+      }),
+      confirmLabel: t('gameDetail:administration.admins.remove'),
       onConfirm: async () => {
         try {
           await removeOwner({
@@ -92,14 +82,10 @@ const AdministrationPanel = ({ game }: AdministrationPanelProps) => {
             color: 'green',
           });
         } catch {
-          notifications.show({
-            message: t('gameDetail:administration.admins.errorGeneric'),
-            color: 'red',
-          });
+          notifyError(t('gameDetail:administration.admins.errorGeneric'));
         }
       },
     });
-  };
 
   return (
     <Stack gap="md">

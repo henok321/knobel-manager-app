@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import type { GameRound, Table } from '../../../../store/api.gen.ts';
+import type { GameRound, Table } from '../store/api.gen.ts';
 import { tableAssignmentsByPlayer } from './tableAssignments.ts';
 
 const rounds: GameRound[] = [

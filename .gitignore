@@ -44,3 +44,7 @@ src/generated
 /playwright-report/
 /playwright/.cache/
 /test-results/
+/blob-report/
+
+# e2e credentials
+.env.e2e

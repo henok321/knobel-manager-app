@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import type { Table, Team } from '../../../../store/api.gen.ts';
 
 interface ScoreEntryModalProps {
-  isOpen: boolean;
   table: Table | null;
   teams: Team[];
   roundNumber: number;
@@ -15,7 +14,6 @@ interface ScoreEntryModalProps {
 }
 
 const ScoreEntryModal = ({
-  isOpen,
   table,
   teams,
   roundNumber,
@@ -36,6 +34,11 @@ const ScoreEntryModal = ({
   if (!table) {
     return null;
   }
+
+  const hasScores = (table.scores?.length ?? 0) > 0;
+  const title = hasScores
+    ? t('gameDetail:rounds.editScoresTitle', { table: table.tableNumber })
+    : t('gameDetail:rounds.enterScoresTitle', { table: table.tableNumber });
 
   const handleSubmit = async () => {
     const scoresArray = players.map((player) => ({
@@ -60,13 +63,11 @@ const ScoreEntryModal = ({
   return (
     <Modal
       centered
-      opened={isOpen}
+      opened
       size="md"
       title={
         <Text fw={600} size="xl">
-          {t('gameDetail:rounds.enterScoresTitle', {
-            table: table.tableNumber,
-          })}
+          {title}
         </Text>
       }
       onClose={onClose}

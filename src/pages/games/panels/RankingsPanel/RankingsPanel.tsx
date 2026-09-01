@@ -1,17 +1,20 @@
-import { Card, Select, Stack, Table, Text, Title } from '@mantine/core';
+import { Card, Select, Stack, Text, Title } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
+import RankingsTable from '../../../../shared/RankingsTable.tsx';
 import type { Game } from '../../../../store/api.gen.ts';
 import { useGetGameTablesQuery } from '../../../../store/api.ts';
-import { buildRoundOptions } from '../roundOptions.ts';
-import { PlayerRankingRow, TeamRankingRow } from './RankingRow';
 import {
   aggregateScoresFromTables,
   mapPlayersToRankings,
   mapTeamsToRankings,
-} from './rankingsMapper.ts';
+} from '../../../../utils/rankings.ts';
+import {
+  buildRoundOptions,
+  roundNumberById,
+} from '../../../../utils/rounds.ts';
 
 interface RankingsPanelProps {
   game: Game;
@@ -22,14 +25,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const [selectedRound, setSelectedRound] = useState<string>('total');
 
   const teams = game.teams ?? [];
-
-  const roundNumberByRoundId = new Map(
-    (game.rounds ?? []).map((r) => [r.id, r.roundNumber]),
-  );
-
-  const roundOptions = buildRoundOptions(t, game.numberOfRounds, {
-    includeTotal: true,
-  });
+  const roundNumbers = roundNumberById(game.rounds);
 
   const { data: allTablesData, isLoading: loading } = useGetGameTablesQuery({
     gameId: game.id,
@@ -40,16 +36,11 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     selectedRound === 'total'
       ? allTables
       : allTables.filter(
-          (table) =>
-            roundNumberByRoundId.get(table.roundID) === Number(selectedRound),
+          (table) => roundNumbers.get(table.roundID) === Number(selectedRound),
         );
 
   const allScores = aggregateScoresFromTables(filteredTables);
-
-  const hasNoScores = Object.keys(allScores).length === 0;
-
   const playerRankings = mapPlayersToRankings(teams, allScores);
-
   const teamRankings = mapTeamsToRankings(teams, allScores);
 
   if (loading) {
@@ -60,7 +51,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     );
   }
 
-  if (hasNoScores && teamRankings.length === 0) {
+  if (Object.keys(allScores).length === 0 && teamRankings.length === 0) {
     return (
       <EmptyStateCard
         description={[
@@ -75,7 +66,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   return (
     <Stack gap="xl">
       <Select
-        data={roundOptions}
+        data={buildRoundOptions(t, game.numberOfRounds, { includeTotal: true })}
         label={t('gameDetail:rankings.filterByRound')}
         style={{ width: 250 }}
         value={selectedRound}
@@ -84,70 +75,22 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
 
       <Card padding="lg">
         <Stack gap="md">
-          <Title order={3}>{t('gameDetail:rankings.teamRankings')}</Title>
-          <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>{t('gameDetail:rankings.rank')}</Table.Th>
-                <Table.Th>{t('gameDetail:rankings.team')}</Table.Th>
-                <Table.Th>{t('gameDetail:rankings.totalScore')}</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {teamRankings.length === 0 ? (
-                <Table.Tr>
-                  <Table.Td colSpan={3}>
-                    <Text c="dimmed" ta="center">
-                      {t('gameDetail:rankings.noData')}
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
-              ) : (
-                teamRankings.map((ranking, index) => (
-                  <TeamRankingRow
-                    key={ranking.teamID}
-                    rank={index + 1}
-                    ranking={ranking}
-                  />
-                ))
-              )}
-            </Table.Tbody>
-          </Table>
+          <Title order={3}>{t('common:rankings.teamRankings')}</Title>
+          <RankingsTable
+            nameLabel={t('common:rankings.team')}
+            rankings={teamRankings}
+          />
         </Stack>
       </Card>
 
       <Card padding="lg">
         <Stack gap="md">
-          <Title order={3}>{t('gameDetail:rankings.playerRankings')}</Title>
-          <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>{t('gameDetail:rankings.rank')}</Table.Th>
-                <Table.Th>{t('gameDetail:rankings.player')}</Table.Th>
-                <Table.Th>{t('gameDetail:rankings.team')}</Table.Th>
-                <Table.Th>{t('gameDetail:rankings.totalScore')}</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {playerRankings.length === 0 ? (
-                <Table.Tr>
-                  <Table.Td colSpan={4}>
-                    <Text c="dimmed" ta="center">
-                      {t('gameDetail:rankings.noData')}
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
-              ) : (
-                playerRankings.map((ranking, index) => (
-                  <PlayerRankingRow
-                    key={ranking.playerID}
-                    rank={index + 1}
-                    ranking={ranking}
-                  />
-                ))
-              )}
-            </Table.Tbody>
-          </Table>
+          <Title order={3}>{t('common:rankings.playerRankings')}</Title>
+          <RankingsTable
+            showTeamColumn
+            nameLabel={t('common:rankings.player')}
+            rankings={playerRankings}
+          />
         </Stack>
       </Card>
     </Stack>

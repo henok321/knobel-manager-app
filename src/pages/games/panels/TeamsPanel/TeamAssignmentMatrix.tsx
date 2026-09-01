@@ -2,11 +2,8 @@ import { Badge, Table, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import type { Player } from '../../../../store/api.gen.ts';
-
-export type RoundTableAssignment = {
-  roundNumber: number;
-  tableNumber: number;
-};
+import { roundSequence } from '../../../../utils/rounds.ts';
+import type { RoundTableAssignment } from '../../../../utils/tableAssignments.ts';
 
 interface TeamAssignmentMatrixProps {
   players: Player[];
@@ -22,7 +19,7 @@ const TeamAssignmentMatrix = ({
   numberOfRounds,
 }: TeamAssignmentMatrixProps) => {
   const { t } = useTranslation();
-  const rounds = Array.from({ length: numberOfRounds }, (_, i) => i + 1);
+  const rounds = roundSequence(numberOfRounds);
   const roundColWidth = `${(100 - PLAYER_COL_PERCENT) / numberOfRounds}%`;
 
   return (
@@ -51,10 +48,10 @@ const TeamAssignmentMatrix = ({
       </Table.Thead>
       <Table.Tbody>
         {players.map((player) => {
-          const tableByRound = new Map<number, number>(
-            (playerTableAssignments[player.id] ?? []).map((a) => [
-              a.roundNumber,
-              a.tableNumber,
+          const tableByRound = new Map(
+            (playerTableAssignments[player.id] ?? []).map((assignment) => [
+              assignment.roundNumber,
+              assignment.tableNumber,
             ]),
           );
           return (

@@ -28,6 +28,7 @@ pnpm local:remote        # same, but proxies /api → VITE_API_URL (i.e. the dep
 pnpm fix                 # biome check --write .  (auto-fix lint + format)
 pnpm check               # tsc --noEmit && biome ci . && i18next-cli status && i18next-cli lint && i18next-cli extract --ci
 pnpm test                # node --test (native Node test runner, no jest; single file: node --test <path>)
+pnpm test:e2e            # playwright tournament playbook (needs a running dev server + backend)
 pnpm knip                # unused files/exports/deps audit — full mode, incl. devDependencies (not --strict)
 pnpm knip:fix            # knip --fix --format (auto-remove unused exports/files)
 
@@ -74,6 +75,11 @@ parent `{ type: 'Game', id: gameId }`, and score updates invalidate `Tables` (ke
 per-game aggregate). Tag granularity follows the client's read model, **not** the backend's route/tag taxonomy — which
 is why cache wiring is hand-written in `api.ts` rather than generated (the codegen's `tag` option is intentionally off).
 When you add a mutation, wire its `invalidatesTags` in `api.ts` to whichever aggregate(s) its response affects.
+
+**Setup conflicts.** Mutations that need a clean setup get a 409 once tables are assigned.
+`useTeamMutations.reportMutationError` invalidates the `Game` tag, opens the reset confirmation, and retries the
+original mutation once after the reset (the `mayReset` flag stops a loop); the half-filled dialog stays mounted behind
+the confirmation. Route any new setup-sensitive mutation through the same helper.
 
 ### Auth
 
@@ -148,18 +154,35 @@ covers all configured locales automatically. Type augmentation doesn't change (s
 
 `src/App.tsx` is the composition root. The persistent shell is `src/shared/layout/Layout.tsx` (wraps `Header` + page
 content + `Footer`); `src/shared/userMenu/` holds the language picker, color-scheme toggle, and user menu. Page entry
-points are under `src/pages/` — `Login.tsx` and `games/{Games,GameDetail,PrintView}` plus subdirs `panels/` and
-`print-views/` for the game-detail interior. Shared utilities sit at `src/utils/`: `assertNever.ts`,
-`gameStatusHelpers.ts`, and `notifyError.ts` — use `notifyError()` for failure toasts instead of a raw
-`notifications.show`, it carries the translated title and red color.
+points are under `src/pages/` — `Login.tsx` and `games/{Games,GameDetail,PrintView}` plus subdirs `panels/` (one
+directory per game-detail tab) and `print-views/` (flat: one file per view, plus `PrintHeader.tsx` and `print.css`).
+
+Shared utilities sit at `src/utils/`: `apiError.ts` (`httpStatus`, `backendErrorMessage`), `assertNever.ts`,
+`confirmModal.tsx`, `gameStatusHelpers.ts`, `notifyError.ts`, `rankings.ts`, `rounds.ts`, `tableAssignments.ts`. Three
+of them replace patterns you'd otherwise hand-roll:
+
+- `notifyError()` for failure toasts instead of a raw `notifications.show` — it carries the translated title and red
+  color.
+- `openConfirmDialog()` (`confirmModal.tsx`) for confirmations instead of a raw `modals.openConfirmModal` — it fills in
+  the cancel label and defaults to a red confirm button. Stateless confirmations go through it; modals that hold their
+  own state stay declarative components (`GameForm`, `TeamForm`, `EditTeamDialog`, `ScoreEntryModal`).
+- `roundSequence()` / `roundNumberById()` (`rounds.ts`) instead of rebuilding `1..numberOfRounds` lists or
+  round-id→round-number maps inline. `rounds.ts` also owns `buildRoundOptions` and the `RoundTable` type (a `Table`
+  decorated with its `roundNumber`, which `PrintView` resolves once for all print views).
 
 Styling: Mantine theme overrides in `src/theme.ts`, app-wide CSS in `src/shared/global.css`, print rules in
 `src/pages/games/print-views/print.css` — the only file where Biome allows `!important` (per the override in
 `biome.json`).
 
 Reusable presentational components live directly under `src/shared/`: `CenterLoader`, `EmptyStateCard`, `Logo`,
-`PrintMenu`, `ErrorBoundary`. Prefer these over re-implementing equivalents inside pages — especially `EmptyStateCard`
-for empty-with-CTA states (called out in the Code Review Lenses) and `ErrorBoundary` for graceful failure boundaries.
+`PrintMenu`, `RankingsTable`, `ErrorBoundary`. Prefer these over re-implementing equivalents inside pages — especially
+`EmptyStateCard` for empty-with-CTA states (called out in the Code Review Lenses), `RankingsTable` for any ranking
+list (it serves both the screen panel and the print view, fed by `utils/rankings.ts`), and `ErrorBoundary` for
+graceful failure boundaries.
+
+Naming follows the file's kind, not its directory: components are PascalCase, function modules are camelCase (which is
+why `utils/confirmModal.tsx` is lowercase despite the `.tsx` — it exports a function, and is `.tsx` only because it
+builds the modal body).
 
 ## TypeScript
 
@@ -177,9 +200,31 @@ for empty-with-CTA states (called out in the Code Review Lenses) and `ErrorBound
 
 Native Node test runner (`node --test`, Node 26 strips TS types natively — no jest, no babel, no jsdom). Tests use
 `node:test` (`describe`/`it`) + `node:assert/strict` and are co-located with the code under test (`*.test.ts`). The
-suite is focused on pure logic (e.g. `src/pages/games/panels/RankingsPanel/rankingsMapper.test.ts`); components and RTK
-Query data fetching aren't unit-tested — there is deliberately no DOM/browser test scaffolding. Relative imports in
-tested modules must carry the `.ts` extension (they already do, repo-wide).
+suite is focused on pure logic (e.g. `src/utils/rankings.test.ts`); components and RTK
+Query data fetching aren't unit-tested (no jsdom) — browser coverage lives in the Playwright suite instead. Relative
+imports in tested modules must carry the `.ts` extension (they already do, repo-wide).
+
+### End-to-end (Playwright)
+
+`e2e/full-game.spec.ts` drives a whole tournament through the UI: create, 11 teams, team/player rename, the
+add-team-after-matchmaking 409 + reset, matchmaking re-run, start, all 88 scores, a score edit, rankings, audit log,
+all print views, finalize. Config in `playwright.config.ts`. **Not part of CI** — CI runs `check`, `knip`, `test` and
+`validate-client` only.
+
+First run: `pnpm exec playwright install chromium`. Credentials come from an untracked `.env.e2e` holding `E2E_EMAIL`
+and `E2E_PASSWORD`; the config resolves that file relative to itself, so a missing one can't make every test skip while
+the run still exits 0. Single test: `pnpm test:e2e --grep "audit log"` — but the read-only tests consume a tournament
+the lifecycle test publishes, so a grep that excludes it makes them skip.
+
+**It writes real data** to whatever `/api` proxies to — under `pnpm local:remote` that is the deployed API. Every run
+leaves a game named `E2E Turnier <timestamp>`; there is no cleanup step.
+
+Shape: one mutating spine test builds and publishes the tournament; the checks that only read it (rankings, audit log,
+print) are separate tests so one broken view can't hide another. Deliberately **not** `serial`. Finalizing mutates, so
+it runs last.
+
+Determinism: matchmaking seating is random and the API's row order is unstable, so expected values are computed from
+the scores the test itself types, and rows are compared as sets, never sequences.
 
 ## Environment
 
@@ -219,8 +264,11 @@ pin it here rather than reinstalling — the lockfile faithfully reproduces the 
 - Senior-engineer standard: clean design, modularity, clear boundaries.
 - Balance DRY with locality — prefer clarity over premature abstraction.
 - Tests live next to the code under test.
-- Comments explain *why* (non-obvious constraints, domain decisions). Don't narrate *what* the code does — let the
-  identifiers carry that.
+- **Clear code over comments.** Default to zero. A comment that narrates *what* the code does is a naming or
+  decomposition problem — rename, extract, split, and the comment disappears with it.
+- When a comment is genuinely unavoidable (non-obvious constraint, external quirk, deliberate deviation), write one
+  brief line saying *why*. Never a multi-line explanatory block, never a restatement of the next statement, never
+  scene-setting prose above a function. Prune generated comment bloat on sight, including your own.
 
 ### Component design
 
@@ -230,6 +278,11 @@ pin it here rather than reinstalling — the lockfile faithfully reproduces the 
   auto-memoizes. **Don't** add `React.memo`/`useMemo`/`useCallback`; the codebase has none. Write plain derivations and
   let the compiler handle memoization.
 - Keep `useEffect` dependency arrays correct — stale closures are a recurring class of bug here.
+- `ScoreEntryModal` must stay conditionally rendered (`{scoreModalOpen && …}`). It holds per-player score state; while
+  permanently mounted that state outlived the table and silently wrote a previous table's score on save. The e2e suite
+  guards it.
+- The round-tables query gates on `isLoading`, not `isFetching` — `isFetching` is also true for the refetch after
+  saving scores, which blanked every table card.
 
 ### Type safety
 

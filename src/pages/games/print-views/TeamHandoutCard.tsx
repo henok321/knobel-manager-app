@@ -1,41 +1,26 @@
 import { Badge, Paper, Stack, Table, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type { Table as TableType, Team } from '../../../../store/api.gen.ts';
+import type { Team } from '../../../store/api.gen.ts';
+import { roundSequence } from '../../../utils/rounds.ts';
+import type { RoundTableAssignment } from '../../../utils/tableAssignments.ts';
 
 interface TeamHandoutCardProps {
   team: Team;
-  tables: (TableType & { roundNumber?: number })[];
+  playerTableAssignments: Record<number, RoundTableAssignment[]>;
   gameName: string;
   numberOfRounds: number;
 }
 
 const TeamHandoutCard = ({
   team,
-  tables,
+  playerTableAssignments,
   gameName,
   numberOfRounds,
 }: TeamHandoutCardProps) => {
   const { t } = useTranslation();
-  const rounds = Array.from({ length: numberOfRounds }, (_, i) => i + 1);
-
+  const rounds = roundSequence(numberOfRounds);
   const teamPlayers = team.players ?? [];
-  const teamPlayerIds = new Set(teamPlayers.map((p) => p.id));
-
-  const playerAssignments: Record<number, Record<number, number>> = {};
-
-  for (const table of tables) {
-    if (!table.roundNumber) {
-      continue;
-    }
-
-    for (const player of table.players || []) {
-      if (teamPlayerIds.has(player.id)) {
-        playerAssignments[player.id] ??= {};
-        playerAssignments[player.id]![table.roundNumber!] = table.tableNumber;
-      }
-    }
-  }
 
   return (
     <Paper withBorder className="team-handout-card" p="md">
@@ -60,31 +45,38 @@ const TeamHandoutCard = ({
           <Table.Thead>
             <Table.Tr>
               <Table.Th>{t('pdf:teamHandout.player')}</Table.Th>
-              {rounds.map((r) => (
-                <Table.Th key={r} style={{ textAlign: 'center' }}>
-                  {t('pdf:teamHandout.round')} {r}
+              {rounds.map((round) => (
+                <Table.Th key={round} style={{ textAlign: 'center' }}>
+                  {t('pdf:teamHandout.round')} {round}
                 </Table.Th>
               ))}
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
             {teamPlayers.map((player) => {
-              const assignments = playerAssignments[player.id] || {};
+              const tableByRound = new Map(
+                (playerTableAssignments[player.id] ?? []).map((assignment) => [
+                  assignment.roundNumber,
+                  assignment.tableNumber,
+                ]),
+              );
+
               return (
                 <Table.Tr key={player.id}>
                   <Table.Td fw={500}>{player.name}</Table.Td>
-                  {rounds.map((roundNum) => {
-                    const assignment = assignments[roundNum];
+                  {rounds.map((round) => {
+                    const tableNumber = tableByRound.get(round);
+
                     return (
-                      <Table.Td key={roundNum} style={{ textAlign: 'center' }}>
-                        {assignment !== undefined ? (
-                          <Badge color="blue" size="sm" variant="light">
-                            {t('pdf:teamHandout.table')} {assignment}
-                          </Badge>
-                        ) : (
+                      <Table.Td key={round} style={{ textAlign: 'center' }}>
+                        {tableNumber === undefined ? (
                           <Text c="dimmed" fs="italic" size="sm">
                             {t('pdf:teamHandout.notAssigned')}
                           </Text>
+                        ) : (
+                          <Badge color="blue" size="sm" variant="light">
+                            {t('pdf:teamHandout.table')} {tableNumber}
+                          </Badge>
                         )}
                       </Table.Td>
                     );

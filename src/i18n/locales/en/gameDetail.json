@@ -1,6 +1,5 @@
 {
   "actions": {
-    "cancel": "Cancel",
     "completeGame": "Finalize Game",
     "completeGameConfirmation": "Are you sure you want to finalize this tournament? All scores and rankings will be locked permanently and cannot be changed anymore.",
     "gameStartedMessage": "Setup matchmaking in the Rounds tab to begin",
@@ -17,7 +16,6 @@
     "admins": {
       "add": "Add admin",
       "added": "Admin added",
-      "cancel": "Cancel",
       "description": "Admins can edit this game and enter results. Add another admin by their email address.",
       "emailLabel": "Email address",
       "emailPlaceholder": "name@example.com",
@@ -79,21 +77,15 @@
   },
   "rankings": {
     "filterByRound": "Filter by Round",
-    "noData": "No scores entered yet",
     "noScoresInstructions": "Start by setting up matchmaking, then enter scores for each table.",
     "noScoresMessage": "Rankings will appear here once you enter scores in the Rounds tab.",
     "noScoresYet": "No Scores Yet",
-    "player": "Player",
-    "playerRankings": "Player Rankings",
-    "rank": "Rank",
-    "team": "Team",
-    "teamRankings": "Team Rankings",
-    "totalRanking": "Total (All Rounds)",
-    "totalScore": "Total Score"
+    "totalRanking": "Total (All Rounds)"
   },
   "rounds": {
     "confirmResetMatchmaking": "This discards the table assignment of every round, including any scores entered at those tables. The teams stay untouched and you can run matchmaking again afterwards.",
     "editScores": "Edit Scores",
+    "editScoresTitle": "Edit Scores - Table {{table}}",
     "enterScores": "Enter Scores",
     "enterScoresTitle": "Enter Scores - Table {{table}}",
     "error": "Failed to setup matchmaking. Please try again.",
@@ -138,7 +130,9 @@
     "cannotAddTeamsAfterStart": "Cannot add teams after tournament has started",
     "confirmDeleteTeam": "Are you sure you want to delete this team? This action cannot be undone.",
     "deleteTeam": "Delete Team",
+    "deleteTeamLabel": "Delete {{team}}",
     "editTeamDialog": "Edit Team",
+    "editTeamLabel": "Edit {{team}}",
     "noSearchResults": "No teams match your search.",
     "noTeams": "No teams yet. Add your first team to get started!",
     "player": "Player",

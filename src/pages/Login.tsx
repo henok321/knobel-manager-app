@@ -7,60 +7,46 @@ import {
   Stack,
   Text,
   TextInput,
-  useMantineTheme,
 } from '@mantine/core';
-import { hasLength, isEmail, useForm } from '@mantine/form';
-import { upperFirst, useMediaQuery } from '@mantine/hooks';
-import { useState } from 'react';
+import { type SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router';
 
-import type { LoginData } from '../auth/AuthContext';
 import { useAuth } from '../auth/useAuth';
 import CenterLoader from '../shared/CenterLoader';
 import Layout from '../shared/layout/Layout.tsx';
 import { assertNever } from '../utils/assertNever.ts';
 
+const PASSWORD_MIN_LENGTH = 7;
+
 const Login = () => {
   const { user, loading, loginAction } = useAuth();
   const [loginError, setLoginError] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState(false);
   const { t } = useTranslation();
-  const theme = useMantineTheme();
-  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
 
-  const form = useForm<LoginData>({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-
-    validate: {
-      email: isEmail(t('common:login.fields.email.validationMessage')),
-      password: hasLength(
-        { min: 7 },
-        t('common:login.fields.password.validationMessage'),
-      ),
-    },
-  });
-
-  const handleSubmit = async (formData: LoginData) => {
+  const submit = async (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
     setSubmitting(true);
-    const loginResult = await loginAction(formData);
 
-    if (loginResult) {
-      switch (loginResult) {
-        case 'INVALID_CREDENTIALS':
-          setLoginError(t('common:login.error.invalidCredentials'));
-          break;
-        case 'UNKNOWN_ERROR':
-          setLoginError(t('common:login.error.unknown'));
-          break;
-        default:
-          assertNever(loginResult);
-      }
-    } else {
-      setLoginError(null);
+    const loginResult = await loginAction({
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+    });
+
+    switch (loginResult) {
+      case null:
+        setLoginError(null);
+        break;
+      case 'INVALID_CREDENTIALS':
+        setLoginError(t('common:login.error.invalidCredentials'));
+        break;
+      case 'UNKNOWN_ERROR':
+        setLoginError(t('common:login.error.unknown'));
+        break;
+      default:
+        assertNever(loginResult);
     }
     setSubmitting(false);
   };
@@ -76,34 +62,31 @@ const Login = () => {
   return (
     <Layout>
       <Flex align="center" h={{ base: '40vh', md: '80vh' }} justify="center">
-        <Paper
-          p="lg"
-          w={{ base: '100%', md: '40rem', lg: '50rem' }}
-          withBorder={!isMobile}
-        >
+        <Paper withBorder p="lg" w={{ base: '100%', md: '40rem', lg: '50rem' }}>
           <Text fw={500} pb="md" size="lg">
             {t('common:login.heading')}
           </Text>
 
-          <form onSubmit={form.onSubmit(handleSubmit)}>
+          <form onSubmit={(event) => void submit(event)}>
             <Stack>
               <TextInput
-                {...form.getInputProps('email')}
                 required
-                type="email"
-                autoComplete={'username'}
+                autoComplete="username"
                 disabled={submitting}
                 label={t('common:login.fields.email.label')}
+                name="email"
                 placeholder={t('common:login.fields.email.placeholder')}
                 radius="md"
+                type="email"
               />
 
               <PasswordInput
-                {...form.getInputProps('password')}
                 required
-                autoComplete={'current-password'}
+                autoComplete="current-password"
                 disabled={submitting}
                 label={t('common:login.fields.password.label')}
+                minLength={PASSWORD_MIN_LENGTH}
+                name="password"
                 placeholder={t('common:login.fields.password.placeholder')}
                 radius="md"
               />
@@ -122,7 +105,7 @@ const Login = () => {
                 radius="xl"
                 type="submit"
               >
-                {upperFirst(t('common:login.submit'))}
+                {t('common:login.submit')}
               </Button>
             </Group>
           </form>

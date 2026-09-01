@@ -1,22 +1,21 @@
 import { Stack, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type {
-  Game,
-  Table as TableType,
-  Team,
-} from '../../../../store/api.gen.ts';
-import PrintHeader from '../PrintHeader';
+import type { Game, Team } from '../../../store/api.gen.ts';
+import type { RoundTable } from '../../../utils/rounds.ts';
+import { tableAssignmentsByPlayer } from '../../../utils/tableAssignments.ts';
+import PrintHeader from './PrintHeader';
 import TeamHandoutCard from './TeamHandoutCard';
 
 interface TeamHandoutsViewProps {
   game: Game;
-  tables: (TableType & { roundNumber?: number })[];
+  tables: RoundTable[];
   teams: Team[];
 }
 
 const TeamHandoutsView = ({ game, tables, teams }: TeamHandoutsViewProps) => {
   const { t } = useTranslation();
+  const playerTableAssignments = tableAssignmentsByPlayer(tables, game.rounds);
 
   return (
     <Stack gap="md">
@@ -31,7 +30,7 @@ const TeamHandoutsView = ({ game, tables, teams }: TeamHandoutsViewProps) => {
           key={team.id}
           gameName={game.name}
           numberOfRounds={game.numberOfRounds}
-          tables={tables}
+          playerTableAssignments={playerTableAssignments}
           team={team}
         />
       ))}

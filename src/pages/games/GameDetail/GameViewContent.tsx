@@ -8,9 +8,8 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core';
-import { modals } from '@mantine/modals';
+import { useLocalStorage } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PrintMenu from '../../../shared/PrintMenu.tsx';
 import type {
@@ -23,6 +22,7 @@ import {
   useUpdateGameMutation,
 } from '../../../store/api.ts';
 import { assertNever } from '../../../utils/assertNever';
+import { openConfirmDialog } from '../../../utils/confirmModal.tsx';
 import {
   statusColor,
   translateGameStatus,
@@ -70,16 +70,11 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
   const { data: tablesData } = useGetGameTablesQuery({ gameId: game.id });
   const tables = tablesData?.tables ?? [];
 
-  const tabStorageKey = `selected_tab_for_game_${game.id}`;
-  const [activeTab, setActiveTab] = useState<GameTab>(() => {
-    const stored = localStorage.getItem(tabStorageKey);
-    return stored && isGameTab(stored) ? stored : getDefaultTab(game.status);
+  const [activeTab, setActiveTab] = useLocalStorage<GameTab>({
+    key: `selected_tab_for_game_${game.id}`,
+    defaultValue: getDefaultTab(game.status),
+    getInitialValueInEffect: false,
   });
-
-  const selectTab = (tab: GameTab) => {
-    setActiveTab(tab);
-    localStorage.setItem(tabStorageKey, tab);
-  };
 
   const completedTables = tables.filter(
     (table) =>
@@ -114,10 +109,10 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
     }
   };
 
-  const confirmStartGame = () => {
-    modals.openConfirmModal({
+  const confirmStartGame = () =>
+    openConfirmDialog({
       title: t('gameDetail:actions.startGame'),
-      children: (
+      message: (
         <Stack gap="sm">
           <Text size="sm">{t('gameDetail:actions.startGameConfirmation')}</Text>
           <Text component="ul" ml="md" size="sm">
@@ -127,16 +122,13 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           </Text>
         </Stack>
       ),
-      labels: {
-        confirm: t('gameDetail:actions.startGame'),
-        cancel: t('gameDetail:actions.cancel'),
-      },
-      confirmProps: { color: 'cobalt' },
+      confirmLabel: t('gameDetail:actions.startGame'),
+      color: 'cobalt',
       onConfirm: async () => {
         if (!(await handleStatusTransition('in_progress'))) {
           return;
         }
-        selectTab('rounds');
+        setActiveTab('rounds');
         notifications.show({
           title: t('gameDetail:actions.gameStartedNotification'),
           message: t('gameDetail:actions.gameStartedMessage'),
@@ -144,24 +136,14 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         });
       },
     });
-  };
 
-  const confirmCompleteGame = () => {
-    modals.openConfirmModal({
+  const confirmCompleteGame = () =>
+    openConfirmDialog({
       title: t('gameDetail:actions.completeGame'),
-      children: (
-        <Text size="sm">
-          {t('gameDetail:actions.completeGameConfirmation')}
-        </Text>
-      ),
-      labels: {
-        confirm: t('gameDetail:actions.completeGame'),
-        cancel: t('gameDetail:actions.cancel'),
-      },
-      confirmProps: { color: 'red' },
+      message: t('gameDetail:actions.completeGameConfirmation'),
+      confirmLabel: t('gameDetail:actions.completeGame'),
       onConfirm: () => void handleStatusTransition('completed'),
     });
-  };
 
   return (
     <Stack gap="md">
@@ -237,7 +219,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
         value={activeTab}
         onChange={(value) => {
           if (value && isGameTab(value)) {
-            selectTab(value);
+            setActiveTab(value);
           }
         }}
       >
