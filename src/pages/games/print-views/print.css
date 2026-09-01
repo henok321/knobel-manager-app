@@ -163,3 +163,22 @@
     margin: 1.5rem 0;
   }
 }
+
+.table-card table,
+.score-sheet-card table {
+  table-layout: fixed;
+}
+
+.table-card th:first-child {
+  width: 45%;
+}
+
+.score-sheet-card th:first-child {
+  width: 40%;
+}
+
+.table-card td,
+.score-sheet-card td,
+.team-handout-table td {
+  overflow-wrap: anywhere;
+}

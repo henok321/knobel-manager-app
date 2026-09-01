@@ -81,6 +81,7 @@ export const api = generatedApi.enhanceEndpoints({
     updateTeam: {
       invalidatesTags: (_result, _error, arg) => [
         { type: 'Game', id: arg.gameId },
+        'Tables',
       ],
     },
     deleteTeam: {
@@ -91,6 +92,7 @@ export const api = generatedApi.enhanceEndpoints({
     updatePlayer: {
       invalidatesTags: (_result, _error, arg) => [
         { type: 'Game', id: arg.gameId },
+        'Tables',
       ],
     },
     updateScores: {
