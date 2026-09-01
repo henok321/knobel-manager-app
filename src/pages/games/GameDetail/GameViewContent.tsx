@@ -86,6 +86,8 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
     completedTables > 0 &&
     completedTables === tables.length;
 
+  const tablesPerRound = tables.length / game.numberOfRounds;
+
   const sufficientTeams = game.teamSize <= (game.teams?.length ?? 0);
   const sufficientRounds = (game.rounds?.length ?? 0) === game.numberOfRounds;
 
@@ -170,11 +172,11 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
                 </Text>
               </>
             )}
-            {tables.length > 0 && (
+            {tablesPerRound > 0 && (
               <>
                 <Text c="dimmed">•</Text>
                 <Text c="dimmed" size="sm">
-                  {t('gameDetail:numberOfTables')}: {tables.length}
+                  {t('gameDetail:numberOfTablesPerRound')}: {tablesPerRound}
                 </Text>
               </>
             )}

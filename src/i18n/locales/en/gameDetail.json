@@ -59,7 +59,7 @@
   },
   "notFound": "Game not found",
   "numberOfRounds": "Number of Rounds",
-  "numberOfTables": "Tables",
+  "numberOfTablesPerRound": "Tables per Round",
   "numberOfTeams": "Teams",
   "printMenu": {
     "label": "Print Options",
