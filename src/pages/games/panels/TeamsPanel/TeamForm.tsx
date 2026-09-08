@@ -1,4 +1,12 @@
-import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
+import {
+  Button,
+  Group,
+  List,
+  Modal,
+  Stack,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { type ChangeEvent, type SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TeamsRequest } from '../../../../store/api.gen.ts';
@@ -67,19 +75,27 @@ const TeamForm = ({
             <Text fw={500} mb="xs" size="sm">
               {t('games:team.form.label.players')}
             </Text>
-            <Stack gap="xs">
+            <List
+              listStyleType=""
+              type="ordered"
+              spacing="xs"
+              styles={{
+                itemWrapper: { width: '100%', alignItems: 'stretch' },
+              }}
+            >
               {players.map((player, index) => (
-                <TextInput
-                  key={index}
-                  required
-                  autoComplete={'off'}
-                  id={`player-${index}`}
-                  name={`player-${index}`}
-                  value={player}
-                  onChange={(e) => handleChangePlayer(index, e)}
-                />
+                <List.Item key={index}>
+                  <TextInput
+                    required
+                    autoComplete={'off'}
+                    id={`player-${index}`}
+                    name={`player-${index}`}
+                    value={player}
+                    onChange={(e) => handleChangePlayer(index, e)}
+                  />
+                </List.Item>
               ))}
-            </Stack>
+            </List>
           </div>
 
           <Group justify="flex-end" mt="md">
