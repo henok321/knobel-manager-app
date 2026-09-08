@@ -1,7 +1,6 @@
 import {
   ActionIcon,
   Badge,
-  Button,
   Card,
   Divider,
   Group,
@@ -54,48 +53,34 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
     >
       <Stack gap="sm">
         <Group align="center" justify="space-between" wrap="nowrap">
-          <Group gap="sm" style={{ flex: 1, minWidth: 0 }}>
-            <Stack gap={4} style={{ flex: 1, minWidth: 0 }}>
-              <Text truncate fw={600} size="lg">
-                {game.name}
+          <Stack gap={4} style={{ flex: 1, minWidth: 0 }}>
+            <Text truncate fw={600} size="lg">
+              {game.name}
+            </Text>
+            <Group gap="xs">
+              <Badge
+                size="sm"
+                variant="filled"
+                color={statusColor(game.status)}
+              >
+                {translateGameStatus(t, game.status)}
+              </Badge>
+              <Text c="dimmed" size="xs">
+                {game.teams?.length ?? 0}{' '}
+                {t('games:picker.teams').toLowerCase()} • {game.numberOfRounds}{' '}
+                {t('gameDetail:rounds.round').toLowerCase()}
               </Text>
-              <Group gap="xs">
-                <Badge
-                  size="sm"
-                  variant="filled"
-                  color={statusColor(game.status)}
-                >
-                  {translateGameStatus(t, game.status)}
-                </Badge>
-                <Text c="dimmed" size="xs">
-                  {game.teams?.length ?? 0}{' '}
-                  {t('games:picker.teams').toLowerCase()} •{' '}
-                  {game.numberOfRounds}{' '}
-                  {t('gameDetail:rounds.round').toLowerCase()}
-                </Text>
-              </Group>
-            </Stack>
-          </Group>
+            </Group>
+          </Stack>
 
-          <Group gap="xs" wrap="nowrap">
-            <Button
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleOpen();
-              }}
-            >
-              {t('games:card.viewDetails')}
-            </Button>
-            <ActionIcon
-              aria-label={t('common:actions.delete')}
-              color="gray"
-              size="lg"
-              onClick={handleDelete}
-            >
-              <IconTrash size={20} stroke={1.5} />
-            </ActionIcon>
-          </Group>
+          <ActionIcon
+            aria-label={t('common:actions.delete')}
+            color="gray"
+            size="lg"
+            onClick={handleDelete}
+          >
+            <IconTrash size={20} stroke={1.5} />
+          </ActionIcon>
         </Group>
 
         <Divider />

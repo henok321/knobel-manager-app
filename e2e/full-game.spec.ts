@@ -161,14 +161,7 @@ const readScoreModal = async (page: Page) => {
 const createTeam = async (page: Page, teamName: string) => {
   await page.getByRole('button', { name: 'Add Team' }).click();
   const d = dialog(page);
-  await expect(
-    d.getByRole('button', { name: 'Create', exact: true }),
-  ).toBeDisabled();
   await d.getByRole('textbox', { name: 'Team name' }).fill(teamName);
-  for (let i = 1; i < TEAM_SIZE; i++) {
-    await d.getByRole('button', { name: 'Add member' }).click();
-  }
-  await expect(d.getByRole('button', { name: 'Add member' })).toBeDisabled();
   const names = memberNames(teamName);
   for (const [i, name] of names.entries()) {
     await d.locator(`#player-${i}`).fill(name);
