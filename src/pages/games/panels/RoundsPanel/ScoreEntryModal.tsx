@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Table, Team } from '../../../../store/api.gen.ts';
+import { teamName } from '../../../../utils/teamName.ts';
 
 interface ScoreEntryModalProps {
   table: Table | null;
@@ -77,24 +78,21 @@ const ScoreEntryModal = ({
           {t('gameDetail:rounds.round')} {roundNumber}
         </Text>
 
-        {players.map((player) => {
-          const teamName = teams.find((t) => t.id === player.teamID)?.name;
-          return (
-            <NumberInput
-              key={player.id}
-              defaultValue={initialScores[player.id]}
-              label={`${player.name} (${teamName})`}
-              min={0}
-              placeholder={t('gameDetail:rounds.scorePlaceholder')}
-              onChange={(value) =>
-                setScores((prev) => ({
-                  ...prev,
-                  [player.id]: typeof value === 'number' ? value : 0,
-                }))
-              }
-            />
-          );
-        })}
+        {players.map((player) => (
+          <NumberInput
+            key={player.id}
+            defaultValue={initialScores[player.id]}
+            label={`${player.name} (${teamName(teams, player.teamID)})`}
+            min={0}
+            placeholder={t('gameDetail:rounds.scorePlaceholder')}
+            onChange={(value) =>
+              setScores((prev) => ({
+                ...prev,
+                [player.id]: typeof value === 'number' ? value : 0,
+              }))
+            }
+          />
+        ))}
 
         <Group justify="flex-end" mt="md">
           <Button color="gray" variant="subtle" onClick={onClose}>

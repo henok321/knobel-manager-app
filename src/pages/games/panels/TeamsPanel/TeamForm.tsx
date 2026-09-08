@@ -1,5 +1,4 @@
 import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
-import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { type ChangeEvent, type SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TeamsRequest } from '../../../../store/api.gen.ts';
@@ -19,7 +18,9 @@ const TeamForm = ({
 }: TeamFormProps) => {
   const { t } = useTranslation();
   const [teamName, setTeamName] = useState('');
-  const [players, setPlayers] = useState(['']);
+  const [players, setPlayers] = useState<string[]>(() =>
+    Array.from({ length: teamSize }, () => ''),
+  );
 
   const submit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,14 +37,6 @@ const TeamForm = ({
     const newPlayers = [...players];
     newPlayers[index] = e.target.value;
     setPlayers(newPlayers);
-  };
-
-  const removePlayer = (index: number) => {
-    setPlayers(players.filter((_, i) => i !== index));
-  };
-
-  const addPlayer = () => {
-    setPlayers([...players, '']);
   };
 
   return (
@@ -76,51 +69,21 @@ const TeamForm = ({
             </Text>
             <Stack gap="xs">
               {players.map((player, index) => (
-                <Group key={index} gap="xs">
-                  <TextInput
-                    required
-                    autoComplete={'off'}
-                    id={`player-${index}`}
-                    name={`player-${index}`}
-                    style={{ flex: 1 }}
-                    value={player}
-                    onChange={(e) => handleChangePlayer(index, e)}
-                  />
-                  <Button
-                    aria-label={t('games:team.form.removePlayer')}
-                    color="red"
-                    disabled={players.length === 1}
-                    px={6}
-                    type="button"
-                    variant="subtle"
-                    onClick={() => removePlayer(index)}
-                  >
-                    <IconTrash size={20} stroke={1.5} />
-                  </Button>
-                </Group>
+                <TextInput
+                  key={index}
+                  required
+                  autoComplete={'off'}
+                  id={`player-${index}`}
+                  name={`player-${index}`}
+                  value={player}
+                  onChange={(e) => handleChangePlayer(index, e)}
+                />
               ))}
-              <Button
-                aria-label={t('games:team.form.addPlayer')}
-                color="green"
-                disabled={players.length >= teamSize}
-                leftSection={<IconPlus size={20} stroke={1.5} />}
-                mt="xs"
-                size="xs"
-                type="button"
-                variant="subtle"
-                onClick={addPlayer}
-              >
-                <Text size="sm">{t('games:team.form.addPlayer')}</Text>
-              </Button>
             </Stack>
           </div>
 
           <Group justify="flex-end" mt="md">
-            <Button
-              disabled={players.length !== teamSize}
-              loading={isSubmitting}
-              type="submit"
-            >
+            <Button loading={isSubmitting} type="submit">
               {t('games:team.form.submit')}
             </Button>
           </Group>

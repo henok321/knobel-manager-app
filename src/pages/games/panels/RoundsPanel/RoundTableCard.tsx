@@ -10,6 +10,7 @@ import {
 import { IconCheck, IconClock } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import type { Table, Team } from '../../../../store/api.gen.ts';
+import { teamName } from '../../../../utils/teamName.ts';
 
 interface RoundTableCardProps {
   table: Table;
@@ -87,11 +88,12 @@ const RoundTableCard = ({
               const playerScore = table.scores?.find(
                 (s) => s.playerID === player.id,
               );
-              const team = teams.find((tm) => tm.id === player.teamID);
               return (
                 <MantineTable.Tr key={player.id}>
                   <MantineTable.Td>{player.name}</MantineTable.Td>
-                  <MantineTable.Td>{team ? team.name : '-'}</MantineTable.Td>
+                  <MantineTable.Td>
+                    {teamName(teams, player.teamID)}
+                  </MantineTable.Td>
                   <MantineTable.Td>
                     {playerScore ? playerScore.score : '-'}
                   </MantineTable.Td>

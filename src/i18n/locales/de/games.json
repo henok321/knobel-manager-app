@@ -8,8 +8,7 @@
       "teamSize": "Teamgröße"
     },
     "gameCreated": "Spiel \"{{name}}\" erfolgreich erstellt",
-    "teamAdded": "Team \"{{name}}\" erfolgreich hinzugefügt",
-    "viewDetails": "Details anzeigen"
+    "teamAdded": "Team \"{{name}}\" erfolgreich hinzugefügt"
   },
   "confirmDelete": "Bist du sicher, dass du dieses Spiel löschen möchtest?",
   "createFirstGame": "Erstelle dein erstes Spiel",
@@ -35,13 +34,11 @@
   "subtitle": "Verwalte alle deine Turniere",
   "team": {
     "form": {
-      "addPlayer": "Mitglied hinzufügen",
       "heading": "Team erstellen",
       "label": {
         "name": "Teamname",
         "players": "Teammitglieder"
       },
-      "removePlayer": "Mitglied entfernen",
       "submit": "Erstellen"
     }
   }
