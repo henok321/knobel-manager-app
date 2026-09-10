@@ -13,7 +13,7 @@ import {
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
+import { useAuth } from '../../../auth/useAuth.ts';
 import CenterLoader from '../../../shared/CenterLoader';
 import Layout from '../../../shared/layout/Layout.tsx';
 import {
@@ -31,6 +31,7 @@ const Games = () => {
   const allGames = data?.games ?? [];
   const [createGame, { isLoading: isCreatingGame }] = useCreateGameMutation();
   const [deleteGame] = useDeleteGameMutation();
+  const auth = useAuth();
 
   const [gameModalActive, setGameModalActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,6 +45,8 @@ const Games = () => {
     (game) => game.status !== 'completed',
   );
   const completedGames = filtered.filter((game) => game.status === 'completed');
+
+  const currentUser = auth.user;
 
   const handleDeleteGame = (gameID: number) =>
     openConfirmDialog({
@@ -59,7 +62,7 @@ const Games = () => {
       },
     });
 
-  if (isLoading) {
+  if (isLoading || !currentUser) {
     return <CenterLoader />;
   }
 
@@ -127,6 +130,7 @@ const Games = () => {
                 <GameListItem
                   key={game.id}
                   game={game}
+                  currentUserId={currentUser.uid}
                   onDelete={handleDeleteGame}
                 />
               ))}
@@ -140,6 +144,7 @@ const Games = () => {
               {completedGames.map((game) => (
                 <GameListItem
                   key={game.id}
+                  currentUserId={currentUser.uid}
                   game={game}
                   onDelete={handleDeleteGame}
                 />

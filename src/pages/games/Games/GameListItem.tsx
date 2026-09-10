@@ -11,7 +11,6 @@ import { IconTrash } from '@tabler/icons-react';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { useAuth } from '../../../auth/useAuth.ts';
 import type { Game } from '../../../store/api.gen.ts';
 import {
   statusColor,
@@ -20,13 +19,13 @@ import {
 
 interface GameListItemProps {
   game: Game;
+  currentUserId: string;
   onDelete: (gameID: number) => void;
 }
 
-const GameListItem = ({ game, onDelete }: GameListItemProps) => {
+const GameListItem = ({ game, currentUserId, onDelete }: GameListItemProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const auth = useAuth();
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -44,9 +43,9 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
     }
   };
 
-  const userIsSuperAdmin =
-    game.owners.find((owner) => owner.ownerSub === auth.user?.uid) ===
-    undefined;
+  const userIsSuperAdmin = !game.owners.some(
+    (owner) => owner.ownerSub === currentUserId,
+  );
 
   return (
     <Card
