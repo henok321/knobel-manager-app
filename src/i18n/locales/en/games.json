@@ -28,6 +28,7 @@
   "noGames": "No games yet. Create your first tournament!",
   "noResults": "No games found matching your search.",
   "picker": {
+    "superAdmin": "Super Admin",
     "teams": "Teams"
   },
   "search": "Search games...",

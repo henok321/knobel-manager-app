@@ -11,6 +11,7 @@ import { IconTrash } from '@tabler/icons-react';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import { useAuth } from '../../../auth/useAuth.ts';
 import type { Game } from '../../../store/api.gen.ts';
 import {
   statusColor,
@@ -25,6 +26,7 @@ interface GameListItemProps {
 const GameListItem = ({ game, onDelete }: GameListItemProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -42,6 +44,10 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
     }
   };
 
+  const userIsSuperAdmin =
+    game.owners.find((owner) => owner.ownerSub === auth.user?.uid) ===
+    undefined;
+
   return (
     <Card
       className="km-card-interactive"
@@ -58,6 +64,9 @@ const GameListItem = ({ game, onDelete }: GameListItemProps) => {
               {game.name}
             </Text>
             <Group gap="xs">
+              {userIsSuperAdmin && (
+                <Badge>{t('games:picker.superAdmin')}</Badge>
+              )}
               <Badge
                 size="sm"
                 variant="filled"
