@@ -63,14 +63,14 @@ const GameListItem = ({ game, currentUserId, onDelete }: GameListItemProps) => {
               {game.name}
             </Text>
             <Group gap="xs">
-              {userIsSuperAdmin && (
-                <Badge>{t('games:picker.superAdmin')}</Badge>
-              )}
               <Badge
                 size="sm"
                 variant="filled"
                 color={statusColor(game.status)}
               >
+                {userIsSuperAdmin && (
+                  <Badge>{t('games:picker.superAdmin')}</Badge>
+                )}
                 {translateGameStatus(t, game.status)}
               </Badge>
               <Text c="dimmed" size="xs">
