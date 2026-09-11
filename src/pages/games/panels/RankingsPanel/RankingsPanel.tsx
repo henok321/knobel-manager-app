@@ -15,14 +15,19 @@ import {
   buildRoundOptions,
   roundNumberById,
 } from '../../../../utils/rounds.ts';
+import { tableAssignmentsByPlayer } from '../../../../utils/tableAssignments.ts';
+import ScoreDetailModal from './ScoreDetailModal.tsx';
 
 interface RankingsPanelProps {
   game: Game;
 }
 
+type Selection = { kind: 'team' | 'player'; id: number };
+
 const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const { t } = useTranslation();
   const [selectedRound, setSelectedRound] = useState<string>('total');
+  const [selection, setSelection] = useState<Selection | null>(null);
 
   const teams = game.teams ?? [];
   const roundNumbers = roundNumberById(game.rounds);
@@ -42,6 +47,27 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const allScores = aggregateScoresFromTables(filteredTables);
   const playerRankings = mapPlayersToRankings(teams, allScores);
   const teamRankings = mapTeamsToRankings(teams, allScores);
+
+  const playerTableAssignments = tableAssignmentsByPlayer(
+    allTables,
+    game.rounds,
+  );
+
+  const selectedTeam = teams.find((team) =>
+    selection?.kind === 'team'
+      ? team.id === selection.id
+      : (team.players ?? []).some((player) => player.id === selection?.id),
+  );
+  const selectedPlayers = (selectedTeam?.players ?? []).filter(
+    (player) => selection?.kind === 'team' || player.id === selection?.id,
+  );
+  const detailTitle =
+    selection?.kind === 'team'
+      ? (selectedTeam?.name ?? '')
+      : t('gameDetail:rankings.detailTitle', {
+          player: selectedPlayers[0]?.name ?? '',
+          team: selectedTeam?.name ?? '',
+        });
 
   if (loading) {
     return (
@@ -79,6 +105,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
           <RankingsTable
             nameLabel={t('common:rankings.team')}
             rankings={teamRankings}
+            onRowSelect={(row) => setSelection({ kind: 'team', id: row.id })}
           />
         </Stack>
       </Card>
@@ -90,9 +117,20 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
             showTeamColumn
             nameLabel={t('common:rankings.player')}
             rankings={playerRankings}
+            onRowSelect={(row) => setSelection({ kind: 'player', id: row.id })}
           />
         </Stack>
       </Card>
+
+      {selectedPlayers.length > 0 && (
+        <ScoreDetailModal
+          numberOfRounds={game.numberOfRounds}
+          playerTableAssignments={playerTableAssignments}
+          players={selectedPlayers}
+          title={detailTitle}
+          onClose={() => setSelection(null)}
+        />
+      )}
     </Stack>
   );
 };

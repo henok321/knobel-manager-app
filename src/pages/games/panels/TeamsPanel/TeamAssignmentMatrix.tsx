@@ -1,4 +1,4 @@
-import { Badge, Group, Table, Text } from '@mantine/core';
+import { Table, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import type { Player } from '../../../../store/api.gen.ts';
@@ -11,7 +11,7 @@ interface TeamAssignmentMatrixProps {
   numberOfRounds: number;
 }
 
-const PLAYER_COL_PERCENT = 32;
+const PLAYER_COL_PERCENT = 40;
 
 const TeamAssignmentMatrix = ({
   players,
@@ -24,11 +24,15 @@ const TeamAssignmentMatrix = ({
 
   return (
     <Table
+      captionSide="top"
       horizontalSpacing="xs"
       style={{ tableLayout: 'fixed', width: '100%' }}
       verticalSpacing="xs"
       withRowBorders={false}
     >
+      <Table.Caption mt={0} ta="left">
+        {t('gameDetail:teams.tablePerRound')}
+      </Table.Caption>
       <Table.Thead>
         <Table.Tr>
           <Table.Th w={`${PLAYER_COL_PERCENT}%`}>
@@ -36,24 +40,20 @@ const TeamAssignmentMatrix = ({
           </Table.Th>
           {rounds.map((round) => (
             <Table.Th key={round} ta="center" w={roundColWidth}>
-              <Text component="span" fw={600} size="sm" visibleFrom="sm">
-                {t('gameDetail:teams.roundColumn', { round })}
-              </Text>
-              <Text component="span" fw={600} hiddenFrom="sm" size="sm">
-                {t('gameDetail:teams.roundColumnShort', { round })}
-              </Text>
+              {t('gameDetail:teams.roundColumn', { round })}
             </Table.Th>
           ))}
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
         {players.map((player) => {
-          const assignmentByRound = new Map(
+          const tableByRound = new Map(
             (playerTableAssignments[player.id] ?? []).map((assignment) => [
               assignment.roundNumber,
-              assignment,
+              assignment.tableNumber,
             ]),
           );
+
           return (
             <Table.Tr key={player.id}>
               <Table.Td>
@@ -62,39 +62,18 @@ const TeamAssignmentMatrix = ({
                 </Text>
               </Table.Td>
               {rounds.map((round) => {
-                const assignment = assignmentByRound.get(round);
+                const tableNumber = tableByRound.get(round);
+
                 return (
-                  <Table.Td key={round}>
-                    {assignment !== undefined && (
-                      <Group gap="xs" justify="center" wrap="nowrap">
-                        <Badge color="indigo" size="sm" variant="light">
-                          <Text component="span" inherit visibleFrom="sm">
-                            {t('gameDetail:teams.tableCell', {
-                              table: assignment.tableNumber,
-                            })}
-                          </Text>
-                          <Text component="span" hiddenFrom="sm" inherit>
-                            {t('gameDetail:teams.tableCellShort', {
-                              table: assignment.tableNumber,
-                            })}
-                          </Text>
-                        </Badge>
-                        {assignment.score && (
-                          <Badge miw="3.5em" size="sm" variant="light">
-                            <Text component="span" inherit visibleFrom="sm">
-                              {t('gameDetail:teams.playerScore', {
-                                score: assignment.score,
-                              })}
-                            </Text>
-                            <Text component="span" hiddenFrom="sm" inherit>
-                              {t('gameDetail:teams.playerScoreShort', {
-                                score: assignment.score,
-                              })}
-                            </Text>
-                          </Badge>
-                        )}
-                      </Group>
-                    )}
+                  <Table.Td key={round} ta="center">
+                    <Text
+                      c={tableNumber === undefined ? 'dimmed' : undefined}
+                      fw={600}
+                      size="sm"
+                      style={{ fontVariantNumeric: 'tabular-nums' }}
+                    >
+                      {tableNumber ?? '–'}
+                    </Text>
                   </Table.Td>
                 );
               })}
