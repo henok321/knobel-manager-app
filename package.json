@@ -44,18 +44,20 @@
     "react-router": "^8.3.1"
   },
   "devDependencies": {
+    "@babel/core": "^8.0.5",
     "@biomejs/biome": "^2.5.13",
     "@playwright/test": "^1.63.0",
+    "@rolldown/plugin-babel": "^0.2.4",
     "@rtk-query/codegen-openapi": "^2.2.0",
     "@types/node": "^26.5.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
+    "babel-plugin-react-compiler": "^1.0.0",
     "husky": "^9.1.7",
     "i18next-cli": "^1.73.2",
     "knip": "^6.35.1",
     "lint-staged": "^17.5.1",
-    "oxc-transform-react": "^0.149.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",
     "vite-plugin-mkcert": "^2.1.0"
