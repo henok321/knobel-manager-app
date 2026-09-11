@@ -130,7 +130,7 @@ const Games = () => {
                 <GameListItem
                   key={game.id}
                   game={game}
-                  currentUserId={currentUser.uid}
+                  userId={currentUser.uid}
                   onDelete={handleDeleteGame}
                 />
               ))}
@@ -144,7 +144,7 @@ const Games = () => {
               {completedGames.map((game) => (
                 <GameListItem
                   key={game.id}
-                  currentUserId={currentUser.uid}
+                  userId={currentUser.uid}
                   game={game}
                   onDelete={handleDeleteGame}
                 />

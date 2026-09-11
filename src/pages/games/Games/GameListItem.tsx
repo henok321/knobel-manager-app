@@ -19,11 +19,11 @@ import {
 
 interface GameListItemProps {
   game: Game;
-  currentUserId: string;
+  userId: string;
   onDelete: (gameID: number) => void;
 }
 
-const GameListItem = ({ game, currentUserId, onDelete }: GameListItemProps) => {
+const GameListItem = ({ game, userId, onDelete }: GameListItemProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ const GameListItem = ({ game, currentUserId, onDelete }: GameListItemProps) => {
   };
 
   const userIsSuperAdmin = !game.owners.some(
-    (owner) => owner.ownerSub === currentUserId,
+    (owner) => owner.ownerSub === userId,
   );
 
   return (
@@ -71,7 +71,9 @@ const GameListItem = ({ game, currentUserId, onDelete }: GameListItemProps) => {
                 {translateGameStatus(t, game.status)}
               </Badge>{' '}
               {userIsSuperAdmin && (
-                <Badge>{t('games:picker.superAdmin')}</Badge>
+                <Badge variant="filled" color="cyan">
+                  {t('games:picker.superAdmin')}
+                </Badge>
               )}
               <Text c="dimmed" size="xs">
                 {game.teams?.length ?? 0}{' '}
