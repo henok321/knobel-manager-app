@@ -26,10 +26,13 @@ const ScoreDetailModal = ({
   const { t } = useTranslation();
   const rounds = roundSequence(numberOfRounds);
   const showTeamTotal = players.length > 1;
-  const teamTotal = players.reduce(
-    (sum, player) => sum + scoreTotal(playerTableAssignments[player.id]),
-    0,
+  const allAssignments = players.flatMap(
+    (player) => playerTableAssignments[player.id] ?? [],
   );
+  const roundTotal = (round: number) =>
+    scoreTotal(
+      allAssignments.filter((assignment) => assignment.roundNumber === round),
+    );
 
   return (
     <Modal centered opened size="lg" title={title} onClose={onClose}>
@@ -113,16 +116,25 @@ const ScoreDetailModal = ({
             {showTeamTotal && (
               <Table.Tfoot>
                 <Table.Tr>
-                  <Table.Th colSpan={numberOfRounds + 1}>
-                    {t('common:rankings.team')}
-                  </Table.Th>
+                  <Table.Th>{t('common:rankings.team')}</Table.Th>
+                  {rounds.map((round) => (
+                    <Table.Th key={round} ta="center">
+                      <Text
+                        fw={700}
+                        size="sm"
+                        style={{ fontVariantNumeric: 'tabular-nums' }}
+                      >
+                        {roundTotal(round)}
+                      </Text>
+                    </Table.Th>
+                  ))}
                   <Table.Th ta="right">
                     <Text
                       fw={700}
                       size="sm"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     >
-                      {teamTotal}
+                      {scoreTotal(allAssignments)}
                     </Text>
                   </Table.Th>
                 </Table.Tr>
