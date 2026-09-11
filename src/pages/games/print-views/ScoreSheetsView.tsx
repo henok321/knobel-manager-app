@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { Game, Team } from '../../../store/api.gen.ts';
 import type { RoundTable } from '../../../utils/rounds.ts';
+import { teamName } from '../../../utils/teamName.ts';
 import PrintHeader from './PrintHeader';
 
 interface ScoreSheetsViewProps {
@@ -51,9 +52,7 @@ const ScoreSheet = ({
             {(table.players ?? []).map((player) => (
               <Table.Tr key={player.id}>
                 <Table.Td>{player.name}</Table.Td>
-                <Table.Td>
-                  {teams.find((team) => team.id === player.teamID)?.name || '-'}
-                </Table.Td>
+                <Table.Td>{teamName(teams, player.teamID)}</Table.Td>
                 <Table.Td style={{ height: rem(40) }}>&nbsp;</Table.Td>
               </Table.Tr>
             ))}

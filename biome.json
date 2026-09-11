@@ -39,18 +39,14 @@
       }
     }
   },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
-  "overrides": [
-    {
-      "includes": ["**/*.css"],
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noImportantStyles": "on"
-          }
-        }
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
       }
-    },
+    }
+  },
+  "overrides": [
     {
       "includes": ["**/print.css"],
       "linter": {

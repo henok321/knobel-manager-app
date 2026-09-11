@@ -24,16 +24,16 @@ const ScoreEntryModal = ({
   const { t } = useTranslation();
   const [scores, setScores] = useState<Record<number, number>>({});
 
-  const players = table?.players || [];
+  if (!table) {
+    return null;
+  }
+
+  const players = table.players || [];
 
   const initialScores: Record<number, number> = {};
   for (const player of players) {
-    const existingScore = table?.scores?.find((s) => s.playerID === player.id);
+    const existingScore = table.scores?.find((s) => s.playerID === player.id);
     initialScores[player.id] = existingScore?.score || 0;
-  }
-
-  if (!table) {
-    return null;
   }
 
   const hasScores = (table.scores?.length ?? 0) > 0;

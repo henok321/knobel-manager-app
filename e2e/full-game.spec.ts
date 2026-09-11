@@ -377,7 +377,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
       page.getByRole('button', { name: 'Finalize Game' }),
     ).toBeVisible();
     await expect(
-      page.getByText(`Tables: ${totalTables * ROUNDS}`),
+      page.getByText(`Tables per Round: ${totalTables}`),
     ).toBeVisible();
   });
 
