@@ -4,6 +4,7 @@ import { roundNumberById } from './rounds.ts';
 export type RoundTableAssignment = {
   roundNumber: number;
   tableNumber: number;
+  score?: number;
 };
 
 export const tableAssignmentsByPlayer = (
@@ -25,6 +26,8 @@ export const tableAssignmentsByPlayer = (
       assignments[id].push({
         roundNumber: tableRoundNumber,
         tableNumber: table.tableNumber,
+        score: table.scores?.find((score) => score.playerID === player.id)
+          ?.score,
       });
     }
   }

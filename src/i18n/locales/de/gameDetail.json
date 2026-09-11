@@ -138,6 +138,8 @@
     "player": "Spieler",
     "playerNamePlaceholder": "Spielername eingeben",
     "players": "Spieler",
+    "playerScore": "Punkte {{score}}",
+    "playerScoreShort": "P{{score}}",
     "resetToChangeTeams": "Die Tische sind bereits verteilt. Wenn du die Spielpaarungen zurücksetzt, wird diese Verteilung verworfen, danach kannst du die Teams ändern und neu berechnen.",
     "roundColumn": "Runde {{round}}",
     "roundColumnShort": "R{{round}}",

@@ -1,4 +1,4 @@
-import { Badge, Table, Text } from '@mantine/core';
+import { Badge, Group, Table, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import type { Player } from '../../../../store/api.gen.ts';
@@ -48,10 +48,10 @@ const TeamAssignmentMatrix = ({
       </Table.Thead>
       <Table.Tbody>
         {players.map((player) => {
-          const tableByRound = new Map(
+          const assignmentByRound = new Map(
             (playerTableAssignments[player.id] ?? []).map((assignment) => [
               assignment.roundNumber,
-              assignment.tableNumber,
+              assignment,
             ]),
           );
           return (
@@ -62,22 +62,38 @@ const TeamAssignmentMatrix = ({
                 </Text>
               </Table.Td>
               {rounds.map((round) => {
-                const tableNumber = tableByRound.get(round);
+                const assignment = assignmentByRound.get(round);
                 return (
-                  <Table.Td key={round} ta="center">
-                    {tableNumber !== undefined && (
-                      <Badge color="indigo" size="sm" variant="light">
-                        <Text component="span" inherit visibleFrom="sm">
-                          {t('gameDetail:teams.tableCell', {
-                            table: tableNumber,
-                          })}
-                        </Text>
-                        <Text component="span" hiddenFrom="sm" inherit>
-                          {t('gameDetail:teams.tableCellShort', {
-                            table: tableNumber,
-                          })}
-                        </Text>
-                      </Badge>
+                  <Table.Td key={round}>
+                    {assignment !== undefined && (
+                      <Group gap="xs" justify="center" wrap="nowrap">
+                        <Badge color="indigo" size="sm" variant="light">
+                          <Text component="span" inherit visibleFrom="sm">
+                            {t('gameDetail:teams.tableCell', {
+                              table: assignment.tableNumber,
+                            })}
+                          </Text>
+                          <Text component="span" hiddenFrom="sm" inherit>
+                            {t('gameDetail:teams.tableCellShort', {
+                              table: assignment.tableNumber,
+                            })}
+                          </Text>
+                        </Badge>
+                        {assignment.score && (
+                          <Badge miw="3.5em" size="sm" variant="light">
+                            <Text component="span" inherit visibleFrom="sm">
+                              {t('gameDetail:teams.playerScore', {
+                                score: assignment.score,
+                              })}
+                            </Text>
+                            <Text component="span" hiddenFrom="sm" inherit>
+                              {t('gameDetail:teams.playerScoreShort', {
+                                score: assignment.score,
+                              })}
+                            </Text>
+                          </Badge>
+                        )}
+                      </Group>
                     )}
                   </Table.Td>
                 );
