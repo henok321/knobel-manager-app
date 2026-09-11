@@ -65,6 +65,7 @@
     "player": "Spieler",
     "playerRankings": "Spieler-Rangliste",
     "rank": "Rang",
+    "showDetails": "Punktedetails für {{name}} anzeigen",
     "team": "Team",
     "teamRankings": "Team-Rangliste",
     "totalScore": "Gesamtpunktzahl"

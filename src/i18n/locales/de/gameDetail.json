@@ -76,10 +76,12 @@
     "print": "Drucken"
   },
   "rankings": {
+    "detailTitle": "{{player}} · {{team}}",
     "filterByRound": "Nach Runde filtern",
     "noScoresInstructions": "Beginne mit der Einrichtung der Spielpaarungen und trage dann Punkte für jeden Tisch ein.",
     "noScoresMessage": "Ranglisten werden hier angezeigt, sobald du Punkte im Runden-Tab einträgst.",
     "noScoresYet": "Noch keine Punkte",
+    "scorePerRound": "Punkte pro Runde, mit dem Tisch, an dem sie erzielt wurden",
     "totalRanking": "Gesamt (Alle Runden)"
   },
   "rounds": {
@@ -141,6 +143,7 @@
     "resetToChangeTeams": "Die Tische sind bereits verteilt. Wenn du die Spielpaarungen zurücksetzt, wird diese Verteilung verworfen, danach kannst du die Teams ändern und neu berechnen.",
     "roundColumn": "Runde {{round}}",
     "searchTeams": "Nach Teamnamen suchen...",
+    "tableCellShort": "T{{table}}",
     "tablePerRound": "Tischnummer pro Runde",
     "teamName": "Teamname",
     "teamNamePlaceholder": "Teamname eingeben"

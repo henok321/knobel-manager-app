@@ -76,10 +76,12 @@
     "print": "Print"
   },
   "rankings": {
+    "detailTitle": "{{player}} · {{team}}",
     "filterByRound": "Filter by Round",
     "noScoresInstructions": "Start by setting up matchmaking, then enter scores for each table.",
     "noScoresMessage": "Rankings will appear here once you enter scores in the Rounds tab.",
     "noScoresYet": "No Scores Yet",
+    "scorePerRound": "Score per round, with the table it was played on",
     "totalRanking": "Total (All Rounds)"
   },
   "rounds": {
@@ -141,6 +143,7 @@
     "resetToChangeTeams": "The tables are already assigned. Resetting the matchmaking discards that assignment, then you can change the teams and run matchmaking again.",
     "roundColumn": "Round {{round}}",
     "searchTeams": "Search team by name...",
+    "tableCellShort": "T{{table}}",
     "tablePerRound": "Table number per round",
     "teamName": "Team Name",
     "teamNamePlaceholder": "Enter team name"

@@ -65,6 +65,7 @@
     "player": "Player",
     "playerRankings": "Player Rankings",
     "rank": "Rank",
+    "showDetails": "Show score details for {{name}}",
     "team": "Team",
     "teamRankings": "Team Rankings",
     "totalScore": "Total Score"

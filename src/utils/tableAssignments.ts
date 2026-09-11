@@ -7,6 +7,9 @@ export type RoundTableAssignment = {
   score?: number;
 };
 
+export const scoreTotal = (assignments: RoundTableAssignment[] = []): number =>
+  assignments.reduce((sum, assignment) => sum + (assignment.score ?? 0), 0);
+
 export const tableAssignmentsByPlayer = (
   tables: Table[],
   rounds: GameRound[] = [],

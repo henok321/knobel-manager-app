@@ -1,4 +1,4 @@
-import { rem, Table, Text } from '@mantine/core';
+import { Anchor, rem, Table, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import type { RankingsRow } from '../utils/rankings.ts';
@@ -9,12 +9,14 @@ interface RankingsTableProps {
   nameLabel: string;
   rankings: RankingsRow[];
   showTeamColumn?: boolean;
+  onRowSelect?: (row: RankingsRow) => void;
 }
 
 const RankingsTable = ({
   nameLabel,
   rankings,
   showTeamColumn = false,
+  onRowSelect,
 }: RankingsTableProps) => {
   const { t } = useTranslation();
 
@@ -27,7 +29,12 @@ const RankingsTable = ({
   }
 
   return (
-    <Table striped withColumnBorders withTableBorder>
+    <Table
+      striped
+      withColumnBorders
+      withTableBorder
+      highlightOnHover={Boolean(onRowSelect)}
+    >
       <Table.Thead>
         <Table.Tr>
           <Table.Th w={rem(80)}>{t('common:rankings.rank')}</Table.Th>
@@ -45,12 +52,31 @@ const RankingsTable = ({
           const fw = rank === 1 ? 700 : 400;
 
           return (
-            <Table.Tr key={row.id}>
+            <Table.Tr
+              key={row.id}
+              style={onRowSelect ? { cursor: 'pointer' } : undefined}
+              onClick={onRowSelect ? () => onRowSelect(row) : undefined}
+            >
               <Table.Td>
                 <Text fw={fw}>{medal ? `${rank} ${medal}` : rank}</Text>
               </Table.Td>
               <Table.Td>
-                <Text fw={fw}>{row.name}</Text>
+                {onRowSelect ? (
+                  <Anchor
+                    aria-label={t('common:rankings.showDetails', {
+                      name: row.name,
+                    })}
+                    component="button"
+                    fw={fw}
+                    type="button"
+                    underline="hover"
+                    onClick={() => onRowSelect(row)}
+                  >
+                    {row.name}
+                  </Anchor>
+                ) : (
+                  <Text fw={fw}>{row.name}</Text>
+                )}
               </Table.Td>
               {showTeamColumn && (
                 <Table.Td>

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import type { GameRound, Table } from '../store/api.gen.ts';
-import { tableAssignmentsByPlayer } from './tableAssignments.ts';
+import { scoreTotal, tableAssignmentsByPlayer } from './tableAssignments.ts';
 
 const rounds: GameRound[] = [
   { id: 50, gameID: 1, roundNumber: 1, status: 'completed' },
@@ -70,5 +70,23 @@ describe('tableAssignmentsByPlayer', () => {
     assert.deepEqual(assignments, {
       10: [{ roundNumber: 50, tableNumber: 3 }],
     });
+  });
+});
+
+describe('scoreTotal', () => {
+  it('is zero without assignments', () => {
+    assert.equal(scoreTotal(), 0);
+    assert.equal(scoreTotal([]), 0);
+  });
+
+  it('sums scores and skips unscored rounds', () => {
+    assert.equal(
+      scoreTotal([
+        { roundNumber: 1, tableNumber: 3, score: 12 },
+        { roundNumber: 2, tableNumber: 7 },
+        { roundNumber: 3, tableNumber: 1, score: 9 },
+      ]),
+      21,
+    );
   });
 });
