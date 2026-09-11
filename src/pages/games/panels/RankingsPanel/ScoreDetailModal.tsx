@@ -91,7 +91,7 @@ const ScoreDetailModal = ({
                             </Text>
                             {assignment !== undefined && (
                               <Text c="dimmed" size="xs">
-                                {t('gameDetail:teams.tableCellShort', {
+                                {t('gameDetail:teams.tableCell', {
                                   table: assignment.tableNumber,
                                 })}
                               </Text>
