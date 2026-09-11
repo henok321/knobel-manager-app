@@ -70,7 +70,6 @@ const RankingsTable = ({
                     fw={fw}
                     type="button"
                     underline="hover"
-                    onClick={() => onRowSelect(row)}
                   >
                     {row.name}
                   </Anchor>

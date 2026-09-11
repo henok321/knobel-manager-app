@@ -53,22 +53,21 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     game.rounds,
   );
 
-  const selectedTeam =
-    selection === null
-      ? undefined
-      : teams.find((team) =>
-          selection.kind === 'team'
-            ? team.id === selection.id
-            : (team.players ?? []).some((player) => player.id === selection.id),
-        );
-  const selectedPlayers =
-    selection === null || selectedTeam === undefined
-      ? []
-      : selection.kind === 'team'
-        ? (selectedTeam.players ?? [])
-        : (selectedTeam.players ?? []).filter(
-            (player) => player.id === selection.id,
-          );
+  const selectedTeam = teams.find((team) =>
+    selection?.kind === 'team'
+      ? team.id === selection.id
+      : (team.players ?? []).some((player) => player.id === selection?.id),
+  );
+  const selectedPlayers = (selectedTeam?.players ?? []).filter(
+    (player) => selection?.kind === 'team' || player.id === selection?.id,
+  );
+  const detailTitle =
+    selection?.kind === 'team'
+      ? (selectedTeam?.name ?? '')
+      : t('gameDetail:rankings.detailTitle', {
+          player: selectedPlayers[0]?.name ?? '',
+          team: selectedTeam?.name ?? '',
+        });
 
   if (loading) {
     return (
@@ -128,14 +127,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
           numberOfRounds={game.numberOfRounds}
           playerTableAssignments={playerTableAssignments}
           players={selectedPlayers}
-          title={
-            selection?.kind === 'team'
-              ? (selectedTeam?.name ?? '')
-              : t('gameDetail:rankings.detailTitle', {
-                  player: selectedPlayers[0]?.name ?? '',
-                  team: selectedTeam?.name ?? '',
-                })
-          }
+          title={detailTitle}
           onClose={() => setSelection(null)}
         />
       )}
