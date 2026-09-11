@@ -22,12 +22,14 @@ export const tableAssignmentsByPlayer = (
     const tableRoundNumber = roundNumbers.get(table.roundID) ?? table.roundID;
     for (const player of tablePlayers) {
       const id = player.id;
+      const score = table.scores?.find(
+        (entry) => entry.playerID === player.id,
+      )?.score;
       assignments[id] ??= [];
       assignments[id].push({
         roundNumber: tableRoundNumber,
         tableNumber: table.tableNumber,
-        score: table.scores?.find((score) => score.playerID === player.id)
-          ?.score,
+        ...(score !== undefined && { score }),
       });
     }
   }
