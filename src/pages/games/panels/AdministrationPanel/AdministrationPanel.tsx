@@ -54,13 +54,13 @@ const AdministrationPanel = ({ game }: AdministrationPanelProps) => {
       });
     } catch (error) {
       const status = httpStatus(error);
-      notifyError(
-        status === 409
-          ? t('gameDetail:administration.admins.errorAlreadyAdmin')
-          : status === 422
-            ? t('gameDetail:administration.admins.errorUserNotFound')
-            : t('gameDetail:administration.admins.errorGeneric'),
-      );
+      let message = t('gameDetail:administration.admins.errorGeneric');
+      if (status === 409) {
+        message = t('gameDetail:administration.admins.errorAlreadyAdmin');
+      } else if (status === 422) {
+        message = t('gameDetail:administration.admins.errorUserNotFound');
+      }
+      notifyError(message);
     }
   };
 

@@ -64,7 +64,7 @@ const TeamForm = ({
           <TextInput
             autoFocus
             required
-            autoComplete={'off'}
+            autoComplete="off"
             id="team-name"
             label={t('games:team.form.label.name')}
             name="team-name"
@@ -88,7 +88,7 @@ const TeamForm = ({
                 <List.Item key={index}>
                   <TextInput
                     required
-                    autoComplete={'off'}
+                    autoComplete="off"
                     id={`player-${index}`}
                     name={`player-${index}`}
                     value={player}

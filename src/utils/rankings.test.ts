@@ -36,11 +36,11 @@ const team = (id: number, name: string, players: Player[]): Team => ({
 });
 
 describe('aggregateScoresFromTables', () => {
-  type Case = {
+  interface Case {
     name: string;
     tables: Table[];
     expected: Record<number, number>;
-  };
+  }
 
   const cases: Case[] = [
     {

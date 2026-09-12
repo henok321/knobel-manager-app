@@ -74,7 +74,7 @@ const GameForm = ({
         <Stack gap="md">
           <TextInput
             autoFocus
-            autoComplete={'off'}
+            autoComplete="off"
             data-1p-ignore
             data-form-type="other"
             data-lpignore="true"

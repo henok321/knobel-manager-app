@@ -91,7 +91,7 @@ const PrintView = () => {
             </Button>
             <Button
               leftSection={<IconPrinter size={16} />}
-              onClick={() => window.print()}
+              onClick={() => globalThis.print()}
             >
               {t('gameDetail:printView.print')}
             </Button>

@@ -1,4 +1,4 @@
-export const httpStatus = (error: unknown): number | undefined =>
+export const httpStatus = (error?: unknown): number | undefined =>
   typeof error === 'object' &&
   error !== null &&
   'status' in error &&
@@ -6,7 +6,7 @@ export const httpStatus = (error: unknown): number | undefined =>
     ? error.status
     : undefined;
 
-export const backendErrorMessage = (error: unknown): string | undefined => {
+export const backendErrorMessage = (error?: unknown): string | undefined => {
   if (typeof error === 'object' && error !== null && 'data' in error) {
     const { data } = error;
 

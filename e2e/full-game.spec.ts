@@ -139,7 +139,7 @@ const login = async (page: Page) => {
 const readScoreModal = async (page: Page) => {
   const d = dialog(page);
   await expect(d).toBeVisible();
-  const lines = (await d.innerText()).split('\n');
+  const lines = (await d.textContent()).split('\n');
   const entries = lines
     .filter((line) => /\(.+\)$/.test(line.trim()))
     .map((line) => {
@@ -182,7 +182,7 @@ const scoreRowsFor = async (page: Page, expectedTables: number) => {
     .evaluateAll((trs) =>
       trs.map((tr) =>
         [...tr.querySelectorAll('td')].map((cell) =>
-          (cell as HTMLElement).innerText.trim(),
+          (cell as HTMLElement).textContent.trim(),
         ),
       ),
     );
@@ -202,7 +202,7 @@ const readRankingRows = async (panel: Locator) => {
     .evaluateAll((trs) =>
       trs.map((tr) =>
         [...tr.querySelectorAll('td,th')].map((cell) =>
-          (cell as HTMLElement).innerText.trim(),
+          (cell as HTMLElement).textContent.trim(),
         ),
       ),
     );
@@ -231,7 +231,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
     }
   });
 
-  const gameName = `E2E Turnier ${new Date().toISOString().replace(/[:.]/g, '-')}`;
+  const gameName = `E2E Turnier ${new Date().toISOString().replaceAll(/[:.]/g, '-')}`;
   const record = newRecord();
   let gameId = '';
 
@@ -498,7 +498,7 @@ test('tournament lifecycle: create, rename, matchmaking conflict, every score, s
     }
   });
 
-  await test.step('no unexpected console errors', async () => {
+  await test.step('no unexpected console errors', () => {
     // The deliberate add-team-after-matchmaking 409 is expected.
     const unexpected = consoleErrors.filter((line) => !line.includes('409'));
     expect(unexpected, unexpected.join('\n')).toHaveLength(0);
@@ -573,7 +573,7 @@ test.describe('a finished tournament', () => {
       );
 
       // Ranks must be a dense 1..n sequence, ordered by descending score.
-      const ranks = teamRows.map((r) => Number.parseInt(r[0] as string, 10));
+      const ranks = teamRows.map((r) => Math.trunc(Number(r[0] as string)));
       expect(ranks).toEqual(teamRows.map((_, i) => i + 1));
       const scores = teamRows.map((r) => Number(r[2]));
       expect([...scores].sort((a, b) => b - a)).toEqual(scores);
@@ -584,7 +584,7 @@ test.describe('a finished tournament', () => {
     const { gameName } = tournament();
     const panel = await openTab(page, 'Audit Log');
     await expect(panel).toContainText(gameName);
-    const text = await panel.innerText();
+    const text = await panel.textContent();
     expect(text).toContain(EMAIL as string);
     for (const marker of [
       'CREATED',
@@ -616,7 +616,7 @@ test.describe('a finished tournament', () => {
       await page.goto(`/games/${gameId}/print?type=${view}`);
       const body = page.locator('body');
       await expect(body).toContainText(gameName);
-      const text = await body.innerText();
+      const text = await body.textContent();
 
       expect(text, `${view}: no unresolved values`).not.toMatch(
         /\bundefined\b|\bNaN\b|\[object /,

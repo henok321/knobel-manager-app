@@ -15,7 +15,7 @@ describe('httpStatus', () => {
       undefined,
     );
     assert.equal(httpStatus(new Error('boom')), undefined);
-    assert.equal(httpStatus(undefined), undefined);
+    assert.equal(httpStatus(), undefined);
     assert.equal(httpStatus('409'), undefined);
   });
 });
@@ -45,7 +45,7 @@ describe('backendErrorMessage', () => {
       backendErrorMessage({ status: 409, data: { error: 42 } }),
       undefined,
     );
-    assert.equal(backendErrorMessage(undefined), undefined);
+    assert.equal(backendErrorMessage(), undefined);
     assert.equal(backendErrorMessage('boom'), undefined);
   });
 });

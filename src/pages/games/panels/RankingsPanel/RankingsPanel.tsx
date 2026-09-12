@@ -22,7 +22,10 @@ interface RankingsPanelProps {
   game: Game;
 }
 
-type Selection = { kind: 'team' | 'player'; id: number };
+interface Selection {
+  kind: 'team' | 'player';
+  id: number;
+}
 
 const RankingsPanel = ({ game }: RankingsPanelProps) => {
   const { t } = useTranslation();

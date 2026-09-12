@@ -1,11 +1,11 @@
 import type { GameRound, Table } from '../store/api.gen.ts';
 import { roundNumberById } from './rounds.ts';
 
-export type RoundTableAssignment = {
+export interface RoundTableAssignment {
   roundNumber: number;
   tableNumber: number;
   score?: number;
-};
+}
 
 export const scoreTotal = (assignments: RoundTableAssignment[] = []): number =>
   assignments.reduce((sum, assignment) => sum + (assignment.score ?? 0), 0);
@@ -24,7 +24,7 @@ export const tableAssignmentsByPlayer = (
     }
     const tableRoundNumber = roundNumbers.get(table.roundID) ?? table.roundID;
     for (const player of tablePlayers) {
-      const id = player.id;
+      const { id } = player;
       const score = table.scores?.find(
         (entry) => entry.playerID === player.id,
       )?.score;

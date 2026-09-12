@@ -11,10 +11,10 @@ import { api } from '../store/api.ts';
 import store from '../store/store.ts';
 import { auth as firebaseAuth } from './firebaseConfig.ts';
 
-type LoginData = {
+interface LoginData {
   email: string;
   password: string;
-};
+}
 
 type AuthErrorCode = 'UNKNOWN_ERROR' | 'INVALID_CREDENTIALS';
 
@@ -64,12 +64,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logOut = async () => {
-    try {
-      await signOut(firebaseAuth);
-    } finally {
+    await signOut(firebaseAuth).finally(() => {
       localStorage.clear();
       store.dispatch(api.util.resetApiState());
-    }
+    });
   };
 
   return (
