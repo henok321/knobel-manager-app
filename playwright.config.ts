@@ -1,4 +1,5 @@
 import { existsSync } from 'node:fs';
+
 import { defineConfig } from '@playwright/test';
 
 // set E2E_EMAIL and E2E_PASSWORD or use .env.e2e

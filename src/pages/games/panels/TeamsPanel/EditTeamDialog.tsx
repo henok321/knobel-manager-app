@@ -1,6 +1,7 @@
 import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
 import { type KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { notifyError } from '../../../../utils/notifyError';
 import type { PlayerName } from './teamChanges.ts';
 

@@ -10,6 +10,7 @@ import {
 import { notifications } from '@mantine/notifications';
 import type { SubmitEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { notifyError } from '../../../utils/notifyError';
 
 interface GameFormData {

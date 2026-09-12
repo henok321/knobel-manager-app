@@ -51,9 +51,9 @@ const remember = (
   team: string,
   score: number,
 ) => {
-  const round_ = record.perRound.get(round) ?? new Map<string, number>();
-  round_.set(player, score);
-  record.perRound.set(round, round_);
+  const roundScores = record.perRound.get(round) ?? new Map<string, number>();
+  roundScores.set(player, score);
+  record.perRound.set(round, roundScores);
   record.teamOfPlayer.set(player, team);
 };
 

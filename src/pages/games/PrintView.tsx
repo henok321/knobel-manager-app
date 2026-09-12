@@ -10,6 +10,7 @@ import RankingsView from './print-views/RankingsView';
 import ScoreSheetsView from './print-views/ScoreSheetsView';
 import TablePlanView from './print-views/TablePlanView';
 import TeamHandoutsView from './print-views/TeamHandoutsView';
+
 import './print-views/print.css';
 
 const PrintView = () => {

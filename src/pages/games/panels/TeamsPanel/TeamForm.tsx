@@ -9,6 +9,7 @@ import {
 } from '@mantine/core';
 import { type ChangeEvent, type SubmitEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import type { TeamsRequest } from '../../../../store/api.gen.ts';
 
 interface TeamFormProps {

@@ -54,7 +54,7 @@ pnpm deploy  # Build + Firebase deploy
 
 ```bash
 pnpm fix    # Auto-fix linting and formatting (runs on pre-commit)
-pnpm check  # tsc + biome + i18next checks (status, lint, extract --ci)
+pnpm check  # tsc + oxlint/oxfmt + i18next checks (status, lint, extract --ci)
 pnpm test   # Run tests
 pnpm knip   # Check for unused files/dependencies
 ```

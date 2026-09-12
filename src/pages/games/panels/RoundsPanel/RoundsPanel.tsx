@@ -13,6 +13,7 @@ import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import {
   useGetGameTablesQuery,

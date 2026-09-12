@@ -9,6 +9,7 @@ import { AuthProvider } from './auth/AuthContext.tsx';
 import ProtectedRoute from './auth/ProtectedRoute.tsx';
 import './i18n/i18nConfig.ts';
 import CenterLoader from './shared/CenterLoader.tsx';
+
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import './shared/global.css';

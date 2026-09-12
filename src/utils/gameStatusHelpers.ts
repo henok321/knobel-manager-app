@@ -1,4 +1,5 @@
 import type { TFunction } from 'i18next';
+
 import type { GameStatus } from '../store/api.gen.ts';
 import { assertNever } from './assertNever.ts';
 

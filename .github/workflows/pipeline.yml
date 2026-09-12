@@ -46,7 +46,7 @@ jobs:
       - name: Setup project
         uses: ./.github/actions/setup-project
 
-      - name: Biome CI (lint + format check)
+      - name: Oxc CI (oxlint + oxfmt check)
         run: pnpm check
 
       - name: Knip (production check)
