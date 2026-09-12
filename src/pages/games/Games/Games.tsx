@@ -13,6 +13,7 @@ import {
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { useAuth } from '../../../auth/useAuth.ts';
 import CenterLoader from '../../../shared/CenterLoader';
 import Layout from '../../../shared/layout/Layout.tsx';
@@ -27,7 +28,7 @@ import GameForm from './GameForm';
 import GameListItem from './GameListItem';
 
 const Games = () => {
-  const { data, isLoading, isError } = useGetGamesQuery(undefined);
+  const { data, isLoading, isError } = useGetGamesQuery();
   const allGames = data?.games ?? [];
   const [createGame, { isLoading: isCreatingGame }] = useCreateGameMutation();
   const [deleteGame] = useDeleteGameMutation();

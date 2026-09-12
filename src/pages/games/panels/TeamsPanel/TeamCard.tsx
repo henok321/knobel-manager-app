@@ -1,6 +1,7 @@
 import { ActionIcon, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+
 import type { Team } from '../../../../store/api.gen.ts';
 import type { RoundTableAssignment } from '../../../../utils/tableAssignments.ts';
 import TeamAssignmentMatrix from './TeamAssignmentMatrix.tsx';

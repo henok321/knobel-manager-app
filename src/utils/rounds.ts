@@ -1,4 +1,5 @@
 import type { TFunction } from 'i18next';
+
 import type { GameRound, Table } from '../store/api.gen.ts';
 
 export const roundSequence = (numberOfRounds: number): number[] =>

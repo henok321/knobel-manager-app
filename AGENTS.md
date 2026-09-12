@@ -11,8 +11,8 @@ pnpm install
 
 pnpm local              # dev server, proxies /api → localhost:8080
 pnpm local:remote       # dev server, proxies /api → deployed API (VITE_API_URL in .env.production)
-pnpm fix                # biome check --write . (auto-fix lint + format; no separate lint script)
-pnpm check              # CI gate: tsc --noEmit && biome ci && i18next status/lint/extract --ci — run before declaring work done
+pnpm fix                # oxfmt . && oxlint --fix . (auto-fix lint + format; no separate lint script)
+pnpm check              # CI gate: tsc --noEmit && oxfmt --check . && oxlint && i18next status/lint/extract --ci — run before declaring work done
 pnpm test               # node --test, native runner (no jest); single file: pnpm exec node --test <path>
 pnpm test:e2e           # Playwright; NOT in CI; writes real data to whatever /api proxies to
 pnpm knip               # unused files/exports/deps audit (CI runs it)
@@ -45,7 +45,7 @@ channel.
   restrictions); don't "fix" it.
 - Filenames follow the file's kind, not its directory: components PascalCase, function modules camelCase (e.g.
   `utils/confirmModal.tsx`).
-- Zero comments by default; when unavoidable, one brief line saying *why*.
+- Zero comments by default; when unavoidable, one brief line saying _why_.
 - No `any`; handle `undefined` from indexed access (`noUncheckedIndexedAccess` is on); exhaustive switches with
   `assertNever`.
 
@@ -67,7 +67,6 @@ Three-file RTK Query chain: `baseApi.ts` (hand-written) → `api.gen.ts` (genera
 - No local backend? Run `pnpm local:remote` instead of `pnpm local`.
 - `.env.production` is intentionally tracked — CI builds depend on it. `.env.e2e` (Playwright credentials) is untracked.
 - Transitive dep broken upstream → pin in `pnpm-workspace.yaml` `overrides`, not a reinstall.
-- Biome allows `!important` only in `src/pages/games/print-views/print.css`.
 - E2e first run: `pnpm exec playwright install chromium`; credentials from untracked `.env.e2e` (`E2E_EMAIL`/
   `E2E_PASSWORD`). Read-only tests consume the tournament the lifecycle test publishes — a `--grep` excluding it makes
   them skip. No cleanup; every run leaves an `E2E Turnier <timestamp>` game.
@@ -75,4 +74,4 @@ Three-file RTK Query chain: `baseApi.ts` (hand-written) → `api.gen.ts` (genera
 ## Git
 
 - Never commit without asking; never push without explicit permission. No Claude attribution in commits.
-- lint-staged runs biome on commit (husky pre-commit); `pnpm check` runs on push (pre-push).
+- lint-staged runs oxfmt/oxlint on commit (husky pre-commit); `pnpm check` runs on push (pre-push).

@@ -1,6 +1,6 @@
 {
   "recommendations": [
-    "biomejs.biome",
+    "oxc.oxc-vscode",
     "github.vscode-github-actions",
     "orta.vscode-jest",
     "lokalise.i18n-ally"

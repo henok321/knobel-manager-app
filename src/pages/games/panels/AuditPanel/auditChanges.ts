@@ -71,7 +71,7 @@ export const describeChanges = (
   lookups: AuditLookups,
 ): AuditChange[] => {
   const wholeRow = before === null || after === null;
-  const subjectFields = new Set(SUBJECT_FIELDS[entity] ?? []);
+  const subjectFields = new Set(SUBJECT_FIELDS[entity]);
   const removedOwner = entity === 'game_owners' && after === null;
 
   return [

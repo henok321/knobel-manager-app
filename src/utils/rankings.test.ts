@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+
 import type { Player, Score, Table, Team } from '../store/api.gen.ts';
 import {
   aggregateScoresFromTables,
@@ -35,11 +36,11 @@ const team = (id: number, name: string, players: Player[]): Team => ({
 });
 
 describe('aggregateScoresFromTables', () => {
-  type Case = {
+  interface Case {
     name: string;
     tables: Table[];
     expected: Record<number, number>;
-  };
+  }
 
   const cases: Case[] = [
     {

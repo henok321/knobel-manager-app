@@ -3,6 +3,7 @@ import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { useGetGameTablesQuery } from '../../../../store/api';
 import type { Game } from '../../../../store/api.gen.ts';
 import { openConfirmDialog } from '../../../../utils/confirmModal.tsx';

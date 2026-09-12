@@ -13,6 +13,7 @@ import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import EmptyStateCard from '../../../../shared/EmptyStateCard';
 import {
   useGetGameTablesQuery,
@@ -64,7 +65,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
 
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRound, setSelectedRound] = useLocalStorage<number>({
     key: `selected_round_for_game_${game.id}`,
@@ -73,12 +74,14 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   });
 
   const runMatchmaking = async (mutate: () => Promise<unknown>) => {
-    setError(null);
+    setActionError(null);
 
     try {
       await mutate();
-    } catch (err) {
-      setError(backendErrorMessage(err) ?? t('gameDetail:rounds.error'));
+    } catch (error) {
+      setActionError(
+        backendErrorMessage(error) ?? t('gameDetail:rounds.error'),
+      );
     }
   };
 
@@ -117,7 +120,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
     if (!selectedTable) {
       return;
     }
-    setError(null);
+    setActionError(null);
 
     try {
       await updateScores({
@@ -126,14 +129,16 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
         tableNumber: selectedTable.tableNumber,
         scoresRequest: { scores },
       }).unwrap();
-    } catch (err) {
-      setError(backendErrorMessage(err) ?? t('common:actions.errorOccurred'));
-      throw err;
+    } catch (error) {
+      setActionError(
+        backendErrorMessage(error) ?? t('common:actions.errorOccurred'),
+      );
+      throw error;
     }
   };
 
   const displayError =
-    error ||
+    actionError ||
     roundTablesErrorMessage(roundTablesError, t('gameDetail:rounds.error'));
 
   const roundsContent = () => {
