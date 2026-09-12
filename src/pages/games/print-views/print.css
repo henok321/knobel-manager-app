@@ -15,13 +15,6 @@
     margin-bottom: 0;
   }
 
-  .mantine-Paper-root {
-    box-shadow: none !important;
-    background: white !important;
-    border: 1px solid #dee2e6 !important;
-    padding: 0.5rem !important;
-  }
-
   table {
     border-collapse: collapse;
     width: 100%;
@@ -50,10 +43,6 @@
     break-after: auto !important;
   }
 
-  .mantine-Badge-root {
-    border: 1px solid currentColor;
-  }
-
   a {
     text-decoration: underline;
     color: black;
@@ -62,12 +51,6 @@
   @page {
     margin: 0.7cm 1.2cm;
     size: A4 portrait;
-  }
-
-  .mantine-Container-root {
-    max-width: 100% !important;
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
   }
 
   h1 {
