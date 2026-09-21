@@ -7,30 +7,30 @@ import {
   mapTeamsToRankings,
 } from './rankings.ts';
 
-const player = (id: number, teamID: number, name: string): Player => ({
+const player = (id: number, teamId: number, name: string): Player => ({
   id,
   name,
-  teamID,
+  teamId: teamId,
 });
 
-const score = (id: number, playerID: number, value: number): Score => ({
+const score = (id: number, playerId: number, value: number): Score => ({
   id,
-  playerID,
-  tableID: 0,
+  playerId: playerId,
+  tableId: 0,
   score: value,
 });
 
-const table = (id: number, roundID: number, scores: Score[]): Table => ({
+const table = (id: number, roundId: number, scores: Score[]): Table => ({
   id,
   tableNumber: id,
-  roundID,
+  roundId: roundId,
   scores,
 });
 
 const team = (id: number, name: string, players: Player[]): Team => ({
   id,
   name,
-  gameID: 1,
+  gameId: 1,
   players,
 });
 
@@ -64,7 +64,7 @@ describe('aggregateScoresFromTables', () => {
       name: 'treats missing/zero score values as zero',
       tables: [
         table(1, 10, [
-          { id: 1, playerID: 100, tableID: 0, score: 0 },
+          { id: 1, playerId: 100, tableId: 0, score: 0 },
           score(2, 200, 4),
         ]),
       ],
@@ -73,7 +73,7 @@ describe('aggregateScoresFromTables', () => {
     {
       name: 'ignores tables without a scores array',
       tables: [
-        { id: 1, tableNumber: 1, roundID: 10 },
+        { id: 1, tableNumber: 1, roundId: 10 },
         table(2, 10, [score(1, 100, 9)]),
       ],
       expected: { 100: 9 },

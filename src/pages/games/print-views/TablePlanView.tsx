@@ -32,7 +32,7 @@ const TableCard = ({ table, teams }: { table: RoundTable; teams: Team[] }) => {
             {(table.players ?? []).map((player) => (
               <Table.Tr key={player.id}>
                 <Table.Td>{player.name}</Table.Td>
-                <Table.Td>{teamName(teams, player.teamID)}</Table.Td>
+                <Table.Td>{teamName(teams, player.teamId)}</Table.Td>
               </Table.Tr>
             ))}
           </Table.Tbody>

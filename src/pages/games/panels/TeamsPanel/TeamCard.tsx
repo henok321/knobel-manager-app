@@ -12,8 +12,8 @@ interface TeamCardProps {
   showTableAssignments: boolean;
   canEdit: boolean;
   canAddDelete: boolean;
-  onEdit: (teamID: number) => void;
-  onDelete: (teamID: number) => void;
+  onEdit: (teamId: number) => void;
+  onDelete: (teamId: number) => void;
 }
 
 const TeamCard = ({

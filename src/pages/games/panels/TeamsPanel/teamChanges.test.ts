@@ -6,10 +6,10 @@ import { teamChanges } from './teamChanges.ts';
 const team: Team = {
   id: 1,
   name: 'Alpha',
-  gameID: 1,
+  gameId: 1,
   players: [
-    { id: 10, name: 'Ann', teamID: 1 },
-    { id: 11, name: 'Bob', teamID: 1 },
+    { id: 10, name: 'Ann', teamId: 1 },
+    { id: 11, name: 'Bob', teamId: 1 },
   ],
 };
 

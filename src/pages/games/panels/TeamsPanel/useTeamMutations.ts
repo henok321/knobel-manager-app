@@ -105,13 +105,13 @@ export const useTeamMutations = (
     ]);
   };
 
-  const removeTeam = async (teamID: number, mayReset = true) => {
+  const removeTeam = async (teamId: number, mayReset = true) => {
     try {
-      await deleteTeam({ gameId: game.id, teamId: teamID }).unwrap();
+      await deleteTeam({ gameId: game.id, teamId }).unwrap();
     } catch (error) {
       reportMutationError(
         error,
-        mayReset ? () => removeTeam(teamID, false) : null,
+        mayReset ? () => removeTeam(teamId, false) : null,
       );
     }
   };

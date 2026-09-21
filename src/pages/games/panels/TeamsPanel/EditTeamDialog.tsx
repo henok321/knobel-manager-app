@@ -51,10 +51,10 @@ const EditTeamDialog = ({
     }
   };
 
-  const updatePlayerName = (playerID: number, newName: string) => {
+  const updatePlayerName = (playerId: number, newName: string) => {
     setPlayerNames((prev) => ({
       ...prev,
-      [playerID]: newName,
+      [playerId]: newName,
     }));
   };
 

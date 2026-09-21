@@ -258,7 +258,7 @@ export type HealthCheckDetailedResponse = {
 };
 export type GameStatus = "setup" | "in_progress" | "completed";
 export type GameOwner = {
-  gameID: number;
+  gameId: number;
   ownerSub: string;
   /** Resolved live from Firebase; absent if the user cannot be resolved. */
   email?: string;
@@ -266,18 +266,18 @@ export type GameOwner = {
 export type Player = {
   id: number;
   name: string;
-  teamID: number;
+  teamId: number;
 };
 export type Team = {
   id: number;
   name: string;
-  gameID: number;
+  gameId: number;
   players?: Player[];
 };
 export type RoundStatus = "setup" | "in_progress" | "completed";
 export type GameRound = {
   id: number;
-  gameID: number;
+  gameId: number;
   roundNumber: number;
   status: RoundStatus;
 };
@@ -332,14 +332,14 @@ export type PlayersResponse = {
 };
 export type Score = {
   id: number;
-  playerID: number;
-  tableID: number;
+  playerId: number;
+  tableId: number;
   score: number;
 };
 export type Table = {
   id: number;
   tableNumber: number;
-  roundID: number;
+  roundId: number;
   players?: Player[];
   scores?: Score[];
 };
@@ -351,7 +351,7 @@ export type TableResponse = {
 };
 export type ScoresRequest = {
   scores: {
-    playerID: number;
+    playerId: number;
     score: number;
   }[];
 };
@@ -360,7 +360,7 @@ export type AuditEvent = {
   id: number;
   /** Name of the changed database table. */
   entity: string;
-  entityID: string;
+  entityId: string;
   action: AuditAction;
   /** Firebase UID of the actor, or "system" for changes made outside a request. */
   actorSub: string;

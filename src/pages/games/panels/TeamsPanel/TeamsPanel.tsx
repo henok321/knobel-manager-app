@@ -49,12 +49,12 @@ const TeamsPanel = ({ game }: TeamsPanelProps) => {
     { onTeamCreated: announceTeamCreated, confirmSetupReset },
   );
 
-  const confirmDeleteTeam = (teamID: number) =>
+  const confirmDeleteTeam = (teamId: number) =>
     openConfirmDialog({
       title: t('gameDetail:teams.deleteTeam'),
       message: t('gameDetail:teams.confirmDeleteTeam'),
       confirmLabel: t('common:actions.delete'),
-      onConfirm: () => void removeTeam(teamID),
+      onConfirm: () => void removeTeam(teamId),
     });
 
   const allTeams = game.teams ?? [];

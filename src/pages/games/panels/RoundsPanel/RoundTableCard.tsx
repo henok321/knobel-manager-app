@@ -86,13 +86,13 @@ const RoundTableCard = ({
           <MantineTable.Tbody>
             {table.players?.map((player) => {
               const playerScore = table.scores?.find(
-                (s) => s.playerID === player.id,
+                (s) => s.playerId === player.id,
               );
               return (
                 <MantineTable.Tr key={player.id}>
                   <MantineTable.Td>{player.name}</MantineTable.Td>
                   <MantineTable.Td>
-                    {teamName(teams, player.teamID)}
+                    {teamName(teams, player.teamId)}
                   </MantineTable.Td>
                   <MantineTable.Td>
                     {playerScore ? playerScore.score : '-'}

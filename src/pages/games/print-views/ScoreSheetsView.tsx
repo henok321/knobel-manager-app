@@ -52,7 +52,7 @@ const ScoreSheet = ({
             {(table.players ?? []).map((player) => (
               <Table.Tr key={player.id}>
                 <Table.Td>{player.name}</Table.Td>
-                <Table.Td>{teamName(teams, player.teamID)}</Table.Td>
+                <Table.Td>{teamName(teams, player.teamId)}</Table.Td>
                 <Table.Td style={{ height: rem(40) }}>&nbsp;</Table.Td>
               </Table.Tr>
             ))}

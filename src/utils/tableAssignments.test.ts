@@ -4,23 +4,23 @@ import type { GameRound, Table } from '../store/api.gen.ts';
 import { scoreTotal, tableAssignmentsByPlayer } from './tableAssignments.ts';
 
 const rounds: GameRound[] = [
-  { id: 50, gameID: 1, roundNumber: 1, status: 'completed' },
-  { id: 51, gameID: 1, roundNumber: 2, status: 'in_progress' },
+  { id: 50, gameId: 1, roundNumber: 1, status: 'completed' },
+  { id: 51, gameId: 1, roundNumber: 2, status: 'in_progress' },
 ];
 
 const table = (
   id: number,
   tableNumber: number,
-  roundID: number,
+  roundId: number,
   playerIds: number[],
 ): Table => ({
   id,
   tableNumber,
-  roundID,
+  roundId: roundId,
   players: playerIds.map((playerId) => ({
     id: playerId,
     name: `Player ${playerId}`,
-    teamID: 1,
+    teamId: 1,
   })),
 });
 
@@ -46,7 +46,7 @@ describe('tableAssignmentsByPlayer', () => {
 
   it('ignores tables without players', () => {
     const assignments = tableAssignmentsByPlayer(
-      [{ id: 1, tableNumber: 3, roundID: 50 }, table(2, 7, 51, [10])],
+      [{ id: 1, tableNumber: 3, roundId: 50 }, table(2, 7, 51, [10])],
       rounds,
     );
 
