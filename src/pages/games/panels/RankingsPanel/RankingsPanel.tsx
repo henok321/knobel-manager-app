@@ -41,7 +41,7 @@ const RankingsPanel = ({ game }: RankingsPanelProps) => {
     selectedRound === 'total'
       ? allTables
       : allTables.filter(
-          (table) => roundNumbers.get(table.roundID) === Number(selectedRound),
+          (table) => roundNumbers.get(table.roundId) === Number(selectedRound),
         );
 
   const allScores = aggregateScoresFromTables(filteredTables);

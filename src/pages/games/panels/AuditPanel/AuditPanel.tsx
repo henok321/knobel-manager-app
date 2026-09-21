@@ -59,7 +59,7 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
     tables: new Map(
       (tablesData?.tables ?? []).map((table) => [
         table.id,
-        tableLabel(table.tableNumber, table.roundID),
+        tableLabel(table.tableNumber, table.roundId),
       ]),
     ),
     owners: new Map(

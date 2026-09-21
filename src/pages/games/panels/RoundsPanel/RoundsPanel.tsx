@@ -112,7 +112,7 @@ const RoundsPanel = ({ game }: RoundsPanelProps) => {
   const roundTables = roundTablesData?.tables ?? [];
 
   const handleSubmitScores = async (
-    scores: { playerID: number; score: number }[],
+    scores: { playerId: number; score: number }[],
   ) => {
     if (!selectedTable) {
       return;

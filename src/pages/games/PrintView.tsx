@@ -34,7 +34,7 @@ const PrintView = () => {
   const roundNumbers = roundNumberById(game?.rounds);
   const tables = (rawTablesData?.tables ?? []).map((table) => ({
     ...table,
-    roundNumber: roundNumbers.get(table.roundID),
+    roundNumber: roundNumbers.get(table.roundId),
   }));
 
   const viewType = searchParams.get('type') || 'tablePlan';

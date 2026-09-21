@@ -11,7 +11,7 @@ interface ScoreEntryModalProps {
   teams: Team[];
   roundNumber: number;
   onClose: () => void;
-  onSubmit: (scores: { playerID: number; score: number }[]) => Promise<void>;
+  onSubmit: (scores: { playerId: number; score: number }[]) => Promise<void>;
 }
 
 const ScoreEntryModal = ({
@@ -32,7 +32,7 @@ const ScoreEntryModal = ({
 
   const initialScores: Record<number, number> = {};
   for (const player of players) {
-    const existingScore = table.scores?.find((s) => s.playerID === player.id);
+    const existingScore = table.scores?.find((s) => s.playerId === player.id);
     initialScores[player.id] = existingScore?.score || 0;
   }
 
@@ -43,7 +43,7 @@ const ScoreEntryModal = ({
 
   const handleSubmit = async () => {
     const scoresArray = players.map((player) => ({
-      playerID: player.id,
+      playerId: player.id,
       score: scores[player.id] ?? initialScores[player.id] ?? 0,
     }));
     try {
@@ -82,7 +82,7 @@ const ScoreEntryModal = ({
           <NumberInput
             key={player.id}
             defaultValue={initialScores[player.id]}
-            label={`${player.name} (${teamName(teams, player.teamID)})`}
+            label={`${player.name} (${teamName(teams, player.teamId)})`}
             min={0}
             placeholder={t('gameDetail:rounds.scorePlaceholder')}
             onChange={(value) =>

@@ -45,10 +45,10 @@ export const aggregateScoresFromTables = (
 ): Record<number, number> => {
   const scoresByPlayer: Record<number, number> = {};
 
-  for (const { playerID, score } of tables.flatMap(
+  for (const { playerId, score } of tables.flatMap(
     (table) => table.scores ?? [],
   )) {
-    scoresByPlayer[playerID] = (scoresByPlayer[playerID] ?? 0) + score;
+    scoresByPlayer[playerId] = (scoresByPlayer[playerId] ?? 0) + score;
   }
 
   return scoresByPlayer;
