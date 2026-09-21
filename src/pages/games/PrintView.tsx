@@ -84,7 +84,7 @@ const PrintView = () => {
             <Button
               leftSection={<IconArrowLeft size={16} />}
               variant="default"
-              onClick={() => void navigate(`/games/${numericGameId}`)}
+              onClick={() => void navigate(`/games/${gameIdParam}`)}
             >
               {t('gameDetail:printView.back')}
             </Button>
