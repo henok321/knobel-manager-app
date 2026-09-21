@@ -7,23 +7,23 @@ import {
   mapTeamsToRankings,
 } from './rankings.ts';
 
-const player = (id: number, teamID: number, name: string): Player => ({
+const player = (id: number, teamId: number, name: string): Player => ({
   id,
   name,
-  teamID,
+  teamID: teamId,
 });
 
-const score = (id: number, playerID: number, value: number): Score => ({
+const score = (id: number, playerId: number, value: number): Score => ({
   id,
-  playerID,
+  playerID: playerId,
   tableID: 0,
   score: value,
 });
 
-const table = (id: number, roundID: number, scores: Score[]): Table => ({
+const table = (id: number, roundId: number, scores: Score[]): Table => ({
   id,
   tableNumber: id,
-  roundID,
+  roundID: roundId,
   scores,
 });
 

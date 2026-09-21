@@ -13,11 +13,11 @@ import TeamHandoutsView from './print-views/TeamHandoutsView';
 import './print-views/print.css';
 
 const PrintView = () => {
-  const { gameID } = useParams<{ gameID: string }>();
+  const { gameId: gameIdParam } = useParams<{ gameId: string }>();
   const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const numericGameId = Number(gameID);
+  const numericGameId = Number(gameIdParam);
   const skip = Number.isNaN(numericGameId);
 
   const { data: gameData, isLoading } = useGetGameQuery(
@@ -84,7 +84,7 @@ const PrintView = () => {
             <Button
               leftSection={<IconArrowLeft size={16} />}
               variant="default"
-              onClick={() => void navigate(`/games/${gameID}`)}
+              onClick={() => void navigate(`/games/${numericGameId}`)}
             >
               {t('gameDetail:printView.back')}
             </Button>

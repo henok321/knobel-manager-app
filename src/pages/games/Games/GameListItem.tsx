@@ -20,7 +20,7 @@ import {
 interface GameListItemProps {
   game: Game;
   userId: string;
-  onDelete: (gameID: number) => void;
+  onDelete: (gameId: number) => void;
 }
 
 const GameListItem = ({ game, userId, onDelete }: GameListItemProps) => {

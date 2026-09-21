@@ -11,12 +11,12 @@ const rounds: GameRound[] = [
 const table = (
   id: number,
   tableNumber: number,
-  roundID: number,
+  roundId: number,
   playerIds: number[],
 ): Table => ({
   id,
   tableNumber,
-  roundID,
+  roundID: roundId,
   players: playerIds.map((playerId) => ({
     id: playerId,
     name: `Player ${playerId}`,

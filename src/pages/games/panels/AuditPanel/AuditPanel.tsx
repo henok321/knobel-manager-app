@@ -41,8 +41,8 @@ const AuditPanel = ({ game }: AuditPanelProps) => {
   const teams = game.teams ?? [];
   const roundNumbers = roundNumberById(game.rounds);
 
-  const tableLabel = (tableNumber: number, roundID: number) => {
-    const roundNumber = roundNumbers.get(roundID);
+  const tableLabel = (tableNumber: number, roundId: number) => {
+    const roundNumber = roundNumbers.get(roundId);
     const table = t('gameDetail:audit.table', { table: tableNumber });
     return roundNumber === undefined
       ? table

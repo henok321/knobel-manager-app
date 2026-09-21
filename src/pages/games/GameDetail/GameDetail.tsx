@@ -8,9 +8,9 @@ import { useGetGameQuery } from '../../../store/api.ts';
 import GameViewContent from './GameViewContent';
 
 const GameDetail = () => {
-  const { gameID } = useParams<{ gameID: string }>();
+  const { gameId: gameIdParam } = useParams<{ gameId: string }>();
   const { t } = useTranslation();
-  const gameId = Number(gameID);
+  const gameId = Number(gameIdParam);
 
   const { data, isLoading } = useGetGameQuery(
     { gameId },

@@ -48,14 +48,14 @@ const Games = () => {
 
   const currentUser = auth.user;
 
-  const handleDeleteGame = (gameID: number) =>
+  const handleDeleteGame = (gameId: number) =>
     openConfirmDialog({
       title: t('games:deleteGame'),
       message: t('games:confirmDelete'),
       confirmLabel: t('common:actions.delete'),
       onConfirm: async () => {
         try {
-          await deleteGame({ gameId: gameID }).unwrap();
+          await deleteGame({ gameId }).unwrap();
         } catch {
           notifyError();
         }
