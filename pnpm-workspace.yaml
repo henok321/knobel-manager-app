@@ -2,7 +2,7 @@ minimumReleaseAge: 0
 engineStrict:  true
 overrides:
   minimatch: '>=10.2.1'
-  browserslist: '4.28.9'
+  browserslist: '4.29.0'
 
 allowBuilds:
   '@firebase/util': true
