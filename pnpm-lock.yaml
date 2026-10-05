@@ -248,7 +248,7 @@ importers:
         version: 9.1.7
       i18next-cli:
         specifier: ^1.74.0
-        version: 1.74.1(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2)
+        version: 1.74.2(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2)
       knip:
         specifier: ^6.36.0
         version: 6.37.0
@@ -1833,13 +1833,13 @@ packages:
   i18next-browser-languagedetector@8.2.1:
     resolution: {integrity: sha512-bZg8+4bdmaOiApD7N7BPT9W8MLZG+nPTOFlLiJiT8uzKXFjhxw4v2ierCXOwB5sFDMtuA5G4kgYZ0AznZxQ/cw==}
 
-  i18next-cli@1.74.1:
-    resolution: {integrity: sha512-8OEbo4jfn4r4/QwieyAvoLWV/rJW2OR6SG09I12jA6kffyhUNsyrH6OaA4bumLIWkdBaGySbiFm0wj1k19N/jA==}
+  i18next-cli@1.74.2:
+    resolution: {integrity: sha512-y32hOiVNLs85f+TKCl4XqERjD0dFy274IOEXe7/Zyp+WMaQC9VhF33JLO0hQZZKK4PUmYwbRDXaSObeE3PbsmA==}
     engines: {node: '>=22'}
     hasBin: true
 
-  i18next-resources-for-ts@2.1.0:
-    resolution: {integrity: sha512-n5UexwEVt0OoIAhG2MWpSnAVJW1U8mQrQTmXyxc5DMAx+NLhcLZhSMJo/FnUsA5JQ3obTYqTgB7YIuZKWpDgow==}
+  i18next-resources-for-ts@2.1.1:
+    resolution: {integrity: sha512-Xhz8S8dtNIPawzeWdmssnsII1JYsbvPWOLmstJakNcgKSFLCneA+xN7qajj/zlk5nf9sx1KGDTx8RNZ73h68tw==}
     hasBin: true
 
   i18next@26.4.2:
@@ -2027,8 +2027,8 @@ packages:
     resolution: {integrity: sha512-4pfM1Ff0x50o0tQwb5ucw/RzNyD0/YJME6IVcStalZuMWxdt3sR3huStTtxz4PUmvZfRguvDejasvQ2kifR11g==}
     engines: {node: 20 || >=22}
 
-  magic-string@1.4.1:
-    resolution: {integrity: sha512-8lyCu36ErXR0J9uaGKlKQoiLZKmtI63YGLE8G2o9jyRPdr4X47LusSOwgOJOzcVtp81fTAAjxR7BwKz682Jhow==}
+  magic-string@1.4.3:
+    resolution: {integrity: sha512-z12OxmaPGE0F4xlpGdjuAUckipLpQlTAuAmyGhNoD7ODpYUzvDfvtxUbjM/jwznyP178oju/KDdyi220wNJ0RQ==}
 
   mimic-function@5.0.1:
     resolution: {integrity: sha512-VP79XUPxV2CigYP3jWwAUFSku2aKqBH7uTAapFWCBqutsbmDo96KY5o8uh6U+/YSIn5OxJnXp73beVkpqMIGhA==}
@@ -3976,7 +3976,7 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.29.7
 
-  i18next-cli@1.74.1(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2):
+  i18next-cli@1.74.2(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2):
     dependencies:
       '@croct/json5-parser': 0.2.2
       '@swc/core': 1.16.2
@@ -3985,11 +3985,11 @@ snapshots:
       execa: 10.0.1
       glob: 13.0.6
       i18next: 26.4.2(typescript@7.0.2)
-      i18next-resources-for-ts: 2.1.0
+      i18next-resources-for-ts: 2.1.1
       inquirer: 14.2.2(@types/node@26.6.2)
       jiti: 2.7.0
       jsonc-parser: 3.3.1
-      magic-string: 1.4.1
+      magic-string: 1.4.3
       minimatch: 10.2.6
       ora: 9.4.1
       react-i18next: 17.0.15(i18next@26.4.2(typescript@7.0.2))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2)
@@ -4002,7 +4002,7 @@ snapshots:
       - react-native
       - typescript
 
-  i18next-resources-for-ts@2.1.0:
+  i18next-resources-for-ts@2.1.1:
     dependencies:
       '@babel/runtime': 7.29.7
       '@swc/core': 1.16.2
@@ -4154,7 +4154,7 @@ snapshots:
 
   lru-cache@11.5.2: {}
 
-  magic-string@1.4.1:
+  magic-string@1.4.3:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
 
