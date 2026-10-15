@@ -1,6 +1,7 @@
 minimumReleaseAge: 0
 engineStrict:  true
 overrides:
+  '@grpc/grpc-js': '>=1.13.6'
   minimatch: '>=10.2.1'
   browserslist: '4.29.0'
 
