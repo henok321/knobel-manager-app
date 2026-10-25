@@ -139,7 +139,7 @@ const login = async (page: Page) => {
 const readScoreModal = async (page: Page) => {
   const d = dialog(page);
   await expect(d).toBeVisible();
-  const lines = (await d.innerText()).split('\n');
+  const lines = (await d.textContent()).split('\n');
   const entries = lines
     .filter((line) => /\(.+\)$/.test(line.trim()))
     .map((line) => {
@@ -182,7 +182,7 @@ const scoreRowsFor = async (page: Page, expectedTables: number) => {
     .evaluateAll((trs) =>
       trs.map((tr) =>
         [...tr.querySelectorAll('td')].map((cell) =>
-          (cell as HTMLElement).innerText.trim(),
+          (cell as HTMLElement).textContent.trim(),
         ),
       ),
     );
@@ -202,7 +202,7 @@ const readRankingRows = async (panel: Locator) => {
     .evaluateAll((trs) =>
       trs.map((tr) =>
         [...tr.querySelectorAll('td,th')].map((cell) =>
-          (cell as HTMLElement).innerText.trim(),
+          (cell as HTMLElement).textContent.trim(),
         ),
       ),
     );
@@ -584,7 +584,7 @@ test.describe('a finished tournament', () => {
     const { gameName } = tournament();
     const panel = await openTab(page, 'Audit Log');
     await expect(panel).toContainText(gameName);
-    const text = await panel.innerText();
+    const text = await panel.textContent();
     expect(text).toContain(EMAIL as string);
     for (const marker of [
       'CREATED',
@@ -616,7 +616,7 @@ test.describe('a finished tournament', () => {
       await page.goto(`/games/${gameId}/print?type=${view}`);
       const body = page.locator('body');
       await expect(body).toContainText(gameName);
-      const text = await body.innerText();
+      const text = await body.textContent();
 
       expect(text, `${view}: no unresolved values`).not.toMatch(
         /\bundefined\b|\bNaN\b|\[object /,
