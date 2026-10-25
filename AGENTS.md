@@ -45,7 +45,7 @@ channel.
   restrictions); don't "fix" it.
 - Filenames follow the file's kind, not its directory: components PascalCase, function modules camelCase (e.g.
   `utils/confirmModal.tsx`).
-- Zero comments by default; when unavoidable, one brief line saying *why*.
+- Zero comments by default; when unavoidable, one brief line saying _why_.
 - No `any`; handle `undefined` from indexed access (`noUncheckedIndexedAccess` is on); exhaustive switches with
   `assertNever`.
 

@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
-      - '.vscode/**'
+      - "README.md"
+      - "LICENSE"
+      - ".vscode/**"
   pull_request:
     paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
-      - '.vscode/**'
+      - "README.md"
+      - "LICENSE"
+      - ".vscode/**"
   workflow_dispatch:
 
 permissions:
@@ -96,7 +96,7 @@ jobs:
       name: production
 
     concurrency:
-      group: 'deploy-${{ github.ref }}'
+      group: "deploy-${{ github.ref }}"
       cancel-in-progress: true
 
     steps:

@@ -1,13 +1,13 @@
 minimumReleaseAge: 0
-engineStrict:  true
+engineStrict: true
 overrides:
-  '@grpc/grpc-js': '>=1.13.6'
-  minimatch: '>=10.2.1'
-  browserslist: '4.29.4'
+  "@grpc/grpc-js": ">=1.13.6"
+  minimatch: ">=10.2.1"
+  browserslist: "4.29.4"
 
 allowBuilds:
-  '@firebase/util': true
-  '@swc/core': true
+  "@firebase/util": true
+  "@swc/core": true
   esbuild: true
   protobufjs: true
   unrs-resolver: true

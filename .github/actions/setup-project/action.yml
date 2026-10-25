@@ -1,8 +1,8 @@
-name: 'Setup Project'
-description: 'Initialize project: checkout, setup Node.js, install dependencies'
+name: "Setup Project"
+description: "Initialize project: checkout, setup Node.js, install dependencies"
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Install pnpm
       uses: pnpm/action-setup@v6
@@ -10,8 +10,8 @@ runs:
     - name: Set up Node.js
       uses: actions/setup-node@v7
       with:
-        node-version-file: '.nvmrc'
-        cache: 'pnpm'
+        node-version-file: ".nvmrc"
+        cache: "pnpm"
 
     - name: Install dependencies
       shell: bash
