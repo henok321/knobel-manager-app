@@ -106,7 +106,7 @@
     "scoresSaved": "Punkte für Tisch {{table}} gespeichert",
     "searchPlayers": "Nach Spielernamen suchen...",
     "selectRound": "Runde auswählen",
-    "setupDescription": "Klicke auf den Button unten, um Tische und Spielerzuordnungen für alle Runden zu generieren. Der Backend-Algorithmus verteilt die Spieler fair.",
+    "setupDescription": "Klicke auf den Button unten, um Tische und Spielerzuordnungen für alle Runden zu generieren. Die Spieler werden zufälligen Tischen zugewiesen. Spieler aus dem gleichen Team werden immer unterschiedlichen Tischen zugewiesen.",
     "setupMatchmaking": "Spielpaarungen einrichten",
     "setupNotAvailable": "Spielpaarungen nicht verfügbar",
     "setupNotAvailableDescription": "Spielpaarungen können nur im Setup-Modus eingerichtet werden. Dieses Spiel wurde bereits gestartet oder abgeschlossen.",

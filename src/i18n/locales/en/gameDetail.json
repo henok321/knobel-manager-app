@@ -106,7 +106,7 @@
     "scoresSaved": "Scores saved for Table {{table}}",
     "searchPlayers": "Search by player name...",
     "selectRound": "Select Round",
-    "setupDescription": "Click the button below to generate tables and player assignments for all rounds. This will use the backend matchmaking algorithm to distribute players fairly.",
+    "setupDescription": "Click the button below to generate tables and player assignments for all rounds. Players will be assigned randomly to tables. Members of the same team will never be assigned to the same table.",
     "setupMatchmaking": "Setup Matchmaking",
     "setupNotAvailable": "Matchmaking Not Available",
     "setupNotAvailableDescription": "Matchmaking can only be set up when the game is in setup mode. This game has already started or been completed.",
