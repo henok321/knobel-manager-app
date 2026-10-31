@@ -2,6 +2,7 @@ import {
   Badge,
   Button,
   Group,
+  Progress,
   Stack,
   Tabs,
   Text,
@@ -81,6 +82,16 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
       table.players?.length &&
       (table.scores?.reduce((sum, score) => sum + score.score, 0) ?? 0) > 0,
   ).length;
+
+  const completedTablesInPercentage = tables.length
+    ? (100 * completedTables) / tables.length
+    : 0;
+
+  const scoreProgressLabel = t('gameDetail:actions.scoreProgress', {
+    completed: completedTables,
+    total: tables.length,
+  });
+
   const canComplete =
     game.status === 'in_progress' &&
     completedTables > 0 &&
@@ -192,17 +203,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
             </Button>
           )}
           {game.status === 'in_progress' && (
-            <Tooltip
-              disabled={canComplete}
-              label={
-                canComplete
-                  ? undefined
-                  : t('gameDetail:actions.scoreProgress', {
-                      completed: completedTables,
-                      total: tables.length,
-                    })
-              }
-            >
+            <Tooltip disabled={canComplete} label={scoreProgressLabel}>
               <Button
                 color="red"
                 disabled={!canComplete}
@@ -216,6 +217,15 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           <PrintMenu game={game} />
         </Group>
       </Group>
+      {game.status === 'in_progress' && (
+        <Tooltip label={scoreProgressLabel}>
+          <Progress
+            aria-label={scoreProgressLabel}
+            value={completedTablesInPercentage}
+            size="xl"
+          />
+        </Tooltip>
+      )}
 
       <Tabs
         value={activeTab}

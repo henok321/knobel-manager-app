@@ -5,7 +5,7 @@
     "gameStartedMessage": "Richte die Spielpaarungen im Runden-Tab ein, um zu beginnen",
     "gameStartedNotification": "Spiel gestartet",
     "printView": "Druckansicht",
-    "scoreProgress": "Punkte-Fortschritt: {{completed}} von {{total}} Tischen bewertet",
+    "scoreProgress": "Spielfortschritt: {{completed}} von {{total}} Tischen bewertet",
     "startGame": "Spiel starten",
     "startGameConfirmation": "Bist du sicher, dass du dieses Turnier starten möchtest? Nach dem Start:",
     "startGameWarning1": "Du kannst keine weiteren Teams hinzufügen",

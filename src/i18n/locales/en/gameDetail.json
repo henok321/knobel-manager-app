@@ -5,7 +5,7 @@
     "gameStartedMessage": "Setup matchmaking in the Rounds tab to begin",
     "gameStartedNotification": "Game Started",
     "printView": "Print View",
-    "scoreProgress": "Score progress: {{completed}} of {{total}} tables scored",
+    "scoreProgress": "Game progress: {{completed}} of {{total}} tables scored",
     "startGame": "Start Game",
     "startGameConfirmation": "Are you sure you want to start this tournament? After starting:",
     "startGameWarning1": "You won't be able to add more teams",
