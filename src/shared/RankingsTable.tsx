@@ -1,4 +1,4 @@
-import { Anchor, rem, Table, Text } from '@mantine/core';
+import { Anchor, Table, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import type { RankingsRow } from '../utils/rankings.ts';
@@ -34,13 +34,16 @@ const RankingsTable = ({
       withColumnBorders
       withTableBorder
       highlightOnHover={Boolean(onRowSelect)}
+      style={{ overflowWrap: 'anywhere' }}
     >
       <Table.Thead>
         <Table.Tr>
-          <Table.Th w={rem(80)}>{t('common:rankings.rank')}</Table.Th>
+          <Table.Th style={{ whiteSpace: 'nowrap' }}>
+            {t('common:rankings.rank')}
+          </Table.Th>
           <Table.Th>{nameLabel}</Table.Th>
           {showTeamColumn && <Table.Th>{t('common:rankings.team')}</Table.Th>}
-          <Table.Th style={{ textAlign: 'right' }} w={rem(120)}>
+          <Table.Th style={{ textAlign: 'right' }}>
             {t('common:rankings.totalScore')}
           </Table.Th>
         </Table.Tr>
