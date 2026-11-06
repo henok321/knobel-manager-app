@@ -21,4 +21,18 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
+  projects: [
+    { name: 'desktop', testMatch: /full-game\.spec\.ts/ },
+    {
+      name: 'mobile',
+      testMatch: /mobile\.spec\.ts/,
+      use: {
+        // iPhone SE profile, on the chromium build the rest of the suite uses.
+        viewport: { width: 375, height: 667 },
+        isMobile: true,
+        hasTouch: true,
+        deviceScaleFactor: 2,
+      },
+    },
+  ],
 });
