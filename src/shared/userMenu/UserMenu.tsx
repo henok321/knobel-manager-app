@@ -28,7 +28,11 @@ const UserMenu = () => {
   const userDisplayName = user?.displayName || user?.email || 'User';
 
   return (
-    <Menu position="bottom-end" shadow="md" width={360}>
+    <Menu
+      position="bottom-end"
+      shadow="md"
+      width="min(360px, calc(100vw - 2rem))"
+    >
       <Menu.Target>
         <UnstyledButton
           px="sm"

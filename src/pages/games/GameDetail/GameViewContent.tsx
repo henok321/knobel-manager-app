@@ -235,7 +235,7 @@ const GameViewContent = ({ game }: GameViewContentProps) => {
           }
         }}
       >
-        <Tabs.List>
+        <Tabs.List style={{ flexWrap: 'nowrap', overflowX: 'auto' }}>
           <Tabs.Tab value="teams">{t('gameDetail:tabs.teams')}</Tabs.Tab>
           <Tabs.Tab value="rounds">{t('gameDetail:tabs.rounds')}</Tabs.Tab>
           <Tabs.Tab value="rankings">{t('gameDetail:tabs.rankings')}</Tabs.Tab>
