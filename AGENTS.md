@@ -25,6 +25,10 @@ pnpm only — never npm or yarn. CI: `check`, `knip`, `test`, `pnpm audit --prod
 `validate-client` (re-runs `api:gen`, fails on drift). Push to `main` deploys to Firebase hosting; PRs get a preview
 channel.
 
+Use the Playwright infrastructure for empirical verification whenever useful, not just for the e2e suite: drive a running
+dev server (`pnpm local`/`local:remote`) with the playwright MCP browser tools to measure real DOM behavior (overflow,
+element widths, computed styles), and check phone widths (320–375px) alongside desktop when a change touches layout.
+
 ## Hard rules
 
 - **`src/store/api.gen.ts` is generated — never edit.** Run `pnpm api:gen && pnpm fix` and commit the result; CI
@@ -70,7 +74,8 @@ Three-file RTK Query chain: `baseApi.ts` (hand-written) → `api.gen.ts` (genera
 - Biome allows `!important` only in `src/pages/games/print-views/print.css`.
 - E2e first run: `pnpm exec playwright install chromium`; credentials from untracked `.env.e2e` (`E2E_EMAIL`/
   `E2E_PASSWORD`). Read-only tests consume the tournament the lifecycle test publishes — a `--grep` excluding it makes
-  them skip. No cleanup; every run leaves an `E2E Turnier <timestamp>` game.
+  them skip. No cleanup; every run leaves an `E2E Turnier <timestamp>` game plus an `E2E Mobile View <timestamp>` game
+  (mobile project, self-contained).
 
 ## Git
 

@@ -139,7 +139,8 @@ const login = async (page: Page) => {
 const readScoreModal = async (page: Page) => {
   const d = dialog(page);
   await expect(d).toBeVisible();
-  const lines = (await d.textContent()).split('\n');
+  // biome-ignore lint/performance/useDomNodeTextContent: only innerText has the rendered line breaks the entry parser splits on
+  const lines = (await d.innerText()).split('\n');
   const entries = lines
     .filter((line) => /\(.+\)$/.test(line.trim()))
     .map((line) => {
@@ -587,8 +588,8 @@ test.describe('a finished tournament', () => {
     const text = await panel.textContent();
     expect(text).toContain(EMAIL as string);
     for (const marker of [
-      'CREATED',
-      'UPDATED',
+      'Created',
+      'Updated',
       'Game',
       'Team',
       'Player',
