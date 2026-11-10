@@ -139,7 +139,9 @@ const login = async (page: Page) => {
 const readScoreModal = async (page: Page) => {
   const d = dialog(page);
   await expect(d).toBeVisible();
-  const lines = (await d.textContent()).split('\n');
+  // innerText, not textContent: the entries are found by line, and only
+  // innerText contains the rendered line breaks between block elements.
+  const lines = (await d.innerText()).split('\n');
   const entries = lines
     .filter((line) => /\(.+\)$/.test(line.trim()))
     .map((line) => {
@@ -587,8 +589,8 @@ test.describe('a finished tournament', () => {
     const text = await panel.textContent();
     expect(text).toContain(EMAIL as string);
     for (const marker of [
-      'CREATED',
-      'UPDATED',
+      'Created',
+      'Updated',
       'Game',
       'Team',
       'Player',
