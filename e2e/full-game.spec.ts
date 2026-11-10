@@ -139,8 +139,7 @@ const login = async (page: Page) => {
 const readScoreModal = async (page: Page) => {
   const d = dialog(page);
   await expect(d).toBeVisible();
-  // innerText, not textContent: the entries are found by line, and only
-  // innerText contains the rendered line breaks between block elements.
+  // biome-ignore lint/performance/useDomNodeTextContent: only innerText has the rendered line breaks the entry parser splits on
   const lines = (await d.innerText()).split('\n');
   const entries = lines
     .filter((line) => /\(.+\)$/.test(line.trim()))
